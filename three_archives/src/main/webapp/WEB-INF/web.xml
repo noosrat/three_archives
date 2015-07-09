@@ -4,4 +4,15 @@
 
 <web-app>
   <display-name>Archetype Created Web Application</display-name>
+  
+  <servlet>
+    <servlet-name>mapoverview</servlet-name>
+    <jsp-file>/WEB-INF/frontend/mapoverview.jsp</jsp-file>
+</servlet>
+
+<servlet-mapping>
+    <servlet-name>mapoverview</servlet-name>
+    <url-pattern>/mapoverview</url-pattern>
+</servlet-mapping>
+  
 </web-app>
