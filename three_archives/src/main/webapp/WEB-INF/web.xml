@@ -3,5 +3,15 @@
  "http://java.sun.com/dtd/web-app_2_3.dtd" >
 
 <web-app>
-	<display-name>Archetype Created Web Application</display-name>
+	<display-name>Three Archives</display-name>
+	<servlet>
+		<servlet-name>ThreeArchivesServlet</servlet-name>
+		<display-name>ThreeArchivesServlet</display-name>
+		<description>communicator</description>
+		<servlet-class>controller.ThreeArchivesServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>ThreeArchivesServlet</servlet-name>
+		<url-pattern>/archives/*</url-pattern>
+	</servlet-mapping>
 </web-app>

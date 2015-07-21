@@ -1,20 +1,20 @@
 package services;
 
+import backend.FedoraCommunicator;
 import backend.Resource;
 
 public abstract class Service {
 
-	private Resource resource;
+	private static Resource resource = new Resource();
+	private static FedoraCommunicator communicator = new FedoraCommunicator();
 	
 	public Resource getResource() {
 		return resource;
 	}
 
-	public void setResource(Resource resource) {
-		this.resource = resource;
+	protected FedoraCommunicator getFedoraCommunicator(){
+		return communicator;
 	}
-
-	public Service() {
-	}
+	
 
 }
