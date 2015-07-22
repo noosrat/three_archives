@@ -8,11 +8,8 @@ import com.yourmediashelf.fedora.client.FedoraClient;
 import com.yourmediashelf.fedora.client.FedoraClientException;
 import com.yourmediashelf.fedora.client.FedoraCredentials;
 import com.yourmediashelf.fedora.client.request.FedoraRequest;
-import com.yourmediashelf.fedora.client.request.Ingest;
-import com.yourmediashelf.fedora.client.response.FedoraResponse;
 import com.yourmediashelf.fedora.client.response.FindObjectsResponse;
 import com.yourmediashelf.fedora.client.response.GetDatastreamResponse;
-import com.yourmediashelf.fedora.client.response.IngestResponse;
 import com.yourmediashelf.fedora.generated.management.DatastreamProfile;
 
 public class FedoraCommunicator {
@@ -40,16 +37,10 @@ public class FedoraCommunicator {
 		return fedora;
 	}
 
-	// public void createFedoraObject(String pid) throws FedoraClientException {
-	// Ingest fedoraObject = new Ingest(pid).label("foofoooloo");
-	// IngestResponse response = fedoraObject.execute();
-	// System.out.println("PID " + response.getPid());
-	//
-	// }
 	public ArrayList<DatastreamProfile> findFedoraObjects(String terms) throws FedoraClientException {
 		return getFedoraObjectsImageDatastream(terms);
 	}
-	
+
 	private List<String> findFedoraObjectsUsingSearchTerms(String terms) throws FedoraClientException {
 		FindObjectsResponse findObjectsResponse = null;
 		if (terms == null || terms.equals("")) {

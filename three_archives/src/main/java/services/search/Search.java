@@ -13,11 +13,6 @@ public class Search extends Service {
 		super();
 	}
 	
-//	public void createFedoraObject() throws FedoraClientException{
-//		getFedoraCommunicator().createFedoraObject("nox:101");
-//		
-//	}
-	
 	public List<DatastreamProfile> findObjects(String terms) throws FedoraClientException{
 		return getFedoraCommunicator().findFedoraObjects(terms);
 	}
