@@ -10,9 +10,38 @@
     <jsp-file>/WEB-INF/frontend/mapoverview.jsp</jsp-file>
 </servlet>
 
+<servlet>
+    <servlet-name>harfieldoverview</servlet-name>
+    <jsp-file>/WEB-INF/frontend/harfieldoverview.jsp</jsp-file>
+</servlet>
+
+<servlet>
+    <servlet-name>imageviewer</servlet-name>
+    <jsp-file>/WEB-INF/frontend/imageviewer.jsp</jsp-file>
+</servlet>
+
+<servlet>
+    <servlet-name>detailviewer</servlet-name>
+    <jsp-file>/WEB-INF/frontend/detailviewer.jsp</jsp-file>
+</servlet>
+
 <servlet-mapping>
     <servlet-name>mapoverview</servlet-name>
     <url-pattern>/mapoverview</url-pattern>
 </servlet-mapping>
-  
+
+<servlet-mapping>
+    <servlet-name>harfieldoverview</servlet-name>
+    <url-pattern>/harfieldoverview</url-pattern>
+</servlet-mapping>
+
+<servlet-mapping>
+    <servlet-name>imageviewer</servlet-name>
+    <url-pattern>/imageviewer</url-pattern>
+</servlet-mapping>
+ 
+<servlet-mapping>
+    <servlet-name>detailviewer</servlet-name>
+    <url-pattern>/detailviewer</url-pattern>
+</servlet-mapping> 
 </web-app>
