@@ -4,4 +4,29 @@
 
 <web-app>
   <display-name>Archetype Created Web Application</display-name>
+  
+  <servlet>
+  	<servlet-name>SimpleServlet</servlet-name>
+  	<display-name>SimpleServlet</display-name>
+  	<description></description>
+  	<servlet-class>SimpleServlet</servlet-class>
+  </servlet>
+  <servlet>
+  	<servlet-name>FirstServlet</servlet-name>
+  	<display-name>FirstServlet</display-name>
+  	<description></description>
+  	<servlet-class>FirstServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+  	<servlet-name>SimpleServlet</servlet-name>
+  	<url-pattern>/SimpleServlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+  	<servlet-name>FirstServlet</servlet-name>
+  	<url-pattern>/FirstServlet</url-pattern>
+  </servlet-mapping>
+  
+  <welcome-file-list><welcome-file>index.jsp
+  </welcome-file>
+  </welcome-file-list>
 </web-app>
