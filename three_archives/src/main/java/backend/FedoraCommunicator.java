@@ -4,6 +4,7 @@ import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.sun.jersey.api.client.ClientResponse;
 import com.yourmediashelf.fedora.client.FedoraClient;
 import com.yourmediashelf.fedora.client.FedoraClientException;
 import com.yourmediashelf.fedora.client.FedoraCredentials;
@@ -40,13 +41,19 @@ public class FedoraCommunicator {
 	public ArrayList<DatastreamProfile> findFedoraObjects(String terms) throws FedoraClientException {
 		return getFedoraObjectsImageDatastream(terms);
 	}
+	
+	public ArrayList<DatastreamProfile> findFedoraObjectsWithQuery(String query) throws FedoraClientException {
+		return getFedoraObjectsImageDatastreamWithQuery(query);
+	}
+	
+	
 
 	private List<String> findFedoraObjectsUsingSearchTerms(String terms) throws FedoraClientException {
 		FindObjectsResponse findObjectsResponse = null;
 		if (terms == null || terms.equals("")) {
 			findObjectsResponse = FedoraClient.findObjects().terms("*").pid().maxResults(10000).execute();
 		} else {
-			findObjectsResponse = FedoraClient.findObjects().terms(terms).pid().maxResults(10000).execute();
+			findObjectsResponse = FedoraClient.findObjects().terms("*"+terms+"*").pid().maxResults(10000).execute();
 		}
 		return findObjectsResponse.getPids();
 	}
@@ -59,6 +66,28 @@ public class FedoraCommunicator {
 
 	private ArrayList<DatastreamProfile> getFedoraObjectsImageDatastream(String terms) throws FedoraClientException {
 		List<String> locatedObjects = findFedoraObjectsUsingSearchTerms(terms);
+		ArrayList<DatastreamProfile> result = new ArrayList<DatastreamProfile>();
+
+		for (String pid : locatedObjects) {
+			GetDatastreamResponse getDatastreamResponse = null;
+			try{
+			getDatastreamResponse = FedoraClient.getDatastream(pid, "img").execute();
+			}
+			catch(FedoraClientException ex){
+				if (ex.getMessage().contains("with datastream ID of \"img\"")){
+					continue;
+				}
+				else{
+					throw ex;
+				}
+			}
+			result.add(getDatastreamResponse.getDatastreamProfile());
+		}
+
+		return result;
+	}
+	private ArrayList<DatastreamProfile> getFedoraObjectsImageDatastreamWithQuery(String query) throws FedoraClientException {
+		List<String> locatedObjects = findFedoraObjectsQuery(query);
 		ArrayList<DatastreamProfile> result = new ArrayList<DatastreamProfile>();
 
 		for (String pid : locatedObjects) {
