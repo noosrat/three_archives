@@ -23,9 +23,8 @@
 	</form>
 
 	<c:forEach var="datastreamProfile" items="${objects}">
-		<td><img src="${datastreamProfile.dsLocation}"
-			style="width: 304px; height: 228px;">
-			${datastreamProfile. }</td>
+		<td><img src="${datastreamProfile.dsLocation}" style="width: 304px; height: 228px;">
+			</td>
 	</c:forEach>
 
 </body>
