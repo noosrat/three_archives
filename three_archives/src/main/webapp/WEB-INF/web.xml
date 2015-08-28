@@ -15,6 +15,46 @@
 		<servlet-name>ThreeArchivesServlet</servlet-name>
 		<url-pattern>/archives/*</url-pattern>
 	</servlet-mapping>
+  
+  <servlet>
+    <servlet-name>mapoverview</servlet-name>
+    <jsp-file>/mapoverview.jsp</jsp-file>
+</servlet>
+
+<servlet>
+    <servlet-name>harfieldoverview</servlet-name>
+    <jsp-file>/WEB-INF/frontend/harfieldoverview.jsp</jsp-file>
+</servlet>
+
+<servlet>
+    <servlet-name>imageviewer</servlet-name>
+    <jsp-file>/WEB-INF/frontend/imageviewer.jsp</jsp-file>
+</servlet>
+
+<servlet>
+    <servlet-name>detailviewer</servlet-name>
+    <jsp-file>/WEB-INF/frontend/detailviewer.jsp</jsp-file>
+</servlet>
+
+<servlet-mapping>
+    <servlet-name>mapoverview</servlet-name>
+    <url-pattern>/archives/mapoverview</url-pattern>
+</servlet-mapping>
+
+<servlet-mapping>
+    <servlet-name>harfieldoverview</servlet-name>
+    <url-pattern>/archives/harfieldoverview</url-pattern>
+</servlet-mapping>
+
+<servlet-mapping>
+    <servlet-name>imageviewer</servlet-name>
+    <url-pattern>/archives/imageviewer</url-pattern>
+</servlet-mapping>
+ 
+<servlet-mapping>
+    <servlet-name>detailviewer</servlet-name>
+    <url-pattern>/archives/detailviewer</url-pattern>
+</servlet-mapping> 
 </web-app>
 
 
