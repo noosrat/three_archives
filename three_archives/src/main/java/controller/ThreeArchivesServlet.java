@@ -27,6 +27,7 @@ public class ThreeArchivesServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
 		redirect(request, response);
+		
 		ServiceDelegator serviceDelegator = new ServiceDelegator();
 		String result = serviceDelegator.execute(request, response);
 		request.getServletContext().getRequestDispatcher("/" + result)
@@ -39,6 +40,12 @@ public class ThreeArchivesServlet extends HttpServlet {
 		if (request.getPathInfo().substring(1).equals("redirect_search")) {
 
 			request.getServletContext().getRequestDispatcher("/search.jsp")
+					.forward(request, response);
+		} 
+		if (request.getPathInfo().substring(1).equals("redirect_maps")) {
+
+			request.getServletContext()
+					.getRequestDispatcher("/mapoverview.jsp")
 					.forward(request, response);
 		}
 

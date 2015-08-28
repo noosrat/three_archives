@@ -24,7 +24,7 @@
 		<input type="submit" value="Exhibitions" />
 
 	</form>
-	<form action="${pageContext.request.contextPath}/archives/maps"
+	<form action="${pageContext.request.contextPath}/archives/redirect_maps"
 		method="post">
  <input type="submit" value="Maps" />
 	</form>
