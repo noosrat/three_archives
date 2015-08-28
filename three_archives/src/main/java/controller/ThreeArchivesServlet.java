@@ -49,6 +49,12 @@ public class ThreeArchivesServlet extends HttpServlet {
 					.forward(request, response);
 		}
 
+		if (request.getPathInfo().substring(1).equals("redirect_exhibitions")) {
+
+			request.getServletContext()
+					.getRequestDispatcher("/exhibitionHome.jsp")
+					.forward(request, response);
+		}
 	}
 
 	/**
