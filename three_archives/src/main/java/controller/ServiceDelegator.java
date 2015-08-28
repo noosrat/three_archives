@@ -14,7 +14,7 @@ import services.search.Search;
 public class ServiceDelegator {
 	// handle exceptions in this method
 	public String execute(HttpServletRequest request, HttpServletResponse response) {
-		String url = "index.jsp";
+		String url = "search.jsp";
 		try {
 			if (request.getPathInfo().substring(1).equals("search")) {
 

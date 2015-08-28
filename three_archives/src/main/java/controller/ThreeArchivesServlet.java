@@ -24,23 +24,32 @@ public class ThreeArchivesServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
 	 *      response)
 	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-
+	protected void doGet(HttpServletRequest request,
+			HttpServletResponse response) throws ServletException, IOException {
+		redirect(request, response);
 		ServiceDelegator serviceDelegator = new ServiceDelegator();
 		String result = serviceDelegator.execute(request, response);
-		request.getServletContext().getRequestDispatcher("/"+result).forward(request, response);
+		request.getServletContext().getRequestDispatcher("/" + result)
+				.forward(request, response);
 
-	
 	}
-	
+
+	private void redirect(HttpServletRequest request,
+			HttpServletResponse response) throws ServletException, IOException {
+		if (request.getPathInfo().substring(1).equals("redirect_search")) {
+
+			request.getServletContext().getRequestDispatcher("/search.jsp")
+					.forward(request, response);
+		}
+
+	}
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
 	 *      response)
 	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
+	protected void doPost(HttpServletRequest request,
+			HttpServletResponse response) throws ServletException, IOException {
 		doGet(request, response);
 	}
 

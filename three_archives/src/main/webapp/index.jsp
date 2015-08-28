@@ -8,24 +8,28 @@
 
 <html>
 <body>
-	<h2>Three Archives Search</h2>
+	<h2>Three Archives</h2>
 	${message}
-	<form action="${pageContext.request.contextPath}/archives/search"
+	<form action="${pageContext.request.contextPath}/archives/redirect_search"
 		method="post">
-	  	<select id="query" name="query">
-			<option value="all">All</option>
-			<option value="pid">ID</option>
-			<option value="title">Title</option>
-			<option value="description">Description</option>
-		</select>  
-		<input type="text" name="terms"><br>
-		<input type="submit" value="Search for Fedora objects" />
+
+
+		<input type="submit" value="Search" />
+
+	</form>
+	<form action="${pageContext.request.contextPath}/archives/exhibitions"
+		method="post">
+
+
+		<input type="submit" value="Exhibitions" />
+
+	</form>
+	<form action="${pageContext.request.contextPath}/archives/maps"
+		method="post">
+ <input type="submit" value="Maps" />
 	</form>
 
-	<c:forEach var="datastreamProfile" items="${objects}">
-		<td><img src="${datastreamProfile.dsLocation}" style="width: 304px; height: 228px;">
-			</td>
-	</c:forEach>
+
 
 </body>
 </html>
