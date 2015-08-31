@@ -1,77 +1,32 @@
-package controller;
-
-import java.util.ArrayList;
-import java.util.List;
+package exhibitions;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.yourmediashelf.fedora.client.FedoraClientException;
-import com.yourmediashelf.fedora.generated.management.DatastreamProfile;
 
-import services.search.Search;
-import model.Exhibition;
+import common.controller.Controller;
+import common.model.Exhibition;
 
-public class ServiceDelegator {
-	// handle exceptions in this method
+public class ExhibitionController implements Controller {
+
 	public String execute(HttpServletRequest request,
-			HttpServletResponse response) {
-		String url = "index.jsp";
-		try {
-			if (request.getPathInfo().substring(1).equals("search")) {
+			HttpServletResponse response) throws Exception {
 
-				url = searchFedoraObjects(request, response);
-			} else if (request.getPathInfo().substring(1)
-					.equals("viewExhibitions")) {
-				url = exhibitions(request, response);
+		if (request.getPathInfo().substring(1).contains("redirect_exhibitions")) {
 
-			}
-		} catch (FedoraClientException exception) {
-			request.setAttribute("message", exception.getMessage());
+			return "WEB-INF/frontend/exhibitions/exhibitionHome.jsp";
+
 		}
+		return exhibitions(request, response);
 
-		return url;
-	}
-
-	enum Query {
-		ALL("all"), ID("pid"), TITLE("title"), DESCRIPTION("description");
-
-		private final String mapping;
-
-		private Query(String mapping) {
-			this.mapping = mapping;
-		}
-	}
-
-	private String searchFedoraObjects(HttpServletRequest request,
-			HttpServletResponse response) throws FedoraClientException {
-		Search search = new Search();
-
-		String terms = request.getParameter("terms");
-		String query = request.getParameter("query");
-
-		List<DatastreamProfile> pids = new ArrayList<DatastreamProfile>();
-
-		if (query != null && !query.equalsIgnoreCase(Query.ALL.mapping)) {
-			pids = search.findObjectsWithQuery(query + "~*" + terms + "*");
-
-		} else {
-			pids = search.findObjects(terms);
-		}
-
-		if (pids != null && !pids.isEmpty()) {
-			request.setAttribute("objects", pids);
-		} else {
-			request.setAttribute("message", "No results to return");
-		}
-		return "search.jsp";
 	}
 
 	private String exhibitions(HttpServletRequest request,
 			HttpServletResponse response) throws FedoraClientException {
 		String result = "";
 		Exhibition[] allExhibitions = new Exhibition[5];
-		
+
 		if (request.getParameter("view_all_exhibitions") != null) {
 			String action = request.getParameter("view_all_exhibitions");
 			if (action.equals("View All Exhibitions")) {
@@ -82,7 +37,7 @@ public class ServiceDelegator {
 				}
 				request.setAttribute("all_exhibitions", allExhibitions);
 				response.setContentType("Exhibition");
-				result = "/exhibition.jsp";
+				result = "exhibition.jsp";
 
 			}
 		}
@@ -102,7 +57,7 @@ public class ServiceDelegator {
 			request.setAttribute("image", path);
 			request.setAttribute("message", selectedExhibit);
 			response.setContentType("text/html");
-			result = "/ExhibitionViewer.jsp";
+			result = "ExhibitionViewer.jsp";
 
 		} else if (1 == 2) {
 			// File fi = new File("D:\\images-missGay2013\\2.jpg");
@@ -111,7 +66,7 @@ public class ServiceDelegator {
 			String path = "D:\\images\\2.jpg";
 			response.setContentType("text/html");
 			request.setAttribute("image", path);
-			result = "/ExhibitionViewer.jsp";
+			result = "ExhibitionViewer.jsp";
 			// String path=getServletContext().getRealPath(File.separator);
 			// File f =new File("D:\\Exhibit2.jpg");
 			// BufferedImage bi=ImageIO.read(f);

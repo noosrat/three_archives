@@ -1,7 +1,6 @@
-package services;
+package common;
 
-import backend.FedoraCommunicator;
-import backend.Resource;
+import search.FedoraCommunicator;
 
 public abstract class Service {
 

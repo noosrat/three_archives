@@ -1,11 +1,10 @@
-package services.search;
+package search;
 
 import java.util.List;
 
 import com.yourmediashelf.fedora.client.FedoraClientException;
 import com.yourmediashelf.fedora.generated.management.DatastreamProfile;
-
-import services.Service;
+import common.Service;
 
 public class Search extends Service {
 

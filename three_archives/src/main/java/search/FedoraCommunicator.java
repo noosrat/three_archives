@@ -1,10 +1,9 @@
-package backend;
+package search;
 
 import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.sun.jersey.api.client.ClientResponse;
 import com.yourmediashelf.fedora.client.FedoraClient;
 import com.yourmediashelf.fedora.client.FedoraClientException;
 import com.yourmediashelf.fedora.client.FedoraCredentials;
@@ -21,7 +20,7 @@ public class FedoraCommunicator {
 		try {
 			FedoraCredentials credentials = new FedoraCredentials("http://localhost:8080/fedora", "fedoraAdmin",
 					"fedoraAdmin");
-			this.fedora = new FedoraClient(credentials);
+			FedoraCommunicator.fedora = new FedoraClient(credentials);
 
 			FedoraRequest.setDefaultClient(fedora);
 
@@ -31,7 +30,7 @@ public class FedoraCommunicator {
 	}
 
 	public void setFedoraClient(FedoraClient fedoraClient) {
-		this.fedora = fedoraClient;
+		FedoraCommunicator.fedora = fedoraClient;
 	}
 
 	public FedoraClient getFedora() {

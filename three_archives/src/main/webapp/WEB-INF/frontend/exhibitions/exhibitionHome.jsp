@@ -4,7 +4,7 @@
 <header>
 	<h1>View exhibitions</h1>
 </header>
-<form method="post" action="${pageContext.request.contextPath}/archives/viewExhibitions">
+<form method="post" action="${pageContext.request.contextPath}/archives/view_exhibitions">
 
 	
 	<header><input type="submit" name="view_all_exhibitions" value="View All Exhibitions"/>	</header>

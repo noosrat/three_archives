@@ -8,18 +8,13 @@
 		<servlet-name>ThreeArchivesServlet</servlet-name>
 		<display-name>ThreeArchivesServlet</display-name>
 		<description>communicator</description>
-		<servlet-class>controller.ThreeArchivesServlet</servlet-class>
+		<servlet-class>common.controller.ThreeArchivesServlet</servlet-class>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>ThreeArchivesServlet</servlet-name>
 		<url-pattern>/archives/*</url-pattern>
 	</servlet-mapping>
   
-  <servlet>
-    <servlet-name>mapoverview</servlet-name>
-    <jsp-file>/mapoverview.jsp</jsp-file>
-</servlet>
-
 <servlet>
     <servlet-name>harfieldoverview</servlet-name>
     <jsp-file>/WEB-INF/frontend/harfieldoverview.jsp</jsp-file>
@@ -34,11 +29,6 @@
     <servlet-name>detailviewer</servlet-name>
     <jsp-file>/WEB-INF/frontend/detailviewer.jsp</jsp-file>
 </servlet>
-
-<servlet-mapping>
-    <servlet-name>mapoverview</servlet-name>
-    <url-pattern>/archives/mapoverview</url-pattern>
-</servlet-mapping>
 
 <servlet-mapping>
     <servlet-name>harfieldoverview</servlet-name>
