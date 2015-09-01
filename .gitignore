@@ -1,1 +1,3 @@
-three_archives\target\*
+*target*
+*.jar
+*.class
