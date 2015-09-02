@@ -5,14 +5,14 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>SpringQueen</title>
-<link rel="stylesheet" type="text/css" href="stylesheet.css"></link>
+<link rel="stylesheet" type="text/css" href="WEB-INF/frontend/exhibitions/stylesheet.css"></link>
 </head>
 <body>
 	<header> 
 	<div>
 	<ol class="ulheading">
 		<li class="liheading">
-			<a href="Sequins.jsp"> <img src="Images/SequinsLogo.png" height="70" width="70" ></a></li> 
+			<a href="WEB-INF/frontend/exhibitions/sequins.jsp"> <img src="Images/SequinsLogo.png" height="70" width="70" ></a></li> 
 		<li class="liheading"><h1>Spring Queen</h1></li>
 	</ol>
 	</div>
@@ -20,9 +20,9 @@
 </header>
 <nav class="navbar">
 	<ul>
-		<li><a href="index.jsp"> <h>About</h></a></li>
-		<li><a href="index.jsp"><h>Research</h></a></li>
-		<li><a href="exhibition.jsp"><h>Exhibitions</h></a></li>
+		<li><a href="WEB-INF/frontend/exhibitions/index.jsp"> <h>About</h></a></li>
+		<li><a href="WEB-INF/frontend/exhibitions/index.jsp"><h>Research</h></a></li>
+		<li><a href="WEB-INF/frontend/exhibitions/exhibition.jsp"><h>Exhibitions</h></a></li>
 		
 		
 	</ul>

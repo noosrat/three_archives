@@ -37,7 +37,7 @@ public class ExhibitionController implements Controller {
 				}
 				request.setAttribute("all_exhibitions", allExhibitions);
 				response.setContentType("Exhibition");
-				result = "exhibition.jsp";
+				result = "WEB-INF/frontend/exhibitions/exhibition.jsp";
 
 			}
 		}
@@ -57,7 +57,7 @@ public class ExhibitionController implements Controller {
 			request.setAttribute("image", path);
 			request.setAttribute("message", selectedExhibit);
 			response.setContentType("text/html");
-			result = "ExhibitionViewer.jsp";
+			result = "WEB-INF/frontend/exhibitions/exhibitionViewer.jsp";
 
 		} else if (1 == 2) {
 			// File fi = new File("D:\\images-missGay2013\\2.jpg");
