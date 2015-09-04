@@ -23,6 +23,9 @@ public class ServiceDelegator {
 		controllers.put("maps", new MapController());
 	}
 
+	public HashMap<String, Controller> getControllers(){
+		return controllers;
+	}
 	public String execute(HttpServletRequest request,
 			HttpServletResponse response) {
 		String url = "index.jsp";

@@ -30,7 +30,7 @@ public class FedoraCommunicator {
 	}
 
 	public void setFedoraClient(FedoraClient fedoraClient) {
-		FedoraCommunicator.fedora = fedoraClient;
+		this.fedora = fedoraClient;
 	}
 
 	public FedoraClient getFedora() {
@@ -48,12 +48,7 @@ public class FedoraCommunicator {
 	
 
 	private List<String> findFedoraObjectsUsingSearchTerms(String terms) throws FedoraClientException {
-		FindObjectsResponse findObjectsResponse = null;
-		if (terms == null || terms.equals("")) {
-			findObjectsResponse = FedoraClient.findObjects().terms("*").pid().maxResults(10000).execute();
-		} else {
-			findObjectsResponse = FedoraClient.findObjects().terms("*"+terms+"*").pid().maxResults(10000).execute();
-		}
+		FindObjectsResponse findObjectsResponse = FedoraClient.findObjects().terms("*"+terms+"*").pid().maxResults(10000).execute();
 		return findObjectsResponse.getPids();
 	}
 

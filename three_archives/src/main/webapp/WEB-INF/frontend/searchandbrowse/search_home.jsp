@@ -10,7 +10,7 @@
 <body>
 	<h2>Three Archives Search</h2>
 	${message}
-	<form action="${pageContext.request.contextPath}/archives/search"
+	<form action="${pageContext.request.contextPath}/archives/search_objects"
 		method="post">
 	  	<select id="query" name="query">
 			<option value="all">All</option>
