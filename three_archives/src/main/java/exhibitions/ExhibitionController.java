@@ -3,8 +3,6 @@ package exhibitions;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.yourmediashelf.fedora.client.FedoraClientException;
-
 import common.controller.Controller;
 import common.model.Exhibition;
 
@@ -23,7 +21,7 @@ public class ExhibitionController implements Controller {
 	}
 
 	private String exhibitions(HttpServletRequest request,
-			HttpServletResponse response) throws FedoraClientException {
+			HttpServletResponse response){
 		String result = "";
 		Exhibition[] allExhibitions = new Exhibition[5];
 

@@ -1,49 +1,31 @@
 package search;
 
-import static org.mockito.Mockito.when;
-
-
-
-
-
-import java.util.ArrayList;
-import java.util.List;
-
-import org.junit.Before;
-import org.junit.Test;
-import org.mockito.Mockito;
-
-import com.yourmediashelf.fedora.client.FedoraClient;
-import com.yourmediashelf.fedora.client.FedoraClientException;
-import com.yourmediashelf.fedora.client.response.FindObjectsResponse;
-import com.yourmediashelf.fedora.client.response.GetDatastreamResponse;
-import com.yourmediashelf.fedora.generated.management.DatastreamProfile;
 
 //remember that we are not trying to test fedora code..we are trying to test OUR code
 public class FedoraCommunicatorTest {
 
 	private FedoraCommunicator instance;
-	private FedoraClient fedoraClient;
-
-	@Before
-	public void setUp() throws Exception {
-		instance = new FedoraCommunicator();
-		FedoraClient fedoraClient = Mockito.mock(FedoraClient.class);
-		instance.setFedoraClient(fedoraClient);
-	}
-
-	
-	private ArrayList<DatastreamProfile> expectedResult() {
-		ArrayList<DatastreamProfile> result = new ArrayList<DatastreamProfile>();
-		for (int x = 0; x < 5; x++) {
-			DatastreamProfile d1 = new DatastreamProfile();
-			d1.setPid("test:" + Math.random());
-
-			result.add(d1);
-		}
-		return result;
-
-	}
+//	private FedoraClient fedoraClient;
+//
+//	@Before
+//	public void setUp() throws Exception {
+//		instance = new FedoraCommunicator();
+//		FedoraClient fedoraClient = Mockito.mock(FedoraClient.class);
+//		instance.setFedoraClient(fedoraClient);
+//	}
+//
+//	
+//	private ArrayList<DatastreamProfile> expectedResult() {
+//		ArrayList<DatastreamProfile> result = new ArrayList<DatastreamProfile>();
+//		for (int x = 0; x < 5; x++) {
+//			DatastreamProfile d1 = new DatastreamProfile();
+//			d1.setPid("test:" + Math.random());
+//
+//			result.add(d1);
+//		}
+//		return result;
+//
+//	}
 	
 //	@Test
 //	public void testFindFedoraObjects(){
