@@ -46,7 +46,7 @@ public class DublinCoreDatastream extends Datastream {
 			String tagName = "dc:" + dc.getDescription();
 			NodeList tag = element.getElementsByTagName(tagName);
 			if (tag!=null){
-//				dublinCoreMetadata.put(dc, element.getElementsByTagName(tagName).item(0).getTextContent());
+				dublinCoreMetadata.put(dc, element.getElementsByTagName(tagName).item(0).getTextContent());
 			}
 			
 		}

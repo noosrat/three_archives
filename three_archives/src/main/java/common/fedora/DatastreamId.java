@@ -1,6 +1,6 @@
 package common.fedora;
 
 public enum DatastreamId {
-	DC,IMG,VID,AUD;
+	DC,IMG,IMG_PUB,VID,AUD;
 
 }

@@ -1,10 +1,10 @@
 package common.fedora;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.TreeMap;
+
+import org.apache.log4j.Logger;
 
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
@@ -16,7 +16,9 @@ import com.sun.jersey.client.apache.ApacheHttpClient;
  * Notes on the class: our result format is ALWAYS to be in XML
  */
 public class FedoraGetRequest{
-
+	
+	private final static Logger LOG = Logger.getLogger(FedoraGetRequest.class);
+	
 	private Client client;
 	private StringBuilder request;
 	private String persistentIdentifier;
@@ -79,6 +81,7 @@ public class FedoraGetRequest{
 
 	private void setFedoraResponse(FedoraXMLResponseParser fedoraResponse) {
 		this.fedoraResponse = fedoraResponse;
+		System.out.println(fedoraResponse);
 	}
 
 	private StringBuilder getPrefix() {
@@ -103,6 +106,7 @@ public class FedoraGetRequest{
 		for (DublinCore dc : fieldsToReturn) {
 			getRequest().append(dc.getDescription()).append("=true&");
 		}
+		LOG.debug("Request after dublin core fields specified " + getRequest());
 		setQueryParameters(queryParameters);
 		
 		return this;
@@ -198,6 +202,8 @@ public class FedoraGetRequest{
 		 * we have a whole map of all the parameters now we must append it to
 		 * our string
 		 */
+		LOG.debug("Processing parameters" + queryParameters.values());
+		
 		for (QueryParameters key : queryParameters.keySet()) {
 			getRequest().append(key.getDescription()).append("=")
 					.append(getQueryParameters().get(key)).append("&");
@@ -205,9 +211,10 @@ public class FedoraGetRequest{
 		if (!queryParameters.containsKey(QueryParameters.RESULT_FORMAT)) {
 			getRequest().append("format=xml");
 		} else {
-			setRequest(new StringBuilder(getRequest().substring(0,
-					getRequest().length() - 1)));
+			getRequest().delete(getRequest().length()-1, getRequest().length());
 		}
+		
+		LOG.debug("Finished processing parameters, request: " + getRequest().toString());
 
 	}
 
@@ -221,23 +228,12 @@ public class FedoraGetRequest{
 
 	public void execute() throws FedoraException{
 		WebResource webResource = client.resource(getRequest().toString());
+		LOG.debug("Successfully created web resource");
 		System.out.println("Request :" + getRequest().toString());
 		ClientResponse clientResponse = webResource.get(ClientResponse.class);
 		
 		if (clientResponse.getStatus()==200){
-			//the request was successful
-			 BufferedReader reader = new BufferedReader(new InputStreamReader(
-					 clientResponse.getEntityInputStream()));
-			String output;
-			String response = "";
-			 try {
-				while ((output = reader.readLine()) != null) {
-					 response += output;
-				 }
-			} catch (IOException e) {
-				throw new FedoraException("Request unsuccessful failed to read line from buffer " + e.getMessage());
-			}
-			setFedoraResponse(new FedoraXMLResponseParser(response));
+			setFedoraResponse(new FedoraXMLResponseParser(clientResponse.getEntityInputStream()));
 		}
 		else{
 			throw new FedoraException("Request execution unsuccessful " + clientResponse.getStatus());

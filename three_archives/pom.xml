@@ -8,6 +8,7 @@
 	<version>0.0.1-SNAPSHOT</version>
 
 	<name>three_archives</name>
+	 <url>http://maven.apache.org</url>
 
 	<dependencies>
 		<dependency>
