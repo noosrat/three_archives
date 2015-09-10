@@ -5,24 +5,21 @@ import java.util.Date;
 
 public class FedoraDigitalObject {
 	private String pid; //^([A-Za-z0-9]|-|\.)+:(([A-Za-z0-9])|-|\.|~|_|(%[0-9A-F]{2}))+$
-	private String xmlRepresentation;
-	private ArrayList<String> versionHistory;
-	private Date dateCreated;
-	private Date dateLastModified;
+	private String xmlRepresentation; //getobjectxml
+	private ArrayList<String> versionHistory; //getobjecthistory
+	private String dateCreated;
+	private String dateLastModified;
 	private State state;
-	private ArrayList<Datastream> datastreams;
+	private ArrayList<Datastream> datastreams; //getdatastreams..and then populate further
 	
 	
 
 	//check this before creating	System.out.println(id.matches("^([A-Za-z0-9]|-|\\.)+:(([A-Za-z0-9])|-|\\.|~|_|(%[0-9A-F]{2}))+$"));
 	//in fedora there is always a default DC datastream
 	
-	public FedoraDigitalObject(){
-		
-	}
 	public FedoraDigitalObject(String pid){
 		this.pid = pid;
-		this.dateCreated = new Date(); //unless we throw this at fedora and then it gives us the date?
+		this.dateCreated = ""; //unless we throw this at fedora and then it gives us the date?
 	}
 	
 	public String getPid() {
@@ -49,19 +46,19 @@ public class FedoraDigitalObject {
 		this.versionHistory = versionHistory;
 	}
 
-	public Date getDateCreated() {
+	public String getDateCreated() {
 		return dateCreated;
 	}
 
-	public void setDateCreated(Date dateCreated) {
+	public void setDateCreated(String dateCreated) {
 		this.dateCreated = dateCreated;
 	}
 
-	public Date getDateLastModified() {
+	public String getDateLastModified() {
 		return dateLastModified;
 	}
 
-	public void setDateLastModified(Date dateLastModified) {
+	public void setDateLastModified(String dateLastModified) {
 		this.dateLastModified = dateLastModified;
 	}
 

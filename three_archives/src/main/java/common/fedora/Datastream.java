@@ -8,9 +8,9 @@ import org.springframework.http.MediaType;
 
 public class Datastream {
 	private String pid;
-	private String datastreamIdentifier;
+	private DatastreamId datastreamIdentifier;
 	private String label;
-	private Date creation;
+	private String creation;
 	private String versionID;
 	private State state;
 	private MediaType mediaType;
@@ -23,7 +23,11 @@ public class Datastream {
 	private String content;
 	private ArrayList<Datastream> versionHistory;
 	
-	public Datastream(String pid, String datastreamIdentifier){
+	public Datastream(){
+		
+	}
+	
+	public Datastream(String pid, DatastreamId datastreamIdentifier){
 		this.pid = pid;
 		this.datastreamIdentifier = datastreamIdentifier;
 	}
@@ -39,11 +43,11 @@ public class Datastream {
 
 
 
-	public String getDatastreamIdentifier() {
+	public DatastreamId getDatastreamIdentifier() {
 		return datastreamIdentifier;
 	}
 
-	public void setDatastreamIdentifier(String datastreamIdentifier) {
+	public void setDatastreamIdentifier(DatastreamId datastreamIdentifier) {
 		this.datastreamIdentifier = datastreamIdentifier;
 	}
 
@@ -55,11 +59,11 @@ public class Datastream {
 		this.label = label;
 	}
 
-	public Date getCreation() {
+	public String getCreation() {
 		return creation;
 	}
 
-	public void setCreation(Date creation) {
+	public void setCreation(String creation) {
 		this.creation = creation;
 	}
 
@@ -148,6 +152,7 @@ public class Datastream {
 				* result
 				+ ((datastreamIdentifier == null) ? 0 : datastreamIdentifier
 						.hashCode());
+		result = prime * result + ((pid == null) ? 0 : pid.hashCode());
 		return result;
 	}
 
@@ -157,22 +162,21 @@ public class Datastream {
 			return true;
 		if (obj == null)
 			return false;
-		if (getClass() != obj.getClass())
+		if (!(obj instanceof Datastream))
 			return false;
 		Datastream other = (Datastream) obj;
-		if (datastreamIdentifier == null) {
-			if (other.datastreamIdentifier != null)
+		if (datastreamIdentifier != other.datastreamIdentifier)
+			return false;
+		if (pid == null) {
+			if (other.pid != null)
 				return false;
-		} else if (!datastreamIdentifier.equals(other.datastreamIdentifier))
+		} else if (!pid.equals(other.pid))
 			return false;
 		return true;
 	}
+	
+	
 
-	@Override
-	public String toString() {
-		return "Datastream [datastreamIdentifier=" + datastreamIdentifier
-				+ ", label=" + label + ", accessURL=" + content + "]";
-	}
 	
 	
 	

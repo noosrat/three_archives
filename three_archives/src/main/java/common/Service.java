@@ -1,17 +1,17 @@
 package common;
 
-import search.FedoraCommunicator;
+import search.FedoraCommunicatorOld;
 
 public abstract class Service {
 
 	private static Resource resource = new Resource();
-	private static FedoraCommunicator communicator = new FedoraCommunicator();
+	private static FedoraCommunicatorOld communicator = new FedoraCommunicatorOld();
 	
 	public Resource getResource() {
 		return resource;
 	}
 
-	protected FedoraCommunicator getFedoraCommunicator(){
+	protected FedoraCommunicatorOld getFedoraCommunicator(){
 		return communicator;
 	}
 	
