@@ -1,16 +1,9 @@
 package common.fedora;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.TreeMap;
 
 import org.apache.log4j.Logger;
-
-import com.sun.jersey.api.client.Client;
-import com.sun.jersey.api.client.ClientResponse;
-import com.sun.jersey.api.client.WebResource;
-import com.sun.jersey.api.client.filter.HTTPBasicAuthFilter;
-import com.sun.jersey.client.apache.ApacheHttpClient;
 
 /*
  * Notes on the class: our result format is ALWAYS to be in XML
@@ -19,18 +12,14 @@ public class FedoraGetRequest{
 	
 	private final static Logger LOG = Logger.getLogger(FedoraGetRequest.class);
 	
-	private Client client;
-	private StringBuilder request;
 	private String persistentIdentifier;
-	private FedoraXMLResponseParser fedoraResponse; 
+	private StringBuilder request;
 	private TreeMap<QueryParameters, String> queryParameters;
+	private FedoraXMLResponseParser fedoraResponse;
+	private final static String baseURL = FedoraCredentials.getUrl();
 	
 	public FedoraGetRequest() {
-		FedoraCredentials fedoraCredentials = new FedoraCredentials();
-		this.client = ApacheHttpClient.create();
-		client.addFilter(new HTTPBasicAuthFilter(fedoraCredentials
-				.getUsername(), fedoraCredentials.getPassword()));
-		this.request = new StringBuilder(fedoraCredentials.getUrl().concat(
+		this.request = new StringBuilder(baseURL.concat(
 				"/objects"));
 		this.queryParameters = new TreeMap<QueryParameters, String>();
 	}
@@ -40,13 +29,6 @@ public class FedoraGetRequest{
 		this.persistentIdentifier = persistentIdentifier;
 	}
 
-	public Client getClient() {
-		return client;
-	}
-
-	public void setClient(Client client) {
-		this.client = client;
-	}
 
 	public StringBuilder getRequest() {
 		return request;
@@ -74,14 +56,12 @@ public class FedoraGetRequest{
 		processParameters();
 	}
 
-	
 	public FedoraXMLResponseParser getFedoraResponse() {
 		return fedoraResponse;
 	}
 
-	private void setFedoraResponse(FedoraXMLResponseParser fedoraResponse) {
+	public void setFedoraResponse(FedoraXMLResponseParser fedoraResponse) {
 		this.fedoraResponse = fedoraResponse;
-		System.out.println(fedoraResponse);
 	}
 
 	private StringBuilder getPrefix() {
@@ -218,27 +198,14 @@ public class FedoraGetRequest{
 
 	}
 
-	public static void main(String[] args) throws FedoraException, IOException{
-		FedoraGetRequest feGetRequest = new FedoraGetRequest();
-		feGetRequest.setPersistentIdentifier("sq:3");
-		feGetRequest.getObjectProfile(new TreeMap<QueryParameters, String>()).execute();
-		System.out.println(feGetRequest.getFedoraResponse().getResponse());
+//	public static void main(String[] args) throws FedoraException, IOException{
+//		FedoraGetRequest feGetRequest = new FedoraGetRequest();
+//		feGetRequest.setPersistentIdentifier("sq:3");
+//		feGetRequest.getObjectProfile(new TreeMap<QueryParameters, String>()).execute();
+//		System.out.println(feGetRequest.getFedoraResponse().getResponse());
+//
+//	}
 
-	}
-
-	public void execute() throws FedoraException{
-		WebResource webResource = client.resource(getRequest().toString());
-		LOG.debug("Successfully created web resource");
-		System.out.println("Request :" + getRequest().toString());
-		ClientResponse clientResponse = webResource.get(ClientResponse.class);
-		
-		if (clientResponse.getStatus()==200){
-			setFedoraResponse(new FedoraXMLResponseParser(clientResponse.getEntityInputStream()));
-		}
-		else{
-			throw new FedoraException("Request execution unsuccessful " + clientResponse.getStatus());
-		}
-
-	}
+	
 
 }

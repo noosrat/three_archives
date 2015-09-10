@@ -1,18 +1,13 @@
 package search;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.TreeMap;
 
-import javax.xml.parsers.ParserConfigurationException;
-
-import org.xml.sax.SAXException;
-
 import common.fedora.DublinCore;
+import common.fedora.FedoraClient;
 import common.fedora.FedoraException;
 import common.fedora.FedoraGetRequest;
-import common.fedora.FedoraXMLResponseParser;
 import common.fedora.QueryParameters;
 
 public class FedoraCommunicator {
@@ -23,11 +18,10 @@ public class FedoraCommunicator {
 	 * datastreams and populate
 	 */
 
-	private FedoraGetRequest fedoraGetRequest;
+	private FedoraClient fedoraClient;
 
 	public FedoraCommunicator() {
-		fedoraGetRequest = new FedoraGetRequest();
-		
+		fedoraClient = new FedoraClient();
 	}
 
 	
@@ -42,7 +36,10 @@ public class FedoraCommunicator {
 		queryParameters.put(QueryParameters.RESULT_FORMAT, "xml");
 		ArrayList<DublinCore> toReturn = new ArrayList<DublinCore>();
 		toReturn.add(DublinCore.PID);
-		fedoraGetRequest.findObjects(queryParameters, toReturn).execute();
+		
+		FedoraGetRequest fedoraGetRequest = new FedoraGetRequest();
+		fedoraClient.execute(fedoraGetRequest.findObjects(queryParameters, toReturn));
+
 		List<String> pids;
 		try{
 		pids = fedoraGetRequest.getFedoraResponse().parseFindObjects();
