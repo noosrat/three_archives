@@ -8,7 +8,7 @@ import org.springframework.http.MediaType;
 
 public class Datastream {
 	private String pid;
-	private DatastreamId datastreamIdentifier;
+	private DatastreamID datastreamIdentifier;
 	private String label;
 	private Date creation;
 	private String versionID;
@@ -28,14 +28,14 @@ public class Datastream {
 	}
 	
 	
-	public Datastream(String pid, DatastreamId datastreamIdentifier){
+	public Datastream(String pid, DatastreamID datastreamIdentifier){
 		this.pid = pid;
 		this.datastreamIdentifier = datastreamIdentifier;
 	}
 
 	
 
-	public Datastream(String pid, DatastreamId datastreamIdentifier,
+	public Datastream(String pid, DatastreamID datastreamIdentifier,
 			String label, Date creation, String versionID, State state,
 			MediaType mediaType, String formatURI, String controlGroup,
 			Integer size, boolean versionable, String location, String content,
@@ -85,11 +85,11 @@ public class Datastream {
 
 
 
-	public DatastreamId getDatastreamIdentifier() {
+	public DatastreamID getDatastreamIdentifier() {
 		return datastreamIdentifier;
 	}
 
-	public void setDatastreamIdentifier(DatastreamId datastreamIdentifier) {
+	public void setDatastreamIdentifier(DatastreamID datastreamIdentifier) {
 		this.datastreamIdentifier = datastreamIdentifier;
 	}
 

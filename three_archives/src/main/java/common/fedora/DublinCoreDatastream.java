@@ -15,7 +15,7 @@ public class DublinCoreDatastream extends Datastream {
 
 	
 	public DublinCoreDatastream(String pid) {
-		super(pid, DatastreamId.DC);
+		super(pid, DatastreamID.DC);
 	}
 	
 	public DublinCoreDatastream(Datastream datastream) {
@@ -24,7 +24,7 @@ public class DublinCoreDatastream extends Datastream {
 
 
 	public DublinCoreDatastream(String pid, String content) throws ParserConfigurationException, SAXException, IOException {
-		super(pid, DatastreamId.DC);
+		super(pid, DatastreamID.DC);
 	}
 
 	

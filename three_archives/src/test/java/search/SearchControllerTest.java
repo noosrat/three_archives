@@ -1,7 +1,20 @@
 package search;
 
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import org.junit.Before;
+import org.junit.Test;
+import org.mockito.Mockito;
+
+import common.fedora.FedoraException;
 
 public class SearchControllerTest {
 	private HttpServletRequest request;
@@ -33,14 +46,14 @@ public class SearchControllerTest {
 //	@Test
 //	public void testHttpRequestDoesNotContainActionFromForm() {
 //		when(request.getPathInfo()).thenReturn("/");
-//		
+//
 //		String result;
 //		try {
-//	
 //			result = instance.execute(request, response);
-//		} catch (FedoraClientException e) {
+//		} catch (FedoraException e) {
 //			throw new AssertionError("Test failed " + e.getMessage());
 //		}
+//
 //		assertTrue(result
 //				.equalsIgnoreCase("WEB-INF/frontend/searchandbrowse/search_home.jsp"));
 //	}
@@ -51,28 +64,27 @@ public class SearchControllerTest {
 //		String result;
 //		try {
 //			result = instance.execute(request, response);
-//		} catch (FedoraClientException e) {
+//		} catch (FedoraException e) {
 //			throw new AssertionError("Test failed " + e.getMessage());
 //		}
 //		assertTrue(result
 //				.equalsIgnoreCase("WEB-INF/frontend/searchandbrowse/search_home.jsp"));
 //
 //	}
-//
 //
 //	@Test
 //	public void testHttpRequestExecuteSearchFedoraObjectsWithEmptyInputsAndResults() {
 //		when(request.getPathInfo()).thenReturn("/search_objects");
 //
 //		when(request.getParameter("terms")).thenReturn(null);
-//		when(request.getParameter("query")).thenReturn(SearchController.Query.ALL.toString());
-//		
+//
 //		String result;
 //		try {
 //			when(searchMock.findObjects(null)).thenReturn(null);
 //			result = instance.execute(request, response);
-//			verify(request).setAttribute("message", "Please enter a search term");
-//		} catch (FedoraClientException e) {
+//			verify(request).setAttribute("message",
+//					"Please enter a search term");
+//		} catch (FedoraException e) {
 //			throw new AssertionError("Test failed " + e.getMessage());
 //		}
 //
@@ -80,7 +92,7 @@ public class SearchControllerTest {
 //				.equalsIgnoreCase("WEB-INF/frontend/searchandbrowse/search_home.jsp"));
 //
 //	}
-//
+
 //	private ArrayList<DatastreamProfile> expectedResult() {
 //		ArrayList<DatastreamProfile> result = new ArrayList<DatastreamProfile>();
 //		for (int x = 0; x < 5; x++) {
@@ -92,14 +104,16 @@ public class SearchControllerTest {
 //		return result;
 //
 //	}
+//
 //	@Test
 //	public void testHttpRequestExecuteSearchFedoraObjectsWithNonEmptyResults() {
 //		when(request.getPathInfo()).thenReturn("/search_objects");
 //		ArrayList<DatastreamProfile> output = expectedResult();
-//		
+//
 //		when(request.getParameter("terms")).thenReturn("image");
-//		when(request.getParameter("query")).thenReturn(SearchController.Query.ALL.toString());
-//		
+//		when(request.getParameter("query")).thenReturn(
+//				SearchController.Query.ALL.toString());
+//
 //		String result;
 //		try {
 //			when(searchMock.findObjects("image")).thenReturn(output);

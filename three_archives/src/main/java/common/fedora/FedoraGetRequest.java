@@ -34,6 +34,10 @@ public class FedoraGetRequest {
 	public void setRequest(StringBuilder request) {
 		this.request = request;
 	}
+	
+	public void resetRequest(){
+		setRequest(new StringBuilder(baseURL.concat("/objects")));
+	}
 
 	public String getPersistentIdentifier() {
 		return persistentIdentifier;
@@ -63,7 +67,7 @@ public class FedoraGetRequest {
 			prefix = getRequest().append("/");
 		return prefix;
 	}
-
+	
 	// /objects ? [terms | query] [maxResults] [resultFormat] [pid] [label]
 	// [state] [ownerId] [cDate] [mDate] [dcmDate] [title] [creator] [subject]
 	// [description] [publisher] [contributor] [date] [type] [format]

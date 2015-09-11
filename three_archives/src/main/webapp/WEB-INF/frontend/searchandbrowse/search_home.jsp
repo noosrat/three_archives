@@ -11,19 +11,14 @@
 	${message}
 	<form action="${pageContext.request.contextPath}/archives/search_objects"
 		method="post">
-	  	<select id="query" name="query">
-			<option value="all">All</option>
-			<option value="pid">ID</option>
-			<option value="title">Title</option>
-			<option value="description">Description</option>
-		</select>  
+	   
 		<input type="text" name="terms"><br>
 		<input type="submit" value="Search for Fedora objects" />
 	</form>
 
-	<c:forEach var="ds" items="${objects}">
+	<c:forEach var="digitalObject" items="${objects}">
 	<!-- 	<td><img src="${ds.content}" style="width: 304px; height: 228px;"> -->
-		<td>${ds}</td>
+		<td>${digitalObject}</td>
 	</c:forEach>
 
 </body>

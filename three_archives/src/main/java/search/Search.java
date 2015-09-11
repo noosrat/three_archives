@@ -4,6 +4,7 @@ import java.util.List;
 
 import common.Service;
 import common.fedora.Datastream;
+import common.fedora.FedoraDigitalObject;
 import common.fedora.FedoraException;
 
 public class Search extends Service {
@@ -12,11 +13,11 @@ public class Search extends Service {
 		super();
 	}
 	
-	public List<Datastream> findObjects(String terms) throws FedoraException{
-		return getFedoraCommunicator().findFedoraObjects(terms);
+	public List<Datastream> findFedoraDatastreams(String terms) throws FedoraException{
+		return getFedoraCommunicator().findFedoraDatastreams(terms);
 	}
-//	
-//	public List<DatastreamProfile> findObjectsWithQuery(String query) throws FedoraClientException{
-//		return getFedoraCommunicator().findFedoraObjectsWithQuery(query);
-//	}
+	
+	public List<FedoraDigitalObject> findFedoraDigitalObjects(String terms) throws FedoraException{
+		return getFedoraCommunicator().findFedoraDigitalObjects(terms);
+	}
 }

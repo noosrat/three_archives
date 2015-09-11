@@ -31,6 +31,7 @@ public class FedoraClient {
 	public FedoraXMLResponseParser execute(FedoraGetRequest fedoraGetRequest) throws FedoraException{
 		WebResource webResource = client.resource(fedoraGetRequest.getRequest().toString());
 		ClientResponse clientResponse = webResource.get(ClientResponse.class);
+		fedoraGetRequest.resetRequest();
 		
 		if (clientResponse.getStatus()==200){
 			return new FedoraXMLResponseParser(clientResponse.getEntityInputStream());

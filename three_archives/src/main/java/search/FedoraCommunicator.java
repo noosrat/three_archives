@@ -1,6 +1,7 @@
 package search;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.TreeMap;
@@ -10,9 +11,8 @@ import javax.xml.parsers.ParserConfigurationException;
 import org.xml.sax.SAXException;
 
 import common.fedora.Datastream;
-import common.fedora.DatastreamId;
+import common.fedora.DatastreamID;
 import common.fedora.DublinCore;
-import common.fedora.DublinCoreDatastream;
 import common.fedora.FedoraClient;
 import common.fedora.FedoraDigitalObject;
 import common.fedora.FedoraException;
@@ -32,28 +32,46 @@ public class FedoraCommunicator {
 	public FedoraCommunicator() {
 		fedoraClient = new FedoraClient();
 	}
-
-	public static void main(String[] args) throws FedoraException {
-		new FedoraCommunicator().findFedoraObjectsWithSearchTerm(null);
+	
+	
+	public ArrayList<FedoraDigitalObject> findFedoraDigitalObjects(String terms) throws FedoraException{
+		return findAndPopulateFedoraDigitalObjects(terms);
 	}
-
-	public ArrayList<Datastream> findFedoraObjects(String terms)
+	
+	
+	public ArrayList<Datastream> findFedoraDatastreams(String terms)
 			throws FedoraException {
-		return findFedoraObjectss("Spring+Queen");
+		return findFedoraDatastreamWithSpecificDatastreamIDMatchingTerms(terms, DatastreamID.DC);
 	}
+	
+	
+	private ArrayList<FedoraDigitalObject> findAndPopulateFedoraDigitalObjects(String terms) throws FedoraException{
+		ArrayList<FedoraDigitalObject> results = new ArrayList<FedoraDigitalObject>();
+		List<String> pids = findFedoraObjectsWithSearchTerm(terms);
+		try {
+			for (String pid : pids) {
+				System.out.println("Processing digital object with pid " + pid);
+				results.add(populateFedoraDigitalObject(pid));
+			}
+		} catch (Exception ex) {
+			throw new FedoraException("Could not Populate fedora digital objects",ex);
+		}
 
-	private ArrayList<Datastream> findFedoraObjectss(String terms)
+		return results;
+	}
+	
+	private ArrayList<Datastream> findFedoraDatastreamWithSpecificDatastreamIDMatchingTerms(String terms, DatastreamID datastreamID)
 			throws FedoraException {
 		ArrayList<Datastream> results = new ArrayList<Datastream>();
-		List<String> pids = findFedoraObjectsWithSearchTerm("");
+		List<String> pids = findFedoraObjectsWithSearchTerm(terms);
 		try {
 			for (String pid : pids) {
 				System.out.println("Processing digital object with pid " + pid);
 				results.add(findSpecificDatastreamsForFedoraObject(pid,
-						DatastreamId.DC));
+						datastreamID));
 			}
 		} catch (Exception ex) {
-			throw new FedoraException(ex);
+			throw new FedoraException("Could not find data streams with specific type",ex);
 		}
 
 		return results;
@@ -62,7 +80,7 @@ public class FedoraCommunicator {
 	private List<String> findFedoraObjectsWithSearchTerm(String terms)
 			throws FedoraException {
 		TreeMap<QueryParameters, String> queryParameters = new TreeMap<QueryParameters, String>();
-		queryParameters.put(QueryParameters.TERMS, "Spring+Queen");
+		queryParameters.put(QueryParameters.TERMS, terms);
 		queryParameters.put(QueryParameters.RESULT_FORMAT, "xml");
 
 		FedoraGetRequest fedoraGetRequest = new FedoraGetRequest();
@@ -74,8 +92,7 @@ public class FedoraCommunicator {
 							DublinCore.PID)).parseFindObjects();
 			;
 			if (pids == null || pids.isEmpty()) {
-				throw new FedoraException(
-						"Could not find any results for your search");
+				throw new FedoraException("Could not find any results for your search");
 			}
 		} catch (Exception ex) {
 			throw new FedoraException("Could not parse xml response "
@@ -88,18 +105,19 @@ public class FedoraCommunicator {
 
 	/* this will give you one specific datastream for a specified object */
 	private Datastream findSpecificDatastreamsForFedoraObject(String pid,
-			DatastreamId datastreamId) throws FedoraException,
+			DatastreamID datastreamId) throws FedoraException,
 			ParserConfigurationException, SAXException, IOException {
 		FedoraGetRequest fedoraGetRequest = new FedoraGetRequest(pid);
 		Datastream datastream;
 		datastream = fedoraClient.execute(
 				fedoraGetRequest.getDatastream(datastreamId.name(), null))
 				.parseGetDatastream();
-		DatastreamId dsid = datastream.getDatastreamIdentifier();
-		
-		if (dsid.equals(DatastreamId.DC)) {
-			fedoraGetRequest = new FedoraGetRequest(pid);
-			datastream = fedoraClient.execute(fedoraGetRequest.getDatastreamDissemination(dsid.name(),null)).parseDublinCoreDatastream(datastream);
+		DatastreamID dsid = datastream.getDatastreamIdentifier();
+
+		if (dsid.equals(DatastreamID.DC.name())) {
+			datastream = fedoraClient.execute(
+					fedoraGetRequest.getDatastreamDissemination(dsid.name(),
+							null)).parseDublinCoreDatastream(datastream);
 		}
 
 		return datastream;
@@ -111,7 +129,27 @@ public class FedoraCommunicator {
 		FedoraGetRequest fedoraGetRequest = new FedoraGetRequest(pid);
 		fedoraClient.execute(fedoraGetRequest.getObjectProfile(null))
 				.parseGetObjectProfile(fedoraDigitalObject);
+		InputStream xml = fedoraClient.execute(fedoraGetRequest.getObjectXML())
+				.getResponse();
+		List<String> versionHistory = fedoraClient.execute(
+				fedoraGetRequest.getObjectHistory()).parseGetObjectHistory();
+		fedoraDigitalObject.setXmlRepresentation(xml);
+		fedoraDigitalObject.setVersionHistory(versionHistory);
 
+		// we now need to list and then parse all of the datastreams for this
+		// digital object
+		// list the ds and then call findSpecificDatastreamsForFedoraObject
+		List<DatastreamID> datastreamIds = fedoraClient.execute(
+				fedoraGetRequest.listDatastreams(null)).parseListDataStream();
+		List<Datastream> objectDatastreams = new ArrayList<Datastream>();
+		try {
+			for (DatastreamID datastreamID : datastreamIds) {
+				objectDatastreams.add(findSpecificDatastreamsForFedoraObject(pid, datastreamID));
+			}
+		} catch (Exception ex) {
+			throw new FedoraException("Could not populate fedora digital object",ex);
+		}
+		fedoraDigitalObject.setDatastreams(objectDatastreams);
 		return fedoraDigitalObject;
 	}
 

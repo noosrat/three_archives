@@ -1,16 +1,17 @@
 package common.fedora;
 
-import java.util.ArrayList;
+import java.io.InputStream;
 import java.util.Date;
+import java.util.List;
 
 public class FedoraDigitalObject {
 	private String pid; //^([A-Za-z0-9]|-|\.)+:(([A-Za-z0-9])|-|\.|~|_|(%[0-9A-F]{2}))+$
-	private String xmlRepresentation; //getobjectxml
-	private ArrayList<String> versionHistory; //getobjecthistory
+	private InputStream xmlRepresentation; //getobjectxml
+	private List<String> versionHistory; //getobjecthistory
 	private Date dateCreated;
 	private Date dateLastModified;
 	private State state;
-	private ArrayList<Datastream> datastreams; //getdatastreams..and then populate further
+	private List<Datastream> datastreams; //getdatastreams..and then populate further
 	
 	
 
@@ -29,19 +30,19 @@ public class FedoraDigitalObject {
 		this.pid = pid;
 	}
 
-	public String getXmlRepresentation() {
+	public InputStream getXmlRepresentation() {
 		return xmlRepresentation;
 	}
 
-	public void setXmlRepresentation(String xmlRepresentation) {
+	public void setXmlRepresentation(InputStream xmlRepresentation) {
 		this.xmlRepresentation = xmlRepresentation;
 	}
 
-	public ArrayList<String> getVersionHistory() {
+	public List<String> getVersionHistory() {
 		return versionHistory;
 	}
 
-	public void setVersionHistory(ArrayList<String> versionHistory) {
+	public void setVersionHistory(List<String> versionHistory) {
 		this.versionHistory = versionHistory;
 	}
 
@@ -69,11 +70,11 @@ public class FedoraDigitalObject {
 		this.state = state;
 	}
 
-	public ArrayList<Datastream> getDatastreams() {
+	public List<Datastream> getDatastreams() {
 		return datastreams;
 	}
 
-	public void setDatastreams(ArrayList<Datastream> datastreams) {
+	public void setDatastreams(List<Datastream> datastreams) {
 		this.datastreams = datastreams;
 	}
 
@@ -105,9 +106,13 @@ public class FedoraDigitalObject {
 	@Override
 	public String toString() {
 		return "FedoraDigitalObject [pid=" + pid + ", xmlRepresentation="
-				+ xmlRepresentation + ", dateCreated=" + dateCreated
-				+ ", dateLastModified=" + dateLastModified + "]";
+				+ xmlRepresentation + ", versionHistory=" + versionHistory
+				+ ", dateCreated=" + dateCreated + ", dateLastModified="
+				+ dateLastModified + ", state=" + state + ", datastreams="
+				+ datastreams + "]";
 	}
+
+
 	
 
 }

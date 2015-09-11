@@ -4,7 +4,7 @@ package search;
 public class SearchTest {
 
 	private Search instance;
-	private FedoraCommunicatorOld fedoraCommunicator;
+	private FedoraCommunicator fedoraCommunicator;
 	
 //	@Before
 //	public void setUp() throws Exception {
@@ -57,20 +57,5 @@ public class SearchTest {
 //		
 //	}
 //	
-//	@Test
-//	public void testFindObjectsWithQuery(){
-//		ArrayList<DatastreamProfile> expectedResult = expectedResult();
-//		List<DatastreamProfile> result = new ArrayList<DatastreamProfile>();
-//		
-//		try {
-//			when(fedoraCommunicator.findFedoraObjects(null)).thenReturn(expectedResult);
-//			result = instance.findObjectsWithQuery(null);
-//		} catch (FedoraClientException e) {
-//			throw new AssertionError("test failed" + e.getMessage());
-//		}
-//		for (int x=0; x<result.size(); x++){
-//			assertTrue("PIDs do not match", result.get(x).getPid().equals(expectedResult.get(x).getPid()));
-//		}
-//	}
 	
 }

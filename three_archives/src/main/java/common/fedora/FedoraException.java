@@ -11,5 +11,10 @@ public class FedoraException extends Exception {
 	public FedoraException(Throwable cause){
 		super(cause);
 	}
+	
+	public FedoraException(String message, Throwable cause){
+		super(message);
+	}
+	
 
 }

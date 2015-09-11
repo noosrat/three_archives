@@ -1,5 +1,7 @@
 package search;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import common.controller.Controller;
 import common.fedora.Datastream;
+import common.fedora.FedoraDigitalObject;
 import common.fedora.FedoraException;
 
 public class SearchController implements Controller {
@@ -19,65 +22,66 @@ public class SearchController implements Controller {
 	}
 
 	public String execute(HttpServletRequest request,
-			HttpServletResponse response) {
+			HttpServletResponse response) throws FedoraException {
 		String result = "WEB-INF/frontend/searchandbrowse/search_home.jsp";
 
 		if (request.getPathInfo().substring(1).contains("redirect_search")) {
 			result = "WEB-INF/frontend/searchandbrowse/search_home.jsp";
-		} else if (request.getPathInfo().substring(1).contains("search_objects")) {
-			result = searchFedoraObjects(request, response);
+		} else if (request.getPathInfo().substring(1)
+				.contains("search_objects")) {
+			result = searchFedoraDigitalObjects(request, response);
 		}
 		return result;
 	}
 
-	private String searchFedoraObjects(HttpServletRequest request,
-			HttpServletResponse response) {
+	
+	private String searchFedoraDigitalObjects(HttpServletRequest request,
+			HttpServletResponse response) throws FedoraException {
 
-		String terms = request.getParameter("terms");
-		String query = request.getParameter("query");
+		String terms;
+		try {
+			terms = URLEncoder.encode(request.getParameter("terms"),"UTF-8");
+		} catch (UnsupportedEncodingException e) {
+			throw new FedoraException("Could not find fedora object due to faulty search", e);
+		}
+
+		List<FedoraDigitalObject> digitalObjects = new ArrayList<FedoraDigitalObject>();
+		if (terms==null || terms.trim().isEmpty()){
+			throw new FedoraException("Please enter search terms");
+		}
+		digitalObjects = getSearch().findFedoraDigitalObjects(terms);
+
+		if (digitalObjects != null && !digitalObjects.isEmpty()) {
+			request.setAttribute("objects", digitalObjects);
+		} else {
+			request.setAttribute("message", "No results to return");
+		}
+
+		return "WEB-INF/frontend/searchandbrowse/search_home.jsp";
+	}
+	private String searchFedoraDatastreams(HttpServletRequest request,
+			HttpServletResponse response) throws FedoraException {
+
+		String terms;
+		try {
+			terms = URLEncoder.encode(request.getParameter("terms"),"UTF-8");
+		} catch (UnsupportedEncodingException e) {
+			throw new FedoraException("Could not find fedora object due to faulty search", e);
+		}
 
 		List<Datastream> pids = new ArrayList<Datastream>();
-		try {
-			pids = getSearch().findObjects(terms);
-		} catch (Exception ex) {
-			request.setAttribute("message", ex.getStackTrace());
+		if (terms==null || terms.trim().isEmpty()){
+			throw new FedoraException("Please enter search terms");
 		}
+		pids = getSearch().findFedoraDatastreams(terms);
 
 		if (pids != null && !pids.isEmpty()) {
 			request.setAttribute("objects", pids);
 		} else {
 			request.setAttribute("message", "No results to return");
 		}
-		// }
 
-		// List<DatastreamProfile> pids = new ArrayList<DatastreamProfile>();
-		//
-		// if (terms == null || terms.trim().isEmpty()) {
-		// request.setAttribute("message", "Please enter a search term");
-		// } else {
-		// if (query != null && !query.equalsIgnoreCase(Query.ALL.mapping)) {
-		// pids = getSearch().findObjectsWithQuery(
-		// query + "~*" + terms + "*");
-		// } else {
-		// pids = getSearch().findObjects(terms);
-		// }
-		//
-		// if (pids != null && !pids.isEmpty()) {
-		// request.setAttribute("objects", pids);
-		// } else {
-		// request.setAttribute("message", "No results to return");
-		// }
-		// }
 		return "WEB-INF/frontend/searchandbrowse/search_home.jsp";
 	}
 
-	enum Query {
-		ALL("all"), ID("pid"), TITLE("title"), DESCRIPTION("description");
-
-		private final String mapping;
-
-		private Query(String mapping) {
-			this.mapping = mapping;
-		}
-	}
 }
