@@ -174,6 +174,18 @@ public class Datastream {
 			return false;
 		return true;
 	}
+
+	@Override
+	public String toString() {
+		return "Datastream [pid=" + pid + ", datastreamIdentifier="
+				+ datastreamIdentifier + ", label=" + label + ", creation="
+				+ creation + ", versionID=" + versionID + ", state=" + state
+				+ ", mediaType=" + mediaType + ", formatURI=" + formatURI
+				+ ", controlGroup=" + controlGroup + ", size=" + size
+				+ ", versionable=" + versionable + ", location=" + location
+				+ ", content=" + content + ", versionHistory=" + versionHistory
+				+ "]";
+	}
 	
 	
 

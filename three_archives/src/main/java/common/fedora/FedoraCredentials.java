@@ -9,11 +9,11 @@ public class FedoraCredentials {
 		return url;
 	}
 
-	public String getUsername() {
+	public static String getUsername() {
 		return username;
 	}
 
-	public String getPassword() {
+	public static String getPassword() {
 		return password;
 	}
 

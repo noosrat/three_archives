@@ -1,6 +1,4 @@
-<%@page import="java.util.List"%>
-<%@page
-	import="com.yourmediashelf.fedora.generated.management.DatastreamProfile"%>
+<%@page	import="common.fedora.Datastream"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql"%>
@@ -22,8 +20,8 @@
 		<input type="submit" value="Search for Fedora objects" />
 	</form>
 
-	<c:forEach var="datastreamProfile" items="${objects}">
-		<td><img src="${datastreamProfile.dsLocation}" style="width: 304px; height: 228px;">
+	<c:forEach var="ds" items="${objects}">
+		<td><img src="${ds.content}" style="width: 304px; height: 228px;">
 			</td>
 	</c:forEach>
 

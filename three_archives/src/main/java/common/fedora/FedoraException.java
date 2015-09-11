@@ -8,5 +8,8 @@ public class FedoraException extends Exception {
 		super(message);
 	}
 	
+	public FedoraException(Throwable cause){
+		super(cause);
+	}
 
 }

@@ -7,6 +7,9 @@ import javax.servlet.http.HttpServletResponse;
 
 import maps.MapController;
 import search.SearchController;
+
+import common.fedora.FedoraException;
+
 import exhibitions.ExhibitionController;
 
 public class ServiceDelegator {
@@ -26,23 +29,23 @@ public class ServiceDelegator {
 	public String execute(HttpServletRequest request,
 			HttpServletResponse response) {
 		String url = "index.jsp";
-//		try {
-//			if (request.getPathInfo().substring(1).contains("search")) {
-//				
-//				url = controllers.get("search").execute(request, response);
-//				
-//			} else if (request.getPathInfo().substring(1)
-//					.contains("exhibitions")) {
-//				url = controllers.get("exhibitions").execute(request, response);
-//			} else if (request.getPathInfo().substring(1).contains("maps")) {
-//				url = controllers.get("maps").execute(request, response);
-//			}
-//		} catch (FedoraClientException exception) {
-//			request.setAttribute("message", exception.getMessage());
-//
-//		} catch (Exception exception) {
-//			request.setAttribute("message", exception.getMessage());
-//		}
+		try {
+			if (request.getPathInfo().substring(1).contains("search")) {
+				
+				url = controllers.get("search").execute(request, response);
+				
+			} else if (request.getPathInfo().substring(1)
+					.contains("exhibitions")) {
+				url = controllers.get("exhibitions").execute(request, response);
+			} else if (request.getPathInfo().substring(1).contains("maps")) {
+				url = controllers.get("maps").execute(request, response);
+			}
+		} catch (FedoraException exception) {
+			request.setAttribute("message", exception.getMessage());
+
+		} catch (Exception exception) {
+			request.setAttribute("message", exception.getMessage());
+		}
 
 		return url;
 	}

@@ -1,6 +1,6 @@
 package common.fedora;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.TreeMap;
 
 import org.apache.log4j.Logger;
@@ -8,19 +8,17 @@ import org.apache.log4j.Logger;
 /*
  * Notes on the class: our result format is ALWAYS to be in XML
  */
-public class FedoraGetRequest{
-	
+public class FedoraGetRequest {
+
 	private final static Logger LOG = Logger.getLogger(FedoraGetRequest.class);
-	
+
 	private String persistentIdentifier;
 	private StringBuilder request;
 	private TreeMap<QueryParameters, String> queryParameters;
-	private FedoraXMLResponseParser fedoraResponse;
 	private final static String baseURL = FedoraCredentials.getUrl();
-	
+
 	public FedoraGetRequest() {
-		this.request = new StringBuilder(baseURL.concat(
-				"/objects"));
+		this.request = new StringBuilder(baseURL.concat("/objects"));
 		this.queryParameters = new TreeMap<QueryParameters, String>();
 	}
 
@@ -28,7 +26,6 @@ public class FedoraGetRequest{
 		this();
 		this.persistentIdentifier = persistentIdentifier;
 	}
-
 
 	public StringBuilder getRequest() {
 		return request;
@@ -52,16 +49,10 @@ public class FedoraGetRequest{
 
 	private void setQueryParameters(
 			TreeMap<QueryParameters, String> queryParameters) {
-		this.queryParameters = queryParameters;
+		if (queryParameters != null) {
+			this.queryParameters = queryParameters;
+		}
 		processParameters();
-	}
-
-	public FedoraXMLResponseParser getFedoraResponse() {
-		return fedoraResponse;
-	}
-
-	public void setFedoraResponse(FedoraXMLResponseParser fedoraResponse) {
-		this.fedoraResponse = fedoraResponse;
 	}
 
 	private StringBuilder getPrefix() {
@@ -79,26 +70,28 @@ public class FedoraGetRequest{
 	// [identifier] [source] [language] [relation] [coverage] [rights]
 	// /objects?terms=demo&pid=true&subject=true&label=true&resultFormat=xml
 
-	public FedoraGetRequest findObjects(TreeMap<QueryParameters, String> queryParameters,
-			ArrayList<DublinCore> fieldsToReturn) {
+	public FedoraGetRequest findObjects(
+			TreeMap<QueryParameters, String> queryParameters,
+			DublinCore... toReturn) {
 		getRequest().append("?");
 		// need to go through and add the DC ones so long
-		for (DublinCore dc : fieldsToReturn) {
+		for (DublinCore dc : toReturn) {
 			getRequest().append(dc.getDescription()).append("=true&");
 		}
-		LOG.debug("Request after dublin core fields specified " + getRequest());
+		System.out.println("Request after dublin core fields specified "
+				+ getRequest());
 		setQueryParameters(queryParameters);
-		
+
 		return this;
 	}
 
-	// // /objects/{pid}/datastreams/{dsID}/content ? [asOfDateTime] [download]
-	// // /objects/demo:29/datastreams/DC/content
-	// public void getDatastreamDissemination(String dsid,
-	// HashMap<QueryParameters,String> queryParameters) {
-	// getPrefix().append("/datastreams/").append(dsid).append("/content?");
-	//
-	// }
+	// /objects/{pid}/datastreams/{dsID}/content ? [asOfDateTime] [download]
+	// /objects/demo:29/datastreams/DC/content
+	public FedoraGetRequest getDatastreamDissemination(String dsid, TreeMap<QueryParameters, String> queryParameters) {
+		getPrefix().append("/datastreams/").append(dsid).append("/content?");
+		setQueryParameters(queryParameters);
+		return this;
+	}
 
 	// Probably will not use this?
 	// // /objects/{pid}/methods/{sdefPid}/{method} ? [method parameters]
@@ -127,7 +120,8 @@ public class FedoraGetRequest{
 
 	// /objects/{pid}/datastreams ? [format] [asOfDateTime]
 	// /objects/demo:35/datastreams?format=xml&asOfDateTime=2008-01-01T05:15:00Z
-	public FedoraGetRequest listDatastreams(TreeMap<QueryParameters, String> queryParameters) {
+	public FedoraGetRequest listDatastreams(
+			TreeMap<QueryParameters, String> queryParameters) {
 		getPrefix().append("/datastreams?");
 		setQueryParameters(queryParameters);
 		return this;
@@ -149,13 +143,14 @@ public class FedoraGetRequest{
 	// GET: /objects/changeme:1/datastreams/DC/history?format=xml
 	public FedoraGetRequest getDatastreamHistory(String dsid) {
 		getPrefix().append("/datastreams/").append(dsid).append("/history?");
-		setQueryParameters(new TreeMap<QueryParameters, String>());
+		setQueryParameters(null);
 		return this;
 	}
 
 	// /objects/{pid}/datastreams ? [profiles] [asOfDateTime]
 	// /objects/demo:35/datastreams?profiles=true&asOfDateTime=2012-08-03T10:02:00.169Z
-	public FedoraGetRequest getDatastreams(TreeMap<QueryParameters, String> queryParameters) {
+	public FedoraGetRequest getDatastreams(
+			TreeMap<QueryParameters, String> queryParameters) {
 		getPrefix().append("/datastreams?");
 		setQueryParameters(queryParameters);
 		return this;
@@ -182,8 +177,8 @@ public class FedoraGetRequest{
 		 * we have a whole map of all the parameters now we must append it to
 		 * our string
 		 */
-		LOG.debug("Processing parameters" + queryParameters.values());
-		
+		System.out.println("Processing parameters" + queryParameters.values());
+
 		for (QueryParameters key : queryParameters.keySet()) {
 			getRequest().append(key.getDescription()).append("=")
 					.append(getQueryParameters().get(key)).append("&");
@@ -191,21 +186,23 @@ public class FedoraGetRequest{
 		if (!queryParameters.containsKey(QueryParameters.RESULT_FORMAT)) {
 			getRequest().append("format=xml");
 		} else {
-			getRequest().delete(getRequest().length()-1, getRequest().length());
+			getRequest().delete(getRequest().length() - 1,
+					getRequest().length());
 		}
-		
-		LOG.debug("Finished processing parameters, request: " + getRequest().toString());
+
+		System.out.println("Finished processing parameters, request: "
+				+ getRequest().toString());
 
 	}
 
-//	public static void main(String[] args) throws FedoraException, IOException{
-//		FedoraGetRequest feGetRequest = new FedoraGetRequest();
-//		feGetRequest.setPersistentIdentifier("sq:3");
-//		feGetRequest.getObjectProfile(new TreeMap<QueryParameters, String>()).execute();
-//		System.out.println(feGetRequest.getFedoraResponse().getResponse());
-//
-//	}
-
-	
+	// public static void main(String[] args) throws FedoraException,
+	// IOException{
+	// FedoraGetRequest feGetRequest = new FedoraGetRequest();
+	// feGetRequest.setPersistentIdentifier("sq:3");
+	// feGetRequest.getObjectProfile(new TreeMap<QueryParameters,
+	// String>()).execute();
+	// System.out.println(feGetRequest.getFedoraResponse().getResponse());
+	//
+	// }
 
 }

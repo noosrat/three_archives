@@ -23,19 +23,17 @@ public class FedoraClient {
 	
 	
 	public FedoraClient(){
-		FedoraCredentials fedoraCredentials = new FedoraCredentials();
 		this.client = ApacheHttpClient.create();
-		client.addFilter(new HTTPBasicAuthFilter(fedoraCredentials
-				.getUsername(), fedoraCredentials.getPassword()));
+		client.addFilter(new HTTPBasicAuthFilter(FedoraCredentials
+				.getUsername(), FedoraCredentials.getPassword()));
 	}
 	
-	public void execute(FedoraGetRequest fedoraGetRequest) throws FedoraException{
+	public FedoraXMLResponseParser execute(FedoraGetRequest fedoraGetRequest) throws FedoraException{
 		WebResource webResource = client.resource(fedoraGetRequest.getRequest().toString());
-		LOG.debug("Successfully created web resource");
 		ClientResponse clientResponse = webResource.get(ClientResponse.class);
 		
 		if (clientResponse.getStatus()==200){
-			fedoraGetRequest.setFedoraResponse(new FedoraXMLResponseParser(clientResponse.getEntityInputStream()));
+			return new FedoraXMLResponseParser(clientResponse.getEntityInputStream());
 		}
 		else{
 			throw new FedoraException("Request execution unsuccessful " + clientResponse.getStatus());

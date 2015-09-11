@@ -3,9 +3,9 @@ package common.fedora;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
-import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
@@ -39,7 +39,6 @@ public class FedoraXMLResponseParser {
 			SAXException, IOException {
 		document= DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(response);
 		document.getDocumentElement().normalize();
-		System.out.println("Succesffully parsed xml");
 	}
 
 	public void setResponse(InputStream response) {
@@ -95,26 +94,49 @@ public class FedoraXMLResponseParser {
 
 	}
 
-	public List<String> parseListDataStream() {
-		List<String> result = new ArrayList<String>();
+	public List<DatastreamId> parseListDataStream() {
+		List<DatastreamId> result = new ArrayList<DatastreamId>();
 		NodeList nodeList = document.getElementsByTagName("objectDatastreams");
 		Node node = nodeList.item(0);
 		Element element = (Element) node;
 		for (int index = 0; index < element.getElementsByTagName("datastream")
 				.getLength(); index++) {
-			result.add(element.getElementsByTagName("datastream").item(index)
+			DatastreamId dsID = DatastreamId.valueOf(element.getElementsByTagName("datastream").item(index)
 					.getAttributes().getNamedItem("dsid").getTextContent());
+			result.add(dsID);
 		}
 
 		return result;
 	}
+	
+	public void parseDublinCoreDatastream(DublinCoreDatastream stream) throws ParserConfigurationException, SAXException, IOException{
+		System.out.println("In parseDublinCore");
+		NodeList nodeList = document.getElementsByTagName("oai_dc:dc");
+		Node node = nodeList.item(0);
+		Element element = (Element)node;
+		HashMap<DublinCore,String> dublinCoreMetadata = new HashMap<DublinCore, String>();
+		for (DublinCore dc: DublinCore.values()){
+			String tagName = "dc:" + dc.getDescription();
+			Node tag = element.getElementsByTagName(tagName).item(0);
+			if (tag!=null){
+				dublinCoreMetadata.put(dc, element.getElementsByTagName(tagName).item(0).getTextContent());
+			}
+			
+		}
+		stream.setDublinCoreMetadata(dublinCoreMetadata);
+	}
+
 
 	public Datastream parseGetDatastream() {
-		Datastream datastream = new Datastream();
+		System.out.println("In parseDatastream");
+		Datastream datastream= new Datastream();
 		NodeList nodeList = document.getElementsByTagName("datastreamProfile");
 		Node node = nodeList.item(0);
 		Element element = (Element) node;
-
+		DatastreamId dsID = DatastreamId.valueOf(element.getAttributes().getNamedItem("dsID").getTextContent());
+		String pid = element.getAttributes().getNamedItem("pid").getTextContent();
+		datastream.setPid(pid);
+		datastream.setDatastreamIdentifier(dsID);
 		String label = element.getElementsByTagName("dsLabel").item(0)
 				.getTextContent();
 		String version = element.getElementsByTagName("dsVersionID").item(0)
@@ -133,16 +155,8 @@ public class FedoraXMLResponseParser {
 				.getTextContent();
 		String versionable = element.getElementsByTagName("dsVersionable")
 				.item(0).getTextContent();
-		String infoType = element.getElementsByTagName("dsInfoType").item(0)
-				.getTextContent();
 		String location = element.getElementsByTagName("dsLocation").item(0)
 				.getTextContent();
-		String locationType = element.getElementsByTagName("dsLocationType")
-				.item(0).getTextContent();
-		String checksumType = element.getElementsByTagName("dsChecksumType")
-				.item(0).getTextContent();
-		String checksum = element.getElementsByTagName("dsChecksum").item(0).getTextContent();
-
 		datastream.setLabel(label);
 		datastream.setCreation(created);
 		datastream.setVersionID(version);
@@ -153,7 +167,7 @@ public class FedoraXMLResponseParser {
 		datastream.setSize(Integer.parseInt(size));
 		datastream.setVersionable(Boolean.parseBoolean(versionable));
 		datastream.setLocation(location);
-
+		System.out.println("Successfully parsed datastream object " + datastream.toString());
 		return datastream;
 	}
 
@@ -165,7 +179,13 @@ public class FedoraXMLResponseParser {
 			node = nodeList.item(index);
 			Datastream datastream = new Datastream();
 			Element element = (Element) node;
-			// do null checks
+			DatastreamId dsID = DatastreamId.valueOf(element.getElementsByTagName("datastream").item(index)
+					.getAttributes().getNamedItem("dsid").getTextContent());
+			String pid = element.getElementsByTagName("datastream").item(index)
+					.getAttributes().getNamedItem("pid").getTextContent();
+			datastream.setPid(pid);
+			datastream.setDatastreamIdentifier(dsID);
+			
 			String label = element.getElementsByTagName("dsLabel").item(index)
 					.getTextContent();
 			String version = element.getElementsByTagName("dsVersionID")
@@ -181,22 +201,14 @@ public class FedoraXMLResponseParser {
 			String controlGroup = element
 					.getElementsByTagName("dsControlGroup").item(index)
 					.getTextContent();
-			String size = element.getElementsByTagName("dsSize").item(0)
+			String size = element.getElementsByTagName("dsSize").item(index)
 					.getTextContent();
 			String versionable = element.getElementsByTagName("dsVersionable")
 					.item(index).getTextContent();
-			String infoType = element.getElementsByTagName("dsInfoType")
-					.item(index).getTextContent();
+
 			String location = element.getElementsByTagName("dsLocation")
 					.item(index).getTextContent();
-			String locationType = element
-					.getElementsByTagName("dsLocationType").item(index)
-					.getTextContent();
-			String checksumType = element
-					.getElementsByTagName("dsChecksumType").item(index)
-					.getTextContent();
-			String checksum = element.getElementsByTagName("dsChecksum")
-					.item(index).getTextContent();
+			
 			datastream.setLabel(label);
 			datastream.setCreation(created);
 			datastream.setVersionID(version);
@@ -214,9 +226,59 @@ public class FedoraXMLResponseParser {
 		return result;
 	}
 
-	// will not implement
-	public List<FedoraDigitalObject> parseGetDatastreamWithProfiles() {
-		return null;
+	public List<Datastream> parseGetDatastreams() {
+		List<Datastream> datastreams = new ArrayList<Datastream>();
+		NodeList nodeList = document.getElementsByTagName("datastreamProfile");
+		for (int index=0; index<nodeList.getLength(); index++){
+			Node node = nodeList.item(index);
+			Datastream datastream = new Datastream();
+			Element element = (Element) node;
+			DatastreamId dsID = DatastreamId.valueOf(element.getElementsByTagName("datastream").item(index)
+					.getAttributes().getNamedItem("dsid").getTextContent());
+			String pid = element.getElementsByTagName("datastream").item(index)
+					.getAttributes().getNamedItem("pid").getTextContent();
+			datastream.setPid(pid);
+			datastream.setDatastreamIdentifier(dsID);
+			String label = element.getElementsByTagName("apim:dsLabel").item(index)
+					.getTextContent();
+			String version = element.getElementsByTagName("apim:dsVersionID").item(index)
+					.getTextContent();
+			String created = element.getElementsByTagName("apim:dsCreateDate").item(index)
+					.getTextContent();
+			String state = element.getElementsByTagName("apim:dsState").item(index)
+					.getTextContent();
+			String mimeType = element.getElementsByTagName("apim:dsMIME").item(index)
+					.getTextContent();
+			String formatURI = element.getElementsByTagName("apim:dsFormatURI").item(index)
+					.getTextContent();
+			String controlGroup = element.getElementsByTagName("apim:dsControlGroup")
+					.item(index).getTextContent();
+			String size = element.getElementsByTagName("apim:dsSize").item(index)
+					.getTextContent();
+			String versionable = element.getElementsByTagName("apim:dsVersionable")
+					.item(index).getTextContent();
+	
+			String location = element.getElementsByTagName("apim:dsLocation").item(index)
+					.getTextContent();
+
+
+			datastream.setLabel(label);
+			datastream.setCreation(created);
+			datastream.setVersionID(version);
+			datastream.setState(State.valueOf(state));
+			// datastream.setMediaType(MediaType.);
+			datastream.setFormatURI(formatURI);
+			datastream.setControlGroup(controlGroup);
+			datastream.setSize(Integer.parseInt(size));
+			datastream.setVersionable(Boolean.parseBoolean(versionable));
+			datastream.setLocation(location);
+			
+			datastreams.add(datastream);
+		}
+		return datastreams;
 	}
+		
+
+	
 
 }
