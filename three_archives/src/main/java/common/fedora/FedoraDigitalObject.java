@@ -7,8 +7,8 @@ public class FedoraDigitalObject {
 	private String pid; //^([A-Za-z0-9]|-|\.)+:(([A-Za-z0-9])|-|\.|~|_|(%[0-9A-F]{2}))+$
 	private String xmlRepresentation; //getobjectxml
 	private ArrayList<String> versionHistory; //getobjecthistory
-	private String dateCreated;
-	private String dateLastModified;
+	private Date dateCreated;
+	private Date dateLastModified;
 	private State state;
 	private ArrayList<Datastream> datastreams; //getdatastreams..and then populate further
 	
@@ -19,7 +19,6 @@ public class FedoraDigitalObject {
 	
 	public FedoraDigitalObject(String pid){
 		this.pid = pid;
-		this.dateCreated = ""; //unless we throw this at fedora and then it gives us the date?
 	}
 	
 	public String getPid() {
@@ -46,19 +45,19 @@ public class FedoraDigitalObject {
 		this.versionHistory = versionHistory;
 	}
 
-	public String getDateCreated() {
+	public Date getDateCreated() {
 		return dateCreated;
 	}
 
-	public void setDateCreated(String dateCreated) {
+	public void setDateCreated(Date dateCreated) {
 		this.dateCreated = dateCreated;
 	}
 
-	public String getDateLastModified() {
+	public Date getDateLastModified() {
 		return dateLastModified;
 	}
 
-	public void setDateLastModified(String dateLastModified) {
+	public void setDateLastModified(Date dateLastModified) {
 		this.dateLastModified = dateLastModified;
 	}
 

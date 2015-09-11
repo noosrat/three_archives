@@ -10,7 +10,7 @@ public class Datastream {
 	private String pid;
 	private DatastreamId datastreamIdentifier;
 	private String label;
-	private String creation;
+	private Date creation;
 	private String versionID;
 	private State state;
 	private MediaType mediaType;
@@ -36,7 +36,7 @@ public class Datastream {
 	
 
 	public Datastream(String pid, DatastreamId datastreamIdentifier,
-			String label, String creation, String versionID, State state,
+			String label, Date creation, String versionID, State state,
 			MediaType mediaType, String formatURI, String controlGroup,
 			Integer size, boolean versionable, String location, String content,
 			ArrayList<Datastream> versionHistory) {
@@ -101,11 +101,11 @@ public class Datastream {
 		this.label = label;
 	}
 
-	public String getCreation() {
+	public Date getCreation() {
 		return creation;
 	}
 
-	public void setCreation(String creation) {
+	public void setCreation(Date creation) {
 		this.creation = creation;
 	}
 
