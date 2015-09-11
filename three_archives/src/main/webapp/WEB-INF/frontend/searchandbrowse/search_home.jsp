@@ -1,4 +1,5 @@
 <%@page	import="common.fedora.Datastream"%>
+<%@page	import="common.fedora.DublinCoreDatastream"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql"%>
@@ -21,8 +22,8 @@
 	</form>
 
 	<c:forEach var="ds" items="${objects}">
-		<td><img src="${ds.content}" style="width: 304px; height: 228px;">
-			</td>
+	<!-- 	<td><img src="${ds.content}" style="width: 304px; height: 228px;"> -->
+		<td>${ds}</td>
 	</c:forEach>
 
 </body>

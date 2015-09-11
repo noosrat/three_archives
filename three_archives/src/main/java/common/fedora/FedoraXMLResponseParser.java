@@ -109,8 +109,9 @@ public class FedoraXMLResponseParser {
 		return result;
 	}
 	
-	public void parseDublinCoreDatastream(DublinCoreDatastream stream) throws ParserConfigurationException, SAXException, IOException{
+	public DublinCoreDatastream parseDublinCoreDatastream(Datastream datastream) throws ParserConfigurationException, SAXException, IOException{
 		System.out.println("In parseDublinCore");
+		DublinCoreDatastream dublinCoreDatastream = new DublinCoreDatastream(datastream);
 		NodeList nodeList = document.getElementsByTagName("oai_dc:dc");
 		Node node = nodeList.item(0);
 		Element element = (Element)node;
@@ -123,7 +124,8 @@ public class FedoraXMLResponseParser {
 			}
 			
 		}
-		stream.setDublinCoreMetadata(dublinCoreMetadata);
+		dublinCoreDatastream.setDublinCoreMetadata(dublinCoreMetadata);
+		return dublinCoreDatastream;
 	}
 
 

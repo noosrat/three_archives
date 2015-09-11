@@ -50,7 +50,7 @@ public class FedoraCommunicator {
 			for (String pid : pids) {
 				System.out.println("Processing digital object with pid " + pid);
 				results.add(findSpecificDatastreamsForFedoraObject(pid,
-						DatastreamId.img));
+						DatastreamId.DC));
 			}
 		} catch (Exception ex) {
 			throw new FedoraException(ex);
@@ -91,18 +91,15 @@ public class FedoraCommunicator {
 			DatastreamId datastreamId) throws FedoraException,
 			ParserConfigurationException, SAXException, IOException {
 		FedoraGetRequest fedoraGetRequest = new FedoraGetRequest(pid);
-		TreeMap<QueryParameters, String> queryParameters = new TreeMap<QueryParameters, String>();
 		Datastream datastream;
 		datastream = fedoraClient.execute(
 				fedoraGetRequest.getDatastream(datastreamId.name(), null))
 				.parseGetDatastream();
 		DatastreamId dsid = datastream.getDatastreamIdentifier();
+		
 		if (dsid.equals(DatastreamId.DC)) {
 			fedoraGetRequest = new FedoraGetRequest(pid);
-			fedoraClient.execute(
-					fedoraGetRequest.getDatastreamDissemination(dsid.name(),
-							null)).parseDublinCoreDatastream(
-					(DublinCoreDatastream) (datastream));
+			datastream = fedoraClient.execute(fedoraGetRequest.getDatastreamDissemination(dsid.name(),null)).parseDublinCoreDatastream(datastream);
 		}
 
 		return datastream;

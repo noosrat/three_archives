@@ -27,11 +27,53 @@ public class Datastream {
 		
 	}
 	
+	
 	public Datastream(String pid, DatastreamId datastreamIdentifier){
 		this.pid = pid;
 		this.datastreamIdentifier = datastreamIdentifier;
 	}
 
+	
+
+	public Datastream(String pid, DatastreamId datastreamIdentifier,
+			String label, String creation, String versionID, State state,
+			MediaType mediaType, String formatURI, String controlGroup,
+			Integer size, boolean versionable, String location, String content,
+			ArrayList<Datastream> versionHistory) {
+		super();
+		this.pid = pid;
+		this.datastreamIdentifier = datastreamIdentifier;
+		this.label = label;
+		this.creation = creation;
+		this.versionID = versionID;
+		this.state = state;
+		this.mediaType = mediaType;
+		this.formatURI = formatURI;
+		this.controlGroup = controlGroup;
+		this.size = size;
+		this.versionable = versionable;
+		this.location = location;
+		this.content = content;
+		this.versionHistory = versionHistory;
+	}
+
+	public Datastream(Datastream datastream){
+		super();
+		this.pid = datastream.getPid();
+		this.datastreamIdentifier = datastream.getDatastreamIdentifier();
+		this.label = datastream.getLabel();
+		this.creation = datastream.getCreation();
+		this.versionID = datastream.getVersionID();
+		this.state = datastream.getState();
+		this.mediaType = datastream.getMediaType();
+		this.formatURI = datastream.getFormatURI();
+		this.controlGroup = datastream.getControlGroup();
+		this.size = datastream.getSize();
+		this.versionable = datastream.isVersionable();
+		this.location = datastream.getLocation();
+		this.content = datastream.getContent();
+		this.versionHistory = datastream.getVersionHistory();
+	}
 
 	public String getPid() {
 		return pid;
