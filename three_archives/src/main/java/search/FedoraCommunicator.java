@@ -8,6 +8,7 @@ import java.util.TreeMap;
 
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.apache.solr.client.solrj.SolrServerException;
 import org.xml.sax.SAXException;
 
 import common.fedora.Datastream;
@@ -34,20 +35,22 @@ public class FedoraCommunicator {
 	}
 	
 	
-	public ArrayList<FedoraDigitalObject> findFedoraDigitalObjects(String terms) throws FedoraException{
+	public ArrayList<FedoraDigitalObject> findFedoraDigitalObjects(String terms) throws FedoraException, SolrServerException{
 		return findAndPopulateFedoraDigitalObjects(terms);
 	}
 	
 	
-	public ArrayList<Datastream> findFedoraDatastreams(String terms)
+	public ArrayList<Datastream> findFedoraDatastreamsUsingSearchTerms(String terms)
 			throws FedoraException {
 		return findFedoraDatastreamWithSpecificDatastreamIDMatchingTerms(terms, DatastreamID.DC);
 	}
 	
 	
-	private ArrayList<FedoraDigitalObject> findAndPopulateFedoraDigitalObjects(String terms) throws FedoraException{
+	private ArrayList<FedoraDigitalObject> findAndPopulateFedoraDigitalObjects(String terms) throws FedoraException, SolrServerException{
+		System.out.println("Finding fedora digital objects matching: " + terms);
 		ArrayList<FedoraDigitalObject> results = new ArrayList<FedoraDigitalObject>();
-		List<String> pids = findFedoraObjectsWithSearchTerm(terms);
+//		List<String> pids = findFedoraObjectsWithSearchTerm(terms);
+		List<String> pids = SolrCommunicator.solrSearch(terms);
 		try {
 			for (String pid : pids) {
 				System.out.println("Processing digital object with pid " + pid);
