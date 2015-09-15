@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<web-app xmlns="http://java.sun.com/xml/ns/j2ee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_5.xsd"
+	version="2.5">
+
+	<display-name>Three Archives</display-name>
+	<servlet>
+		<servlet-name>ThreeArchivesServlet</servlet-name>
+		<display-name>ThreeArchivesServlet</display-name>
+		<description>communicator</description>
+		<servlet-class>common.controller.ThreeArchivesServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>ThreeArchivesServlet</servlet-name>
+		<url-pattern>/archives/*</url-pattern>
+	</servlet-mapping>
+  
+<servlet>
+    <servlet-name>harfieldoverview</servlet-name>
+    <jsp-file>/WEB-INF/frontend/harfieldoverview.jsp</jsp-file>
+</servlet>
+
+<servlet>
+    <servlet-name>imageviewer</servlet-name>
+    <jsp-file>/WEB-INF/frontend/imageviewer.jsp</jsp-file>
+</servlet>
+
+<servlet>
+    <servlet-name>detailviewer</servlet-name>
+    <jsp-file>/WEB-INF/frontend/detailviewer.jsp</jsp-file>
+</servlet>
+
+<servlet-mapping>
+    <servlet-name>harfieldoverview</servlet-name>
+    <url-pattern>/archives/harfieldoverview</url-pattern>
+</servlet-mapping>
+
+<servlet-mapping>
+    <servlet-name>imageviewer</servlet-name>
+    <url-pattern>/archives/imageviewer</url-pattern>
+</servlet-mapping>
+ 
+<servlet-mapping>
+    <servlet-name>detailviewer</servlet-name>
+    <url-pattern>/archives/detailviewer</url-pattern>
+</servlet-mapping> 
+
+</web-app>

@@ -2,9 +2,12 @@ package search;
 
 import java.util.List;
 
-import com.yourmediashelf.fedora.client.FedoraClientException;
-import com.yourmediashelf.fedora.generated.management.DatastreamProfile;
+import org.apache.solr.client.solrj.SolrServerException;
+
 import common.Service;
+import common.fedora.Datastream;
+import common.fedora.FedoraDigitalObject;
+import common.fedora.FedoraException;
 
 public class Search extends Service {
 
@@ -12,11 +15,13 @@ public class Search extends Service {
 		super();
 	}
 	
-	public List<DatastreamProfile> findObjects(String terms) throws FedoraClientException{
-		return getFedoraCommunicator().findFedoraObjects(terms);
+	
+	public List<Datastream> findFedoraDatastreams(String terms) throws FedoraException{
+		return getFedoraCommunicator().findFedoraDatastreamsUsingSearchTerms(terms);
 	}
 	
-	public List<DatastreamProfile> findObjectsWithQuery(String query) throws FedoraClientException{
-		return getFedoraCommunicator().findFedoraObjectsWithQuery(query);
+	public List<FedoraDigitalObject> findFedoraDigitalObjects(String terms) throws FedoraException, SolrServerException{
+//		return getFedoraCommunicator().findFedoraDigitalObjectsUsingSearchTerms(terms);
+		return getFedoraCommunicator().findFedoraDigitalObjects(terms);
 	}
 }

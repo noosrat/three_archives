@@ -1,4 +1,4 @@
 *target*
 *.jar
 *.class
-*.settings*
+*.settings*/three_archives/

@@ -1,100 +1,160 @@
 package search;
 
-import java.net.MalformedURLException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.TreeMap;
 
-import com.yourmediashelf.fedora.client.FedoraClient;
-import com.yourmediashelf.fedora.client.FedoraClientException;
-import com.yourmediashelf.fedora.client.FedoraCredentials;
-import com.yourmediashelf.fedora.client.request.FedoraRequest;
-import com.yourmediashelf.fedora.client.response.FindObjectsResponse;
-import com.yourmediashelf.fedora.client.response.GetDatastreamResponse;
-import com.yourmediashelf.fedora.generated.management.DatastreamProfile;
+import javax.xml.parsers.ParserConfigurationException;
+
+import org.apache.solr.client.solrj.SolrServerException;
+import org.xml.sax.SAXException;
+
+import common.fedora.Datastream;
+import common.fedora.DatastreamID;
+import common.fedora.DublinCore;
+import common.fedora.FedoraClient;
+import common.fedora.FedoraDigitalObject;
+import common.fedora.FedoraException;
+import common.fedora.FedoraGetRequest;
+import common.fedora.QueryParameters;
 
 public class FedoraCommunicator {
+	/*
+	 * 1. FindObjects (according to search terms) = list of pids 2. Create
+	 * Fedora Digital objects with these pids and getObjectProfile 3.
+	 * FindObjectXML (easy to obtain) 4. FindObjectHistory (not necessary) 5.
+	 * ListDatastreams = data stream ids 6. GetActual datastreams and populate
+	 */
 
-	private static FedoraClient fedora;
+	private FedoraClient fedoraClient;
 
 	public FedoraCommunicator() {
+		fedoraClient = new FedoraClient();
+	}
+	
+	
+	public ArrayList<FedoraDigitalObject> findFedoraDigitalObjects(String terms) throws FedoraException, SolrServerException{
+		return findAndPopulateFedoraDigitalObjects(terms);
+	}
+	
+	
+	public ArrayList<Datastream> findFedoraDatastreamsUsingSearchTerms(String terms)
+			throws FedoraException {
+		return findFedoraDatastreamWithSpecificDatastreamIDMatchingTerms(terms, DatastreamID.DC);
+	}
+	
+	
+	private ArrayList<FedoraDigitalObject> findAndPopulateFedoraDigitalObjects(String terms) throws FedoraException, SolrServerException{
+		System.out.println("Finding fedora digital objects matching: " + terms);
+		ArrayList<FedoraDigitalObject> results = new ArrayList<FedoraDigitalObject>();
+//		List<String> pids = findFedoraObjectsWithSearchTerm(terms);
+		List<String> pids = SolrCommunicator.solrSearch(terms);
 		try {
-			FedoraCredentials credentials = new FedoraCredentials("http://localhost:8080/fedora", "fedoraAdmin",
-					"fedoraAdmin");
-			FedoraCommunicator.fedora = new FedoraClient(credentials);
-
-			FedoraRequest.setDefaultClient(fedora);
-
-		} catch (MalformedURLException ex) {
-			System.out.println("error, credentials incorrect, malformed" + ex);
-		}
-	}
-
-	public void setFedoraClient(FedoraClient fedoraClient) {
-		FedoraCommunicator.fedora = fedoraClient;
-	}
-
-	public FedoraClient getFedora() {
-		return fedora;
-	}
-
-	public ArrayList<DatastreamProfile> findFedoraObjects(String terms) throws FedoraClientException {
-		return getFedoraObjectsImageDatastream(terms);
-	}
-	
-	public ArrayList<DatastreamProfile> findFedoraObjectsWithQuery(String query) throws FedoraClientException {
-		return getFedoraObjectsImageDatastreamWithQuery(query);
-	}
-	
-	
-
-	private List<String> findFedoraObjectsUsingSearchTerms(String terms) throws FedoraClientException {
-		FindObjectsResponse findObjectsResponse = null;
-		if (terms == null || terms.equals("")) {
-			findObjectsResponse = FedoraClient.findObjects().terms("*").pid().maxResults(10000).execute();
-		} else {
-			findObjectsResponse = FedoraClient.findObjects().terms("*"+terms+"*").pid().maxResults(10000).execute();
-		}
-		return findObjectsResponse.getPids();
-	}
-
-	private List<String> findFedoraObjectsQuery(String query) throws FedoraClientException {
-		FindObjectsResponse findObjectsResponse = null;
-		findObjectsResponse = FedoraClient.findObjects().query(query).pid().maxResults(10000).execute();
-		return findObjectsResponse.getPids();
-	}
-
-	private ArrayList<DatastreamProfile> getFedoraObjectsImageDatastream(String terms) throws FedoraClientException {
-		List<String> locatedObjects = findFedoraObjectsUsingSearchTerms(terms);
-		ArrayList<DatastreamProfile> result = new ArrayList<DatastreamProfile>();
-
-		for (String pid : locatedObjects) {
-			GetDatastreamResponse getDatastreamResponse = null;
-			try{
-			getDatastreamResponse = FedoraClient.getDatastream(pid, "img").execute();
+			for (String pid : pids) {
+				System.out.println("Processing digital object with pid " + pid);
+				results.add(populateFedoraDigitalObject(pid));
 			}
-			catch(FedoraClientException ex){
-				if (ex.getMessage().contains("with datastream ID of \"img\"")){
-					continue;
-				}
-				else{
-					throw ex;
-				}
-			}
-			result.add(getDatastreamResponse.getDatastreamProfile());
+		} catch (Exception ex) {
+			throw new FedoraException("Could not Populate fedora digital objects",ex);
 		}
 
-		return result;
+		return results;
 	}
-	private ArrayList<DatastreamProfile> getFedoraObjectsImageDatastreamWithQuery(String query) throws FedoraClientException {
-		List<String> locatedObjects = findFedoraObjectsQuery(query);
-		ArrayList<DatastreamProfile> result = new ArrayList<DatastreamProfile>();
-
-		for (String pid : locatedObjects) {
-			GetDatastreamResponse getDatastreamResponse = FedoraClient.getDatastream(pid, "img").execute();
-			result.add(getDatastreamResponse.getDatastreamProfile());
+	
+	private ArrayList<Datastream> findFedoraDatastreamWithSpecificDatastreamIDMatchingTerms(String terms, DatastreamID datastreamID)
+			throws FedoraException {
+		ArrayList<Datastream> results = new ArrayList<Datastream>();
+		List<String> pids = findFedoraObjectsWithSearchTerm(terms);
+		try {
+			for (String pid : pids) {
+				System.out.println("Processing digital object with pid " + pid);
+				results.add(findSpecificDatastreamsForFedoraObject(pid,
+						datastreamID));
+			}
+		} catch (Exception ex) {
+			throw new FedoraException("Could not find data streams with specific type",ex);
 		}
 
-		return result;
+		return results;
+	}
+
+	private List<String> findFedoraObjectsWithSearchTerm(String terms)
+			throws FedoraException {
+		TreeMap<QueryParameters, String> queryParameters = new TreeMap<QueryParameters, String>();
+		queryParameters.put(QueryParameters.TERMS, terms);
+		queryParameters.put(QueryParameters.RESULT_FORMAT, "xml");
+
+		FedoraGetRequest fedoraGetRequest = new FedoraGetRequest();
+
+		List<String> pids;
+		try {
+			pids = fedoraClient.execute(
+					fedoraGetRequest.findObjects(queryParameters,
+							DublinCore.PID)).parseFindObjects();
+			;
+			if (pids == null || pids.isEmpty()) {
+				throw new FedoraException("Could not find any results for your search");
+			}
+		} catch (Exception ex) {
+			throw new FedoraException("Could not parse xml response "
+					+ ex.getMessage() + ex.getCause());
+		}
+		System.out.println("Successfully located " + pids.size()
+				+ " digital objects");
+		return pids;
+	}
+
+	/* this will give you one specific datastream for a specified object */
+	private Datastream findSpecificDatastreamsForFedoraObject(String pid,
+			DatastreamID datastreamId) throws FedoraException,
+			ParserConfigurationException, SAXException, IOException {
+		FedoraGetRequest fedoraGetRequest = new FedoraGetRequest(pid);
+		Datastream datastream;
+		datastream = fedoraClient.execute(
+				fedoraGetRequest.getDatastream(datastreamId.name(), null))
+				.parseGetDatastream();
+		DatastreamID dsid = datastream.getDatastreamID();
+
+		if (dsid.equals(DatastreamID.DC)) {
+			System.out.println("Located a dublin core datastream.  About to parse this type");
+			datastream = fedoraClient.execute(
+					fedoraGetRequest.getDatastreamDissemination(dsid.name(),
+							null)).parseDublinCoreDatastream(datastream);
+		}
+
+		return datastream;
+	}
+
+	private FedoraDigitalObject populateFedoraDigitalObject(String pid)
+			throws FedoraException {
+		FedoraDigitalObject fedoraDigitalObject = new FedoraDigitalObject(pid);
+		FedoraGetRequest fedoraGetRequest = new FedoraGetRequest(pid);
+		fedoraClient.execute(fedoraGetRequest.getObjectProfile(null))
+				.parseGetObjectProfile(fedoraDigitalObject);
+		InputStream xml = fedoraClient.execute(fedoraGetRequest.getObjectXML())
+				.getResponse();
+		List<String> versionHistory = fedoraClient.execute(
+				fedoraGetRequest.getObjectHistory()).parseGetObjectHistory();
+		fedoraDigitalObject.setXmlRepresentation(xml);
+		fedoraDigitalObject.setVersionHistory(versionHistory);
+
+		// we now need to list and then parse all of the datastreams for this
+		// digital object
+		// list the ds and then call findSpecificDatastreamsForFedoraObject
+		List<DatastreamID> datastreamIds = fedoraClient.execute(
+				fedoraGetRequest.listDatastreams(null)).parseListDataStream();
+		List<Datastream> objectDatastreams = new ArrayList<Datastream>();
+		try {
+			for (DatastreamID datastreamID : datastreamIds) {
+				objectDatastreams.add(findSpecificDatastreamsForFedoraObject(pid, datastreamID));
+			}
+		} catch (Exception ex) {
+			throw new FedoraException("Could not populate fedora digital object",ex);
+		}
+		fedoraDigitalObject.setDatastreams(objectDatastreams);
+		return fedoraDigitalObject;
 	}
 
 }
