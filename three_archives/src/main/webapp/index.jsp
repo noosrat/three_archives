@@ -4,7 +4,7 @@
 	<h2>Three Archives</h2>
 	${message}
 	<form
-		action="${pageContext.request.contextPath}/archives/redirect_search"
+		action="${pageContext.request.contextPath}/archives/browse"
 		method="post">
 
 		<input type="submit" value="Search" />
