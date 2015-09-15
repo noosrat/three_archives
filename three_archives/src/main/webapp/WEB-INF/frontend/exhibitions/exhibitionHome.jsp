@@ -6,12 +6,15 @@
 <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/stylesheet.css"></link>
 </head>
 <header>
-	<h1>View exhibitions</h1>
+	<h1>Exhibition Home</h1>
 </header>
 <form method="post" action="${pageContext.request.contextPath}/archives/view_exhibitions">
 
 	
-	<header><input type="submit" name="view_all_exhibitions" value="View All Exhibitions"/>	</header>
+	<header>
+		<input type="submit" name="view_all_exhibitions" value="View All Exhibitions"/>	
+		<input type="submit" name="create_exhibition" value="Create Exhibition"/>	
+	</header>
 </form>
 
 <div>
