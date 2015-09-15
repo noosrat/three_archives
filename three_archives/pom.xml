@@ -105,7 +105,7 @@
 									<type>${project.packaging}</type>
 								</artifactItem>
 							</artifactItems>
-							<outputDirectory>C:\Users\Nicole Petersen\Downloads\apache-tomcat-8.0.24-windows-x86 (1)\apache-tomcat-8.0.24\webapps</outputDirectory>
+							<outputDirectory>C:\Users\Noosrat Hossain\Documents\2015\FEDORA\tomcat\webapps</outputDirectory>
 						</configuration>
 					</execution>
 				</executions>

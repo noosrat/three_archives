@@ -9,7 +9,7 @@ public class MapController implements Controller {
 
 	public String execute(HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
-		if (request.getPathInfo().substring(1).equals("redirect_maps")) {
+		if (request.getPathInfo().substring(1).contains("redirect_maps")) {
 
 			return "WEB-INF/frontend/maps/mapoverview.jsp";
 		}

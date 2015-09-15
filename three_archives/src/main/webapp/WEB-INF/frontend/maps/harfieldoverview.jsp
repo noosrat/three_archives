@@ -84,16 +84,31 @@ function initialize() {
   
   var rightclicks = 0
   var coords;
+  var coords1;
   google.maps.event.addListener(map, 'rightclick', function(e) {
 	    if (rightclicks == 0)
 	    {
 	    	rightclicks++;
 	    	console.log("start");
 	    	coords = [];
+	    	coords1 = [];
 	    	
 	    }
 	    else if (rightclicks == 1)
 	    	{console.log(coords);
+	    	
+	    	var har
+	    	har = new google.maps.Polygon({
+                paths: coords1,
+                strokeColor: '#000000',
+                strokeOpacity: 0.8,
+                strokeWeight: 2,
+                fillColor: '#FFFFFF',
+                fillOpacity: 0.35
+              });
+
+              har.setMap(map);
+	    	
 	    	console.log("end");
 	    	rightclicks=0;}
 	  });
@@ -101,6 +116,7 @@ function initialize() {
   google.maps.event.addListener(map, 'click', function(e) {
 	  //placeMarker(e.latLng, map);
 	  coords.push("new google.maps.LatLng("+e.latLng.lat() + ", " + e.latLng.lng()+"),\n");
+	  coords1.push(e.latLng);
 	  console.log(1+2);
 	  //
 	  });

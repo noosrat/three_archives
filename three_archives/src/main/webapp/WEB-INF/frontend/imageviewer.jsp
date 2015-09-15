@@ -12,5 +12,11 @@
 <h1>Name</h1>
 <img src="<%= pic %>">
 <h4>Details</h4>
+
+<form name="map" method="post" action="${pageContext.request.contextPath}/archives/redirect_maps?image=images/<%= pic %>">
+<!-- place word map in url-->
+    <input type="submit" value="Place Me" />
+</form>
+
 </body>
 </html>
