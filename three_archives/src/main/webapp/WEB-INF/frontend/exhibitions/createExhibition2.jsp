@@ -42,6 +42,16 @@
     		margin: 15px;
     		padding: 10px;
     	}
+    	
+    	div.scroll{
+    		background-color: #00FFFF;
+    		width: 240px;
+    		height:500px;
+    		overflow: scroll;
+    	}
+    	div.scroll img{
+    		padding:10px;
+    	}
 	</style>
 <script>
 	function dragStart(event) {
@@ -65,7 +75,7 @@
 			//document.getElementById(data).style.width="50%";
 		//}
 		
-		if(document.getElementById(data).style.width=="50%")
+		if(document.getElementById(data).style.width=="40%")
 		{
 			document.getElementById(data).style.width="100%";
 			document.getElementById("demo").innerHTML = document.getElementById("demo").value + event.target.id + " " + data + " " ;
@@ -74,8 +84,8 @@
 		
 		else if (event.target.id=="cart")
 		{
-			document.getElementById(data).style.width="50%";
-			document.getElementById("demo").innerHTML = document.getElementById("demo").value + event.target.id + " " + data + " " ;
+			document.getElementById(data).style.width="40%";
+			document.getElementById("demo").innerHTML = document.getElementById("demo").value + "REMOVE " + data + " " ;
 		}
 		else if (document.getElementById(data).style.width=="100%")
 		{
@@ -96,23 +106,19 @@
 	<ul id="mainEx" style="list-style-type:none;margin:0;padding:0;">
 		<li style="display:inline;float:left;font-weight:bold;">
 		
-			<div style="border: 1px solid #aaaaaa;width: 200px; diplay:inline-block; background:#F8F8F8;">
+			<div id="cart" class="scroll droptarget droptargetCart" ondrop="drop(event)" ondragover="allowDrop(event)" style="border: 1px solid #aaaaaa; diplay:inline-block; background:#F8F8F8;">
 				<h1>My image shelf</h1>
-				<div class="droptarget droptargetCart" ondrop="drop(event)" ondragover="allowDrop(event)">
-  					<img  src="${pageContext.request.contextPath}/images/1.jpg"  style="width:50%;" ondragstart="dragStart(event)" draggable="true" id="image1">
-				</div>
-				<div class="droptarget droptargetCart" ondrop="drop(event)" ondragover="allowDrop(event)">
-  					<img  src="${pageContext.request.contextPath}/images/2.jpg"  style="width:50%;" ondragstart="dragStart(event)" draggable="true" id="image2">
-				</div>
-				<div class="droptarget droptargetCart" ondrop="drop(event)" ondragover="allowDrop(event)">
-  					<img  src="${pageContext.request.contextPath}/images/3.jpg"  style="width:50%;" ondragstart="dragStart(event)" draggable="true" id="image3">
-				</div>
-				<div class="droptarget droptargetCart" ondrop="drop(event)" ondragover="allowDrop(event)">
-  					<img  src="${pageContext.request.contextPath}/images/4.jpg"  style="width:50%;" ondragstart="dragStart(event)" draggable="true" id="image4">
-				</div>
-				<div class="droptarget droptargetCart" ondrop="drop(event)" ondragover="allowDrop(event)">
-  					<img  src="${pageContext.request.contextPath}/images/5.jpg"  style="width:50%;" ondragstart="dragStart(event)" draggable="true" id="image5">
-				</div>
+				
+  					<img  src="${pageContext.request.contextPath}/images/1.jpg"  style="width:40%;" ondragstart="dragStart(event)" draggable="true" id="image1">
+				
+  					<img  src="${pageContext.request.contextPath}/images/2.jpg"  style="width:40%;" ondragstart="dragStart(event)" draggable="true" id="image2">
+				
+  					<img  src="${pageContext.request.contextPath}/images/3.jpg"  style="width:40%;" ondragstart="dragStart(event)" draggable="true" id="image3">
+				
+  					<img  src="${pageContext.request.contextPath}/images/4.jpg"  style="width:40%;" ondragstart="dragStart(event)" draggable="true" id="image4">
+				
+  					<img  src="${pageContext.request.contextPath}/images/5.jpg"  style="width:40%;" ondragstart="dragStart(event)" draggable="true" id="image5">
+				
 			</div>
 		</li>
 		
