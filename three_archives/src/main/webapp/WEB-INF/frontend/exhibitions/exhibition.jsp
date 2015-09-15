@@ -21,7 +21,7 @@
 	<h1>Exhibition:</h1><br>
 	<%int i; %>
 	<% for (i=1; i<=numberofExhibitions;i++){ %>
-	<input type="radio" name="selectedExhibit" value=<%=i%> > Exhibit <%out.println(i);%></input> <br>
+	<input type="radio" name="selectedExhibit" value=<%=exhibitions[i-1].getExhibitionId()%> > Exhibit <%out.println(exhibitions[i-1].getTitle());%></input> <br>
 	 
 	<br>
 	<%} %>

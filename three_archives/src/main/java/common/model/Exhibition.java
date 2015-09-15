@@ -4,20 +4,26 @@ import java.util.Random;
 
 public class Exhibition {
 	String title;
-	String templateid;
+	int exhibitionid;
+	int templateid;
 	String[] media;
 	String creator;
 	String dateCreated;
 	String description;
 
 	public Exhibition() {
-		this.title = "title";
-		this.templateid = null;
-		this.media = null;
-		this.creator = null;
-		this.dateCreated = null;
-		this.description = null;
 
+	}
+	public Exhibition(String title,int id)
+	{
+		this.title=title;
+		this.exhibitionid=id;
+		this.AutoExhibitionGenerator();
+	}
+	
+	public int getExhibitionId()
+	{
+		return(this.exhibitionid);
 	}
 
 	public String getTitle() {
@@ -26,6 +32,15 @@ public class Exhibition {
 
 	public String[] getMedia() {
 		return this.media;
+	}
+	public String getTemplateid()
+	{
+		return (String.valueOf(this.templateid));
+	}
+	
+	public void setTemplate(String template)
+	{
+		this.templateid=Integer.parseInt(template);
 	}
 
 	public void AutoExhibitionGenerator() {
@@ -38,7 +53,7 @@ public class Exhibition {
 		for (int i = 0; i < 10; i++) {
 			randomNum = random.nextInt(15 - 1);
 
-			this.media[i] = "Images/" + String.valueOf(randomNum) + ".jpg";
+			this.media[i] = "/images/" + String.valueOf(randomNum) + ".jpg";
 
 		}
 
