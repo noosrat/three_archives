@@ -22,12 +22,12 @@ public class DublinCoreDatastream extends Datastream {
 		super(datastream);
 	}
 
-
-	public DublinCoreDatastream(String pid, String content) throws ParserConfigurationException, SAXException, IOException {
-		super(pid, DatastreamID.DC);
+	public DublinCoreDatastream(String pid,HashMap<DublinCore,String> metadata){
+		this(pid);
+		this.dublinCoreMetadata = metadata;
+		
 	}
 
-	
 	public void setDublinCoreMetadata(HashMap<DublinCore, String> dublinCoreMetadata) {
 		this.dublinCoreMetadata = dublinCoreMetadata;
 	}
@@ -35,6 +35,8 @@ public class DublinCoreDatastream extends Datastream {
 	public HashMap<DublinCore,String> getDublinCoreMetadata(){
 		return dublinCoreMetadata;
 	}
+	
+	
 
 	@Override
 	public String toString() {

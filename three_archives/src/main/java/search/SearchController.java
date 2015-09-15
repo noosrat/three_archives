@@ -12,6 +12,8 @@ import org.apache.solr.client.solrj.SolrServerException;
 
 import common.controller.Controller;
 import common.fedora.Datastream;
+import common.fedora.DatastreamID;
+import common.fedora.DublinCoreDatastream;
 import common.fedora.FedoraDigitalObject;
 import common.fedora.FedoraException;
 
@@ -47,12 +49,14 @@ public class SearchController implements Controller {
 			throws FedoraException, SolrServerException {
 
 		String terms;
-//		try {
-//			terms = URLEncoder.encode(request.getParameter("terms"), "UTF-8"); is this really necessary since solr will do it?
-			terms = request.getParameter("terms");
-//		} catch (UnsupportedEncodingException e) {
-//			throw new FedoraException("Could not find fedora object due to faulty search", e);
-//		}
+		// try {
+		// terms = URLEncoder.encode(request.getParameter("terms"), "UTF-8"); is
+		// this really necessary since solr will do it?
+		terms = request.getParameter("terms");
+		// } catch (UnsupportedEncodingException e) {
+		// throw new FedoraException("Could not find fedora object due to faulty
+		// search", e);
+		// }
 
 		List<FedoraDigitalObject> digitalObjects = new ArrayList<FedoraDigitalObject>();
 		if (terms == null || terms.trim().isEmpty()) {
@@ -62,11 +66,27 @@ public class SearchController implements Controller {
 
 		if (digitalObjects != null && !digitalObjects.isEmpty()) {
 			request.setAttribute("objects", digitalObjects);
+			request.setAttribute("dublinCoreDatastreams", populateDublinCoreDatastream(digitalObjects));
 		} else {
 			request.setAttribute("message", "No results to return");
 		}
 
 		return "WEB-INF/frontend/searchandbrowse/search_home.jsp";
+	}
+
+	/*
+	 * had to do this since JSTL doesn't allow type casting
+	 */
+	private ArrayList<DublinCoreDatastream> populateDublinCoreDatastream(
+			List<FedoraDigitalObject> fedoraDigitalObjects) {
+		ArrayList<DublinCoreDatastream> dublinCoreDatastreams = new ArrayList<DublinCoreDatastream>();
+		for (FedoraDigitalObject digitalObject : fedoraDigitalObjects) {
+			int index = digitalObject.getDatastreams().indexOf(new DublinCoreDatastream(digitalObject.getPid()));
+				dublinCoreDatastreams.add((DublinCoreDatastream) (digitalObject.getDatastreams().get(index)));
+		}
+
+		return dublinCoreDatastreams;
+
 	}
 
 	private String searchFedoraDatastreams(HttpServletRequest request, HttpServletResponse response)

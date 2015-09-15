@@ -150,7 +150,7 @@ public class FedoraXMLResponseParser {
 		String pid = element.getAttributes().getNamedItem("pid")
 				.getTextContent();
 		datastream.setPid(pid);
-		datastream.setDatastreamIdentifier(dsID);
+		datastream.setDatastreamID(dsID);
 		String label = element.getElementsByTagName(tagPrefix+"dsLabel").item(0)
 				.getTextContent();
 		String version = element.getElementsByTagName(tagPrefix+"dsVersionID").item(0)

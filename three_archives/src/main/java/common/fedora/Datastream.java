@@ -2,13 +2,15 @@ package common.fedora;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
 
 import org.springframework.http.MediaType;
 
 
 public class Datastream {
 	private String pid;
-	private DatastreamID datastreamIdentifier;
+	private DatastreamID datastreamID;
 	private String label;
 	private Date creation;
 	private String versionID;
@@ -30,7 +32,7 @@ public class Datastream {
 	
 	public Datastream(String pid, DatastreamID datastreamIdentifier){
 		this.pid = pid;
-		this.datastreamIdentifier = datastreamIdentifier;
+		this.datastreamID = datastreamIdentifier;
 	}
 
 	
@@ -42,7 +44,7 @@ public class Datastream {
 			ArrayList<Datastream> versionHistory) {
 		super();
 		this.pid = pid;
-		this.datastreamIdentifier = datastreamIdentifier;
+		this.datastreamID = datastreamIdentifier;
 		this.label = label;
 		this.creation = creation;
 		this.versionID = versionID;
@@ -60,7 +62,7 @@ public class Datastream {
 	public Datastream(Datastream datastream){
 		super();
 		this.pid = datastream.getPid();
-		this.datastreamIdentifier = datastream.getDatastreamIdentifier();
+		this.datastreamID = datastream.getDatastreamID();
 		this.label = datastream.getLabel();
 		this.creation = datastream.getCreation();
 		this.versionID = datastream.getVersionID();
@@ -85,12 +87,12 @@ public class Datastream {
 
 
 
-	public DatastreamID getDatastreamIdentifier() {
-		return datastreamIdentifier;
+	public DatastreamID getDatastreamID() {
+		return datastreamID;
 	}
 
-	public void setDatastreamIdentifier(DatastreamID datastreamIdentifier) {
-		this.datastreamIdentifier = datastreamIdentifier;
+	public void setDatastreamID(DatastreamID datastreamIdentifier) {
+		this.datastreamID = datastreamIdentifier;
 	}
 
 	public String getLabel() {
@@ -174,7 +176,7 @@ public class Datastream {
 	}
 
 	public String getContent() {
-		return "http://localhost:8080/fedora/objects/" + getPid() + "/datastreams/" + getDatastreamIdentifier() + "/content";
+		return "http://localhost:8080/fedora/objects/" + getPid() + "/datastreams/" + getDatastreamID() + "/content";
 	}
 
 
@@ -192,7 +194,7 @@ public class Datastream {
 		int result = 1;
 		result = prime
 				* result
-				+ ((datastreamIdentifier == null) ? 0 : datastreamIdentifier
+				+ ((datastreamID == null) ? 0 : datastreamID
 						.hashCode());
 		result = prime * result + ((pid == null) ? 0 : pid.hashCode());
 		return result;
@@ -207,7 +209,7 @@ public class Datastream {
 		if (!(obj instanceof Datastream))
 			return false;
 		Datastream other = (Datastream) obj;
-		if (datastreamIdentifier != other.datastreamIdentifier)
+		if (datastreamID != other.datastreamID)
 			return false;
 		if (pid == null) {
 			if (other.pid != null)
@@ -220,7 +222,7 @@ public class Datastream {
 	@Override
 	public String toString() {
 		return "Datastream [pid=" + pid + ", datastreamIdentifier="
-				+ datastreamIdentifier + ", label=" + label + ", creation="
+				+ datastreamID + ", label=" + label + ", creation="
 				+ creation + ", versionID=" + versionID + ", state=" + state
 				+ ", mediaType=" + mediaType + ", formatURI=" + formatURI
 				+ ", controlGroup=" + controlGroup + ", size=" + size
@@ -231,7 +233,20 @@ public class Datastream {
 	
 	
 
-	
+	public static void main(String[] args){
+		List<Datastream> ds = new ArrayList<Datastream>();
+		ds.add(new Datastream("01", DatastreamID.IMG));
+		ds.add(new Datastream("02", DatastreamID.AUD));
+		ds.add(new Datastream("03", DatastreamID.IMG));
+		ds.add(new DublinCoreDatastream("10", new HashMap<DublinCore, String>()));
+		
+		
+		for (Datastream d: ds){
+			System.out.println(d.getClass());
+			System.out.println(d instanceof DublinCoreDatastream);
+		   System.out.println((DublinCoreDatastream)(ds.get(ds.indexOf(new DublinCoreDatastream("10")))));
+		}
+	}
 	
 	
 	

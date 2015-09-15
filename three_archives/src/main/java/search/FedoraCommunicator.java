@@ -115,9 +115,10 @@ public class FedoraCommunicator {
 		datastream = fedoraClient.execute(
 				fedoraGetRequest.getDatastream(datastreamId.name(), null))
 				.parseGetDatastream();
-		DatastreamID dsid = datastream.getDatastreamIdentifier();
+		DatastreamID dsid = datastream.getDatastreamID();
 
-		if (dsid.equals(DatastreamID.DC.name())) {
+		if (dsid.equals(DatastreamID.DC)) {
+			System.out.println("Located a dublin core datastream.  About to parse this type");
 			datastream = fedoraClient.execute(
 					fedoraGetRequest.getDatastreamDissemination(dsid.name(),
 							null)).parseDublinCoreDatastream(datastream);
