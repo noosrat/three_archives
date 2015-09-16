@@ -129,23 +129,29 @@ public class FedoraCommunicator {
 
 	private FedoraDigitalObject populateFedoraDigitalObject(String pid)
 			throws FedoraException {
+		System.out.println(" populating xxxxxxxxxxxxxxxxxxxxxx");
 		FedoraDigitalObject fedoraDigitalObject = new FedoraDigitalObject(pid);
 		FedoraGetRequest fedoraGetRequest = new FedoraGetRequest(pid);
 		fedoraClient.execute(fedoraGetRequest.getObjectProfile(null))
 				.parseGetObjectProfile(fedoraDigitalObject);
+		System.out.println(" populating profile xxxxxxxxxxxxxxxxxxxxxx");
 		InputStream xml = fedoraClient.execute(fedoraGetRequest.getObjectXML())
 				.getResponse();
+		System.out.println(" happened");
 		List<String> versionHistory = fedoraClient.execute(
 				fedoraGetRequest.getObjectHistory()).parseGetObjectHistory();
 		fedoraDigitalObject.setXmlRepresentation(xml);
 		fedoraDigitalObject.setVersionHistory(versionHistory);
+		System.out.println(" happened");
 
 		// we now need to list and then parse all of the datastreams for this
 		// digital object
 		// list the ds and then call findSpecificDatastreamsForFedoraObject
+		System.out.println("xxxxxxxxxxxxxxxxxxxxxx");
 		List<DatastreamID> datastreamIds = fedoraClient.execute(
 				fedoraGetRequest.listDatastreams(null)).parseListDataStream();
 		List<Datastream> objectDatastreams = new ArrayList<Datastream>();
+		System.out.println("xxxxxxxxxxxxxxxxxxxxxx");
 		try {
 			for (DatastreamID datastreamID : datastreamIds) {
 				objectDatastreams.add(findSpecificDatastreamsForFedoraObject(pid, datastreamID));

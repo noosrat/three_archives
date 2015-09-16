@@ -19,6 +19,7 @@ function initialize() {
     zoom: 17,
     center: {lat: -33.9863, lng: 18.4743}
   });
+  
   var harfield1;
   var triangleCoords1 = [new google.maps.LatLng(-33.98540458260216, 18.472459316253662),
                         new google.maps.LatLng(-33.9858760765136, 18.472448587417603),

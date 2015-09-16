@@ -1,4 +1,16 @@
 <!DOCTYPE html>
+
+<%@page import="common.fedora.Datastream"%>
+<%@page import="common.fedora.DublinCoreDatastream"%>
+<%@page import="common.fedora.FedoraDigitalObject"%>
+<%@page import="java.util.ArrayList"%>
+<%@page import="java.util.List"%>
+
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@ taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql"%>
+<%@ taglib prefix="x" uri="http://java.sun.com/jsp/jstl/xml"%>
+
 <html>
   <head>
     <title>Simple Map</title>
@@ -39,7 +51,32 @@ function initialize() {
 	map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
 	var markers = [];
 	
-	var image1 = {url: "'http://localhost:8080/fedora/objects/ms:1/datastreams/ms1/content" /*contextPath+"/fedora/objects/ms:1/datastreams/ms1/content"*/, size: null, origin: null, anchor: null, scaledSize: new google.maps.Size(40, 40)}
+	//<%String path = request.getParameter("image");%>
+	//  var contextPath='<%=request.getContextPath()%>';
+	//  console.log('<%=path%>');
+	  //google.maps.event.addListener(map, 'click', function(e) {
+		//	var newimage = {url: contextPath+'/<%=path%>', size: null, origin: null, anchor: null, scaledSize: new google.maps.Size(40, 40)}
+		  	/* newmarker = new google.maps.Marker({
+		      	position:  e.latLng,
+		      map: map,
+		      //icon: "images/4.jpg",
+		      icon: newimage,
+		      	title: 'Hello World!'});
+		  	
+		  	//markers.push(newmarker);
+		  });*/
+	
+	<%List<FedoraDigitalObject> coord = (List<FedoraDigitalObject>) request.getAttribute("objects");%>
+	<%System.out.println(coord.isEmpty());%>
+	<%System.out.println(coord.get(0));%>
+	<%System.out.println(coord.get(0).getPid());%>
+	var pid='<%=coord.get(0).getPid()%>'
+	var uu="http://localhost:8080/fedora/objects/"+  pid +"/datastreams/IMG/content";
+	var image1 = {url: uu, size: null, origin: null, anchor: null, scaledSize: new google.maps.Size(40, 40)}
+	console.log(uu)
+	
+	/*'http://localhost:8080/fedora/objects/'+coord.get(0).getPid()+'/datastreams/'+coord.get(0).getPid()+'/content' /*contextPath+"/fedora/objects/ms:1/datastreams/ms1/content"*/
+	
 	var marker1 = new google.maps.Marker({
 		position:  {lat: -34, lng: 18.5},
       map: map,
