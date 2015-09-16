@@ -108,11 +108,13 @@ public class FedoraXMLResponseParser {
 		NodeList nodeList = document.getElementsByTagName("objectDatastreams");
 		Node node = nodeList.item(0);
 		Element element = (Element) node;
+		System.out.println("xxxxxx Parsing for loop");
 		for (int index = 0; index < element.getElementsByTagName("datastream")
 				.getLength(); index++) {
 			DatastreamID dsID = DatastreamID.valueOf(element
 					.getElementsByTagName("datastream").item(index)
 					.getAttributes().getNamedItem("dsid").getTextContent());
+			System.out.println("Parsing datastream for ID: "+dsID);
 			result.add(dsID);
 		}
 
