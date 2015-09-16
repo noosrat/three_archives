@@ -9,6 +9,7 @@
 </head>
 <body>
 
+
 	<div class="container">
   		<div class="jumbotron">
     		<h1>Personal Histories</h1>      

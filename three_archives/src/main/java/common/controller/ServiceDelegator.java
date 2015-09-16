@@ -31,7 +31,7 @@ public class ServiceDelegator {
 	public String execute(HttpServletRequest request, HttpServletResponse response) {
 		String url = "index.jsp";
 		try {
-			if (request.getPathInfo().substring(1).contains("search")) {
+			if (request.getPathInfo().substring(1).contains("search") || request.getPathInfo().substring(1).contains("browse")) {
 
 				url = controllers.get("search").execute(request, response);
 

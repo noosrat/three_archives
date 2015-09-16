@@ -29,6 +29,11 @@ public class SearchController implements Controller {
 		String result = "WEB-INF/frontend/searchandbrowse/search_home.jsp";
 
 		try {
+			if (request.getPathInfo().substring(1).contains("browse")) {
+				result = browseFedoraObjects(request,response);
+			} else if (request.getPathInfo().substring(1).contains("search_objects")) {
+				result = searchFedoraDigitalObjects(request, response);
+			}
 			if (request.getPathInfo().substring(1).contains("redirect_search")) {
 				result = "WEB-INF/frontend/searchandbrowse/search_home.jsp";
 			} else if (request.getPathInfo().substring(1).contains("search_objects")) {
@@ -43,6 +48,23 @@ public class SearchController implements Controller {
 		}
 		return result;
 
+	}
+	
+	private String browseFedoraObjects(HttpServletRequest request, HttpServletResponse response) throws FedoraException, SolrServerException{
+	 //this is to return everything in the archive collection...this is just to illustrate browse temporarily
+
+		List<FedoraDigitalObject> digitalObjects = new ArrayList<FedoraDigitalObject>();
+	
+		digitalObjects = getSearch().findFedoraDigitalObjects("*");
+
+		if (digitalObjects != null && !digitalObjects.isEmpty()) {
+			request.setAttribute("objects", digitalObjects);
+			request.setAttribute("dublinCoreDatastreams", populateDublinCoreDatastream(digitalObjects));
+		} else {
+			request.setAttribute("message", "No results to return");
+		}
+
+		return "WEB-INF/frontend/searchandbrowse/search_home.jsp";
 	}
 
 	private String searchFedoraDigitalObjects(HttpServletRequest request, HttpServletResponse response)
