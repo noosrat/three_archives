@@ -20,6 +20,7 @@ public class ServiceDelegator {
 	static {
 		controllers.put("search", new SearchController());
 		controllers.put("exhibitions", new ExhibitionController());
+		controllers.put("general", new GeneralController());
 		controllers.put("maps", new MapController());
 	}
 
@@ -36,11 +37,17 @@ public class ServiceDelegator {
 
 			} else if (request.getPathInfo().substring(1).contains("exhibitions")) {
 				url = controllers.get("exhibitions").execute(request, response);
+			} else if (request.getPathInfo().substring(1).contains("snaps")) {
+				url = controllers.get("general").execute(request, response);
+			} else if (request.getPathInfo().substring(1).contains("sequins")) {
+				url = controllers.get("general").execute(request, response);
+			} else if (request.getPathInfo().substring(1).contains("harfield")) {
+				url = controllers.get("general").execute(request, response);
 			} else if (request.getPathInfo().substring(1).contains("maps")) {
 				url = controllers.get("maps").execute(request, response);
 			}
 		} catch (Exception exception) {
-			request.setAttribute("message", exception.getMessage());
+			request.setAttribute("message", exception);
 		}
 
 		return url;
