@@ -14,11 +14,15 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Three Archives : Search and Browse</title>
 <link rel="stylesheet" type="text/css"
-	href="${pageContext.request.contextPath}/search_and_browse.css"></link>
-
-<script type='text/javascript'
-	src='http://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js?ver=1.4.2'></script>
-
+	href="${pageContext.request.contextPath}/css/search_and_browse.css"></link>
+<script type="text/javascript">
+$(document).ready(function(){
+	$('input.typeahead').typeahead({
+		name: 'accounts',
+		local: ['Audi', 'BMW', 'Bugatti', 'Ferrari', 'Ford', 'Lamborghini', 'Mercedes Benz', 'Porsche', 'Rolls-Royce', 'Volkswagen']
+	});
+});  
+</script>
 </head>
 
 
@@ -64,7 +68,7 @@
 	<!--  portfolio grid section displaying the images -->
 	<section id="portfolio">
 		<div class="container">
-			<div class="row">
+			<!-- <div class="row">-->
 				<!--  for loop going through the digital objects -->
     <c:set var="count" value="0" scope="page" />
 				<c:forEach var="digitalObject" items="${objects}">
@@ -103,7 +107,7 @@
 					<!-- "col-sm-4 portfolio-item" -->
 <c:set var="count" value="${count + 1}" scope="page" />
 				</c:forEach>
-			</div>
+			<!-- </div>-->
 			<!--  row -->
 		</div>
 		<!--  container -->
@@ -160,8 +164,10 @@
 			<c:set var="count" value="${count + 1}" scope="page" />
 	</c:forEach>
 
-
-
+ <!--   <div class="bs-example">
+        <input type="text" class="typeahead tt-query" autocomplete="on" spellcheck="false">
+    </div>
+-->
 
 
 
@@ -169,9 +175,9 @@
 	<!-- Bootstrap core JavaScript
     ================================================== -->
 	<!-- Placed at the end of the document so the pages load faster -->
-	<script
-		src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+	<script	src="${pageContext.request.contextPath}/js/jquery.js"></script>
+	<script src="${pageContext.request.contextPath}/js/bootstrap.min.js"></script>
+	<script src="${pageContext.request.contextPath}/js/typeahead.js"></script>
 
 </body>
 </html>
