@@ -18,6 +18,8 @@ public class ExhibitionController implements Controller {
 	{
 		if (request.getPathInfo().substring(1).contains("redirect_exhibitions")) 
 		{
+			HttpSession session = request.getSession();
+			session.setAttribute("ARCHIVE", "seqiuns");
 			return "WEB-INF/frontend/exhibitions/exhibitionHome.jsp";
 
 		}
@@ -64,14 +66,42 @@ public class ExhibitionController implements Controller {
 			String action = request.getParameter("create_exhibition");
 			if (action.equals("Create Exhibition")) 
 			{
+				result = "WEB-INF/frontend/exhibitions/ExhibitionLogin.jsp";
+			}
+		}
+		
+		if (request.getParameter("login_to_create_exhibition") != null) 
+		{
+			String name= request.getParameter("name");
+			String password= request.getParameter("password");
+			String proceed="APPROVE"; //TODO Process user id and password
+			if (proceed.equals("APPROVE")) 
+			{
 				result = "WEB-INF/frontend/exhibitions/createExhibition.jsp";
 			}
+			else
+			{
+				return "WEB-INF/frontend/exhibitions/exhibitionHome.jsp";
+			}
+			
+			
 		}
 		
 		if (request.getParameter("selectedTemplate")!=null )
 		{
 			String selectedTemplate=request.getParameter("selectedTemplate");
-			request.setAttribute("returnedExhibitionTemplate",selectedTemplate);
+			/*if(selectedTemplate.equals("1"))
+			{
+				session.setAttribute("TEMPLATE_ID",selectedTemplate);
+				result = "WEB-INF/frontend/exhibitions/populateTemplate1.jsp";
+			}
+			
+			else if(selectedTemplate.equals("2"))
+			{
+				session.setAttribute("TEMPLATE_ID",selectedTemplate);
+				result = "WEB-INF/frontend/exhibitions/populateTemplate2.jsp";
+			}*/
+			
 			session.setAttribute("TEMPLATE_ID",selectedTemplate);
 			result = "WEB-INF/frontend/exhibitions/createExhibition2.jsp";
 		}
@@ -82,13 +112,31 @@ public class ExhibitionController implements Controller {
 			if(action.equals("Next"))
 			{
 				
-				String template=(String)session.getAttribute("TEMPLATE_ID");
+				//Get image captions
+				//Get the captions as well
+				String [] captions=new String[12];
+				if(!(request.getParameter("input_cap0").equals(""))){captions[0]=request.getParameter("input_cap0");}
+				if(!(request.getParameter("input_cap1").equals(""))){captions[1]=request.getParameter("input_cap1");}
+				if(!(request.getParameter("input_cap2").equals(""))){captions[2]=request.getParameter("input_cap2");}
+				if(!(request.getParameter("input_cap3").equals(""))){captions[3]=request.getParameter("input_cap3");}
+				if(!(request.getParameter("input_cap4").equals(""))){captions[4]=request.getParameter("input_cap4");}
+				if(!(request.getParameter("input_cap5").equals(""))){captions[5]=request.getParameter("input_cap5");}
+				if(!(request.getParameter("input_cap6").equals(""))){captions[6]=request.getParameter("input_cap6");}
+				if(!(request.getParameter("input_cap7").equals(""))){captions[7]=request.getParameter("input_cap7");}
+				if(!(request.getParameter("input_cap8").equals(""))){captions[8]=request.getParameter("input_cap8");}
+				if(!(request.getParameter("input_cap9").equals(""))){captions[9]=request.getParameter("input_cap9");}
+				if(!(request.getParameter("input_cap10").equals(""))){captions[10]=request.getParameter("input_cap10");}
+				if(!(request.getParameter("input_cap11").equals(""))){captions[11]=request.getParameter("input_cap11");}
+				
+				session.setAttribute("CAPTIONS", captions);
+				
+				
+				
+			
 				String userAction=request.getParameter("user_action");
 				session.setAttribute("POPULATED_TEMPLATE",userAction);
-				request.setAttribute("template",template);
-				request.setAttribute("user_actions", userAction);
 			
-				result = "WEB-INF/frontend/exhibitions/createExhibition3.jsp";
+				result = "WEB-INF/frontend/exhibitions/createExhibition3.jsp";//Go get additional exhibition description
 			}
 			else if(action.equals("Back"))
 			{
@@ -108,13 +156,16 @@ public class ExhibitionController implements Controller {
 				String exhibitionTitle= request.getParameter("Title");
 				String exhibitionDescription= request.getParameter("Description");
 				String exhibitionCreator= request.getParameter("Creator");
-				String exhibitionDate= request.getParameter("Date");
 				String exhibitionViewable= request.getParameter("viewable");
+				
+				String mediaString=(String) session.getAttribute("POPULATED_TEMPLATE");
+				String[] media=new String[12];
+				media=service.processTemplate(mediaString);
+				request.setAttribute("PopulatedTemplateArray",media);
 				
 				request.setAttribute("ExhibitionTitle",exhibitionTitle);
 				request.setAttribute("ExhibitionDescription",exhibitionDescription);
 				request.setAttribute("ExhibitionCreator",exhibitionCreator);
-				request.setAttribute("ExhibitionDate",exhibitionDate);
 				request.setAttribute("ExhibitionViewable",exhibitionViewable);
 				
 				result = "WEB-INF/frontend/exhibitions/createViewExhibition.jsp";

@@ -8,7 +8,6 @@ public class Exhibition {
 	int templateid;
 	String[] media;
 	String creator;
-	String dateCreated;
 	String description;
 
 	public Exhibition() {
