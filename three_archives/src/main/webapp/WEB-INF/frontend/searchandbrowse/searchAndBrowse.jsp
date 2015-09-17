@@ -44,7 +44,7 @@
 						class="icon-bar"></span> <span class="icon-bar"></span> <span
 						class="icon-bar"></span>
 				</button>
-				<a class="navbar-brand" href="#">Harfield Village</a> <a
+				<a class="navbar-brand" href="${pageContext.request.contextPath}/archives/browse">Harfield Village</a> <a
 					class="navbar-brand"> ${message}</a>
 				<!-- <a class="navbar-brand" href="#">Sequins, Self and Struggle</a>
 				<a class="navbar-brand" href="#">Movie Snaps</a>-->

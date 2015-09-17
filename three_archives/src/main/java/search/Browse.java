@@ -1,7 +1,10 @@
 package search;
 
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
@@ -19,8 +22,8 @@ public class Browse extends Service {
 
 	private static Set<FedoraDigitalObject> fedoraDigitalObjects = new HashSet<FedoraDigitalObject>();
 	private static Set<FedoraDigitalObject> filteredDigitalObjects = new HashSet<FedoraDigitalObject>();
-	private static TreeMap<String, Set<String>> browsingCategories = new TreeMap<String, Set<String>>();
-	private static TreeMap<String, Set<String>> filteredBrowsingCategories = new TreeMap<String, Set<String>>();
+	private static TreeMap<String, TreeSet<String>> browsingCategories = new TreeMap<String, TreeSet<String>>();
+	private static TreeMap<String, TreeSet<String>> filteredBrowsingCategories = new TreeMap<String, TreeSet<String>>();
 
 	public static void initialise() throws FedoraException, SolrServerException {
 		System.out.println("In browse cosntructor");
@@ -41,11 +44,11 @@ public class Browse extends Service {
 		Browse.filteredDigitalObjects = filteredDigitalObjects;
 	}
 
-	public static TreeMap<String, Set<String>> getBrowsingCategories() {
+	public static TreeMap<String, TreeSet<String>> getBrowsingCategories() {
 		return browsingCategories;
 	}
 
-	private static void setBrowsingCategories(TreeMap<String, Set<String>> browsingCategories) {
+	private static void setBrowsingCategories(TreeMap<String, TreeSet<String>> browsingCategories) {
 		Browse.browsingCategories = browsingCategories;
 		setFilteredBrowsingCategories(browsingCategories);
 	}
@@ -56,102 +59,105 @@ public class Browse extends Service {
 	 * result in actual data will be populated
 	 */
 
-	public static TreeMap<String, Set<String>> getFilteredBrowsingCategories() {
+	public static TreeMap<String, TreeSet<String>> getFilteredBrowsingCategories() {
 		return filteredBrowsingCategories;
 	}
 
-	public static void setFilteredBrowsingCategories(TreeMap<String, Set<String>> filteredBrowsingCategories) {
+	public static void setFilteredBrowsingCategories(TreeMap<String, TreeSet<String>> filteredBrowsingCategories) {
 		Browse.filteredBrowsingCategories = filteredBrowsingCategories;
 	}
 
 	private static void setUpBrowsingCategoriesAndValues(Set<FedoraDigitalObject> fedoraDigitalObjects) {
 		System.out.println("Setting up browsing categories and values ");
-		TreeMap<String, Set<String>> searchAndBrowseCategoriesAndValues = new TreeMap<String, Set<String>>();
-		
-		/*here we only want to populat the keys for now*/
-		
-		for (SearchAndBrowseCategory cat : SearchAndBrowseCategory.values()) {
-			Set<String> values = new TreeSet<String>();
-			switch (cat) {
-			case TITLE:
-				values.add("M");
-				values.add("S");
-				break; // search in dublin core titile
-			case YEAR:
-				values.add("1981");
-				values.add("1990");
-				values.add("2012");
-				values.add("2013");
-				break;// search in dublin core date
-			case EVENT:
-				break;// search description
-			case EXHIBITION:
-				break; // this will be a data type search
-			case MEDIA_TYPE:
-				for (DatastreamID dsID : DatastreamID.values()) {
-					values.add(dsID.getDescription());
-				}
-				break; // this just filters according to the media types of
-						// the
-						// datastream
-			case LOCATION:
-				break; // search dublin core ds
-			case ACADEMIC_PAPER:
-				break;// search description nad maybe title
-			case CREATOR:
-				break; // search DC
-			case SUBJECT:
-				break;// search DC
-			}
+		TreeMap<String, TreeSet<String>> searchAndBrowseCategoriesAndValues = new TreeMap<String, TreeSet<String>>();
 
-			searchAndBrowseCategoriesAndValues.put(cat.name(), values);
+		/*
+		 * here we only want to populat the keys for now ..just initiliasing it
+		 */
+
+		for (SearchAndBrowseCategory cat : SearchAndBrowseCategory.values()) {
+			searchAndBrowseCategoriesAndValues.put(cat.name(), new TreeSet<String>());
+		}
+
+		for (SearchAndBrowseCategory cat : SearchAndBrowseCategory.values()) {
+			Set<String> values = new HashSet<String>();
+			for (FedoraDigitalObject digitalObject : fedoraDigitalObjects) {
+				HashMap<DublinCore, String> dc = ((DublinCoreDatastream) digitalObject.getDatastreams()
+						.get(DatastreamID.DC.name())).getDublinCoreMetadata();
+				switch (cat) {
+				case TITLE:
+					if (dc.get(DublinCore.TITLE) != null) {
+						values.add(dc.get(DublinCore.TITLE).substring(0, 1));
+					}
+					break;
+				case YEAR:
+					values.add(dc.get(DublinCore.DATE));
+					break;
+				case EVENT:
+					break;// search description
+				case EXHIBITION:
+					break; // this will be a database query
+				case MEDIA_TYPE:
+					String f = dc.get(DublinCore.FORMAT);
+					String t = dc.get(DublinCore.TYPE);
+
+					String format = "";
+					if (f != null && !f.isEmpty()) {
+						format += f.toLowerCase();
+					}
+					if (t != null && !t.isEmpty()) {
+						format += " " + t.toLowerCase();
+					}
+					DatastreamID result = DatastreamID.parseMediaType(format);
+
+					if (result != null) {
+						values.add(result.name());
+					}
+					break;
+				case LOCATION:
+					break; // search dublin core coverage
+				case ACADEMIC_PAPER:
+					break;// search description nad maybe title
+				case CREATOR:
+					values.add(dc.get(DublinCore.CREATOR));
+					break; // search DC
+				case SUBJECT:
+					values.add(dc.get(DublinCore.SUBJECT));
+					break;// search DC
+				case COLLECTION:
+					String dublinCoreDescription = dc.get(DublinCore.DESCRIPTION);
+					if (dublinCoreDescription != null && !dublinCoreDescription.isEmpty()) {
+						String[] description = dublinCoreDescription.split("%");
+						String s = "";
+						for (int i = 0; i < description.length; i++) {
+							if (description[i].contains("Collection")) {
+								String[] col = description[i].split(":");
+								values.add(col[1]);
+								break;
+							}
+						}
+					}
+					break;
+				}
+			}
+			values.remove(null);
+			searchAndBrowseCategoriesAndValues.put(cat.name(), new TreeSet<String>(values));
 
 		}
 		System.out.println("BROWSING CATEGORIES " + searchAndBrowseCategoriesAndValues);
+		removeEmptyCategories(searchAndBrowseCategoriesAndValues);
 		setBrowsingCategories(searchAndBrowseCategoriesAndValues);
+	}
 
-		// for (SearchAndBrowseCategory cat : SearchAndBrowseCategory.values())
-		// {
-		// Set<String> values = new TreeSet<String>();
-		// switch (cat) {
-		// case TITLE:
-		// values.add("M");
-		// values.add("S");
-		// break; // search in dublin core titile
-		// case YEAR:
-		// values.add("1981");
-		// values.add("1990");
-		// values.add("2012");
-		// values.add("2013");
-		// break;// search in dublin core date
-		// case EVENT:
-		// break;// search description
-		// case EXHIBITION:
-		// break; // this will be a data type search
-		// case MEDIA_TYPE:
-		// for (DatastreamID dsID : DatastreamID.values()) {
-		// values.add(dsID.getDescription());
-		// }
-		// break; // this just filters according to the media types of
-		// // the
-		// // datastream
-		// case LOCATION:
-		// break; // search dublin core ds
-		// case ACADEMIC_PAPER:
-		// break;// search description nad maybe title
-		// case CREATOR:
-		// break; // search DC
-		// case SUBJECT:
-		// break;// search DC
-		// }
-		//
-		// searchAndBrowseCategoriesAndValues.put(cat.name(), values);
-		//
-		// }
-		// System.out.println("BROWSING CATEGORIES " +
-		// searchAndBrowseCategoriesAndValues);
-		// setBrowsingCategories(searchAndBrowseCategoriesAndValues);
+	private static void removeEmptyCategories(TreeMap<String, TreeSet<String>> searchAndBrowseCategoriesAndValues) {
+		for (Iterator it = searchAndBrowseCategoriesAndValues.entrySet().iterator(); it.hasNext();) {
+			Map.Entry<String, TreeSet<String>> entry = (Entry<String, TreeSet<String>>) it.next();
 
+			if (entry.getValue().size()==0){
+				it.remove();
+			}
+
+		}
 	}
 
 	public static void filterFedoraDigitalObjects(Set<FedoraDigitalObject> objectsToFilter, String filterCategory,
@@ -196,6 +202,26 @@ public class Browse extends Service {
 								// exhibition 1 then behave accordingly
 				System.out.println("removing object with PID " + digitalObject.getPid());
 				break;
+			case COLLECTION:
+				String dublinCoreDescription = dc.getDublinCoreMetadata().get(DublinCore.DESCRIPTION);
+				if (dublinCoreDescription != null && !dublinCoreDescription.isEmpty()) {
+					String[] description = dublinCoreDescription.split("%");
+					String result = "";
+					for (int i = 0; i < description.length; i++) {
+						if (description[i].contains("Collection")) {
+							String[] col = description[i].split(":");
+							result = col[1];
+							break;
+						}
+					}
+
+					if (!(result.contains(filterValue))) {
+						System.out.println("removing object with PID " + digitalObject.getPid()
+								+ "and collection value " + result);
+						iterator.remove();
+					}
+				}
+				break;
 			case MEDIA_TYPE: // should we look in the datastream type and
 								// then
 				// in the format of the actual Dc metadata
@@ -214,54 +240,22 @@ public class Browse extends Service {
 				if (t != null && !t.isEmpty()) {
 					format += " " + t.toLowerCase();
 				}
-				// concatenated
-				// the
-				// two
-				// so
-				// we
-				// only
-				// have
-				// to
-				// search
-				// one
-				// filed..reducing
-				// if
-				// statements
 				System.out.println("********************************************Media type and format found " + format);
 				String media = filterValue.toLowerCase();
 				// check for JPG, JPEG, GIF, PNG
 				if (format != null && !format.isEmpty()) {
-					switch (DatastreamID.parseDescription(media)) {
-					case IMG:
-					case IMG_PUB:
-						if (!(format.contains(media) || format.contains("jpg") || format.contains("jpeg")
-								|| format.contains("gif") || format.contains("png"))) {
-							System.out.println("removing object with PID " + digitalObject.getPid());
-							iterator.remove();
-						}
-						break;
-					case VID:
-						if (!(format.contains(media) || format.contains("3gp") || format.contains("mp4")
-								|| format.contains("mpeg4") || format.contains("vid"))) {
-							System.out.println("removing object with PID " + digitalObject.getPid());
-							iterator.remove();
-						}
-						break;
-					case AUD:
-						if (!(format.contains(media) || format.contains("mp3") || format.contains("aud")
-								|| format.contains("flac"))) {
-							System.out.println("removing object with PID " + digitalObject.getPid());
-							iterator.remove();
-						}
-						break;
-					}
 
+					if (DatastreamID.parseMediaType(format) == DatastreamID.parseDescription(media)) {
+						iterator.remove();
+
+					}
 				}
 			}
 
 		}
 		setUpBrowsingCategoriesAndValues(filteredObjects);
-		TreeMap<String, Set<String>> filteredCategories = new TreeMap<String, Set<String>>(getBrowsingCategories());
+		TreeMap<String, TreeSet<String>> filteredCategories = new TreeMap<String, TreeSet<String>>(
+				getBrowsingCategories());
 		filteredCategories.remove(filterCategory);
 		System.out.println("Filtered categories " + filteredCategories);
 		setFilteredBrowsingCategories(filteredCategories);

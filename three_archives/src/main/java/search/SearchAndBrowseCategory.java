@@ -8,7 +8,8 @@ public enum SearchAndBrowseCategory {
 	MEDIA_TYPE, //this just filters according to the media types of the datastream
 	LOCATION, //search dublin core ds
 	ACADEMIC_PAPER, //search description nad maybe title
-	CREATOR, //search DC
+	CREATOR,
+	COLLECTION,//search DC description
 	SUBJECT;// search DC
 	
 
