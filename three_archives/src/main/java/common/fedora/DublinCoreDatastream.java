@@ -1,11 +1,6 @@
 package common.fedora;
 
-import java.io.IOException;
 import java.util.HashMap;
-
-import javax.xml.parsers.ParserConfigurationException;
-
-import org.xml.sax.SAXException;
 
 public class DublinCoreDatastream extends Datastream {
 

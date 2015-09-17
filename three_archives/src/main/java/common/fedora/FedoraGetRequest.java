@@ -1,6 +1,5 @@
 package common.fedora;
 
-import java.util.HashMap;
 import java.util.TreeMap;
 
 import org.apache.log4j.Logger;

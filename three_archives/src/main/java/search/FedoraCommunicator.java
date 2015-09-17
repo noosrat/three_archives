@@ -2,9 +2,12 @@ package search;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.TreeMap;
+import java.util.TreeSet;
 
 import javax.xml.parsers.ParserConfigurationException;
 
@@ -35,20 +38,20 @@ public class FedoraCommunicator {
 	}
 	
 	
-	public ArrayList<FedoraDigitalObject> findFedoraDigitalObjects(String terms) throws FedoraException, SolrServerException{
+	public Set<FedoraDigitalObject> findFedoraDigitalObjects(String terms) throws FedoraException, SolrServerException{
 		return findAndPopulateFedoraDigitalObjects(terms);
 	}
 	
 	
-	public ArrayList<Datastream> findFedoraDatastreamsUsingSearchTerms(String terms)
+	public HashMap<String,Datastream> findFedoraDatastreamsUsingSearchTerms(String terms)
 			throws FedoraException {
 		return findFedoraDatastreamWithSpecificDatastreamIDMatchingTerms(terms, DatastreamID.DC);
 	}
 	
 	
-	private ArrayList<FedoraDigitalObject> findAndPopulateFedoraDigitalObjects(String terms) throws FedoraException, SolrServerException{
+	private Set<FedoraDigitalObject> findAndPopulateFedoraDigitalObjects(String terms) throws FedoraException, SolrServerException{
 		System.out.println("Finding fedora digital objects matching: " + terms);
-		ArrayList<FedoraDigitalObject> results = new ArrayList<FedoraDigitalObject>();
+		Set<FedoraDigitalObject> results = new HashSet<FedoraDigitalObject>();
 //		List<String> pids = findFedoraObjectsWithSearchTerm(terms);
 		List<String> pids = SolrCommunicator.solrSearch(terms);
 		try {
@@ -63,14 +66,14 @@ public class FedoraCommunicator {
 		return results;
 	}
 	
-	private ArrayList<Datastream> findFedoraDatastreamWithSpecificDatastreamIDMatchingTerms(String terms, DatastreamID datastreamID)
+	private HashMap<String,Datastream> findFedoraDatastreamWithSpecificDatastreamIDMatchingTerms(String terms, DatastreamID datastreamID)
 			throws FedoraException {
-		ArrayList<Datastream> results = new ArrayList<Datastream>();
+		HashMap<String,Datastream> results = new HashMap<String,Datastream>();
 		List<String> pids = findFedoraObjectsWithSearchTerm(terms);
 		try {
 			for (String pid : pids) {
 				System.out.println("Processing digital object with pid " + pid);
-				results.add(findSpecificDatastreamsForFedoraObject(pid,
+				results.put(datastreamID.name(),findSpecificDatastreamsForFedoraObject(pid,
 						datastreamID));
 			}
 		} catch (Exception ex) {
@@ -145,10 +148,10 @@ public class FedoraCommunicator {
 		// list the ds and then call findSpecificDatastreamsForFedoraObject
 		List<DatastreamID> datastreamIds = fedoraClient.execute(
 				fedoraGetRequest.listDatastreams(null)).parseListDataStream();
-		List<Datastream> objectDatastreams = new ArrayList<Datastream>();
+		HashMap<String,Datastream> objectDatastreams = new HashMap<String,Datastream>();
 		try {
 			for (DatastreamID datastreamID : datastreamIds) {
-				objectDatastreams.add(findSpecificDatastreamsForFedoraObject(pid, datastreamID));
+				objectDatastreams.put(datastreamID.name(),findSpecificDatastreamsForFedoraObject(pid, datastreamID));
 			}
 		} catch (Exception ex) {
 			throw new FedoraException("Could not populate fedora digital object",ex);

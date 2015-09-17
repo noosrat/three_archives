@@ -22,6 +22,8 @@ public class ThreeArchivesServlet extends HttpServlet {
 
 	private void process(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException{
+		System.out.println("Entered Servlet");
+				System.out.println("PathInfo : "+ request.getPathInfo());
 				ServiceDelegator serviceDelegator = new ServiceDelegator();
 				String result = serviceDelegator.execute(request, response);
 				request.getServletContext().getRequestDispatcher("/" + result)
