@@ -1,4 +1,6 @@
 <!DOCTYPE html>
+<%@page import="java.io.PrintWriter"%>
+<%@page import="java.util.List"%>
 <html>
   <head>
     <title>Simple Map</title>
@@ -6,10 +8,14 @@
     <meta charset="utf-8">
     <style>
       html, body, #map-canvas {
-        height: 100%;
+        height: 95%;
+        width: 100%;
         margin: 0px;
         padding: 0px
       }
+      #map_canvas {
+    position: relative;
+}
     </style>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAkDhZAIvYefYnMLplLMYFBxACznT-8lmA"></script>
     <script>
@@ -19,81 +25,52 @@ function initialize() {
     zoom: 17,
     center: {lat: -33.9863, lng: 18.4743}
   });
+  //loop though text file with polygon paths
+  var contextPath='<%=request.getContextPath()%>';
+  <%List<String> polygons =(List<String>) request.getAttribute("points");%>
+  console.log(polygons);
+  var markers = [];
+  var polys = [];
+  var polys1 = "";
+ 
+  function deletePolygons()
+  {
+	  for (var i = 0; i < polys.length; i++) {
+		    polys[i].setMap(null);
+		  
+		    polys = [];  
+  }
+  }
   
-  var harfield1;
-  var triangleCoords1 = [new google.maps.LatLng(-33.98540458260216, 18.472459316253662),
-                        new google.maps.LatLng(-33.9858760765136, 18.472448587417603),
-                        new google.maps.LatLng(-33.98593834909882, 18.47424030303955),
-                        new google.maps.LatLng(-33.985449063271574, 18.47427248954773),
-                        new google.maps.LatLng(-33.98540458260216, 18.472459316253662)];
-
-                      // Construct the polygon.
-                      harfield1 = new google.maps.Polygon({
-                        paths: triangleCoords1,
-                        strokeColor: '#000000',
-                        strokeOpacity: 0.8,
-                        strokeWeight: 2,
-                        fillColor: '#FFFFFF',
-                        fillOpacity: 0.35
-                      });
-
-                      harfield1.setMap(map);
+  function deleteMarkers() {
+	  for (var j = 0; j < markers.length; j++) {
+	    markers[j].setMap(null);
+	  
+	    markers = [];
+	  }
+	}
   
-  google.maps.event.addListener(harfield1, 'mouseover', function(e) {
-		console.log('mouseover')  
-		this.setOptions({fillColor:'#00FF00'});
-	  });
+  <%for (int l = 0; l < polygons.size(); l++) {
+	    polygons.get(l).split(";");
+	     
+}%>
+   
   
-  google.maps.event.addListener(harfield1, 'mouseout', function(e) {
-		console.log('mouseout')  
-		harfield1.setOptions({fillColor:'#FFFFFF'});
-	  });
   
-  google.maps.event.addListener(harfield1, 'click', function(e) {
-		console.log('click')  
-		href=window.location.assign("detailviewer");
-	  });
-  
-  var harfield2;
-  var triangleCoords2 = [new google.maps.LatLng(-33.98636535988254, 18.472437858581543), 
-                        new google.maps.LatLng(-33.98640984004913, 18.473961353302002),
-                        new google.maps.LatLng(-33.98593834909882, 18.47424030303955),
-                        new google.maps.LatLng(-33.9858760765136, 18.472448587417603),
-                        new google.maps.LatLng(-33.98636535988254, 18.472437858581543)];
-
-                      // Construct the polygon.
-                      harfield2 = new google.maps.Polygon({
-                        paths: triangleCoords2,
-                        strokeColor: '#000000',
-                        strokeOpacity: 0.8,
-                        strokeWeight: 2,
-                        fillColor: '#FFFFFF',
-                        fillOpacity: 0.35
-                      });
-
-                      harfield2.setMap(map);
-  
-  google.maps.event.addListener(harfield2, 'mouseover', function(e) {
-		console.log('mouseover')  
-		this.setOptions({fillColor:'#00FF00'});
-	  });
-  
-  google.maps.event.addListener(harfield2, 'mouseout', function(e) {
-		console.log('mouseout')  
-		harfield2.setOptions({fillColor:'#FFFFFF'});
-	  });
   
   var rightclicks = 0
   var coords;
+  var points;
   var coords1;
   google.maps.event.addListener(map, 'rightclick', function(e) {
 	    if (rightclicks == 0)
 	    {
 	    	rightclicks++;
 	    	console.log("start");
-	    	coords = [];
+	    	coords = "";
 	    	coords1 = [];
-	    	
+	    	points="";
+
 	    }
 	    else if (rightclicks == 1)
 	    	{console.log(coords);
@@ -110,15 +87,36 @@ function initialize() {
 
               har.setMap(map);
 	    	
-	    	console.log("end");
+              google.maps.event.addListener(har, 'mouseover', function(e) {
+          		console.log('mouseover')  
+          		this.setOptions({fillColor:'#00FF00'});
+          	  });
+            
+            google.maps.event.addListener(har, 'mouseout', function(e) {
+          		console.log('mouseout')  
+          		this.setOptions({fillColor:'#FFFFFF'});
+          	  });
+             
+	    	polys.push(har);
+	    	polys1.concat(points, ";");
+            console.log("end");
+	    	deleteMarkers();
+	    	console.log("writing to file"); 
+	    	//loadXMLDoc(points);
+	    	document.getElementById("demo").innerHTML = polys1;
+	    	console.log(points)
+	    	//writeToFile(coords1)
 	    	rightclicks=0;}
 	  });
   
   google.maps.event.addListener(map, 'click', function(e) {
 	  //placeMarker(e.latLng, map);
-	  coords.push("new google.maps.LatLng("+e.latLng.lat() + ", " + e.latLng.lng()+"),\n");
+	  coords = coords.concat("new google.maps.LatLng("+e.latLng.lat() + ", " + e.latLng.lng()+"),\n");
+	  points = points.concat("lat: " +e.latLng.lat() + ", long: " + e.latLng.lng()+";");
 	  coords1.push(e.latLng);
-	  console.log(1+2);
+	  console.log("corner");
+	  
+	  placeMarker(e.latLng, map);
 	  //
 	  });
   
@@ -127,9 +125,11 @@ function initialize() {
 function placeMarker(position, map) {
 	  var marker = new google.maps.Marker({
 	    position: position,
-	    map: map
+	    map: map,
+	    //icon: contextPath+"/images/dot.png"
 	  });
 	  map.panTo(position);
+
 	}
 
 
@@ -137,7 +137,12 @@ google.maps.event.addDomListener(window, 'load', initialize);
 
     </script>
   </head>
-  <body>
+  <body>	
     <div id="map-canvas"></div>
+	<form method="post" action="${pageContext.request.contextPath}/archives/maps/add_polygon">
+		<textarea id="demo" name="polypoints" readonly=readonly style="display:none;"> </textarea>
+			<input type="submit" value="Sumbit Changes" name="sendPoints"/>
+		</form>
+	<input onclick="deletePolygons();" type=button value="Cancel">
   </body>
 </html>
