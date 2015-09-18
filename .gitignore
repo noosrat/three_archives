@@ -1,4 +1,3 @@
-*target*
-*.jar
-*.class
-*.settings*/three_archives/
+target\*
+three_archives\.classpath
+three_archives\.settings\
