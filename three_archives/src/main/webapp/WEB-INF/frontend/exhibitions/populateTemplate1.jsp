@@ -19,7 +19,7 @@
  		 $('.slider4').bxSlider({
    		 slideWidth: 250,
    		 minSlides: 2,
-   	 	 maxSlides: 3,
+   	 	 maxSlides: 2,
    		 moveSlides: 2,
    	 	slideMargin: 8,
    	 	infiniteLoop:false,
@@ -100,7 +100,7 @@
      <a href="#" class="btn btn-info btn-lg"><span class="glyphicon glyphicon-search"></span> Search</a>     
   </div>     
 
-
+<h1>It is refreshing</h1>
  <nav class="navbar navbar-default">
   <div class="container-fluid">
     <div class="navbar-header">
@@ -154,40 +154,109 @@
 		<li style="display:inline; float:left;font-weight:bold;margin:80px;">
 		
 		<form method="post" action="${pageContext.request.contextPath}/archives/create_exhibitions">
-			<textarea id="demo" name="user_action" readonly=readonly style="display:none;"> </textarea>
+			<textarea id="demo" name="user_action" readonly=readonly style="display:none;"></textarea>
 			<input type="submit" value="Back" name="exhibition_det"/>
 			<input type="submit" value="Next" name="exhibition_det"/>
-		</form>
+		
 		
   		<div class="slider4">
   			<div class="slide">
-				<div class="droptarget droptargetTemplate" id="0" ondrop="drop(event)" ondragover="allowDrop(event)" style="width:80%"></div>
-				<div class="droptarget droptargetTemplate" id="1" ondrop="drop(event)" ondragover="allowDrop(event)" style="width:80%"></div>
+				<div class="droptarget droptargetTemplate" id="0" ondrop="drop(event)" ondragover="allowDrop(event)" style="width:80%">
+						<textarea rows="1" cols="23" name="input_cap0" > caption</textarea>
+						
+				</div>
+				<div class="droptarget droptargetTemplate" id="1" ondrop="drop(event)" ondragover="allowDrop(event)" style="width:80%">
+					<ul style="list-style-type:none;margin:0;padding:0;">
+						<li style="display:inline; float:left;font-weight:bold;">	
+							<textarea rows="1" cols="23"  name="input_cap1" ></textarea>
+						</li>
+					</ul>
+				</div>
 			</div>
 			<div class="slide">
-				<div class="droptarget droptargetTemplate" id="2" ondrop="drop(event)" ondragover="allowDrop(event)" style="width:80%"></div>
-				<div class="droptarget droptargetTemplate" id="3" ondrop="drop(event)"ondragover="allowDrop(event)" style="width:80%"></div>
+				<div class="droptarget droptargetTemplate" id="2" ondrop="drop(event)" ondragover="allowDrop(event)" style="width:80%">
+					<ul style="list-style-type:none;margin:0;padding:0;">
+						<li style="display:inline; float:left;font-weight:bold;">	
+							<textarea rows="1" cols="23"  name="input_cap2" > caption</textarea>
+						</li>
+					</ul>
+				</div>
+				<div class="droptarget droptargetTemplate" id="3" ondrop="drop(event)"ondragover="allowDrop(event)" style="width:80%">
+					<ul style="list-style-type:none;margin:0;padding:0;">
+						<li style="display:inline; float:left;font-weight:bold;">	
+							<textarea rows="1" cols="23"  name="input_cap3"> caption</textarea>
+						</li>
+					</ul>	
+				</div>
 			</div>
 			<div class="slide">
-				<div class="droptarget droptargetTemplate" id="4" ondrop="drop(event)" ondragover="allowDrop(event)" style="width:80%"></div>
-				<div class="droptarget droptargetTemplate" id="5" ondrop="drop(event)" ondragover="allowDrop(event)" style="width:80%"></div>
+				<div class="droptarget droptargetTemplate" id="4" ondrop="drop(event)" ondragover="allowDrop(event)" style="width:80%">
+					<ul style="list-style-type:none;margin:0;padding:0;">
+						<li style="display:inline; float:left;font-weight:bold;">	
+							<textarea rows="1" cols="23"  name="input_cap4" > caption</textarea>
+						</li>
+					</ul>
+				</div>
+				<div class="droptarget droptargetTemplate" id="5" ondrop="drop(event)" ondragover="allowDrop(event)" style="width:80%">
+					<ul style="list-style-type:none;margin:0;padding:0;">
+						<li style="display:inline; float:left;font-weight:bold;">	
+							<textarea rows="1" cols="23" name="input_cap5" > caption</textarea>
+						</li>
+					</ul>
+				</div>
 			</div>	
 			<div class="slide">
-				<div class="droptarget droptargetTemplate" id="6" ondrop="drop(event)" ondragover="allowDrop(event)" style="width:80%"></div>
-				<div class="droptarget droptargetTemplate" id="7" ondrop="drop(event)" ondragover="allowDrop(event)" style="width:80%"></div>
+				<div class="droptarget droptargetTemplate" id="6" ondrop="drop(event)" ondragover="allowDrop(event)" style="width:80%">
+					<ul style="list-style-type:none;margin:0;padding:0;">
+						<li style="display:inline; float:left;font-weight:bold;">	
+							<textarea rows="1" cols="23" name="input_cap6"> caption</textarea>
+						</li>
+					</ul>
+				</div>
+				<div class="droptarget droptargetTemplate" id="7" ondrop="drop(event)" ondragover="allowDrop(event)" style="width:80%">
+					<ul style="list-style-type:none;margin:0;padding:0;">
+						<li style="display:inline; float:left;font-weight:bold;">	
+							<textarea rows="1" cols="23" name="input_cap7" > caption</textarea>
+						</li>
+					</ul>
+				</div>
 			</div>
 			<div class="slide">
-				<div class="droptarget droptargetTemplate" id="8" ondrop="drop(event)" ondragover="allowDrop(event)" style="width:80%"></div>
-				<div class="droptarget droptargetTemplate" id="9" ondrop="drop(event)" ondragover="allowDrop(event)" style="width:80%"></div>
+				<div class="droptarget droptargetTemplate" id="8" ondrop="drop(event)" ondragover="allowDrop(event)" style="width:80%">
+					<ul style="list-style-type:none;margin:0;padding:0;">
+						<li style="display:inline; float:left;font-weight:bold;">	
+							<textarea rows="1" cols="23" name="input_cap8" > caption</textarea>
+						</li>
+					</ul>
+				</div>
+				<div class="droptarget droptargetTemplate" id="9" ondrop="drop(event)" ondragover="allowDrop(event)" style="width:80%">
+					<ul style="list-style-type:none;margin:0;padding:0;">
+						<li style="display:inline; float:left;font-weight:bold;">	
+							<textarea rows="1" cols="23" name="input_cap9" > caption</textarea>
+						</li>
+					</ul>
+				</div>
 			</div>
 			<div class="slide">
-				<div class="droptarget droptargetTemplate" id="10" ondrop="drop(event)" ondragover="allowDrop(event)" style="width:80%"></div>
-				<div class="droptarget droptargetTemplate" id="11" ondrop="drop(event)" ondragover="allowDrop(event)" style="width:80%"></div>
+				<div class="droptarget droptargetTemplate" id="10" ondrop="drop(event)" ondragover="allowDrop(event)" style="width:80%">
+					<ul style="list-style-type:none;margin:0;padding:0;">
+						<li style="display:inline; float:left;font-weight:bold;">	
+							<textarea rows="1" cols="23" name="input_cap10" > caption</textarea>
+						</li>
+					</ul>
+				</div>
+				<div class="droptarget droptargetTemplate" id="11" ondrop="drop(event)" ondragover="allowDrop(event)" style="width:80%">
+					<ul style="list-style-type:none;margin:0;padding:0;">
+						<li style="display:inline; float:left;font-weight:bold;">	
+							<textarea rows="1" cols="23" name="input_cap11" > caption</textarea>
+						</li>
+					</ul>
+				</div>
 			</div>
 		</div>
-		</li>
+		</form>
 	
-		
+		</li>
 	</ul>
 
 

@@ -18,13 +18,13 @@
 		<h1>Select a template</h1>
 		<ul id="templateSelection" style="list-style-type:none;margin:0;padding:0;margin:auto;">
 			<li style="display:inline;float:left;font-weight:bold; padding:10px;">
-				<input type="image" name="selectedTemplate" value="1" src="${pageContext.request.contextPath}/images/template1.jpg" alt="Template 1">
+				<input type="image" name="selectedTemplate" value=1 src="${pageContext.request.contextPath}/images/template1.jpg" alt="Template 1">
 			</li>
 			<li style="display:inline;float:left;font-weight:bold;padding:10px;">
-				<input type="image" name="selectedTemplate" value="2" src="${pageContext.request.contextPath}/images/template2.jpg" alt="Template 2">
+				<input type="image" name="selectedTemplate" value=2 src="${pageContext.request.contextPath}/images/template2.jpg" alt="Template 2">
 			</li>
 			<li style="display:inline;float:left;font-weight:bold;padding:10px;">
-				<input type="image" name="selectedTemplate" value="3" src="${pageContext.request.contextPath}/images/template3.jpg" alt="Template 3">
+				<input type="image" name="selectedTemplate" value=3 src="${pageContext.request.contextPath}/images/template3.jpg" alt="Template 3">
 			</li>
 		</ul>
 		<br><br>

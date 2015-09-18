@@ -26,7 +26,7 @@
 
 <body>
 <header>
-	<h1>Exhibition Title: </h1> <h1><%out.println(request.getAttribute("message")); %></h1>
+	<h1>Exhibition Titlearoo: </h1> <h1><%out.println(request.getAttribute("message")); %></h1>
 	<h1>Exhibition Title using object: </h1> <h1><%out.println(request.getAttribute("message")); %></h1>
 </header>
 
@@ -35,12 +35,12 @@
 
 
 <div class="slider4"  >
-  <div class="slide"><img src="${pageContext.request.contextPath}/images/1.jpg" > <img src="<%=imageTitles[1]%>"></div>
-   <div class="slide"><img src="${pageContext.request.contextPath}<%=imageTitles[2]%>"><img src="<%=imageTitles[3]%>"></div>
+  <div class="slide"><img src="http://localhost:8080/fedora/objects/sq:15/datastreams/IMG/content" > <img src="<%=imageTitles[1]%>"></div>
+   <div class="slide"><img src="<%=imageTitles[2]%>"><img src="<%=imageTitles[3]%>"></div>
    
-     <div class="slide"><img src="${pageContext.request.contextPath}<%=imageTitles[4]%>"> <img src="${pageContext.request.contextPath}<%=imageTitles[5]%>"></div>
-       <div class="slide"><img src="${pageContext.request.contextPath}<%=imageTitles[6]%>"><img src="${pageContext.request.contextPath}<%=imageTitles[7]%>"></div>
-         <div class="slide"><img src="${pageContext.request.contextPath}<%=imageTitles[8]%>"><img src="${pageContext.request.contextPath}<%=imageTitles[9]%>"></div>
+     <div class="slide"><img src="<%=imageTitles[4]%>"> <img src="<%=imageTitles[5]%>"></div>
+       <div class="slide"><img src="<%=imageTitles[6]%>"><img src="<%=imageTitles[7]%>"></div>
+         <div class="slide"><img src="<%=imageTitles[8]%>"><img src="<%=imageTitles[9]%>"></div>
 </div>
      
 

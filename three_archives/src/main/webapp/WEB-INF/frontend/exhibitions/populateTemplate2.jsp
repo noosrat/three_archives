@@ -11,6 +11,22 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
   <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
   
+  <link type="text/css" href="${pageContext.request.contextPath}/jquery.bxslider/jquery.bxslider.css" rel="stylesheet" />
+	<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/stylesheet.css"></link>
+	<script src="${pageContext.request.contextPath}/jquery.bxslider/jquery.bxslider.min.js"></script>
+	<script>
+		$(document).ready(function(){
+ 		 $('.slider4').bxSlider({
+   		 slideWidth: 250,
+   		 minSlides: 2,
+   	 	 maxSlides: 3,
+   		 moveSlides: 2,
+   	 	slideMargin: 8,
+   	 	infiniteLoop:false,
+		hideControlOnEnd:true
+  		});
+		});
+	</script>
   <style>
 		.droptargetCart {
  			margin: 5px;
@@ -130,8 +146,118 @@
   				
 			</div>
 		</li>
-		<li>
+		<li style="display:inline; float:left;font-weight:bold;margin:80px;">
+		
+		<form method="post" action="${pageContext.request.contextPath}/archives/create_exhibitions">
+			<textarea id="demo" name="user_action" readonly=readonly style="display:none;"> </textarea>
+			<input type="submit" value="Back" name="exhibition_det"/>
+			<input type="submit" value="Next" name="exhibition_det"/>
+		</form>
+		
+		<div class="slider4">
+			<div class="slide">
+					<div class="droptarget droptargetTemplate" id="0" ondrop="drop(event)" ondragover="allowDrop(event)" style="width:80%">
+						<ul style="list-style-type:none;margin:0;padding:0;">
+						<li style="display:inline; float:left;font-weight:bold;">	
+							<textarea rows="1" cols="23" id="input_cap0" name="user_action" style="display:none;"> caption</textarea>
+						</li>
+					</ul>
+					</div>
+					<div class="droptarget nodroptargetTemplate" id="1" style="width:80%">
+						<ul style="list-style-type:none;margin:0;padding:0;">
+							<li style="display:inline; float:left;font-weight:bold;">	
+								<textarea rows="1" cols="23" id="input_cap1" name="user_action" style="display:none;"> caption</textarea>
+							</li>
+						</ul>
+					</div>
+			</div>
+			<div class="slide">
+					<div class="droptarget nodroptargetTemplate" id="2" style="width:80%">
+						<ul style="list-style-type:none;margin:0;padding:0;">
+							<li style="display:inline; float:left;font-weight:bold;">	
+								<textarea rows="1" cols="23" id="input_cap2" name="user_action" style="display:none;"> caption</textarea>
+							</li>
+						</ul>
+					</div>
+					<div class="droptarget droptargetTemplate" id="3" ondrop="drop(event)" ondragover="allowDrop(event)" style="width:80%">
+						<ul style="list-style-type:none;margin:0;padding:0;">
+							<li style="display:inline; float:left;font-weight:bold;">	
+								<textarea rows="1" cols="23" id="input_cap3" name="user_action" style="display:none;"> caption</textarea>
+							</li>
+						</ul>
+					</div>
+			</div>
+			<div class="slide">
+				<div class="droptarget droptargetTemplate" id="4" ondrop="drop(event)" ondragover="allowDrop(event)" style="width:80%">
+					<ul style="list-style-type:none;margin:0;padding:0;">
+							<li style="display:inline; float:left;font-weight:bold;">	
+								<textarea rows="1" cols="23" id="input_cap4" name="user_action" style="display:none;"> caption</textarea>
+							</li>
+						</ul>
+				</div>
+				<div class="droptarget nodroptargetTemplate" id="5" style="width:80%">
+					<ul style="list-style-type:none;margin:0;padding:0;">
+							<li style="display:inline; float:left;font-weight:bold;">	
+								<textarea rows="1" cols="23" id="input_cap5" name="user_action" style="display:none;"> caption</textarea>
+							</li>
+						</ul>	
+				</div>
+			</div>	
+			<div class="slide">
+				<div class="droptarget nodroptargetTemplate" id="6"  style="width:80%">
+					<ul style="list-style-type:none;margin:0;padding:0;">
+							<li style="display:inline; float:left;font-weight:bold;">	
+								<textarea rows="1" cols="23" id="input_cap6" name="user_action" style="display:none;"> caption</textarea>
+							</li>
+						</ul>	
+				</div>
+				<div class="droptarget droptargetTemplate" id="7" ondrop="drop(event)" ondragover="allowDrop(event)" style="width:80%">
+					<ul style="list-style-type:none;margin:0;padding:0;">
+							<li style="display:inline; float:left;font-weight:bold;">	
+								<textarea rows="1" cols="23" id="input_cap7" name="user_action" style="display:none;"> caption</textarea>
+							</li>
+						</ul>
+				</div>
+			</div>
+			<div class="slide">
+				<div class="droptarget droptargetTemplate" id="8" ondrop="drop(event)" ondragover="allowDrop(event)" style="width:80%">
+					<ul style="list-style-type:none;margin:0;padding:0;">
+							<li style="display:inline; float:left;font-weight:bold;">	
+								<textarea rows="1" cols="23" id="input_cap8" name="user_action" style="display:none;"> caption</textarea>
+							</li>
+						</ul>	
+				</div>
+				<div class="droptarget nodroptargetTemplate" id="9"  style="width:80%">
+					<ul style="list-style-type:none;margin:0;padding:0;">
+							<li style="display:inline; float:left;font-weight:bold;">	
+								<textarea rows="1" cols="23" id="input_cap9" name="user_action" style="display:none;"> caption</textarea>
+							</li>
+						</ul>
+				</div>
+			</div>
+			<div class="slide">
+				<div class="droptarget nodroptargetTemplate" id="10" style="width:80%">
+					<ul style="list-style-type:none;margin:0;padding:0;">
+							<li style="display:inline; float:left;font-weight:bold;">	
+								<textarea rows="1" cols="23" id="input_cap10" name="user_action" style="display:none;"> caption</textarea>
+							</li>
+						</ul>
+				</div>
+				<div class="droptarget droptargetTemplate" id="11" ondrop="drop(event)" ondragover="allowDrop(event)" style="width:80%">
+					<ul style="list-style-type:none;margin:0;padding:0;">
+							<li style="display:inline; float:left;font-weight:bold;">	
+								<textarea rows="1" cols="23" id="input_cap11" name="user_action" style="display:none;"> caption</textarea>
+							</li>
+						</ul>
+				</div>
+			</div>
+		</div>
 		</li>
+		
+		
+		
+		
+		
 		
 </ul>
 

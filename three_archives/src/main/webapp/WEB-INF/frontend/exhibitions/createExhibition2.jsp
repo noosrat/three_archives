@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
-    <%@ page import="java.util.ArrayList" %>
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <head>
 	<link type="text/css" href="${pageContext.request.contextPath}/jquery.bxslider/jquery.bxslider.css" rel="stylesheet" />
@@ -65,15 +65,7 @@
     	event.preventDefault();
     	var data = event.dataTransfer.getData("Text");
     	event.target.appendChild(document.getElementById(data));
-    	//document.getElementById("demo").innerHTML = document.getElementById(data);
-    	//document.getElementById("demo").innerHTML = document.getElementById("demo").value + event.target.id + " " + data + " " ;
 
-		//if(document.getElementById(data).style.width=="50%"){
-			//document.getElementById(data).style.width="100%";
-		//}
-		//else{
-			//document.getElementById(data).style.width="50%";
-		//}
 		
 		if(document.getElementById(data).style.width=="40%")
 		{
@@ -145,11 +137,8 @@
   		<div class="slider4">
   			<div class="slide">
 				<div class="droptarget droptargetTemplate" id="0" ondrop="drop(event)" ondragover="allowDrop(event)" style="width:80%">
-					<ul style="list-style-type:none;margin:0;padding:0;">
-						<li style="display:inline; float:left;font-weight:bold;">	
-							<textarea rows="1" cols="23" name="input_cap0" > caption</textarea>
-						</li>
-					</ul>
+						<textarea rows="1" cols="23" name="input_cap0" > caption</textarea>
+						
 				</div>
 				<div class="droptarget droptargetTemplate" id="1" ondrop="drop(event)" ondragover="allowDrop(event)" style="width:80%">
 					<ul style="list-style-type:none;margin:0;padding:0;">

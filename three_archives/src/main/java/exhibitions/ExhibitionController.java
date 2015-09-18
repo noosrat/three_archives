@@ -52,7 +52,13 @@ public class ExhibitionController implements Controller {
 			allExhibitions = service.listAllExhibitions();
 			String selectedExhibit = request.getParameter("selectedExhibit");
 			int exhibitionId = Integer.parseInt(request.getParameter("selectedExhibit"));
-			String[] images = allExhibitions[exhibitionId].getMedia();
+			String[] images= new String[10];
+			 images = allExhibitions[exhibitionId].getMedia();
+			for (int i=0;i<10;i++)//TODO Remove 
+			{
+				images[i]="http://localhost:8080/fedora/objects/sq:15/datastreams/IMG/content";
+				
+			}
 			request.setAttribute("images", images);
 			String path = "D:\\images\\2.jpg";
 			request.setAttribute("image", path);
@@ -82,28 +88,27 @@ public class ExhibitionController implements Controller {
 			else
 			{
 				return "WEB-INF/frontend/exhibitions/exhibitionHome.jsp";
-			}
-			
+			}	
 			
 		}
 		
 		if (request.getParameter("selectedTemplate")!=null )
 		{
 			String selectedTemplate=request.getParameter("selectedTemplate");
-			/*if(selectedTemplate.equals("1"))
+			if(selectedTemplate.equals("1"))
 			{
 				session.setAttribute("TEMPLATE_ID",selectedTemplate);
 				result = "WEB-INF/frontend/exhibitions/populateTemplate1.jsp";
 			}
 			
-			else if(selectedTemplate.equals("2"))
+			else 
 			{
 				session.setAttribute("TEMPLATE_ID",selectedTemplate);
 				result = "WEB-INF/frontend/exhibitions/populateTemplate2.jsp";
-			}*/
+			}
 			
-			session.setAttribute("TEMPLATE_ID",selectedTemplate);
-			result = "WEB-INF/frontend/exhibitions/createExhibition2.jsp";
+			//session.setAttribute("TEMPLATE_ID",selectedTemplate);
+			//result = "WEB-INF/frontend/exhibitions/createExhibition2.jsp";
 		}
 		
 		if (request.getParameter("exhibition_det")!=null)
@@ -168,34 +173,45 @@ public class ExhibitionController implements Controller {
 				request.setAttribute("ExhibitionCreator",exhibitionCreator);
 				request.setAttribute("ExhibitionViewable",exhibitionViewable);
 				
+				session.setAttribute("TITLE",exhibitionTitle);
+				session.setAttribute("DESCRIPTION",exhibitionDescription);
+				session.setAttribute("CREATOR",exhibitionCreator);
+				session.setAttribute("VIEWABLE",exhibitionViewable);
+				session.setAttribute("POPULATED_TEMPLATE_ARRAY",media);
 				result = "WEB-INF/frontend/exhibitions/createViewExhibition.jsp";
 			}
-			else //if (action.equals("Back"))
-			{
+		//	else //if (action.equals("Back"))
+			//{
 				//go back to the create exhibition page
 				//but pre-populate the template with what has already been done
 				//also pre-populate the shopping cart
+			//}
+		}
+		
+		if(request.getParameter("saved_exhibition")!=null)
+		{
+			String action = request.getParameter("save_exhibition");
+			if(action.equals("save"))
+			{
+				//create exhibition object
+				String title=(String) session.getAttribute("TITLE");
+				int exID=1;//TODO deal with exhibition IDs!!
+				String tempID=(String) session.getAttribute("TEMPLATE_ID");
+				String[] media=(String [])session.getAttribute("POPULALTED_TEMPLATE_ID");
+				String creator=(String)session.getAttribute("CREATOR");
+				String description=(String)session.getAttribute("DESCRIPTION");
+				String[] captions=(String[])session.getAttribute("CAPTIONS");
+				Exhibition newExhibition= new Exhibition(title, exID, tempID, media, creator, description, captions);
+				
+				
+				//send exhibition object to ExhibitionService
+			}
+			else{
+				//do not save the exhibition and ho to exhibition home
 			}
 		}
 		
-		else if (1 == 2) {
-			// File fi = new File("D:\\images-missGay2013\\2.jpg");
-			// byte[] fileContent=Files.readAllBytes(fi.toPath());
-			// byte[] imageBytes = fileContent;
-			String path = "D:\\images\\2.jpg";
-			response.setContentType("text/html");
-			request.setAttribute("image", path);
-			result = "ExhibitionViewer.jsp";
-			// String path=getServletContext().getRealPath(File.separator);
-			// File f =new File("D:\\Exhibit2.jpg");
-			// BufferedImage bi=ImageIO.read(f);
-			// OutputStream out=response.getOutputStream();
-
-			// ImageIO.write(bi, "jpg", out);
-			// out.close();
-		}
 		return result;
-
 	}
 
 }
