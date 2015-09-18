@@ -88,6 +88,23 @@
 			<artifactId>solr-solrj</artifactId>
 			<version>4.6.1</version>
 		</dependency>
+		
+ 
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-entitymanager</artifactId>
+			<version>5.0.1.Final</version>
+		</dependency>
+ 
+		
+		<dependency>
+			<groupId>org.postgresql</groupId>
+			<artifactId>postgresql</artifactId>
+			<version>9.4-1200-jdbc41</version>
+		</dependency>
+ 
+		
+		
 
 	</dependencies>
 

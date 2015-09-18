@@ -22,6 +22,6 @@ public class Search extends Service {
 	
 	public List<FedoraDigitalObject> findFedoraDigitalObjects(String terms) throws FedoraException, SolrServerException{
 //		return getFedoraCommunicator().findFedoraDigitalObjectsUsingSearchTerms(terms);
-		return getFedoraCommunicator().findFedoraDigitalObjects(terms);
+		return getFedoraCommunicator().findFedoraDigitalObjects(terms, "search");
 	}
 }

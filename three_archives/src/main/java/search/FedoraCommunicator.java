@@ -6,9 +6,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.TreeMap;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.solr.client.solrj.SolrServerException;
+import org.apache.zookeeper.server.Request;
 import org.xml.sax.SAXException;
 
 import common.fedora.Datastream;
@@ -35,8 +38,8 @@ public class FedoraCommunicator {
 	}
 	
 	
-	public ArrayList<FedoraDigitalObject> findFedoraDigitalObjects(String terms) throws FedoraException, SolrServerException{
-		return findAndPopulateFedoraDigitalObjects(terms);
+	public ArrayList<FedoraDigitalObject> findFedoraDigitalObjects(String terms, String feature) throws FedoraException, SolrServerException{
+		return findAndPopulateFedoraDigitalObjects(terms, feature);
 	}
 	
 	
@@ -46,11 +49,22 @@ public class FedoraCommunicator {
 	}
 	
 	
-	private ArrayList<FedoraDigitalObject> findAndPopulateFedoraDigitalObjects(String terms) throws FedoraException, SolrServerException{
+	private ArrayList<FedoraDigitalObject> findAndPopulateFedoraDigitalObjects(String terms, String feature) throws FedoraException, SolrServerException{
 		System.out.println("Finding fedora digital objects matching: " + terms);
 		ArrayList<FedoraDigitalObject> results = new ArrayList<FedoraDigitalObject>();
-//		List<String> pids = findFedoraObjectsWithSearchTerm(terms);
-		List<String> pids = SolrCommunicator.solrSearch(terms);
+		 
+		
+		List<String> pids = new ArrayList();
+		if (feature=="search"){
+
+			pids = SolrCommunicator.solrSearch(terms);
+
+		} else if (feature=="maps") {
+			pids = findFedoraObjectsWithSearchTerm(terms);
+		}	
+		
+		//<String> pids = findFedoraObjectsWithSearchTerm(terms);
+		
 		try {
 			for (String pid : pids) {
 				System.out.println("Processing digital object with pid " + pid);
