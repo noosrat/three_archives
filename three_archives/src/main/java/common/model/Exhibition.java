@@ -7,8 +7,8 @@ public class Exhibition {
 	int exhibitionid;
 	int templateid;
 	String[] media;
+	String[] captions;
 	String creator;
-	String dateCreated;
 	String description;
 
 	public Exhibition() {
@@ -20,6 +20,22 @@ public class Exhibition {
 		this.exhibitionid=id;
 		this.AutoExhibitionGenerator();
 	}
+	public Exhibition(String title,int exID,String tempID,String[] media,String creator,String description, String[] captions)
+	{
+		this.title=title;
+		this.exhibitionid=exID;
+		this.templateid=Integer.parseInt(tempID);
+		this.media=media;
+		this.creator=creator;
+		this.description=description;
+		this.captions= captions;
+	}
+
+	public void setTemplate(String template)
+	{
+		this.templateid=Integer.parseInt(template);
+	}
+	
 	
 	public int getExhibitionId()
 	{
@@ -38,10 +54,7 @@ public class Exhibition {
 		return (String.valueOf(this.templateid));
 	}
 	
-	public void setTemplate(String template)
-	{
-		this.templateid=Integer.parseInt(template);
-	}
+	
 
 	public void AutoExhibitionGenerator() {
 		Exhibition exhibition = new Exhibition();

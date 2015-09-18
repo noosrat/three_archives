@@ -1,19 +1,25 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
 <head>
-	<link type="text/css" href="${pageContext.request.contextPath}/jquery.bxslider/jquery.bxslider.css" rel="stylesheet" />
+  <title>Template 1</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/stylesheet.css"></link>
+  <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+  <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+  
+  <link type="text/css" href="${pageContext.request.contextPath}/jquery.bxslider/jquery.bxslider.css" rel="stylesheet" />
 	<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/stylesheet.css"></link>
-	<script src="${pageContext.request.contextPath}/jquery.min.js"></script>
 	<script src="${pageContext.request.contextPath}/jquery.bxslider/jquery.bxslider.min.js"></script>
-
 	<script>
 		$(document).ready(function(){
  		 $('.slider4').bxSlider({
    		 slideWidth: 250,
    		 minSlides: 2,
-   	 	 maxSlides: 3,
+   	 	 maxSlides: 2,
    		 moveSlides: 2,
    	 	slideMargin: 8,
    	 	infiniteLoop:false,
@@ -21,10 +27,7 @@
   		});
 		});
 	</script>
-	
-	<title>Exhibition viewer</title>
-
-	<style>
+  <style>
 		.droptargetCart {
  			margin: 5px;
     		padding: 5px;
@@ -65,22 +68,17 @@
     	event.preventDefault();
     	var data = event.dataTransfer.getData("Text");
     	event.target.appendChild(document.getElementById(data));
-
-		
-		if(document.getElementById(data).style.width=="40%")
-		{
+    	
+		if(document.getElementById(data).style.width=="40%"){
 			document.getElementById(data).style.width="100%";
-			document.getElementById("demo").innerHTML = document.getElementById("demo").value + event.target.id + " " + data + " " ;
-				
+			document.getElementById("demo").innerHTML = document.getElementById("demo").value + event.target.id + " " + data + " " ;		
 		}
 		
-		else if (event.target.id=="cart")
-		{
+		else if (event.target.id=="cart"){
 			document.getElementById(data).style.width="40%";
 			document.getElementById("demo").innerHTML = document.getElementById("demo").value + "REMOVE " + data + " " ;
 		}
-		else if (document.getElementById(data).style.width=="100%")
-		{
+		else if (document.getElementById(data).style.width=="100%"){
 			document.getElementById("demo").innerHTML = document.getElementById("demo").value + "REMOVE " + data + " " + event.target.id + " " + data + " ";
 				
 		}
@@ -88,14 +86,43 @@
 </script>
 </head>
 <body>
-	<header>
-		<h1>Create Exhibition</h1>
-	</header>
-	
-	
-	
-	<br>
-	<ul id="mainEx" style="list-style-type:none;margin:0;padding:0;">
+<div class="container">
+  <div class="header">
+	<%if (session.getAttribute("ARCHIVE").equals("sequins")){ %>
+    		<h1>Sequins, Self and Struggle</h1> 
+	<%}
+	else if (session.getAttribute("ARCHIVE").equals("snaps")){%>
+		<h1>Movie Snaps</h1> 
+	<%}
+	else if (session.getAttribute("ARCHIVE").equals("harfield")){%>
+		<h1>Harfield Village</h1> 
+	<%}%>
+     <a href="#" class="btn btn-info btn-lg"><span class="glyphicon glyphicon-search"></span> Search</a>     
+  </div>     
+
+<h1>It is refreshing</h1>
+ <nav class="navbar navbar-default">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="#">Personal Histories</a>
+    </div>
+    <div>
+      <ul class="nav navbar-nav">
+        <li class="active"><a href="#">Home</a></li>
+	<li><a href="#">About</a></li>
+	<li><a href="#">Research</a></li>
+        <li><a href="#">Exhibitions</a></li>
+        <li><a href="#">Maps</a></li>
+        <li><a href="#">Browse</a></li>
+      </ul>
+    </div>
+  </div>
+</nav> 
+
+
+
+
+<ul id="mainEx" style="list-style-type:none;margin:0;padding:0;">
 		<li style="display:inline;float:left;font-weight:bold;">
 		
 			<div id="cart" class="scroll droptarget droptargetCart" ondrop="drop(event)" ondragover="allowDrop(event)" style="border: 1px solid #aaaaaa; diplay:inline-block; background:#F8F8F8;">
@@ -124,8 +151,6 @@
 				
 			</div>
 		</li>
-		
-		<%if (session.getAttribute("TEMPLATE_ID").equals("1")){%>
 		<li style="display:inline; float:left;font-weight:bold;margin:80px;">
 		
 		<form method="post" action="${pageContext.request.contextPath}/archives/create_exhibitions">
@@ -230,58 +255,11 @@
 			</div>
 		</div>
 		</form>
+	
 		</li>
-	<%} %>
-
-	<%if (session.getAttribute("TEMPLATE_ID").equals("2")){%>
-	<li style="display:inline; float:left;font-weight:bold;margin:80px;">
-		
-		<form method="post" action="${pageContext.request.contextPath}/archives/create_exhibitions">
-			<textarea id="demo" name="user_action" readonly=readonly style="display:none;"> </textarea>
-			<input type="submit" value="Back" name="exhibition_det"/>
-			<input type="submit" value="Next" name="exhibition_det"/>
-		</form>
-		
-		<div class="slider4">
-			<div class="slide">
-					<div class="droptarget droptargetTemplate" id="0" ondrop="drop(event)" ondragover="allowDrop(event)" style="width:80%">
-						<ul style="list-style-type:none;margin:0;padding:0;">
-						<li style="display:inline; float:left;font-weight:bold;">	
-							<textarea rows="1" cols="23" id="input_cap0" name="user_action" style="display:none;"> caption</textarea>
-						</li>
-					</ul>
-					</div>
-					<div class="droptarget nodroptargetTemplate" id="1" style="width:80%">
-						<ul style="list-style-type:none;margin:0;padding:0;">
-							<li style="display:inline; float:left;font-weight:bold;">	
-								<textarea rows="1" cols="23" id="input_cap1" name="user_action" style="display:none;"> caption</textarea>
-							</li>
-						</ul>
-					</div>
-			</div>
-			<div class="slide">
-					<div class="droptarget nodroptargetTemplate" id="2" style="width:80%"></div>
-					<div class="droptarget droptargetTemplate" id="3" ondrop="drop(event)" ondragover="allowDrop(event)" style="width:80%"></div>
-			</div>
-			<div class="slide">
-				<div class="droptarget droptargetTemplate" id="4" ondrop="drop(event)" ondragover="allowDrop(event)" style="width:80%"></div>
-				<div class="droptarget nodroptargetTemplate" id="5" style="width:80%"></div>
-			</div>	
-			<div class="slide">
-				<div class="droptarget nodroptargetTemplate" id="6"  style="width:80%"></div>
-				<div class="droptarget droptargetTemplate" id="7" ondrop="drop(event)" ondragover="allowDrop(event)" style="width:80%"></div>
-			</div>
-			<div class="slide">
-				<div class="droptarget droptargetTemplate" id="8" ondrop="drop(event)" ondragover="allowDrop(event)" style="width:80%"></div>
-				<div class="droptarget nodroptargetTemplate" id="9"  style="width:80%"></div>
-			</div>
-			<div class="slide">
-				<div class="droptarget nodroptargetTemplate" id="10" style="width:80%"></div>
-				<div class="droptarget droptargetTemplate" id="11" ondrop="drop(event)" ondragover="allowDrop(event)" style="width:80%"></div>
-			</div>
-		</div>
-		</li>
-		<%}%>
 	</ul>
 
+
+</div>
 </body>
+</html>
