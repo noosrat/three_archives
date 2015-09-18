@@ -17,18 +17,6 @@
 <title>Three Archives : Search and Browse</title>
 <link rel="stylesheet" type="text/css"
 	href="${pageContext.request.contextPath}/css/search_and_browse.css"></link>
-<script type="text/javascript">
-	$(document).ready(
-			function() {
-				$('input.typeahead').typeahead(
-						{
-							name : 'accounts',
-							local : [ 'Audi', 'BMW', 'Bugatti', 'Ferrari',
-									'Ford', 'Lamborghini', 'Mercedes Benz',
-									'Porsche', 'Rolls-Royce', 'Volkswagen' ]
-						});
-			});
-</script>
 </head>
 
 
@@ -44,15 +32,16 @@
 						class="icon-bar"></span> <span class="icon-bar"></span> <span
 						class="icon-bar"></span>
 				</button>
-				<a class="navbar-brand" href="${pageContext.request.contextPath}/archives/browse">Harfield Village</a> <a
-					class="navbar-brand"> ${message}</a>
+				<a class="navbar-brand"
+					href="${pageContext.request.contextPath}/archives/browse">Harfield
+					Village</a> <a class="navbar-brand"> ${message}</a>
 				<!-- <a class="navbar-brand" href="#">Sequins, Self and Struggle</a>
 				<a class="navbar-brand" href="#">Movie Snaps</a>-->
 
 			</div>
 
 			<div id="navbar" class="navbar-collapse collapse">
-				<c:forEach var="category" items="${categories}">
+				<c:forEach var="category" items="${browseCategories}">
 					<!--    Category: ${category.key}  - Value: ${category.value} <br> -->
 
 					<ul class="nav navbar-nav">
@@ -76,12 +65,36 @@
 				<form class="navbar-form navbar-right"
 					action="${pageContext.request.contextPath}/archives/search_objects"
 					method="post">
+
+
 					<div class="form-group">
 						<input type="text" placeholder="Search archive"
 							class="form-control" name="terms">
 					</div>
 
+					<!--    Category: ${category.key}  - Value: ${category.value} <br> -->
+					<ul class="nav navbar-nav">
+						<li class="dropdown"><a
+							href="${pageContext.request.contextPath}/archives/search_objects"
+							class="dropdown-toggle" data-toggle="dropdown" role="button"
+							aria-haspopup="true" aria-expanded="false">Search All<span
+								class="caret"></span></a>
+							<ul class="dropdown-menu">
+								<c:forEach var="searchCategory" items="${searchCategories}">
+									<li><a
+										href="${pageContext.request.contextPath}/archives/search_objects/category=${searchCategory}">${searchCategory}</a></li>
+								</c:forEach>
+							</ul>
+					</ul>
 					<button type="submit" class="btn btn-success">Search</button>
+					<br> 
+
+					<div class="checkbox">
+						<label> <input type="checkbox" id="limitSearch" name="limitSearch" value="limitSearch">Limit
+							search to these results
+						</label>
+					</div>
+
 				</form>
 			</div>
 		</div>
@@ -100,11 +113,6 @@
 	<br>
 	<!--  portfolio grid section displaying the images -->
 	<section id="portfolio">
-		Categories : ${categories.size()} <br>
-		<c:forEach var="category" items="${categories}">
-    Category: ${category.key}  - Value: ${category.value} <br>
-		</c:forEach>
-
 		<div class="container">
 			<!-- <div class="row">-->
 			<!--  for loop going through the digital objects -->
@@ -194,7 +202,6 @@
 	<!-- Placed at the end of the document so the pages load faster -->
 	<script src="${pageContext.request.contextPath}/js/jquery.js"></script>
 	<script src="${pageContext.request.contextPath}/js/bootstrap.min.js"></script>
-	<script src="${pageContext.request.contextPath}/js/typeahead.js"></script>
 
 </body>
 </html>

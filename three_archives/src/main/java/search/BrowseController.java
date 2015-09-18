@@ -12,18 +12,18 @@ import common.fedora.FedoraDigitalObject;
 import common.fedora.FedoraException;
 
 public class BrowseController implements Controller {
-	
-	
 
 	public String execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		Browse.initialise();
-		browseFedoraObjects(request, response);
+		this.browseFedoraObjects(request, response);
+		request.setAttribute("searchCategories", SearchController.retrieveSearchCategories());
+		System.out.println("SEARCH CATEGORIES " + SearchController.retrieveSearchCategories());
 		return "WEB-INF/frontend/searchandbrowse/searchAndBrowse.jsp";
 	}
 
 	private void browseAllFedoraObjects(HttpServletRequest request, HttpServletResponse response)
 			throws FedoraException, SolrServerException {
-		
+
 		// this is to return everything in the archive collection...this is just
 		// to illustrate browse temporarily
 		/* we are intiially searching all the fedora objects here */
@@ -35,8 +35,6 @@ public class BrowseController implements Controller {
 			request.setAttribute("message", "No results to return");
 		}
 	}
-	
-	
 
 	private void browseFedoraObjects(HttpServletRequest request, HttpServletResponse response)
 			throws FedoraException, SolrServerException {
@@ -62,11 +60,7 @@ public class BrowseController implements Controller {
 
 		}
 		System.out.println("Categories " + Browse.getFilteredBrowsingCategories());
-		request.setAttribute("categories",Browse.getFilteredBrowsingCategories());
+		request.setAttribute("browseCategories", Browse.getFilteredBrowsingCategories());
 	}
-
-	
-	
-	
 
 }
