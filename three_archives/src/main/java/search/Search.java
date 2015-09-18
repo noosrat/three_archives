@@ -1,6 +1,7 @@
 package search;
 
-import java.util.List;
+import java.util.HashMap;
+import java.util.Set;
 
 import org.apache.solr.client.solrj.SolrServerException;
 
@@ -16,11 +17,11 @@ public class Search extends Service {
 	}
 	
 	
-	public List<Datastream> findFedoraDatastreams(String terms) throws FedoraException{
+	public HashMap<String,Datastream> findFedoraDatastreams(String terms) throws FedoraException{
 		return getFedoraCommunicator().findFedoraDatastreamsUsingSearchTerms(terms);
 	}
 	
-	public List<FedoraDigitalObject> findFedoraDigitalObjects(String terms) throws FedoraException, SolrServerException{
+	public Set<FedoraDigitalObject> findFedoraDigitalObjects(String terms) throws FedoraException, SolrServerException{
 //		return getFedoraCommunicator().findFedoraDigitalObjectsUsingSearchTerms(terms);
 		return getFedoraCommunicator().findFedoraDigitalObjects(terms, "search");
 	}

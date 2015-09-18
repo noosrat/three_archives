@@ -18,11 +18,15 @@ public enum DublinCore {
 	public String getDescription() {
 		return description;
 	}
-	
-	public DublinCore parseDescription(String description){
-		if (description!=null){
-			return DublinCore.valueOf(description);
+
+	public static DublinCore parseDescription(String type){
+		for (DublinCore id: DublinCore.values()){
+			if (type.equalsIgnoreCase(id.getDescription())){
+				return id;
+			}
 		}
 		return null;
 	}
+	
+	
 }

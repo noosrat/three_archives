@@ -4,16 +4,16 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Scanner;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import search.Search;
 import common.controller.Controller;
 import common.fedora.FedoraDigitalObject;
-import common.fedora.FedoraException;
 
 public class MapController implements Controller {
 
@@ -21,13 +21,13 @@ public class MapController implements Controller {
 			HttpServletResponse response) throws Exception {
 		if (request.getPathInfo().substring(1).contains("redirect_maps")) {
 
-			List<FedoraDigitalObject> digitalObjects = new ArrayList<FedoraDigitalObject>();
+			Set<FedoraDigitalObject> digitalObjects = new HashSet<FedoraDigitalObject>();
 			Map search = new Map();
 			digitalObjects = search.findFedoraDigitalObjects("&query=coverage~*");	
 			//digitalObjects = search.findFedoraDigitalObjects("kitten");	
 			request.setAttribute("objects", digitalObjects);
 			request.setAttribute("points", read());
-			
+//			
 			//setAttribute to points array for to be sent (points are from database)
 			
 			return "WEB-INF/frontend/maps/harfieldoverview.jsp";

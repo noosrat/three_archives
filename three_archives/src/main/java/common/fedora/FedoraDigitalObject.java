@@ -2,6 +2,7 @@ package common.fedora;
 
 import java.io.InputStream;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 public class FedoraDigitalObject {
@@ -11,7 +12,7 @@ public class FedoraDigitalObject {
 	private Date dateCreated;
 	private Date dateLastModified;
 	private State state;
-	private List<Datastream> datastreams; //getdatastreams..and then populate further
+	private HashMap<String,Datastream> datastreams; //getdatastreams..and then populate further
 	
 	
 
@@ -70,11 +71,11 @@ public class FedoraDigitalObject {
 		this.state = state;
 	}
 
-	public List<Datastream> getDatastreams() {
+	public HashMap<String,Datastream> getDatastreams() {
 		return datastreams;
 	}
 
-	public void setDatastreams(List<Datastream> datastreams) {
+	public void setDatastreams(HashMap<String,Datastream> datastreams) {
 		this.datastreams = datastreams;
 	}
 
