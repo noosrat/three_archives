@@ -28,7 +28,7 @@ function initialize() {
   //loop though text file with polygon paths
   var contextPath='<%=request.getContextPath()%>';
   <%List<String> polygons =(List<String>) request.getAttribute("points");%>
-  console.log(polygons);
+  console.log(<%=polygons%>);
   var markers = [];
   var polys = [];
   var polys1 = "";
