@@ -30,6 +30,7 @@ public class Browse extends Service {
 		fedoraDigitalObjects = SearchController.getSearch().findFedoraDigitalObjects("*");
 		System.out.println("Processed fedora digital objects, found " + fedoraDigitalObjects.size() + " objects");
 		setUpBrowsingCategoriesAndValues(fedoraDigitalObjects);
+		SearchController.buildAutocompleteJSONFile(fedoraDigitalObjects);
 	}
 
 	public static Set<FedoraDigitalObject> getFedoraDigitalObjects() {
@@ -253,7 +254,7 @@ public class Browse extends Service {
 			}
 
 		}
-		setUpBrowsingCategoriesAndValues(filteredObjects);
+//		setUpBrowsingCategoriesAndValues(filteredObjects); only if filtering on filtered
 		TreeMap<String, TreeSet<String>> filteredCategories = new TreeMap<String, TreeSet<String>>(
 				getBrowsingCategories());
 		filteredCategories.remove(filterCategory);

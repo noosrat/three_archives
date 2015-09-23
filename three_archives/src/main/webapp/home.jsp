@@ -72,7 +72,6 @@ ${message}
 		method="post">
 		<input type="submit" value="Maps" />
 	</form>
-
 </div>
 
 

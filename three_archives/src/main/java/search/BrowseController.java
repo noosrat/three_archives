@@ -30,7 +30,7 @@ public class BrowseController implements Controller {
 		Set<FedoraDigitalObject> fedoraDigitalObjects = Browse.getFedoraDigitalObjects();
 
 		if (fedoraDigitalObjects != null && !fedoraDigitalObjects.isEmpty()) {
-			request.setAttribute("objects", fedoraDigitalObjects);
+			request.getSession().setAttribute("objects", fedoraDigitalObjects);
 		} else {
 			request.setAttribute("message", "No results to return");
 		}
@@ -55,12 +55,15 @@ public class BrowseController implements Controller {
 			 * our category is not null...therefore we need to start filtering
 			 * the searches by what has been selected by the user
 			 */
-			Browse.filterFedoraDigitalObjects(Browse.getFedoraDigitalObjects(), category, value);
-			request.setAttribute("objects", Browse.getFilteredDigitalObjects());
+			Browse.filterFedoraDigitalObjects(Browse.getFedoraDigitalObjects(), category, value);//we are filtering through all the digital objects...look at filtering filtered objects when thinking about being able to filter the search
+			request.getSession().setAttribute("objects", Browse.getFilteredDigitalObjects());
 
 		}
 		System.out.println("Categories " + Browse.getFilteredBrowsingCategories());
-		request.setAttribute("browseCategories", Browse.getFilteredBrowsingCategories());
+//		request.setAttribute("browseCategories", Browse.getFilteredBrowsingCategories()); this will only be relevant when we can do filtering on filtering
+		request.setAttribute("browseCategories", Browse.getBrowsingCategories());
 	}
+
+	
 
 }

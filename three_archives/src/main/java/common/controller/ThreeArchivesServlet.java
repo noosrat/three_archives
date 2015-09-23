@@ -23,12 +23,18 @@ public class ThreeArchivesServlet extends HttpServlet {
 	private void process(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException{
 		System.out.println("Entered Servlet");
-				System.out.println("PathInfo : "+ request.getPathInfo());
-				ServiceDelegator serviceDelegator = new ServiceDelegator();
+		
+		System.out.println("PathInfo : "+ request.getPathInfo());
+		ServiceDelegator serviceDelegator = new ServiceDelegator();
+		if (request.getPathInfo().contains("test")){
+			request.getServletContext().getRequestDispatcher("/WEB-INF/frontend/searchandbrowse/test.jsp")
+			.forward(request, response);	
+	
+		}else{
 				String result = serviceDelegator.execute(request, response);
 				request.getServletContext().getRequestDispatcher("/" + result)
 						.forward(request, response);	
-		
+		}
 	}
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse

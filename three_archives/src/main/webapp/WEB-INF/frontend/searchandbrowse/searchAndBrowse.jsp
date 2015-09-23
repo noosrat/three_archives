@@ -17,6 +17,45 @@
 <title>Three Archives : Search and Browse</title>
 <link rel="stylesheet" type="text/css"
 	href="${pageContext.request.contextPath}/css/search_and_browse.css"></link>
+
+
+
+<script type="text/javascript"
+	src="${pageContext.request.contextPath}/js/jquery.js"></script>
+<script type="text/javascript"
+	src="${pageContext.request.contextPath}/js/bootstrap.js"></script>
+<script type="text/javascript"
+	src="${pageContext.request.contextPath}/js/typeahead.js"></script>
+<script type="text/javascript">
+$(document).ready(function() {
+	var archive = '<%= session.getAttribute("ARCHIVE") %>';
+	if (archive == "Sequins, Self and Struggle") {
+		var words = "/data/sequins.json";
+	} else if (archive == "Movie Snaps") {
+		var words = "/data/movie.json";
+	} else if (archive == "Harfield Village") {
+		var words = "/data/harfield.json";
+	}
+
+	var countries = new Bloodhound({
+		datumTokenizer : Bloodhound.tokenizers.whitespace,
+		queryTokenizer : Bloodhound.tokenizers.whitespace,
+		limit : 5,
+		prefetch : {
+			url : words,
+		}
+	});
+
+	$('#prefetch .typeahead').typeahead(null, {
+		name : 'countries',
+		source : countries
+	});
+});
+	
+</script>
+
+
+
 </head>
 
 
@@ -33,10 +72,7 @@
 						class="icon-bar"></span>
 				</button>
 				<a class="navbar-brand"
-					href="${pageContext.request.contextPath}/archives/browse">Harfield
-					Village</a> <a class="navbar-brand"> ${message}</a>
-				<!-- <a class="navbar-brand" href="#">Sequins, Self and Struggle</a>
-				<a class="navbar-brand" href="#">Movie Snaps</a>-->
+					href="${pageContext.request.contextPath}/archives/browse">${ARCHIVE}</a> <a class="navbar-brand"> ${message}</a>
 
 			</div>
 
@@ -63,48 +99,59 @@
 			<div id="navbar" class="collapse navbar-collapse">
 
 				<form class="navbar-form navbar-right"
-					action="${pageContext.request.contextPath}/archives/search_objects"
+					action="${pageContext.request.contextPath}/archives/search_objects/category=${searchCategories[0]}"
 					method="post">
 
 
 					<div class="form-group">
-						<input type="text" placeholder="Search archive"
-							class="form-control" name="terms">
-					</div>
-
+						
+						
+						
+<div id="prefetch">
+  <input class="form-control typeahead tt-query" data-provider="typeahead" type="text" placeholder="Search Archive" autocomplete="off" spellcheck="false" name="terms">
+</div>
+</div>
 					<!--    Category: ${category.key}  - Value: ${category.value} <br> -->
 					<ul class="nav navbar-nav">
 						<li class="dropdown"><a
 							href="${pageContext.request.contextPath}/archives/search_objects"
 							class="dropdown-toggle" data-toggle="dropdown" role="button"
-							aria-haspopup="true" aria-expanded="false">Search All<span
+							aria-haspopup="true" aria-expanded="false">${searchCategories[0]}<span
 								class="caret"></span></a>
 							<ul class="dropdown-menu">
 								<c:forEach var="searchCategory" items="${searchCategories}">
 									<li><a
 										href="${pageContext.request.contextPath}/archives/search_objects/category=${searchCategory}">${searchCategory}</a></li>
+
 								</c:forEach>
 							</ul>
 					</ul>
 					<button type="submit" class="btn btn-success">Search</button>
-					<br> 
+					<br>
 
 					<div class="checkbox">
-						<label> <input type="checkbox" id="limitSearch" name="limitSearch" value="limitSearch">Limit
-							search to these results
+						<label> <input type="checkbox" id="limitSearch"
+							name="limitSearch" value="limitSearch">Limit search to
+							these results
 						</label>
 					</div>
 
 				</form>
+
+
 			</div>
 		</div>
+
 		<!--/.nav-collapse -->
 		</div>
 	</nav>
+
 	<br>
 	<br>
 	<br>
 	<br>
+
+
 
 
 	<br>
@@ -189,19 +236,8 @@
 		<c:set var="count" value="${count + 1}" scope="page" />
 	</c:forEach>
 
-	<!--   <div class="bs-example">
-        <input type="text" class="typeahead tt-query" autocomplete="on" spellcheck="false">
-    </div>
--->
 
 
-
-
-	<!-- Bootstrap core JavaScript
-    ================================================== -->
-	<!-- Placed at the end of the document so the pages load faster -->
-	<script src="${pageContext.request.contextPath}/js/jquery.js"></script>
-	<script src="${pageContext.request.contextPath}/js/bootstrap.min.js"></script>
 
 </body>
 </html>

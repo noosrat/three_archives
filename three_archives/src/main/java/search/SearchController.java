@@ -1,5 +1,9 @@
 package search;
 
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.TreeSet;
@@ -8,8 +12,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.solr.client.solrj.SolrServerException;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 
 import common.controller.Controller;
+import common.fedora.DatastreamID;
+import common.fedora.DublinCoreDatastream;
 import common.fedora.FedoraDigitalObject;
 import common.fedora.FedoraException;
 
@@ -24,6 +32,9 @@ public class SearchController implements Controller {
 	public String execute(HttpServletRequest request, HttpServletResponse response) {
 		String result = "WEB-INF/frontend/searchandbrowse/searchAndBrowse.jsp";
 		request.setAttribute("searchCategories", retrieveSearchCategories());
+		request.setAttribute("browseCategories", Browse.getBrowsingCategories());
+		request.setAttribute("autocompletion", autocompleteValues(Browse.getFedoraDigitalObjects()));
+
 		String requestPath = request.getPathInfo().substring(1);
 		if (requestPath != null) {
 			try {
@@ -64,27 +75,48 @@ public class SearchController implements Controller {
 			for (FedoraDigitalObject digitalObject : exisitingObjects) {
 				terms.append("PID:\"").append(digitalObject.getPid()).append("\" OR ");
 			}
-			terms.delete(terms.length() - 2, terms.length()).append(")");
+			terms.delete(terms.length() - 4, terms.length()).append(")");
 			// now we can add the rest of the actual query
 			terms.append(" AND ");
 			System.out.println("SOLR QUERY for limited search " + terms);
 		}
-		if (requestPath.contains("search_objects/category")) {
-			// then do all the specific searching
-			System.out.println("REQUEST PAHT IN search fedora digital objects by category " + requestPath);
-			String[] splitPath = requestPath.split("=");
-			String queryCategory = splitPath[0];
-			String queryValue = splitPath[1];
-			terms.append(queryCategory).append(":\"").append(queryValue).append("\"");
-		} else {
-			String s = request.getParameter("terms");
-			if (s != null && !s.isEmpty()) {
-				terms.append(s);
-			} else {
-				throw new FedoraException("Please enter search terms");
 
+		String s = request.getParameter("terms");
+		// if (requestPath.contains("search_objects/category")) {
+		// then do all the specific searching
+		System.out.println("REQUEST PAHT IN search fedora digital objects by category " + requestPath);
+		String[] splitPath = requestPath.split("=");
+		if (splitPath.length == 2) {
+			SearchAndBrowseCategory queryCategory = SearchAndBrowseCategory.valueOf(splitPath[1]);
+			// maybe here we just return to the page with re-organised/placed
+			// search items..etc with our one selected and then they can still
+			// put a value into the text box
+			ArrayList<String> categories = SearchController.retrieveSearchCategories();
+			System.out.println(categories);
+			categories.remove(categories.indexOf(queryCategory.name()));
+			categories.add(0, queryCategory.name());
+			System.out.println(categories);
+			request.setAttribute("searchCategories", categories);
+			System.out.println("Terms " + s);
+			System.out.println("Category " + queryCategory + "equals search all "
+					+ queryCategory.equals(SearchAndBrowseCategory.SEARCH_ALL));
+			if (s == null || s.isEmpty()) {
+				return;
 			}
+			if (!(queryCategory.equals(SearchAndBrowseCategory.SEARCH_ALL))) {
+				for (int x = 0; x < queryCategory.getDublinCoreField().size(); x++) {
+					if (x > 0 && x != queryCategory.getDublinCoreField().size() - 1) {
+						terms.append(queryCategory.getDublinCoreField().get(x)).append(":\"").append(s).append("\"")
+								.append(" OR ");
 
+					} else {
+
+						terms.append(queryCategory.getDublinCoreField().get(x)).append(":\"").append(s).append("\"");
+					}
+				}
+			} else {
+				terms.append(s);
+			}
 		}
 
 		System.out.println("Query constructed by category for solr is " + terms);
@@ -99,12 +131,59 @@ public class SearchController implements Controller {
 		}
 	}
 
-	public static TreeSet<String> retrieveSearchCategories() {
-		TreeSet<String> result = new TreeSet<String>();
+	public static ArrayList<String> retrieveSearchCategories() {
+		ArrayList<String> result = new ArrayList<String>();
 		for (SearchAndBrowseCategory cat : SearchAndBrowseCategory.values()) {
 			result.add(cat.name());
 		}
 		return result;
 	}
 
+	private static Set<String> autocompleteValues(Set<FedoraDigitalObject> fedoraDigitalObjects) {
+		Set<String> values = new TreeSet<String>();
+
+		for (FedoraDigitalObject fedoraDigitalObject : fedoraDigitalObjects) {
+			DublinCoreDatastream dublinCoreDatastream = (DublinCoreDatastream) fedoraDigitalObject.getDatastreams()
+					.get(DatastreamID.DC.name());
+
+			for (String dublinCoreFieldValue : dublinCoreDatastream.getDublinCoreMetadata().values()) {
+				String[] splitSemiColon = dublinCoreFieldValue.split(";");
+				for (String split : splitSemiColon) {
+					String[] splitPercentage = split.split("%"); 
+					values.addAll(Arrays.asList(splitPercentage));
+				
+				}
+				String[] tokens = dublinCoreFieldValue.split("\\W");
+				values.addAll(Arrays.asList(tokens));
+			}
+		}
+		System.out.println("Autocompletion values " + values);
+
+		return values;
+
+	}
+
+	/*
+	 * the below needs to moved to occur whenever there is an upload to the database...the data will then be retrieved from the db from the dofields table..
+	 */
+	public static void buildAutocompleteJSONFile(Set<FedoraDigitalObject> fedoraDigitalObjects) {
+		JSONArray list = new JSONArray();
+		System.out.println("Writing to file");
+		Set<String> values = autocompleteValues(fedoraDigitalObjects);
+		System.out.println("Autocomplete values to write to file  " + values);
+		for (String s : values) {
+			list.add(s);
+		}
+
+		try {
+
+			FileWriter file = new FileWriter("../webapps/data/autocomplete.json");
+			file.write(list.toJSONString());
+			file.flush();
+			file.close();
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 }
