@@ -118,12 +118,12 @@ public class FedoraXMLResponseParser {
 		NodeList nodeList = document.getElementsByTagName("oai_dc:dc");
 		Node node = nodeList.item(0);
 		Element element = (Element) node;
-		HashMap<DublinCore, String> dublinCoreMetadata = new HashMap<DublinCore, String>();
+		HashMap<String, String> dublinCoreMetadata = new HashMap<String, String>();
 		for (DublinCore dc : DublinCore.values()) {
 			String tagName = "dc:" + dc.getDescription();
 			Node tag = element.getElementsByTagName(tagName).item(0);
 			if (tag != null) {
-				dublinCoreMetadata.put(dc, element.getElementsByTagName(tagName).item(0).getTextContent());
+				dublinCoreMetadata.put(dc.name(), element.getElementsByTagName(tagName).item(0).getTextContent());
 			}
 
 		}

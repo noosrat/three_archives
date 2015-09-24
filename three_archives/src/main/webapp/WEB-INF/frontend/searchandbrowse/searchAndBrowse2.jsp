@@ -28,7 +28,8 @@
 	src="${pageContext.request.contextPath}/js/bootstrap.js"></script>
 <script type="text/javascript"
 	src="${pageContext.request.contextPath}/js/typeahead.js"></script>
-	
+	<script type="text/javascript"
+	src="${pageContext.request.contextPath}/js/lightbox.min.js"></script>
 <script type="text/javascript">
 $(document).ready(function() {
 	var archive = '<%= session.getAttribute("ARCHIVE") %>';
@@ -130,6 +131,7 @@ $(document).ready(function() {
 							</ul>
 					</ul>
 					<button type="submit" class="btn btn-success">Search</button>
+					<br>
 
 					<div class="checkbox">
 						<label> <input type="checkbox" id="limitSearch"
@@ -160,65 +162,88 @@ $(document).ready(function() {
 	<br>
 	<br>
 	<br>
-	
-	
-	
 	<!--  portfolio grid section displaying the images -->
 	<section id="portfolio">
-	<div class="container gallery">
-		<div class="row">
+		<div class="container">
+			<!-- <div class="row">-->
 			<!--  for loop going through the digital objects -->
+			<c:set var="count" value="0" scope="page" />
 			<c:forEach var="digitalObject" items="${objects}">
 
-				<div class="col-sm-4 portfolio-item">
 
-					<a href="${digitalObject.datastreams['IMG'].content}" class="portfolio-link" data-toggle="lightbox modal" 
-					data-title="
-					Title: ${digitalObject.datastreams['DC'].dublinCoreMetadata['TITLE']}<br> 
-					
-					Description: ${digitalObject.datastreams['DC'].dublinCoreMetadata['DESCRIPTION']}<br>
-					Date: ${digitalObject.datastreams['DC'].dublinCoreMetadata['DATE']} <br>
-					Format: ${digitalObject.datastreams['DC'].dublinCoreMetadata['FORMAT']} <br>
-					Coverage: ${digitalObject.datastreams['DC'].dublinCoreMetadata['COVERAGE']}<br>
-					Contributor: ${digitalObject.datastreams['DC'].dublinCoreMetadata['CONTRIBUTOR']}<br>
-					Subject: ${digitalObject.datastreams['DC'].dublinCoreMetadata['SUBJECT']} <br>
-					Creator: ${digitalObject.datastreams['DC'].dublinCoreMetadata['CREATOR']} <br>
-					<br>
-					<br>
-					" 
-														
-					data-lightbox="archive"> 
-					
-					
-					<div class="caption">
-							<div class="caption-content">
-							
-							
-							<br>
-							Title: ${digitalObject.datastreams['DC'].dublinCoreMetadata['TITLE']}
-							<br>
-							Type: ${digitalObject.datastreams['DC'].dublinCoreMetadata['FORMAT']}
-							
-							</div>
+
+				<div class="col-sm-4 portfolio-item">
+					<a href="#portfolioModal${count}" class="portfolio-link"
+						data-toggle="modal"> <!-- <td>${digitalObject}</td>--> <!--  for loop going through the digital objects' datastreams -->
+
+						<div class="caption">
+							<div class="caption-content">${digitalObject.datastreams['DC'].dublinCoreMetadata}</div>
 							<!-- caption content -->
 						</div> <!-- caption -->
-					<img src="${digitalObject.datastreams['IMG'].content}" class="img-thumbnail img-responsive" alt="image unavailable">
-				</a>
+						
+						
+						 <img
+						src="${digitalObject.datastreams['IMG'].content}"
+						class="img-thumbnail img-responsive" alt="image unavailable">
+					</a>
 				</div>
-
 				<!-- "col-sm-4 portfolio-item" -->
+				<c:set var="count" value="${count + 1}" scope="page" />
 			</c:forEach>
+			<!-- </div>-->
+			<!--  row -->
 		</div>
-		<!--  row -->
-	</div>
-	<!--  container -->
+		<!--  container -->
 	</section>
+
 	<!-- portfolio modal section containing results to the above links -->
 
 
-	
-<script type="text/javascript"
-	src="${pageContext.request.contextPath}/js/lightbox.min.js"></script>
+	<c:set var="count" value="0" scope="page" />
+	<c:forEach var="digitalObject" items="${objects}">
+		<div class="portfolio-modal modal fade" id="portfolioModal${count}"
+			tabindex="-1" role="dialog" aria-hidden="false">
+			<div class="modal-content" data-dismiss="modal">
+				<div class="close-modal" data-dismiss="modal">
+					<div class="lr">
+						<div class="rl"></div>
+					</div>
+				</div>
+				<div class="container">
+					<div class="row">
+						<div class="col-lg-8 col-lg-offset-2">
+							<div class="modal-body">
+
+
+								<img src="${digitalObject.datastreams['IMG'].content}"
+									class="img-thumbnail img-responsive" alt="image unavailable">
+								<br> <br>
+								<div class="item-details">${digitalObject.datastreams['DC'].dublinCoreMetadata}
+								</div>
+								<!-- item details -->
+
+
+								<br>
+								<!-- 	<button type="button" class="btn btn-default"
+									>
+									<i class="fa fa-times"></i> Place me
+								</button> -->
+							</div>
+							<!-- modal body -->
+						</div>
+						<!--  col-lg-8 -->
+					</div>
+					<!-- row -->
+				</div>
+				<!-- container -->
+			</div>
+			<!-- modal-content -->
+		</div>
+		<!--  portfolio-modal modal fade -->
+		<c:set var="count" value="${count + 1}" scope="page" />
+	</c:forEach>
+
+
 
 
 </body>

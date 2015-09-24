@@ -232,24 +232,6 @@ public class Datastream {
 	}
 	
 	
-
-	public static void main(String[] args){
-		List<Datastream> ds = new ArrayList<Datastream>();
-		ds.add(new Datastream("01", DatastreamID.IMG));
-		ds.add(new Datastream("02", DatastreamID.AUD));
-		ds.add(new Datastream("03", DatastreamID.IMG));
-		ds.add(new DublinCoreDatastream("10", new HashMap<DublinCore, String>()));
-		
-		
-		for (Datastream d: ds){
-			System.out.println(d.getClass());
-			System.out.println(d instanceof DublinCoreDatastream);
-		   System.out.println((DublinCoreDatastream)(ds.get(ds.indexOf(new DublinCoreDatastream("10")))));
-		}
-	}
-	
-	
-	
 	
 	
 	
