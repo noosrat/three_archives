@@ -1,5 +1,6 @@
 package search;
 
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -13,7 +14,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.solr.client.solrj.SolrServerException;
 import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
 import common.controller.Controller;
 import common.fedora.DatastreamID;
@@ -36,6 +38,7 @@ public class SearchController implements Controller {
 		request.setAttribute("autocompletion", autocompleteValues(Browse.getFedoraDigitalObjects()));
 
 		String requestPath = request.getPathInfo().substring(1);
+		System.out.println("PATH INFO " + requestPath);
 		if (requestPath != null) {
 			try {
 				if (requestPath.contains("search_objects")) {
@@ -49,13 +52,16 @@ public class SearchController implements Controller {
 						"Something seems to have gone wrong with Fedora" + exception.getStackTrace());
 
 			}
+			catch (Exception exception){
+				request.setAttribute("message", exception.getStackTrace());
+			}
 		}
 		return result;
 
 	}
 
 	private void searchFedoraDigitalObjects(HttpServletRequest request, HttpServletResponse response)
-			throws FedoraException, SolrServerException {
+			throws Exception {
 		String requestPath = request.getPathInfo().substring(1);
 		StringBuilder terms = new StringBuilder("");
 
@@ -85,6 +91,7 @@ public class SearchController implements Controller {
 		// if (requestPath.contains("search_objects/category")) {
 		// then do all the specific searching
 		System.out.println("REQUEST PAHT IN search fedora digital objects by category " + requestPath);
+		System.out.println("TERMS FOUND FOR THE SEARCH " + s);
 		String[] splitPath = requestPath.split("=");
 		if (splitPath.length == 2) {
 			SearchAndBrowseCategory queryCategory = SearchAndBrowseCategory.valueOf(splitPath[1]);
@@ -129,6 +136,7 @@ public class SearchController implements Controller {
 		} else {
 			request.setAttribute("message", (Object) "No results to return");
 		}
+		similarSearchTags(request);
 	}
 
 	public static ArrayList<String> retrieveSearchCategories() {
@@ -149,9 +157,9 @@ public class SearchController implements Controller {
 			for (String dublinCoreFieldValue : dublinCoreDatastream.getDublinCoreMetadata().values()) {
 				String[] splitSemiColon = dublinCoreFieldValue.split(";");
 				for (String split : splitSemiColon) {
-					String[] splitPercentage = split.split("%"); 
+					String[] splitPercentage = split.split("%");
 					values.addAll(Arrays.asList(splitPercentage));
-				
+
 				}
 				String[] tokens = dublinCoreFieldValue.split("\\W");
 				values.addAll(Arrays.asList(tokens));
@@ -164,7 +172,9 @@ public class SearchController implements Controller {
 	}
 
 	/*
-	 * the below needs to moved to occur whenever there is an upload to the database...the data will then be retrieved from the db from the dofields table..
+	 * the below needs to moved to occur whenever there is an upload to the
+	 * database...the data will then be retrieved from the db from the dofields
+	 * table..
 	 */
 	public static void buildAutocompleteJSONFile(Set<FedoraDigitalObject> fedoraDigitalObjects) {
 		JSONArray list = new JSONArray();
@@ -186,4 +196,73 @@ public class SearchController implements Controller {
 			e.printStackTrace();
 		}
 	}
+
+	private Set<String> similarSearchTags(HttpServletRequest request) throws Exception { // this
+		System.out.println("Compiling list of similar search tags"); // will
+		// be
+		// read from the
+		// relevant JSON
+		// file and
+		// taken into a
+		// set and then
+		// the matching
+		// tags are
+		// displayed
+		// only pic top results that actually contain the search term
+		TreeSet<String> results = new TreeSet<String>();
+		String terms = (String) request.getParameter("terms");
+		System.out.println("Search term " + terms);
+		String[] splitSearchTerm = null;
+		if (terms != null) {
+			splitSearchTerm = terms.split(" ");
+		}
+		// now we read in the autocomplete json file
+		JSONParser parser = new JSONParser();
+		StringBuilder file =new StringBuilder( "../webapps/data/");
+		String archive = (String) request.getSession().getAttribute("ARCHIVE");
+		if (archive.toLowerCase().contains("harfield")) {
+			file.append("harfield.json");
+		} else if (archive.toLowerCase().contains("sequins")) {
+			file.append("sequins.json");
+		} else if (archive.toLowerCase().contains("movie")) {
+			file.append("movie.json");
+		}
+		
+		System.out.println("JSon file  " + file);
+		// read in the archive attribute and check which json file we are
+		// reading in
+		Set<String> autocomplete;
+		try {
+			System.out.println("about to parse");
+			Object obj = parser.parse(new FileReader(new String(file)));
+			JSONArray array = (JSONArray) obj;
+			System.out.println(array.size());
+
+			autocomplete = new TreeSet<String>(array);
+			System.out.println("Autocomplete array " + autocomplete.size());
+			System.out.println(autocomplete.size());
+		} catch (ParseException parseException) {
+			System.out.println(parseException.getStackTrace());
+			throw new Exception(parseException);
+		}
+
+		// now we go trough out array and we select items to have as tags
+
+		for (String auto : autocomplete) {
+			System.out.println("Going throught autocomplete array " + auto);
+			for (String term : splitSearchTerm) {
+				System.out.println("Going throught splitsearch term " + term);
+				if (auto.contains(term)) {
+					results.add(auto);
+					break; // breaking out since the whole auto line will be
+							// addedd so we don't need to check the other terms
+							// existience
+				}
+			}
+		}
+		request.setAttribute("searchTags", results);
+		return results;
+	}
+
+
 }

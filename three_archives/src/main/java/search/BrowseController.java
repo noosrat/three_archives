@@ -1,6 +1,8 @@
 package search;
 
+import java.util.Arrays;
 import java.util.Set;
+import java.util.TreeSet;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -8,6 +10,8 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.solr.client.solrj.SolrServerException;
 
 import common.controller.Controller;
+import common.fedora.DatastreamID;
+import common.fedora.DublinCoreDatastream;
 import common.fedora.FedoraDigitalObject;
 import common.fedora.FedoraException;
 
@@ -56,6 +60,8 @@ public class BrowseController implements Controller {
 			 * the searches by what has been selected by the user
 			 */
 			Browse.filterFedoraDigitalObjects(Browse.getFedoraDigitalObjects(), category, value);//we are filtering through all the digital objects...look at filtering filtered objects when thinking about being able to filter the search
+			request.setAttribute("browseCategory", category);
+			request.setAttribute("categoryValue", value);
 			request.getSession().setAttribute("objects", Browse.getFilteredDigitalObjects());
 
 		}
@@ -64,6 +70,20 @@ public class BrowseController implements Controller {
 		request.setAttribute("browseCategories", Browse.getBrowsingCategories());
 	}
 
-	
+	private Set<String> matchingSearchTags(FedoraDigitalObject fedoraDigitalObject){ //this is taken from the metadata of the fedora object and links are given..when the links are clicked a search is conducted on that value
+		Set<String> results = new TreeSet<String>();
+		//here we compile a list of results from the metadata items and we turn them into tags? or rather make the metadata tags in the view clickable links?
+		DublinCoreDatastream dc = (DublinCoreDatastream)fedoraDigitalObject.getDatastreams().get(DatastreamID.DC.name());
+		
+		for (String s: dc.getDublinCoreMetadata().values()){
+			String[] split = s.split(";");
+			for (String s2:split){
+				String[] splitmore = s2.split("%");
+				results.addAll(Arrays.asList(splitmore));
+			}
+		}
+		
+		return results;
+	}
 
 }
