@@ -51,8 +51,7 @@ public class SearchController implements Controller {
 				request.setAttribute("message",
 						"Something seems to have gone wrong with Fedora" + exception.getStackTrace());
 
-			}
-			catch (Exception exception){
+			} catch (Exception exception) {
 				request.setAttribute("message", exception.getStackTrace());
 			}
 		}
@@ -60,8 +59,7 @@ public class SearchController implements Controller {
 
 	}
 
-	private void searchFedoraDigitalObjects(HttpServletRequest request, HttpServletResponse response)
-			throws Exception {
+	private void searchFedoraDigitalObjects(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		String requestPath = request.getPathInfo().substring(1);
 		StringBuilder terms = new StringBuilder("");
 
@@ -147,22 +145,21 @@ public class SearchController implements Controller {
 		return result;
 	}
 
-	private static Set<String> autocompleteValues(Set<FedoraDigitalObject> fedoraDigitalObjects) {
-		Set<String> values = new TreeSet<String>();
+	private static TreeSet<String> autocompleteValues(Set<FedoraDigitalObject> fedoraDigitalObjects) {
+		TreeSet<String> values = new TreeSet<String>();
 
 		for (FedoraDigitalObject fedoraDigitalObject : fedoraDigitalObjects) {
 			DublinCoreDatastream dublinCoreDatastream = (DublinCoreDatastream) fedoraDigitalObject.getDatastreams()
 					.get(DatastreamID.DC.name());
 
 			for (String dublinCoreFieldValue : dublinCoreDatastream.getDublinCoreMetadata().values()) {
-				String[] splitSemiColon = dublinCoreFieldValue.split(";");
-				for (String split : splitSemiColon) {
-					String[] splitPercentage = split.split("%");
-					values.addAll(Arrays.asList(splitPercentage));
-
+				String[] splitPercentage = dublinCoreFieldValue.split("%");
+				values.addAll(Arrays.asList(splitPercentage));
+				for (String string : splitPercentage) {
+					// now we split by spaces to get the individual tokents
+					String[] spaceSplit = string.split(" ");
+					values.addAll(Arrays.asList(spaceSplit));
 				}
-				String[] tokens = dublinCoreFieldValue.split("\\W");
-				values.addAll(Arrays.asList(tokens));
 			}
 		}
 		System.out.println("Autocompletion values " + values);
@@ -184,7 +181,6 @@ public class SearchController implements Controller {
 		for (String s : values) {
 			list.add(s);
 		}
-
 		try {
 
 			FileWriter file = new FileWriter("../webapps/data/autocomplete.json");
@@ -218,8 +214,9 @@ public class SearchController implements Controller {
 		}
 		// now we read in the autocomplete json file
 		JSONParser parser = new JSONParser();
-		StringBuilder file =new StringBuilder( "../webapps/data/");
+		StringBuilder file = new StringBuilder("../webapps/data/");
 		String archive = (String) request.getSession().getAttribute("ARCHIVE");
+
 		if (archive.toLowerCase().contains("harfield")) {
 			file.append("harfield.json");
 		} else if (archive.toLowerCase().contains("sequins")) {
@@ -227,7 +224,7 @@ public class SearchController implements Controller {
 		} else if (archive.toLowerCase().contains("movie")) {
 			file.append("movie.json");
 		}
-		
+
 		System.out.println("JSon file  " + file);
 		// read in the archive attribute and check which json file we are
 		// reading in
@@ -263,6 +260,5 @@ public class SearchController implements Controller {
 		request.setAttribute("searchTags", results);
 		return results;
 	}
-
 
 }

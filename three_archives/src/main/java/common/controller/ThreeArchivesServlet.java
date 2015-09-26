@@ -20,30 +20,24 @@ public class ThreeArchivesServlet extends HttpServlet {
 		super();
 	}
 
-	private void process(HttpServletRequest request,
-			HttpServletResponse response) throws ServletException, IOException{
+	private void process(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 		System.out.println("Entered Servlet");
-		
-		System.out.println("PathInfo : "+ request.getPathInfo());
+
+		System.out.println("PathInfo : " + request.getPathInfo());
 		ServiceDelegator serviceDelegator = new ServiceDelegator();
-		if (request.getPathInfo().contains("test")){
-			request.getServletContext().getRequestDispatcher("/WEB-INF/frontend/searchandbrowse/test.jsp")
-			.forward(request, response);	
-	
-		}else{
-				String result = serviceDelegator.execute(request, response);
-				request.getServletContext().getRequestDispatcher("/" + result)
-						.forward(request, response);	
-		}
+		String result = serviceDelegator.execute(request, response);
+		request.getServletContext().getRequestDispatcher("/" + result).forward(request, response);
 	}
+
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
 	 *      response)
 	 */
 	@Override
-	protected void doGet(HttpServletRequest request,
-			HttpServletResponse response) throws ServletException, IOException {
-		process(request,response);
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		process(request, response);
 
 	}
 
@@ -52,11 +46,9 @@ public class ThreeArchivesServlet extends HttpServlet {
 	 *      response)
 	 */
 	@Override
-	protected void doPost(HttpServletRequest request,
-			HttpServletResponse response) throws ServletException, IOException {
-		process(request,response);
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		process(request, response);
 	}
-	
-
 
 }

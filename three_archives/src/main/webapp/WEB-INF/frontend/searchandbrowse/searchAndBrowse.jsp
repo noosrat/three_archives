@@ -1,3 +1,4 @@
+
 <%@page import="common.fedora.Datastream"%>
 <%@page import="common.fedora.DublinCoreDatastream"%>
 <%@page import="common.fedora.FedoraDigitalObject"%>
@@ -18,7 +19,7 @@
 <title>Three Archives : Search and Browse</title>
 <link rel="stylesheet" type="text/css"
 	href="${pageContext.request.contextPath}/css/search_and_browse.css"></link>
-<link href="${pageContext.request.contextPath}/css/bootstrap.min.css"
+<link href="${pageContext.request.contextPath}/bootstrap-3.3.5/css/bootstrap.min.css"
 	rel="stylesheet">
 <!-- <link href="${pageContext.request.contextPath}/css/lightbox.css"
 	rel="stylesheet">-->
@@ -27,9 +28,9 @@
 
 
 <script type="text/javascript"
-	src="${pageContext.request.contextPath}/js/jquery.js"></script>
+	src="${pageContext.request.contextPath}/js/jquery-1.11.3.js"></script>
 <script type="text/javascript"
-	src="${pageContext.request.contextPath}/js/bootstrap.js"></script>
+	src="${pageContext.request.contextPath}/bootstrap-3.3.5/js/bootstrap.js"></script>
 <script type="text/javascript"
 	src="${pageContext.request.contextPath}/js/typeahead.js"></script>
 
@@ -43,7 +44,6 @@ $(document).ready(function() {
 		} else if (archive == "Harfield Village") {
 			var words = "/data/harfield.json";
 		}
-
 		var countries = new Bloodhound({
 			datumTokenizer : Bloodhound.tokenizers.whitespace,
 			queryTokenizer : Bloodhound.tokenizers.whitespace,
@@ -52,7 +52,6 @@ $(document).ready(function() {
 				url : words,
 			}
 		});
-
 		$('#prefetch .typeahead').typeahead(null, {
 			name : 'countries',
 			source : countries
@@ -66,8 +65,6 @@ $(document).ready(function() {
 
 
 <body>
-
-
 
 	<nav class="navbar navbar-inverse navbar-fixed-top">
 		<div class="container-fluid">
@@ -215,16 +212,20 @@ Other search tags: <br>
 					class="img-thumbnail img-responsive" alt="image unavailable"></td>
 						
 						
-				 <td>   Title: <a href="${pageContext.request.contextPath}/archives/search_objects/category=TITLE?terms=${digitalObject.datastreams['DC'].dublinCoreMetadata['TITLE']}">${digitalObject.datastreams['DC'].dublinCoreMetadata['TITLE']}</a><br> 
-					
-					Description: <a href="${pageContext.request.contextPath}/archives/search_objects/category=DESCRIPTION?terms=${digitalObject.datastreams['DC'].dublinCoreMetadata['DESCRIPTION']}">${digitalObject.datastreams['DC'].dublinCoreMetadata['DESCRIPTION']}</a><br>
-					Date: <a href="${pageContext.request.contextPath}/archives/search_objects/category=YEAR?terms=${digitalObject.datastreams['DC'].dublinCoreMetadata['DATE']}">${digitalObject.datastreams['DC'].dublinCoreMetadata['DATE']}</a> <br>
-					Format: ${digitalObject.datastreams['DC'].dublinCoreMetadata['FORMAT']} <br>
+				 <td>   
+				 	Title: <a href="${pageContext.request.contextPath}/archives/search_objects/category=TITLE?terms=${digitalObject.datastreams['DC'].dublinCoreMetadata['TITLE']}">${digitalObject.datastreams['DC'].dublinCoreMetadata['TITLE']}</a><br> 
+					Collection: <a href="${pageContext.request.contextPath}/archives/search_objects/category=COLLECTION?terms=${digitalObject.datastreams['DC'].dublinCoreMetadata['COLLECTION']}">${digitalObject.datastreams['DC'].dublinCoreMetadata['COLLECTION']}</a><br>
+					Contributor: <a href="${pageContext.request.contextPath}/archives/search_objects/category=CONTRIBUTOR?terms=${digitalObject.datastreams['DC'].dublinCoreMetadata['CONTRIBUTOR']}">${digitalObject.datastreams['DC'].dublinCoreMetadata['CONTRIBUTOR']}</a><br>
 					Coverage: ${digitalObject.datastreams['DC'].dublinCoreMetadata['COVERAGE']}<br>
-					Contributor: ${digitalObject.datastreams['DC'].dublinCoreMetadata['CONTRIBUTOR']}<br>
-					Subject: ${digitalObject.datastreams['DC'].dublinCoreMetadata['SUBJECT']} <br>
 					Creator: ${digitalObject.datastreams['DC'].dublinCoreMetadata['CREATOR']} <br>	
+					Date: <a href="${pageContext.request.contextPath}/archives/search_objects/category=YEAR?terms=${digitalObject.datastreams['DC'].dublinCoreMetadata['DATE']}">${digitalObject.datastreams['DC'].dublinCoreMetadata['DATE']}</a> <br>
+					Description: <a href="${pageContext.request.contextPath}/archives/search_objects/category=DESCRIPTION?terms=${digitalObject.datastreams['DC'].dublinCoreMetadata['DESCRIPTION']}">${digitalObject.datastreams['DC'].dublinCoreMetadata['DESCRIPTION']}</a><br>
+					Event: <a href="${pageContext.request.contextPath}/archives/search_objects/category=EVENT?terms=${digitalObject.datastreams['DC'].dublinCoreMetadata['EVENT']}">${digitalObject.datastreams['DC'].dublinCoreMetadata['EVENT']}</a><br>
+					Format: ${digitalObject.datastreams['DC'].dublinCoreMetadata['FORMAT']} <br>
+					Location: <a href="${pageContext.request.contextPath}/archives/search_objects/category=LOCATION?terms=${digitalObject.datastreams['DC'].dublinCoreMetadata['LOCATION']}">${digitalObject.datastreams['DC'].dublinCoreMetadata['LOCATION']}</a><br>
+					Subject: ${digitalObject.datastreams['DC'].dublinCoreMetadata['SUBJECT']} <br>
 					</td>
+			
 					</table>
 					</div>
 

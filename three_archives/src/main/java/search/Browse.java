@@ -82,21 +82,22 @@ public class Browse extends Service {
 
 		for (SearchAndBrowseCategory cat : SearchAndBrowseCategory.values()) {
 			Set<String> values = new HashSet<String>();
-			
+
 			for (FedoraDigitalObject digitalObject : fedoraDigitalObjects) {
-				
+
 				HashMap<String, String> dc = ((DublinCoreDatastream) digitalObject.getDatastreams()
 						.get(DatastreamID.DC.name())).getDublinCoreMetadata();
 				switch (cat) {
 				case TITLE:
 					if (dc.get(DublinCore.TITLE.name()) != null) {
-						values.add(dc.get(DublinCore.TITLE.name()).substring(0, 1));
+						values.add(dc.get(DublinCore.TITLE.name()).substring(0, 1));//just getting the first character of the title
 					}
 					break;
 				case YEAR:
 					values.add(dc.get(DublinCore.DATE.name()));
 					break;
 				case EVENT:
+					values.add(dc.get("EVENT"));
 					break;// search description
 				case EXHIBITION:
 					break; // this will be a database query
@@ -128,18 +129,7 @@ public class Browse extends Service {
 					values.add(dc.get(DublinCore.SUBJECT.name()));
 					break;// search DC
 				case COLLECTION:
-					String dublinCoreDescription = dc.get(DublinCore.DESCRIPTION.name());
-					if (dublinCoreDescription != null && !dublinCoreDescription.isEmpty()) {
-						String[] description = dublinCoreDescription.split("%");
-						String s = "";
-						for (int i = 0; i < description.length; i++) {
-							if (description[i].contains("Collection")) {
-								String[] col = description[i].split(":");
-								values.add(col[1]);
-								break;
-							}
-						}
-					}
+					values.add(dc.get("COLLECTION"));
 					break;
 				}
 			}
@@ -156,7 +146,7 @@ public class Browse extends Service {
 		for (Iterator it = searchAndBrowseCategoriesAndValues.entrySet().iterator(); it.hasNext();) {
 			Map.Entry<String, TreeSet<String>> entry = (Entry<String, TreeSet<String>>) it.next();
 
-			if (entry.getValue().size()==0){
+			if (entry.getValue().size() == 0) {
 				it.remove();
 			}
 
@@ -198,7 +188,14 @@ public class Browse extends Service {
 			// }
 			// break;
 			case EVENT:
-				System.out.println("removing object with PID " + digitalObject.getPid());
+				String dublinCoreEvent = dc.getDublinCoreMetadata().get("EVENT");
+				if (dublinCoreEvent != null && !dublinCoreEvent.isEmpty()) {
+					if (!(dublinCoreEvent.contains(filterValue))) {
+						System.out.println("removing object with PID " + digitalObject.getPid()
+								+ "and collection value " + dublinCoreEvent);
+						iterator.remove();
+					}
+				}
 				break;
 			case EXHIBITION: // should we look in the db for this...search
 								// by
@@ -206,21 +203,11 @@ public class Browse extends Service {
 				System.out.println("removing object with PID " + digitalObject.getPid());
 				break;
 			case COLLECTION:
-				String dublinCoreDescription = dc.getDublinCoreMetadata().get(DublinCore.DESCRIPTION.name());
-				if (dublinCoreDescription != null && !dublinCoreDescription.isEmpty()) {
-					String[] description = dublinCoreDescription.split("%");
-					String result = "";
-					for (int i = 0; i < description.length; i++) {
-						if (description[i].contains("Collection")) {
-							String[] col = description[i].split(":");
-							result = col[1];
-							break;
-						}
-					}
-
-					if (!(result.contains(filterValue))) {
+				String dublinCoreCollection = dc.getDublinCoreMetadata().get("COLLECTION");
+				if (dublinCoreCollection != null && !dublinCoreCollection.isEmpty()) {
+					if (!(dublinCoreCollection.contains(filterValue))) {
 						System.out.println("removing object with PID " + digitalObject.getPid()
-								+ "and collection value " + result);
+								+ "and collection value " + dublinCoreCollection);
 						iterator.remove();
 					}
 				}
@@ -256,7 +243,8 @@ public class Browse extends Service {
 			}
 
 		}
-//		setUpBrowsingCategoriesAndValues(filteredObjects); only if filtering on filtered
+		// setUpBrowsingCategoriesAndValues(filteredObjects); only if filtering
+		// on filtered
 		TreeMap<String, TreeSet<String>> filteredCategories = new TreeMap<String, TreeSet<String>>(
 				getBrowsingCategories());
 		filteredCategories.remove(filterCategory);
