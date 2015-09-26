@@ -1,3 +1,4 @@
+
 <%@page import="common.fedora.Datastream"%>
 <%@page import="common.fedora.DublinCoreDatastream"%>
 <%@page import="common.fedora.FedoraDigitalObject"%>
@@ -14,28 +15,112 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+
 <title>Three Archives : Search and Browse</title>
 <link rel="stylesheet" type="text/css"
 	href="${pageContext.request.contextPath}/css/search_and_browse.css"></link>
+<link href="${pageContext.request.contextPath}/bootstrap-3.3.5/css/bootstrap.min.css"
+	rel="stylesheet">
+<!-- <link href="${pageContext.request.contextPath}/css/lightbox.css"
+	rel="stylesheet">-->
+	<link href="${pageContext.request.contextPath}/css/bootstrap-lightbox.min.css" rel="stylesheet">
+
+
+
+<script type="text/javascript"
+	src="${pageContext.request.contextPath}/js/jquery-1.11.3.js"></script>
+<script type="text/javascript"
+	src="${pageContext.request.contextPath}/bootstrap-3.3.5/js/bootstrap.js"></script>
+<script type="text/javascript"
+	src="${pageContext.request.contextPath}/js/typeahead.js"></script>
+
 <script type="text/javascript">
-	$(document).ready(
-			function() {
-				$('input.typeahead').typeahead(
-						{
-							name : 'accounts',
-							local : [ 'Audi', 'BMW', 'Bugatti', 'Ferrari',
-									'Ford', 'Lamborghini', 'Mercedes Benz',
-									'Porsche', 'Rolls-Royce', 'Volkswagen' ]
-						});
-			});
+$(document).ready(function() {
+	var archive = '<%=session.getAttribute("ARCHIVE")%>';
+		if (archive == "Sequins, Self and Struggle") {
+			var words = "/data/sequins.json";
+		} else if (archive == "Movie Snaps") {
+			var words = "/data/movie.json";
+		} else if (archive == "Harfield Village") {
+			var words = "/data/harfield.json";
+		}
+		var countries = new Bloodhound({
+			datumTokenizer : Bloodhound.tokenizers.whitespace,
+			queryTokenizer : Bloodhound.tokenizers.whitespace,
+			limit : 5,
+			prefetch : {
+				url : words,
+			}
+		});
+		$('#prefetch .typeahead').typeahead(null, {
+			name : 'countries',
+			source : countries
+		});
+	});
 </script>
+
+
+
 </head>
 
 
 <body>
 
 	<nav class="navbar navbar-inverse navbar-fixed-top">
-		<div class="container">
+		<div class="container-fluid">
+			<div class="navbar-header">
+
+				<a class="navbar-brand"
+					href="${pageContext.request.contextPath}/archives/browse">${ARCHIVE}</a>
+
+			</div>
+
+
+			<div id="navbar" class="collapse navbar-collapse">
+
+				<form class="navbar-form navbar-right"
+					action="${pageContext.request.contextPath}/archives/search_objects/category=${searchCategories[0]}"
+					method="post">
+					<div class="form-group">
+						<div id="prefetch">
+							<input class="form-control typeahead tt-query tt-hint tt-dropdown-menu tt-suggestion"
+								data-provider="typeahead" type="text"
+								placeholder="Search Archive" autocomplete="off"
+								spellcheck="false" name="terms">
+						</div>
+					</div>
+					<ul class="nav navbar-nav">
+						<li class="dropdown"><a
+							href="${pageContext.request.contextPath}/archives/search_objects"
+							class="dropdown-toggle" data-toggle="dropdown" role="button"
+							aria-haspopup="true" aria-expalinded="false">${searchCategories[0]}<span
+								class="caret"></span></a>
+							<ul class="dropdown-menu">
+								<c:forEach var="searchCategory" items="${searchCategories}">
+									<li><a
+										href="${pageContext.request.contextPath}/archives/search_objects/category=${searchCategory}">${searchCategory}</a></li>
+
+								</c:forEach>
+							</ul>
+					</ul>
+					<button type="submit" class="btn">Search</button>
+
+					<div class="checkbox">
+						<label> <input type="checkbox" id="limitSearch"
+							name="limitSearch" value="limitSearch"><font
+							color="white"> Limit search to these results</font>
+						</label>
+					</div>
+
+				</form>
+
+
+			</div>
+		</div>
+	</nav>
+
+	<nav class="navbar navbar-inverse navbar-fixed-bottom">
+		<div class="container-fluid">
 			<div class="navbar-header">
 				<button type="button" class="navbar-toggle collapsed"
 					data-toggle="collapse" data-target="#navbar" aria-expanded="false"
@@ -44,157 +129,118 @@
 						class="icon-bar"></span> <span class="icon-bar"></span> <span
 						class="icon-bar"></span>
 				</button>
-				<a class="navbar-brand" href="${pageContext.request.contextPath}/archives/browse">Harfield Village</a> <a
-					class="navbar-brand"> ${message}</a>
-				<!-- <a class="navbar-brand" href="#">Sequins, Self and Struggle</a>
-				<a class="navbar-brand" href="#">Movie Snaps</a>-->
+				<a class="navbar-brand" href="#">Three Archives</a>
 
 			</div>
-
-			<div id="navbar" class="navbar-collapse collapse">
-				<c:forEach var="category" items="${categories}">
-					<!--    Category: ${category.key}  - Value: ${category.value} <br> -->
-
-					<ul class="nav navbar-nav">
-						<li class="dropdown"><a
-							href="${pageContext.request.contextPath}/archives/browse?category=${category.key}"
-							class="dropdown-toggle" data-toggle="dropdown" role="button"
-							aria-haspopup="true" aria-expanded="false">${category.key}<span
-								class="caret"></span></a>
-							<ul class="dropdown-menu">
-								<c:forEach var="categoryValue" items="${category.value}">
-									<li><a
-										href="${pageContext.request.contextPath}/archives/browse?category=${category.key}&${category.key}=${categoryValue}">${categoryValue}</a></li>
-								</c:forEach>
-							</ul>
-					</ul>
-				</c:forEach>
-				<!--/.nav-collapse -->
-			</div>
-			<div id="navbar" class="collapse navbar-collapse">
-
-				<form class="navbar-form navbar-right"
-					action="${pageContext.request.contextPath}/archives/search_objects"
-					method="post">
-					<div class="form-group">
-						<input type="text" placeholder="Search archive"
-							class="form-control" name="terms">
-					</div>
-
-					<button type="submit" class="btn btn-success">Search</button>
-				</form>
-			</div>
-		</div>
-		<!--/.nav-collapse -->
 		</div>
 	</nav>
-	<br>
-	<br>
-	<br>
-	<br>
+	${message}
 
+	<div class="bs-example">
+		<ul>
+			<li>${browseCategory}> ${categoryValue}</li>
 
-	<br>
-	<br>
-	<br>
-	<br>
-	<!--  portfolio grid section displaying the images -->
-	<section id="portfolio">
-		Categories : ${categories.size()} <br>
-		<c:forEach var="category" items="${categories}">
-    Category: ${category.key}  - Value: ${category.value} <br>
-		</c:forEach>
+		</ul>
+	</div>
 
-		<div class="container">
-			<!-- <div class="row">-->
-			<!--  for loop going through the digital objects -->
-			<c:set var="count" value="0" scope="page" />
-			<c:forEach var="digitalObject" items="${objects}">
-
-
-
-				<div class="col-sm-4 portfolio-item">
-					<a href="#portfolioModal${count}" class="portfolio-link"
-						data-toggle="modal"> <!-- <td>${digitalObject}</td>--> <!--  for loop going through the digital objects' datastreams -->
-
-						<div class="caption">
-							<div class="caption-content">${digitalObject.datastreams['DC'].dublinCoreMetadata}</div>
-							<!-- caption content -->
-						</div> <!-- caption --> <img
-						src="${digitalObject.datastreams['IMG'].content}"
-						class="img-thumbnail img-responsive" alt="image unavailable">
-					</a>
-				</div>
-				<!-- "col-sm-4 portfolio-item" -->
-				<c:set var="count" value="${count + 1}" scope="page" />
+	<div class="bs-docs-sidebar">
+		<ul class="nav nav-list bs-docs-sidenav">
+			<!-- <li><a href="#dropdowns"><i class="icon-chevron-right"></i> Dropdowns</a></li> -->
+			<c:forEach var="category" items="${browseCategories}">
+				<li class="dropdown"><a
+					href="${pageContext.request.contextPath}/archives/browse?category=${category.key}"
+					class="dropdown-toggle" data-toggle="dropdown" role="button"
+					aria-haspopup="true" aria-expanded="false"><i
+						class="icon-chevron-right"></i>${category.key}<span class="caret"></span></a>
+					<ul class="dropdown-menu">
+						<c:forEach var="categoryValue" items="${category.value}">
+							<li><a
+								href="${pageContext.request.contextPath}/archives/browse?category=${category.key}&${category.key}=${categoryValue}">${categoryValue}</a></li>
+						</c:forEach>
+					</ul></li>
 			</c:forEach>
-			<!-- </div>-->
-			<!--  row -->
-		</div>
-		<!--  container -->
+
+		</ul>
+	</div>
+Other search tags: <br>
+	<c:forEach var="searchTag" items="${searchTags}">
+		<a
+			href="${pageContext.request.contextPath}/archives/search_objects/category=SEARCH_ALL?terms=${searchTag}">${searchTag}</a>
+	</c:forEach>
+
+	<section id="portfolio">
+	<div class="container gallery">
+		<c:set var="count" value="0" scope="page" />
+		<c:forEach var="digitalObject" items="${objects}">
+			<div class="col-xs-6 col-sm-3 portfolio-item">
+				<a href="#lightbox${count}" class="portfolio-link" data-toggle="modal"
+					data-target="#lightbox${count}"> 
+					
+					<div class="caption">
+								<div class="caption-content">
+
+
+									<br> Title:
+									${digitalObject.datastreams['DC'].dublinCoreMetadata['TITLE']}
+									<br> Type:
+									${digitalObject.datastreams['DC'].dublinCoreMetadata['FORMAT']}
+
+								</div>
+								<!-- caption content -->
+							</div> <!-- caption --> 
+					
+					
+					<img
+					src="${digitalObject.datastreams['IMG'].content}"
+					class="img-thumbnail img-responsive" alt="image unavailable">
+				</a>
+			</div>
+			<c:set var="count" value="${count + 1}" scope="page" />
+		</c:forEach>
+	</div>
 	</section>
-
-	<!-- portfolio modal section containing results to the above links -->
-
-
 	<c:set var="count" value="0" scope="page" />
 	<c:forEach var="digitalObject" items="${objects}">
-		<div class="portfolio-modal modal fade" id="portfolioModal${count}"
-			tabindex="-1" role="dialog" aria-hidden="false">
-			<div class="modal-content" data-dismiss="modal">
-				<div class="close-modal" data-dismiss="modal">
-					<div class="lr">
-						<div class="rl"></div>
+		<div id="lightbox${count}" class="modal fade" tabindex="-1" role="dialog"
+			aria-labelledby="myLargeModalLabel" aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-body">
+					<table style="width:100%">
+						<td><img
+					src="${digitalObject.datastreams['IMG'].content}"
+					class="img-thumbnail img-responsive" alt="image unavailable"></td>
+						
+						
+				 <td>   
+				 	Title: <a href="${pageContext.request.contextPath}/archives/search_objects/category=TITLE?terms=${digitalObject.datastreams['DC'].dublinCoreMetadata['TITLE']}">${digitalObject.datastreams['DC'].dublinCoreMetadata['TITLE']}</a><br> 
+					Collection: <a href="${pageContext.request.contextPath}/archives/search_objects/category=COLLECTION?terms=${digitalObject.datastreams['DC'].dublinCoreMetadata['COLLECTION']}">${digitalObject.datastreams['DC'].dublinCoreMetadata['COLLECTION']}</a><br>
+					Contributor: <a href="${pageContext.request.contextPath}/archives/search_objects/category=CONTRIBUTOR?terms=${digitalObject.datastreams['DC'].dublinCoreMetadata['CONTRIBUTOR']}">${digitalObject.datastreams['DC'].dublinCoreMetadata['CONTRIBUTOR']}</a><br>
+					Coverage: ${digitalObject.datastreams['DC'].dublinCoreMetadata['COVERAGE']}<br>
+					Creator: ${digitalObject.datastreams['DC'].dublinCoreMetadata['CREATOR']} <br>	
+					Date: <a href="${pageContext.request.contextPath}/archives/search_objects/category=YEAR?terms=${digitalObject.datastreams['DC'].dublinCoreMetadata['DATE']}">${digitalObject.datastreams['DC'].dublinCoreMetadata['DATE']}</a> <br>
+					Description: <a href="${pageContext.request.contextPath}/archives/search_objects/category=DESCRIPTION?terms=${digitalObject.datastreams['DC'].dublinCoreMetadata['DESCRIPTION']}">${digitalObject.datastreams['DC'].dublinCoreMetadata['DESCRIPTION']}</a><br>
+					Event: <a href="${pageContext.request.contextPath}/archives/search_objects/category=EVENT?terms=${digitalObject.datastreams['DC'].dublinCoreMetadata['EVENT']}">${digitalObject.datastreams['DC'].dublinCoreMetadata['EVENT']}</a><br>
+					Format: ${digitalObject.datastreams['DC'].dublinCoreMetadata['FORMAT']} <br>
+					Location: <a href="${pageContext.request.contextPath}/archives/search_objects/category=LOCATION?terms=${digitalObject.datastreams['DC'].dublinCoreMetadata['LOCATION']}">${digitalObject.datastreams['DC'].dublinCoreMetadata['LOCATION']}</a><br>
+					Subject: ${digitalObject.datastreams['DC'].dublinCoreMetadata['SUBJECT']} <br>
+					</td>
+			
+					</table>
 					</div>
+
+				<button type="button">Place me</button>
+				<button type="button" data-dismiss="modal"	aria-hidden="true">×</button>
 				</div>
-				<div class="container">
-					<div class="row">
-						<div class="col-lg-8 col-lg-offset-2">
-							<div class="modal-body">
-
-
-								<img src="${digitalObject.datastreams['IMG'].content}"
-									class="img-thumbnail img-responsive" alt="image unavailable">
-								<br> <br>
-								<div class="item-details">${digitalObject.datastreams['DC'].dublinCoreMetadata}
-								</div>
-								<!-- item details -->
-
-
-								<br>
-								<!-- 	<button type="button" class="btn btn-default"
-									>
-									<i class="fa fa-times"></i> Place me
-								</button> -->
-							</div>
-							<!-- modal body -->
-						</div>
-						<!--  col-lg-8 -->
-					</div>
-					<!-- row -->
-				</div>
-				<!-- container -->
 			</div>
-			<!-- modal-content -->
 		</div>
-		<!--  portfolio-modal modal fade -->
 		<c:set var="count" value="${count + 1}" scope="page" />
 	</c:forEach>
 
-	<!--   <div class="bs-example">
-        <input type="text" class="typeahead tt-query" autocomplete="on" spellcheck="false">
-    </div>
--->
 
+	<script type="text/javascript"
+		src="${pageContext.request.contextPath}/js/lightbox.js"></script>
 
-
-
-	<!-- Bootstrap core JavaScript
-    ================================================== -->
-	<!-- Placed at the end of the document so the pages load faster -->
-	<script src="${pageContext.request.contextPath}/js/jquery.js"></script>
-	<script src="${pageContext.request.contextPath}/js/bootstrap.min.js"></script>
-	<script src="${pageContext.request.contextPath}/js/typeahead.js"></script>
 
 </body>
 </html>

@@ -30,6 +30,7 @@ public class Browse extends Service {
 		fedoraDigitalObjects = SearchController.getSearch().findFedoraDigitalObjects("*");
 		System.out.println("Processed fedora digital objects, found " + fedoraDigitalObjects.size() + " objects");
 		setUpBrowsingCategoriesAndValues(fedoraDigitalObjects);
+		SearchController.buildAutocompleteJSONFile(fedoraDigitalObjects);
 	}
 
 	public static Set<FedoraDigitalObject> getFedoraDigitalObjects() {
@@ -81,25 +82,28 @@ public class Browse extends Service {
 
 		for (SearchAndBrowseCategory cat : SearchAndBrowseCategory.values()) {
 			Set<String> values = new HashSet<String>();
+
 			for (FedoraDigitalObject digitalObject : fedoraDigitalObjects) {
-				HashMap<DublinCore, String> dc = ((DublinCoreDatastream) digitalObject.getDatastreams()
+
+				HashMap<String, String> dc = ((DublinCoreDatastream) digitalObject.getDatastreams()
 						.get(DatastreamID.DC.name())).getDublinCoreMetadata();
 				switch (cat) {
 				case TITLE:
-					if (dc.get(DublinCore.TITLE) != null) {
-						values.add(dc.get(DublinCore.TITLE).substring(0, 1));
+					if (dc.get(DublinCore.TITLE.name()) != null) {
+						values.add(dc.get(DublinCore.TITLE.name()).substring(0, 1));//just getting the first character of the title
 					}
 					break;
 				case YEAR:
-					values.add(dc.get(DublinCore.DATE));
+					values.add(dc.get(DublinCore.DATE.name()));
 					break;
 				case EVENT:
+					values.add(dc.get("EVENT"));
 					break;// search description
 				case EXHIBITION:
 					break; // this will be a database query
 				case MEDIA_TYPE:
-					String f = dc.get(DublinCore.FORMAT);
-					String t = dc.get(DublinCore.TYPE);
+					String f = dc.get(DublinCore.FORMAT.name());
+					String t = dc.get(DublinCore.TYPE.name());
 
 					String format = "";
 					if (f != null && !f.isEmpty()) {
@@ -119,24 +123,13 @@ public class Browse extends Service {
 				case ACADEMIC_PAPER:
 					break;// search description nad maybe title
 				case CREATOR:
-					values.add(dc.get(DublinCore.CREATOR));
+					values.add(dc.get(DublinCore.CREATOR.name()));
 					break; // search DC
 				case SUBJECT:
-					values.add(dc.get(DublinCore.SUBJECT));
+					values.add(dc.get(DublinCore.SUBJECT.name()));
 					break;// search DC
 				case COLLECTION:
-					String dublinCoreDescription = dc.get(DublinCore.DESCRIPTION);
-					if (dublinCoreDescription != null && !dublinCoreDescription.isEmpty()) {
-						String[] description = dublinCoreDescription.split("%");
-						String s = "";
-						for (int i = 0; i < description.length; i++) {
-							if (description[i].contains("Collection")) {
-								String[] col = description[i].split(":");
-								values.add(col[1]);
-								break;
-							}
-						}
-					}
+					values.add(dc.get("COLLECTION"));
 					break;
 				}
 			}
@@ -153,7 +146,7 @@ public class Browse extends Service {
 		for (Iterator it = searchAndBrowseCategoriesAndValues.entrySet().iterator(); it.hasNext();) {
 			Map.Entry<String, TreeSet<String>> entry = (Entry<String, TreeSet<String>>) it.next();
 
-			if (entry.getValue().size()==0){
+			if (entry.getValue().size() == 0) {
 				it.remove();
 			}
 
@@ -172,7 +165,7 @@ public class Browse extends Service {
 			DublinCoreDatastream dc = (DublinCoreDatastream) digitalObject.getDatastreams().get(DatastreamID.DC.name());
 			switch (SearchAndBrowseCategory.valueOf(filterCategory.toUpperCase())) {
 			case TITLE:
-				String title = dc.getDublinCoreMetadata().get(DublinCore.TITLE);
+				String title = dc.getDublinCoreMetadata().get(DublinCore.TITLE.name());
 				if (title != null && !title.trim().isEmpty()) {
 					if (!title.startsWith(filterValue)) {
 						System.out.println("removing object with PID " + digitalObject.getPid() + "and title " + title);
@@ -181,7 +174,7 @@ public class Browse extends Service {
 				}
 				break;
 			case YEAR:
-				String date = dc.getDublinCoreMetadata().get(DublinCore.DATE);
+				String date = dc.getDublinCoreMetadata().get(DublinCore.DATE.name());
 				if (!(date != null && date.contains(filterValue))) {
 					System.out.println("removing object with PID " + digitalObject.getPid() + "and date " + date);
 					iterator.remove();
@@ -195,7 +188,14 @@ public class Browse extends Service {
 			// }
 			// break;
 			case EVENT:
-				System.out.println("removing object with PID " + digitalObject.getPid());
+				String dublinCoreEvent = dc.getDublinCoreMetadata().get("EVENT");
+				if (dublinCoreEvent != null && !dublinCoreEvent.isEmpty()) {
+					if (!(dublinCoreEvent.contains(filterValue))) {
+						System.out.println("removing object with PID " + digitalObject.getPid()
+								+ "and collection value " + dublinCoreEvent);
+						iterator.remove();
+					}
+				}
 				break;
 			case EXHIBITION: // should we look in the db for this...search
 								// by
@@ -203,21 +203,11 @@ public class Browse extends Service {
 				System.out.println("removing object with PID " + digitalObject.getPid());
 				break;
 			case COLLECTION:
-				String dublinCoreDescription = dc.getDublinCoreMetadata().get(DublinCore.DESCRIPTION);
-				if (dublinCoreDescription != null && !dublinCoreDescription.isEmpty()) {
-					String[] description = dublinCoreDescription.split("%");
-					String result = "";
-					for (int i = 0; i < description.length; i++) {
-						if (description[i].contains("Collection")) {
-							String[] col = description[i].split(":");
-							result = col[1];
-							break;
-						}
-					}
-
-					if (!(result.contains(filterValue))) {
+				String dublinCoreCollection = dc.getDublinCoreMetadata().get("COLLECTION");
+				if (dublinCoreCollection != null && !dublinCoreCollection.isEmpty()) {
+					if (!(dublinCoreCollection.contains(filterValue))) {
 						System.out.println("removing object with PID " + digitalObject.getPid()
-								+ "and collection value " + result);
+								+ "and collection value " + dublinCoreCollection);
 						iterator.remove();
 					}
 				}
@@ -229,8 +219,8 @@ public class Browse extends Service {
 				 * for now just look in the dublin core record for the
 				 * datastream...and then get the format..i.e. image..video...
 				 */
-				String f = dc.getDublinCoreMetadata().get(DublinCore.FORMAT);
-				String t = dc.getDublinCoreMetadata().get(DublinCore.TYPE);
+				String f = dc.getDublinCoreMetadata().get(DublinCore.FORMAT.name());
+				String t = dc.getDublinCoreMetadata().get(DublinCore.TYPE.name());
 
 				String format = "";
 				if (f != null && !f.isEmpty()) {
@@ -253,7 +243,8 @@ public class Browse extends Service {
 			}
 
 		}
-		setUpBrowsingCategoriesAndValues(filteredObjects);
+		// setUpBrowsingCategoriesAndValues(filteredObjects); only if filtering
+		// on filtered
 		TreeMap<String, TreeSet<String>> filteredCategories = new TreeMap<String, TreeSet<String>>(
 				getBrowsingCategories());
 		filteredCategories.remove(filterCategory);

@@ -12,17 +12,23 @@ import common.fedora.FedoraException;
 
 public class Search extends Service {
 
+	private static final String feature = "search";
+
 	public Search() {
 		super();
 	}
-	
-	
-	public HashMap<String,Datastream> findFedoraDatastreams(String terms) throws FedoraException{
+
+	public HashMap<String, Datastream> findFedoraDatastreams(String terms) throws FedoraException {
 		return getFedoraCommunicator().findFedoraDatastreamsUsingSearchTerms(terms);
 	}
-	
-	public Set<FedoraDigitalObject> findFedoraDigitalObjects(String terms) throws FedoraException, SolrServerException{
-//		return getFedoraCommunicator().findFedoraDigitalObjectsUsingSearchTerms(terms);
-		return getFedoraCommunicator().findFedoraDigitalObjects(terms, "search");
+
+	public Set<FedoraDigitalObject> findFedoraDigitalObjects(String terms) throws FedoraException, SolrServerException {
+		return getFedoraCommunicator().findFedoraDigitalObjects(terms, feature);
 	}
+
+	public Set<FedoraDigitalObject> findFedoraDigitalObjectsbyCategory(String query)
+			throws FedoraException, SolrServerException {
+		return this.getFedoraCommunicator().findFedoraDigitalObjects(query, feature);
+	}
+	
 }

@@ -60,7 +60,6 @@ public class FedoraCommunicator {
 		System.out.println("Finding fedora digital objects matching: " + terms);
 
 		Set<FedoraDigitalObject> results = new HashSet<FedoraDigitalObject>();
-		 
 		
 		List<String> pids = new ArrayList<String>();
 		if (feature=="search"){
@@ -71,8 +70,6 @@ public class FedoraCommunicator {
 			pids = findFedoraObjectsWithSearchTerm(terms);
 		}	
 		
-		
-
 		try {
 			for (String pid : pids) {
 				System.out.println("Processing digital object with pid " + pid);
@@ -84,6 +81,7 @@ public class FedoraCommunicator {
 
 		return results;
 	}
+
 	
 	private HashMap<String,Datastream> findFedoraDatastreamWithSpecificDatastreamIDMatchingTerms(String terms, DatastreamID datastreamID)
 			throws FedoraException {
