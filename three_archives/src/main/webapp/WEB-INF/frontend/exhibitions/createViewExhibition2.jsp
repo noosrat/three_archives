@@ -111,7 +111,6 @@
             <div class="row">
                 <div class="col-lg-12 text-center">
                     <h2><%out.println(request.getAttribute("ExhibitionTitle")); %></h2>  	
-  					
   					<div class="slider4" >
   					<div class="slide">
 						<img src="<%=images[0]%>">		
@@ -152,8 +151,6 @@
 	</section>
 	
 
-		
-     
  
 </body>
 </html>

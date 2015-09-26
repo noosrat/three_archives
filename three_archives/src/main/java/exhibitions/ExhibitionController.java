@@ -11,15 +11,24 @@ import javax.servlet.http.HttpSession;
 
 import common.controller.Controller;
 import common.model.Exhibition;
+import java.io.File;
+import java.io.File;
+
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import java.net.URL;
+import javax.imageio.ImageIO;
 
 public class ExhibitionController implements Controller {
-
+	
 	public String execute(HttpServletRequest request,HttpServletResponse response) throws Exception 
 	{
 		if (request.getPathInfo().substring(1).contains("redirect_exhibitions")) 
 		{
 			HttpSession session = request.getSession();
 			session.setAttribute("ARCHIVE", "seqiuns");
+		
 			return "WEB-INF/frontend/exhibitions/exhibitionHome.jsp";
 
 		}
@@ -134,26 +143,9 @@ public class ExhibitionController implements Controller {
 				if(!(request.getParameter("input_cap11").equals(""))){captions[11]=request.getParameter("input_cap11");}
 				
 				session.setAttribute("CAPTIONS", captions);
-				
-				
-				
-			
 				String userAction=request.getParameter("user_action");
 				session.setAttribute("POPULATED_TEMPLATE",userAction);
-			
-				result = "WEB-INF/frontend/exhibitions/createExhibition3.jsp";//Go get additional exhibition description
-			}
-			else if(action.equals("Back"))
-			{
-				result = "WEB-INF/frontend/exhibitions/createExhibition.jsp";
-			}
-		}
-		
-		if (request.getParameter("submit_exhibition")!=null)
-		{
-			String action=request.getParameter("submit_exhibition");
-			if (action.equals("Next"))
-			{
+				
 				//get all the exhibition content
 				//create exhibition object
 				//view the newly created exhibition object
@@ -165,7 +157,13 @@ public class ExhibitionController implements Controller {
 				
 				String mediaString=(String) session.getAttribute("POPULATED_TEMPLATE");
 				String[] media=new String[12];
-				media=service.processTemplate(mediaString);
+				//media=service.processTemplate(mediaString);
+				
+				for (int i=0;i<12;i++)//TODO Remove 
+				{
+					media[i]="http://localhost:8080/fedora/objects/sq:15/datastreams/IMG/content";
+					
+				}
 				request.setAttribute("PopulatedTemplateArray",media);
 				
 				request.setAttribute("ExhibitionTitle",exhibitionTitle);
@@ -179,14 +177,21 @@ public class ExhibitionController implements Controller {
 				session.setAttribute("VIEWABLE",exhibitionViewable);
 				session.setAttribute("POPULATED_TEMPLATE_ARRAY",media);
 				result = "WEB-INF/frontend/exhibitions/createViewExhibition.jsp";
+				
+				if(session.getAttribute("TEMPLATE_ID").equals("1")){
+					result = "WEB-INF/frontend/exhibitions/createViewExhibition.jsp";//View before saving
+				}
+				
+				else if(session.getAttribute("TEMPLATE_ID").equals("2")){
+					result = "WEB-INF/frontend/exhibitions/createViewExhibition2.jsp";//View before saving	
+				}
 			}
-		//	else //if (action.equals("Back"))
-			//{
-				//go back to the create exhibition page
-				//but pre-populate the template with what has already been done
-				//also pre-populate the shopping cart
-			//}
+			else if(action.equals("Back"))
+			{
+				result = "WEB-INF/frontend/exhibitions/createExhibition.jsp";
+			}
 		}
+		
 		
 		if(request.getParameter("saved_exhibition")!=null)
 		{

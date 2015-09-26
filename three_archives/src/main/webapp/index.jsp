@@ -38,14 +38,15 @@
     	
    	 	<div class="col-sm-4" style= "border: 1px solid; ">
 			<form
-		action="${pageContext.request.contextPath}/archives/redirect_harfield"
-		method="post">
+			action="${pageContext.request.contextPath}/archives/redirect_harfield"
+			method="post">
 
-		<input type="submit" value="harfield" />
+			<input type="submit" value="harfield" />
 
-	</form>
+			</form>
       		
    		</div>
+   	
   	</div>
 
 </div>
