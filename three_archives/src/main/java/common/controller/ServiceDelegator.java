@@ -9,6 +9,7 @@ import exhibitions.ExhibitionController;
 import maps.MapController;
 import search.BrowseController;
 import search.SearchController;
+import uploads.UploadController;
 
 public class ServiceDelegator {
 	// handle exceptions in this method
@@ -20,6 +21,7 @@ public class ServiceDelegator {
 		controllers.put("exhibitions", new ExhibitionController());
 		controllers.put("general", new GeneralController());
 		controllers.put("maps", new MapController());
+		controllers.put("uploads", new UploadController());
 		controllers.put("browse", new BrowseController());
 	}
 
@@ -37,9 +39,11 @@ public class ServiceDelegator {
 				url = controllers.get("browse").execute(request, response);
 			} else if (pathInfo.contains("exhibition")) {
 				url = controllers.get("exhibitions").execute(request, response);
-			}	else if (pathInfo.contains("maps")) {
+			}else if (pathInfo.contains("maps")) {
 
 				url = controllers.get("maps").execute(request, response);
+			} else if (pathInfo.contains("uploads")) {
+				url = controllers.get("uploads").execute(request, response);
 			} else if (pathInfo.contains("snaps")) {
 				url = controllers.get("general").execute(request, response);
 			} else if (pathInfo.contains("sequins")) {
