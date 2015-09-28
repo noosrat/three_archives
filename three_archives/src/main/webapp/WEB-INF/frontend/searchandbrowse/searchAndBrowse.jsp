@@ -9,6 +9,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql"%>
 <%@ taglib prefix="x" uri="http://java.sun.com/jsp/jstl/xml"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
 <html>
 <head>
@@ -147,7 +148,8 @@ $(document).ready(function() {
 					<c:forEach var="category" items="${browseCategories}">
 						<li><a href="javascript:;" data-toggle="collapse"
 							data-target="#demo${count}"><i class="fa fa-fw fa-arrows-v"></i>${category.key}
-								<i class="fa fa-fw fa-caret-down"></i></a>
+								 <span class="badge">${fn:length(category.value)}</span><i class="fa fa-fw fa-caret-down"></i>
+								</a>
 							<ul id="demo${count}" class="collapse">
 								<c:forEach var="categoryValue" items="${category.value}">
 									<li><a
@@ -161,15 +163,14 @@ $(document).ready(function() {
 			</div>
 		</nav>
 
-		${message}
-
-
 
 		<div id="page-wrapper">
 			<div class="container-fluid">
 				<div class="row">
 					<div class="col-lg-12">
-						<h1 class="page-header"></h1>
+						<h3 class="page-header">
+                            <small>${message}</small>
+                        </h3>
 						<ol class="breadcrumb">
 							<li><i class="fa fa-dashboard"></i>${browseCategory}</li>
 							<li class="active"><i class="fa fa-wrench"></i>
@@ -218,13 +219,13 @@ $(document).ready(function() {
 						<div class="modal-dialog">
 							<div class="modal-content">
 								<div class="modal-body">
-									<table style="width: 100%">
-										<td><img
+								<!-- 	<table style="width: 100%"> <td>-->
+										<img
 											src="${digitalObject.datastreams['IMG'].content}"
 											class="img-thumbnail img-responsive" alt="image unavailable"></td>
 
 
-										<td>Title: <a
+										Title: <a
 											href="${pageContext.request.contextPath}/archives/search_objects/category=TITLE?terms=${digitalObject.datastreams['DC'].dublinCoreMetadata['TITLE']}">${digitalObject.datastreams['DC'].dublinCoreMetadata['TITLE']}</a><br>
 											Collection: <a
 											href="${pageContext.request.contextPath}/archives/search_objects/category=COLLECTION?terms=${digitalObject.datastreams['DC'].dublinCoreMetadata['COLLECTION']}">${digitalObject.datastreams['DC'].dublinCoreMetadata['COLLECTION']}</a><br>
@@ -247,9 +248,8 @@ $(document).ready(function() {
 											Subject:
 											${digitalObject.datastreams['DC'].dublinCoreMetadata['SUBJECT']}
 											<br>
-										</td>
+										
 
-									</table>
 								</div>
 
 								<button type="button">Place me</button>

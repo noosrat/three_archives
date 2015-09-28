@@ -5,7 +5,7 @@ import java.util.List;
 
 public enum SearchAndBrowseCategory {
 	SEARCH_ALL(Arrays.asList("")),
-	ACADEMIC_PAPER(Arrays.asList("")), //search description nad maybe title
+	//ACADEMIC_PAPER(Arrays.asList("")), //search description nad maybe title
 	COLLECTION(Arrays.asList("dc.description")),//search DC description
 	CREATOR(Arrays.asList("dc.creator")),
 	EVENT(Arrays.asList("dc.description")),//search description

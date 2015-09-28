@@ -120,8 +120,6 @@ public class Browse extends Service {
 					break;
 				case LOCATION:
 					break; // search dublin core coverage
-				case ACADEMIC_PAPER:
-					break;// search description nad maybe title
 				case CREATOR:
 					values.add(dc.get(DublinCore.CREATOR.name()));
 					break; // search DC

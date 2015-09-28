@@ -45,14 +45,15 @@ public class SearchController implements Controller {
 					searchFedoraDigitalObjects(request, response);
 				}
 			} catch (SolrServerException exception) {
-				request.setAttribute("message",
-						"Something seems to have gone wrong with SOLR" + exception.getStackTrace());
+				request.setAttribute("message", "Something seems to have gone wrong with SOLR");
+				System.out.println(exception);
 			} catch (FedoraException exception) {
-				request.setAttribute("message",
-						"Something seems to have gone wrong with Fedora" + exception.getStackTrace());
+				request.setAttribute("message", "Something seems to have gone wrong with Fedora");
+				System.out.println(exception);
 
 			} catch (Exception exception) {
-				request.setAttribute("message", exception.getStackTrace());
+				request.setAttribute("message", "Unable to process request");
+				System.out.println(exception);
 			}
 		}
 		return result;
@@ -128,12 +129,10 @@ public class SearchController implements Controller {
 		Set<FedoraDigitalObject> digitalObjects = new HashSet<FedoraDigitalObject>();
 		digitalObjects = getSearch().findFedoraDigitalObjects(new String(terms));
 		System.out.println("Retrieved " + digitalObjects.size() + " objects in SOLR");
-		if (!(digitalObjects == null || digitalObjects.isEmpty())) {
-			// request.setAttribute("objects", (Object) digitalObjects);
-			request.getSession().setAttribute("objects", digitalObjects);
-		} else {
-			request.setAttribute("message", (Object) "No results to return");
+		if ((digitalObjects == null || digitalObjects.isEmpty())) {
+			request.setAttribute("message", "No results to return");
 		}
+		request.getSession().setAttribute("objects", digitalObjects);
 		similarSearchTags(request);
 	}
 
@@ -183,13 +182,13 @@ public class SearchController implements Controller {
 		}
 		try {
 
-			FileWriter file = new FileWriter("../webapps/data/autocomplete.json");
+			FileWriter file = new FileWriter("../webapps/data/harfield.json");
 			file.write(list.toJSONString());
 			file.flush();
 			file.close();
 
 		} catch (IOException e) {
-			e.printStackTrace();
+			System.out.println(e);
 		}
 	}
 
@@ -225,30 +224,25 @@ public class SearchController implements Controller {
 			file.append("movie.json");
 		}
 
-		System.out.println("JSon file  " + file);
 		// read in the archive attribute and check which json file we are
 		// reading in
 		Set<String> autocomplete;
 		try {
-			System.out.println("about to parse");
 			Object obj = parser.parse(new FileReader(new String(file)));
 			JSONArray array = (JSONArray) obj;
 			System.out.println(array.size());
 
 			autocomplete = new TreeSet<String>(array);
-			System.out.println("Autocomplete array " + autocomplete.size());
 			System.out.println(autocomplete.size());
 		} catch (ParseException parseException) {
-			System.out.println(parseException.getStackTrace());
+			System.out.println(parseException);
 			throw new Exception(parseException);
 		}
 
 		// now we go trough out array and we select items to have as tags
 
 		for (String auto : autocomplete) {
-			System.out.println("Going throught autocomplete array " + auto);
 			for (String term : splitSearchTerm) {
-				System.out.println("Going throught splitsearch term " + term);
 				if (auto.contains(term)) {
 					results.add(auto);
 					break; // breaking out since the whole auto line will be
