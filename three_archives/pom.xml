@@ -141,7 +141,7 @@
 									<type>${project.packaging}</type>
 								</artifactItem>
 							</artifactItems>
-							<outputDirectory>H:\workspace\apache-tomcat-8.0.24\webapps</outputDirectory>
+							<outputDirectory>/home/nox/Applications/apache/apache-tomcat-8.0.24/webapps</outputDirectory>
 						</configuration>
 					</execution>
 				</executions>
