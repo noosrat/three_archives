@@ -1,3 +1,4 @@
+
 <%@page import="common.fedora.Datastream"%>
 <%@page import="common.fedora.DublinCoreDatastream"%>
 <%@page import="common.fedora.FedoraDigitalObject"%>
@@ -8,7 +9,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql"%>
 <%@ taglib prefix="x" uri="http://java.sun.com/jsp/jstl/xml"%>
-<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
 <html>
 <head>
@@ -30,6 +31,7 @@
 <link
 	href="${pageContext.request.contextPath}/css/bootstrap-lightbox.min.css"
 	rel="stylesheet">
+
 <script type="text/javascript"
 	src="${pageContext.request.contextPath}/js/jquery-1.11.3.js"></script>
 <script type="text/javascript"
@@ -62,6 +64,8 @@ $(document).ready(function() {
 	});
 </script>
 
+
+
 </head>
 
 
@@ -69,8 +73,6 @@ $(document).ready(function() {
 	<div id="wrapper">
 		<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
 			<div class="container-fluid">
-
-
 				<div class="navbar-header">
 
 					<c:choose>

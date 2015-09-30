@@ -1,7 +1,7 @@
 package uploads;
 import java.io.File;
 
-import common.fedora.*;
+import common.fedora.UploadClient;
 
 
 public class UploadService {

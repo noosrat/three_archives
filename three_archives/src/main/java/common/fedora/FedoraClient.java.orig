@@ -10,29 +10,33 @@ import com.sun.jersey.client.apache.ApacheHttpClient;
 
 public class FedoraClient {
 	private final static Logger LOG = Logger.getLogger(FedoraClient.class);
-
-	private static Client client;
-
-	static {
-		client = ApacheHttpClient.create();
-		client.addFilter(new HTTPBasicAuthFilter(FedoraCredentials.getUsername(), FedoraCredentials.getPassword()));
-	}
-	private FedoraClient(){
-		
-	}
-
-	public static Client getClient() {
+	
+	private Client client;
+	 
+	public Client getClient() {
 		return client;
 	}
 
-	public static FedoraXMLResponseParser execute(FedoraGetRequest fedoraGetRequest) throws FedoraException {
+	public void setClient(Client client) {
+		this.client = client;
+	}
+	
+	
+	public FedoraClient(){
+		this.client = ApacheHttpClient.create();
+		client.addFilter(new HTTPBasicAuthFilter(FedoraCredentials
+				.getUsername(), FedoraCredentials.getPassword()));
+	}
+	
+	public FedoraXMLResponseParser execute(FedoraGetRequest fedoraGetRequest) throws FedoraException{
 		WebResource webResource = client.resource(fedoraGetRequest.getRequest().toString());
 		ClientResponse clientResponse = webResource.get(ClientResponse.class);
 		fedoraGetRequest.resetRequest();
-
-		if (clientResponse.getStatus() == 200) {
+		
+		if (clientResponse.getStatus()==200){
 			return new FedoraXMLResponseParser(clientResponse.getEntityInputStream());
-		} else {
+		}
+		else{
 			throw new FedoraException("Request execution unsuccessful " + clientResponse.getStatus());
 		}
 

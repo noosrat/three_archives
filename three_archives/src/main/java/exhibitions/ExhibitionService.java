@@ -1,7 +1,7 @@
 package exhibitions;
 
 import common.Service;
-import common.model.*;
+import common.model.Exhibition;
 
 public class ExhibitionService extends Service {
 

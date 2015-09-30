@@ -45,14 +45,15 @@ public class SearchController implements Controller {
 					searchFedoraDigitalObjects(request, response);
 				}
 			} catch (SolrServerException exception) {
-				request.setAttribute("message",
-						"Something seems to have gone wrong with SOLR" + exception.getStackTrace());
+				request.setAttribute("message", "Something seems to have gone wrong with SOLR");
+				System.out.println(exception);
 			} catch (FedoraException exception) {
-				request.setAttribute("message",
-						"Something seems to have gone wrong with Fedora" + exception.getStackTrace());
+				request.setAttribute("message", "Something seems to have gone wrong with Fedora");
+				System.out.println(exception);
 
 			} catch (Exception exception) {
-				request.setAttribute("message", exception.getStackTrace());
+				request.setAttribute("message", "Unable to process request");
+				System.out.println(exception);
 			}
 		}
 		return result;

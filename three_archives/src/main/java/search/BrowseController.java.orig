@@ -1,6 +1,8 @@
 package search;
 
+import java.util.Arrays;
 import java.util.Set;
+import java.util.TreeSet;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -8,9 +10,10 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.solr.client.solrj.SolrServerException;
 
 import common.controller.Controller;
+import common.fedora.DatastreamID;
+import common.fedora.DublinCoreDatastream;
 import common.fedora.FedoraDigitalObject;
 import common.fedora.FedoraException;
-import history.HistoryController;
 
 public class BrowseController implements Controller {
 
@@ -19,7 +22,6 @@ public class BrowseController implements Controller {
 		this.browseFedoraObjects(request, response);
 		request.setAttribute("searchCategories", SearchController.retrieveSearchCategories());
 		System.out.println("SEARCH CATEGORIES " + SearchController.retrieveSearchCategories());
-		(new HistoryController()).execute(request, response);
 		return "WEB-INF/frontend/searchandbrowse/searchAndBrowse.jsp";
 	}
 
@@ -39,7 +41,7 @@ public class BrowseController implements Controller {
 	}
 
 	private void browseFedoraObjects(HttpServletRequest request, HttpServletResponse response)
-			throws Exception {
+			throws FedoraException, SolrServerException {
 		String category = request.getParameter("category");
 		String value = request.getParameter(category);
 
@@ -61,12 +63,27 @@ public class BrowseController implements Controller {
 			request.setAttribute("browseCategory", category);
 			request.setAttribute("categoryValue", value);
 			request.getSession().setAttribute("objects", Browse.getFilteredDigitalObjects());
-			//this is where we should call the HistoryBrowseMethod to update what the user browses by the most
-//			(new HistoryController()).execute(request, response);
+
 		}
 		System.out.println("Categories " + Browse.getFilteredBrowsingCategories());
 //		request.setAttribute("browseCategories", Browse.getFilteredBrowsingCategories()); this will only be relevant when we can do filtering on filtering
 		request.setAttribute("browseCategories", Browse.getBrowsingCategories());
+	}
+
+	private Set<String> matchingSearchTags(FedoraDigitalObject fedoraDigitalObject){ //this is taken from the metadata of the fedora object and links are given..when the links are clicked a search is conducted on that value
+		Set<String> results = new TreeSet<String>();
+		//here we compile a list of results from the metadata items and we turn them into tags? or rather make the metadata tags in the view clickable links?
+		DublinCoreDatastream dc = (DublinCoreDatastream)fedoraDigitalObject.getDatastreams().get(DatastreamID.DC.name());
+		
+		for (String s: dc.getDublinCoreMetadata().values()){
+			String[] split = s.split(";");
+			for (String s2:split){
+				String[] splitmore = s2.split("%");
+				results.addAll(Arrays.asList(splitmore));
+			}
+		}
+		
+		return results;
 	}
 
 }
