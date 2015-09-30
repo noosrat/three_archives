@@ -62,9 +62,24 @@
 		});
 	</script>
  <style>
+ 	
 		.header{
-	 background: url(${pageContext.request.contextPath}/images/Back.jpg);
+	 	background: url(${pageContext.request.contextPath}/images/Cover.jpg) no-repeat center center fixed; 
+			 -webkit-background-size: cover;
+  			-moz-background-size: cover;
+  			-o-background-size: cover;
+  			background-size: cover;
+			-moz-filter: url("data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\'><filter id=\'grayscale\'><feColorMatrix type=\'matrix\' values=\'0.3333 0.3333 0.3333 0 0 0.3333 0.3333 0.3333 0 0 0.3333 0.3333 0.3333 0 0 0 0 0 1 0\'/></filter></svg>#grayscale");
+         	-o-filter: url("data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\'><filter id=\'grayscale\'><feColorMatrix type=\'matrix\' values=\'0.3333 0.3333 0.3333 0 0 0.3333 0.3333 0.3333 0 0 0.3333 0.3333 0.3333 0 0 0 0 0 1 0\'/></filter></svg>#grayscale");
+         	-webkit-filter: grayscale(100%);
+        	filter: gray;
+         	filter: url("data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\'><filter id=\'grayscale\'><feColorMatrix type=\'matrix\' values=\'0.3333 0.3333 0.3333 0 0 0.3333 0.3333 0.3333 0 0 0.3333 0.3333 0.3333 0 0 0 0 0 1 0\'/></filter></svg>#grayscale");
+			color: black;
+			opacity: 0.3;
 }
+	.about{
+		
+	}
 		.droptargetCart {
  			margin: 5px;
     		padding: 5px;
@@ -72,23 +87,16 @@
 		.droptargetTemplate {
    			width: 210px; 
     			height: 210px;
-    			border: 1px dotted #aaaaaa;
+    			text-align:center;
     	}
-		.nodroptargetTemplate {
-    		width: 100px; 
-    		height: 200px;
-    		margin: 15px;
-    		padding: 10px;
-    	}
+		
 		.slide{
 			height:570px;
 		}
 		.caption{
 			margin:2px;
 		}
-    	
-
-		
+    		
 	</style>
 
 </head>
@@ -113,47 +121,56 @@
                     <h2><%out.println(request.getAttribute("ExhibitionTitle")); %></h2>  	
   					
   					<div class="slider4" >
+					<% for (int j=0;j<11;j++){%>
   					<div class="slide">
-						<img src="<%=images[0]%>">		
-						<textarea class="TextArea" rows="2" cols="26"  name="input_cap1" readonly=readonly><%=captions[1] %></textarea>
-					</div>
-					<div class="slide">	
-						<textarea class="TextArea" rows="2" cols="26"  name="input_cap2" readonly=readonly><%=captions[2] %></textarea>
-						<img src="<%=images[3]%>">	
-						
-					</div>
-					<div class="slide">
-						<img src="<%=images[4]%>">	
+						<%if (images[j]!=null){%>
+						<div class="droptarget droptargetTemplate">
+							<img src="<%=images[j]%>">
+						</div>
+						<%}
+						else{%>
+						<div class="droptarget droptargetTemplate" style="visibility:hidden">
+						</div>
+						<%}%>
+						<%if (captions[j]!=null){%>	
+						<div class="caption">
 							
-						<textarea class="TextArea" rows="2" cols="26"  name="input_cap5" readonly=readonly><%=captions[5] %></textarea>	
-					</div>	
-					<div class="slide">
-							
-						<textarea class="TextArea" rows="2" cols="26"  name="input_cap6" readonly=readonly><%=captions[6] %></textarea>
-						<img src="<%=images[7]%>">	
-							
+							<div style="height:40px;width:210px;" name="input_cap1"><%=captions[j] %></div>
+						</div>
+						<%}
+						else{%>
+						<div class="caption">
+							<textarea class="TextArea" rows="2" cols="26"  name="input_cap1" readonly=readonly style="visibility:hidden"></textarea>
+						</div>
+						<%}%>
+						<%if (images[j+1]!=null){%>
+						<div class="droptarget droptargetTemplate">
+							<img src="<%=images[j+1]%>">
+						</div>
+						<%}
+						else{%>
+						<div class="droptarget droptargetTemplate" style="visibility:hidden">
+						</div>
+						<%}%>
+						<%if (captions[j+1]!=null){%>
+						<div class="caption">	
+							<div style="height:40px;width:210px;"  name="input_cap1"><%=captions[j+1] %></div>
+						</div>
+						<%}
+						else{%>
+						<div class="caption">
+							<textarea class="TextArea" rows="2" cols="26"  name="input_cap1" readonly=readonly style="visibility:hidden"></textarea>
+						</div>
+						<%}%>
+						<%j++;%>
 					</div>
-					<div class="slide">
-						<img src="<%=images[8]%>">	
-						
-							
-						<textarea class="TextArea" rows="2" cols="26"  name="input_cap9" readonly=readonly><%=captions[9] %></textarea>
-					</div>
-					<div class="slide">
-						
-						<textarea class="TextArea" rows="2" cols="26"  name="input_cap10" readonly=readonly><%=captions[10] %></textarea>
-						<img src="<%=images[11]%>">	
-						
-					</div>
+					<%}%>
 					</div>
 				</div>
        		</div>
 		</div>
 	</section>
 	
-
-		
-     
  
 </body>
 </html>

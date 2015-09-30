@@ -23,17 +23,7 @@ public class UploadController implements Controller{
 	
 	private String uploads(HttpServletRequest request,HttpServletResponse response){
 
-		String result = "";
-		HttpSession session = request.getSession();
-		if (request.getParameter("submit_album_name") != null) 
-		{
-			String action = request.getParameter("enter_album_name");
-			
-			session.setAttribute("ALBUM_NAME",action);
-			
-			result = "WEB-INF/frontend/Uploads/uploadItems.jsp";
-			
-		}
+		String result = "";		
 		
 		if (request.getParameter("upload_files") != null) 
 		{
@@ -46,6 +36,12 @@ public class UploadController implements Controller{
 			
 			
 			result = "WEB-INF/frontend/Uploads/uploadItems.jsp";
+			
+		}
+		
+		if (request.getParameter("upload_more_files") != null) 
+		{
+			result = "WEB-INF/frontend/Uploads/UploadHome.jsp";
 			
 		}
 		

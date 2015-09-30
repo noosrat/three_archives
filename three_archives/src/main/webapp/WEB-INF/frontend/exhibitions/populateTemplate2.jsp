@@ -36,7 +36,7 @@
    			width: 210px; 
     			height: 210px;
     			border: 1px dotted #aaaaaa;
-    			background-image: url("cameraIcon1.png");
+    			background: url(${pageContext.request.contextPath}/images/cameraIcon1.png);
     	}
 		.nodroptargetTemplate {
     		width: 100px; 
@@ -72,22 +72,28 @@
 	
 	function drop(event) {	
     	event.preventDefault();
-    	var data = event.dataTransfer.getData("Text");
-    	event.target.appendChild(document.getElementById(data));
+    	var a=event.target.id;
+    	if(a.indexOf("http://")>-1)
+    	{
+    		//do nothing because the block is occupied
+    	}
+    	else{
+    		var data = event.dataTransfer.getData("Text");
+    		event.target.appendChild(document.getElementById(data));
     	
-		if(document.getElementById(data).style.width=="40%"){
-			document.getElementById(data).style.width="100%";
-			document.getElementById("demo").innerHTML = document.getElementById("demo").value + event.target.id + " " + data + " " ;		
-		}
+			if(document.getElementById(data).style.width=="40%"){
+				document.getElementById(data).style.width="100%";
+				document.getElementById("demo").innerHTML = document.getElementById("demo").value + event.target.id + " " + data + " " ;		
+			}
 		
-		else if (event.target.id=="cart"){
-			document.getElementById(data).style.width="40%";
-			document.getElementById("demo").innerHTML = document.getElementById("demo").value + "REMOVE " + data + " " ;
-		}
-		else if (document.getElementById(data).style.width=="100%"){
-			document.getElementById("demo").innerHTML = document.getElementById("demo").value + "REMOVE " + data + " " + event.target.id + " " + data + " ";
-				
-		}
+			else if (event.target.id=="cart"){
+				document.getElementById(data).style.width="40%";
+				document.getElementById("demo").innerHTML = document.getElementById("demo").value + "REMOVE " + data + " " ;
+			}
+			else if (document.getElementById(data).style.width=="100%"){
+				document.getElementById("demo").innerHTML = document.getElementById("demo").value + "REMOVE " + data + " " + event.target.id + " " + data + " ";
+			}
+    	}
 	}
 </script>
 </head>
@@ -126,33 +132,16 @@
 
 
 
-<form method="post" action="${pageContext.request.contextPath}/archives/create_exhibitions">
+
 <form role="form" method="post" action="${pageContext.request.contextPath}/archives/create_exhibitions">
 <ul id="mainEx" style="list-style-type:none;margin:0;padding:0;">
 		<li style="display:inline;float:left;font-weight:bold;">
-		
+		<%String [] cartImages= (String[]) (session.getAttribute("MEDIA_CART")); %>
 			<div id="cart" class="scroll droptarget droptargetCart" ondrop="drop(event)" ondragover="allowDrop(event)" style="border: 1px solid #aaaaaa; diplay:inline-block; background:#F8F8F8;">
-				
-  					<img  src="${pageContext.request.contextPath}/images/1.jpg"  style="width:40%;" ondragstart="dragStart(event)" draggable="true" id="1.jpg">
-				
-  					<img  src="${pageContext.request.contextPath}/images/2.jpg"  style="width:40%;" ondragstart="dragStart(event)" draggable="true" id="2.jpg">
-				
-  					<img  src="${pageContext.request.contextPath}/images/3.jpg"  style="width:40%;" ondragstart="dragStart(event)" draggable="true" id="3.jpg">
-				
-  					<img  src="${pageContext.request.contextPath}/images/4.jpg"  style="width:40%;" ondragstart="dragStart(event)" draggable="true" id="4.jpg">
-				
-  					<img  src="${pageContext.request.contextPath}/images/5.jpg"  style="width:40%;" ondragstart="dragStart(event)" draggable="true" id="5.jpg">
-  					<img  src="${pageContext.request.contextPath}/images/6.jpg"  style="width:40%;" ondragstart="dragStart(event)" draggable="true" id="6.jpg">
-  					<img  src="${pageContext.request.contextPath}/images/7.jpg"  style="width:40%;" ondragstart="dragStart(event)" draggable="true" id="7.jpg">
-  					<img  src="${pageContext.request.contextPath}/images/8.jpg"  style="width:40%;" ondragstart="dragStart(event)" draggable="true" id="8.jpg">
-  					<img  src="${pageContext.request.contextPath}/images/9.jpg"  style="width:40%;" ondragstart="dragStart(event)" draggable="true" id="9.jpg">
-  					<img  src="${pageContext.request.contextPath}/images/10.jpg"  style="width:40%;" ondragstart="dragStart(event)" draggable="true" id="10.jpg">
-  					<img  src="${pageContext.request.contextPath}/images/11.jpg"  style="width:40%;" ondragstart="dragStart(event)" draggable="true" id="11.jpg">
-  					<img  src="${pageContext.request.contextPath}/images/12.jpg"  style="width:40%;" ondragstart="dragStart(event)" draggable="true" id="12.jpg">
-  					<img  src="${pageContext.request.contextPath}/images/13.jpg"  style="width:40%;" ondragstart="dragStart(event)" draggable="true" id="13.jpg">
-  					<img  src="${pageContext.request.contextPath}/images/14.jpg"  style="width:40%;" ondragstart="dragStart(event)" draggable="true" id="14.jpg">
-  					<img  src="${pageContext.request.contextPath}/images/15.jpg"  style="width:40%;" ondragstart="dragStart(event)" draggable="true" id="15.jpg">
-  					
+				<%for (int i=0;i<cartImages.length;i++){ 
+					if(cartImages[i]!=null){%>
+  					<img  src="<%=cartImages[i]%>"  style="width:40%;" ondragstart="dragStart(event)" draggable="true" id="<%=cartImages[i]%>">
+  				<%}} %>	
 				
 			</div>
 		</li>
@@ -187,12 +176,12 @@
 				<div class="droptarget droptargetTemplate" id="4" ondrop="drop(event)" ondragover="allowDrop(event)" ">
 				</div>
 				<div class="caption">
-						<textarea class="TextArea" rows="10" cols="26"  name="input_cap4" placeholder="Add text to me"></textarea>
+						<textarea class="TextArea" rows="10" cols="26"  name="input_cap4" style="display:none" placeholder="Add text to me"></textarea>
 					</div>
 				<div class="droptarget nodroptargetTemplate" id="5" >
 				</div>
 				<div class="caption">
-						<textarea class="TextArea" rows="10" cols="26"  name="input_cap5" style="display:none"></textarea>
+						<textarea class="TextArea" rows="10" cols="26"  name="input_cap5" ></textarea>
 				</div>
 			</div>	
 			<div class="slide">
@@ -211,12 +200,12 @@
 				<div class="droptarget droptargetTemplate" id="8" ondrop="drop(event)" ondragover="allowDrop(event)" >	
 				</div>
 				<div class="caption">
-						<textarea class="TextArea" rows="10" cols="26"  name="input_cap8" placeholder="Add text to me"></textarea>
+						<textarea class="TextArea" rows="10" cols="26"  name="input_cap8" style="display:none" placeholder="Add text to me"></textarea>
 				</div>
 				<div class="droptarget nodroptargetTemplate" id="9" >
 				</div>
 				<div class="caption">
-						<textarea class="TextArea" rows="10" cols="26"  name="input_cap9" style="display:none"></textarea>
+						<textarea class="TextArea" rows="10" cols="26"  name="input_cap9"></textarea>
 				</div>
 			</div>
 			<div class="slide">

@@ -4,7 +4,15 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+
+import search.FedoraCommunicator;
+
 import common.controller.Controller;
+import common.fedora.DublinCore;
+import common.fedora.FedoraClient;
+import common.fedora.FedoraDigitalObject;
+import common.fedora.FedoraException;
+
 import common.model.Exhibition;
 
 public class ExhibitionController implements Controller {
@@ -23,7 +31,7 @@ public class ExhibitionController implements Controller {
 	}
 	
 	private String exhibitions(HttpServletRequest request,
-			HttpServletResponse response){
+			HttpServletResponse response) throws FedoraException{
 
 		String result = "";
 		ExhibitionService service= new ExhibitionService();
@@ -88,25 +96,46 @@ public class ExhibitionController implements Controller {
 			
 		}
 		
-		if (request.getParameter("selectedTemplate")!=null )
-		{
-			String selectedTemplate=request.getParameter("selectedTemplate");
-			if(selectedTemplate.equals("1"))
-			{
-				session.setAttribute("TEMPLATE_ID",selectedTemplate);
-				result = "WEB-INF/frontend/exhibitions/populateTemplate1.jsp";
+		if (request.getParameter("selectedTemplate")!=null ){
+			try {	
+					String[] cart= new String[20];
+					FedoraCommunicator fc= new FedoraCommunicator();
+
+					FedoraDigitalObject ob=fc.populateFedoraDigitalObject("KEL:1");
+					FedoraDigitalObject ob2=fc.populateFedoraDigitalObject("KEL:2");
+					cart[0]=ob.getDatastreams().get("IMG").getContent(); 
+					cart[1]=ob2.getDatastreams().get("IMG").getContent(); 
+					cart[2]="http://localhost:8080/fedora/objects/KEL:3/datastreams/IMG/content";
+					cart[3]="http://localhost:8080/fedora/objects/KEL:4/datastreams/IMG/content";
+					cart[4]="http://localhost:8080/fedora/objects/KEL:5/datastreams/IMG/content";
+					cart[5]="http://localhost:8080/fedora/objects/KEL:6/datastreams/IMG/content";
+					cart[6]="http://localhost:8080/fedora/objects/KEL:7/datastreams/IMG/content";
+					cart[7]="http://localhost:8080/fedora/objects/KEL:8/datastreams/IMG/content";
+					cart[8]="http://localhost:8080/fedora/objects/KEL:9/datastreams/IMG/content";
+					cart[9]="http://localhost:8080/fedora/objects/KEL:10/datastreams/IMG/content";
+					cart[10]="http://localhost:8080/fedora/objects/KEL:11/datastreams/IMG/content";
+					cart[11]="http://localhost:8080/fedora/objects/KEL:12/datastreams/IMG/content";
+					cart[12]="http://localhost:8080/fedora/objects/KEL:13/datastreams/IMG/content";
+						
+					session.setAttribute("MEDIA_CART", cart);
+					String selectedTemplate=request.getParameter("selectedTemplate");
+					if(selectedTemplate.equals("1")){
+						session.setAttribute("TEMPLATE_ID",selectedTemplate);
+						result = "WEB-INF/frontend/exhibitions/populateTemplate1.jsp";
+					}
+					
+					else {
+						session.setAttribute("TEMPLATE_ID",selectedTemplate);
+						result = "WEB-INF/frontend/exhibitions/populateTemplate2.jsp";
+					}
+					
+				
+			} 
+			catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
-			
-			else 
-			{
-				session.setAttribute("TEMPLATE_ID",selectedTemplate);
-				result = "WEB-INF/frontend/exhibitions/populateTemplate2.jsp";
-			}
-			
-			//session.setAttribute("TEMPLATE_ID",selectedTemplate);
-			//result = "WEB-INF/frontend/exhibitions/createExhibition2.jsp";
 		}
-		
 		if (request.getParameter("exhibition_det")!=null)
 		{
 			String action=request.getParameter("exhibition_det");
@@ -144,13 +173,13 @@ public class ExhibitionController implements Controller {
 				
 				String mediaString=(String) session.getAttribute("POPULATED_TEMPLATE");
 				String[] media=new String[12];
-				//media=service.processTemplate(mediaString);
+				media=service.processTemplate(mediaString);
 				
-				for (int i=0;i<12;i++)//TODO Remove 
-				{
-					media[i]="http://localhost:8080/fedora/objects/sq:15/datastreams/IMG/content";
+				//for (int i=0;i<12;i++)//TODO Remove 
+			//	{
+				//	media[i]="http://localhost:8080/fedora/objects/sq:15/datastreams/IMG/content";
 					
-				}
+				//}
 				request.setAttribute("PopulatedTemplateArray",media);
 				
 				request.setAttribute("ExhibitionTitle",exhibitionTitle);
