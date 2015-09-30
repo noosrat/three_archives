@@ -3,7 +3,7 @@ package common.fedora;
 public class FedoraCredentials {
 	private static final String url = "http://localhost:8080/fedora";
 	private static final String username = "fedoraAdmin";
-	private static final String password ="fedoraAdmin";
+	private static final String password ="12345";
 
 	public static String getUrl() {
 		return url;

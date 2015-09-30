@@ -19,18 +19,18 @@ public class MapController implements Controller {
 
 	public String execute(HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
+		String archive = (String) request.getSession().getAttribute("ARCHIVE");
 		if (request.getPathInfo().substring(1).contains("redirect_maps")) {
-
-			Set<FedoraDigitalObject> digitalObjects = new HashSet<FedoraDigitalObject>();
-			Map search = new Map();
-			digitalObjects = search.findFedoraDigitalObjects("&query=coverage~*");	
-			//digitalObjects = search.findFedoraDigitalObjects("kitten");	
-			request.setAttribute("objects", digitalObjects);
+			if (archive.equalsIgnoreCase("Harfield Village")){
+				Map mp = new Map();
+			request.setAttribute("test", mp.test() );
 			request.setAttribute("points", read());
 //			
 			//setAttribute to points array for to be sent (points are from database)
 			
-			return "WEB-INF/frontend/maps/harfieldoverview.jsp";
+			return "WEB-INF/frontend/maps/harfieldoverview.jsp";}
+			else {
+				return "WEB-INF/frontend/imageviewer.jsp";}
 		}
 		else if (request.getPathInfo().substring(1).contains("polygon")) {
 
@@ -46,11 +46,19 @@ public class MapController implements Controller {
 			//string maniulation send to database
 			return "WEB-INF/frontend/maps/harfieldoverview.jsp";
 		}
-		else if (request.getPathInfo().substring(1).contains("place")) {
+		
+		else if (request.getPathInfo().substring(1).contains("har")) {
 
 			List<FedoraDigitalObject> MapPic = (List<FedoraDigitalObject>) request.getAttribute("digitalObject");
 			
 			request.setAttribute("MapPic", MapPic);
+			
+			Set<FedoraDigitalObject> digitalObjects = new HashSet<FedoraDigitalObject>();
+			Map search = new Map();
+			digitalObjects = search.findFedoraDigitalObjects("&query=coverage~*");	
+			//digitalObjects = search.findFedoraDigitalObjects("kitten");	
+			request.setAttribute("objects", digitalObjects);
+			
 		
 			return "WEB-INF/frontend/maps/mapoverview.jsp";
 		}

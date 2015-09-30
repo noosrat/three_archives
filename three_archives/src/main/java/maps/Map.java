@@ -18,4 +18,10 @@ public class Map extends Service {
 //		return getFedoraCommunicator().findFedoraDigitalObjectsUsingSearchTerms(terms);
 		return getFedoraCommunicator().findFedoraDigitalObjects(terms, "maps");
 	}
+	
+	public String test() throws FedoraException
+	{
+		return getFedoraCommunicator().populateFedoraDigitalObject("ms:1").getDatastreams().get("IMG").getContent() ;
+		}
+	
 }

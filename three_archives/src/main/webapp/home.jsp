@@ -78,6 +78,12 @@ ${message}
 		method="post">
 		<input type="submit" value="Uploads" />
 	</form>
+	
+	<form
+		action="${pageContext.request.contextPath}/archives/redirect_downloads"
+		method="post">
+		<input type="submit" value="Downloads" />
+	</form>
 
 
 </div>

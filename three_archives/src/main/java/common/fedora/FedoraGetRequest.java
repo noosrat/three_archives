@@ -91,6 +91,7 @@ public class FedoraGetRequest {
 	// /objects/{pid}/datastreams/{dsID}/content ? [asOfDateTime] [download]
 	// /objects/demo:29/datastreams/DC/content
 	public FedoraGetRequest getDatastreamDissemination(String dsid, TreeMap<QueryParameters, String> queryParameters) {
+		System.out.print("InDatastreamDissemination");
 		getPrefix().append("/datastreams/").append(dsid).append("/content?");
 		setQueryParameters(queryParameters);
 		return this;
@@ -174,6 +175,7 @@ public class FedoraGetRequest {
 		getPrefix().append("/objectXML");
 		return this;
 	}
+	
 
 	private void processParameters() {
 		/*

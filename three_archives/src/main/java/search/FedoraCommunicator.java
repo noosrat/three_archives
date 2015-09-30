@@ -76,6 +76,7 @@ public class FedoraCommunicator {
 				results.add(populateFedoraDigitalObject(pid));
 			}
 		} catch (Exception ex) {
+			System.out.print(ex);
 			throw new FedoraException("Could not Populate fedora digital objects",ex);
 		}
 
@@ -147,7 +148,7 @@ public class FedoraCommunicator {
 		return datastream;
 	}
 
-	private FedoraDigitalObject populateFedoraDigitalObject(String pid)
+	public FedoraDigitalObject populateFedoraDigitalObject(String pid)
 			throws FedoraException {
 		System.out.println(" populating xxxxxxxxxxxxxxxxxxxxxx");
 		FedoraDigitalObject fedoraDigitalObject = new FedoraDigitalObject(pid);
@@ -182,6 +183,24 @@ public class FedoraCommunicator {
 		}
 		fedoraDigitalObject.setDatastreams(objectDatastreams);
 		return fedoraDigitalObject;
+	}
+	
+	public void downloadFedoraDigitalObjectUsingObjects(Set<FedoraDigitalObject> obs) throws FedoraException{
+		for(FedoraDigitalObject object: obs){
+			 System.out.println(object.getPid());
+			 
+			//pid =object.getPid();
+		
+		FedoraGetRequest fedoraGetRequest = new FedoraGetRequest(object.getPid());
+		TreeMap<QueryParameters, String> param = new TreeMap();
+		//TreeMap param = new TreeMap();
+		
+		//QueryParameters qp = new QueryParameters("download");
+		
+		param.put(QueryParameters.DOWNLOAD, "true");
+		fedoraClient.execute(fedoraGetRequest.getDatastreamDissemination("IMG",param));
+		
+		}
 	}
 
 }
