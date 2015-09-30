@@ -4,12 +4,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-
-import search.FedoraCommunicator;
-
 import common.controller.Controller;
 import common.fedora.DublinCore;
 import common.fedora.FedoraClient;
+import common.fedora.FedoraCommunicator;
 import common.fedora.FedoraDigitalObject;
 import common.fedora.FedoraException;
 

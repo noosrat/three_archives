@@ -38,7 +38,6 @@ public class SearchController implements Controller {
 		request.setAttribute("autocompletion", autocompleteValues(Browse.getFedoraDigitalObjects()));
 
 		String requestPath = request.getPathInfo().substring(1);
-		System.out.println("PATH INFO " + requestPath);
 		if (requestPath != null) {
 			try {
 				if (requestPath.contains("search_objects")) {
@@ -65,7 +64,6 @@ public class SearchController implements Controller {
 
 		String limit = request.getParameter("limitSearch");
 		if (limit != null && !limit.isEmpty() && limit.equalsIgnoreCase("limitSearch")) {
-			System.out.println("LIMITING THE SEARCH TO THIS SPECIFIC COLLECTION");
 			Set<FedoraDigitalObject> results = new HashSet<FedoraDigitalObject>();
 			// we essentially just need to filter the result we had with the new
 			// search term?
@@ -73,7 +71,6 @@ public class SearchController implements Controller {
 			// existing items and the new condition..
 			Set<FedoraDigitalObject> exisitingObjects = (Set<FedoraDigitalObject>) request.getSession()
 					.getAttribute("objects");
-			System.out.println("Found " + exisitingObjects.size() + " exisitng objects");
 			// we need to build the query for fedora
 			terms.append("(");
 			for (FedoraDigitalObject digitalObject : exisitingObjects) {
@@ -82,14 +79,11 @@ public class SearchController implements Controller {
 			terms.delete(terms.length() - 4, terms.length()).append(")");
 			// now we can add the rest of the actual query
 			terms.append(" AND ");
-			System.out.println("SOLR QUERY for limited search " + terms);
 		}
 
 		String s = request.getParameter("terms");
 		// if (requestPath.contains("search_objects/category")) {
 		// then do all the specific searching
-		System.out.println("REQUEST PAHT IN search fedora digital objects by category " + requestPath);
-		System.out.println("TERMS FOUND FOR THE SEARCH " + s);
 		String[] splitPath = requestPath.split("=");
 		if (splitPath.length == 2) {
 			SearchAndBrowseCategory queryCategory = SearchAndBrowseCategory.valueOf(splitPath[1]);
@@ -97,14 +91,9 @@ public class SearchController implements Controller {
 			// search items..etc with our one selected and then they can still
 			// put a value into the text box
 			ArrayList<String> categories = SearchController.retrieveSearchCategories();
-			System.out.println(categories);
 			categories.remove(categories.indexOf(queryCategory.name()));
 			categories.add(0, queryCategory.name());
-			System.out.println(categories);
 			request.setAttribute("searchCategories", categories);
-			System.out.println("Terms " + s);
-			System.out.println("Category " + queryCategory + "equals search all "
-					+ queryCategory.equals(SearchAndBrowseCategory.SEARCH_ALL));
 			if (s == null || s.isEmpty()) {
 				return;
 			}
@@ -124,10 +113,8 @@ public class SearchController implements Controller {
 			}
 		}
 
-		System.out.println("Query constructed by category for solr is " + terms);
 		Set<FedoraDigitalObject> digitalObjects = new HashSet<FedoraDigitalObject>();
 		digitalObjects = getSearch().findFedoraDigitalObjects(new String(terms));
-		System.out.println("Retrieved " + digitalObjects.size() + " objects in SOLR");
 		if ((digitalObjects == null || digitalObjects.isEmpty())) {
 			request.setAttribute("message", "No results to return");
 		}
@@ -160,7 +147,6 @@ public class SearchController implements Controller {
 				}
 			}
 		}
-		System.out.println("Autocompletion values " + values);
 
 		return values;
 
@@ -173,9 +159,7 @@ public class SearchController implements Controller {
 	 */
 	public static void buildAutocompleteJSONFile(Set<FedoraDigitalObject> fedoraDigitalObjects) {
 		JSONArray list = new JSONArray();
-		System.out.println("Writing to file");
 		Set<String> values = autocompleteValues(fedoraDigitalObjects);
-		System.out.println("Autocomplete values to write to file  " + values);
 		for (String s : values) {
 			list.add(s);
 		}
@@ -192,7 +176,6 @@ public class SearchController implements Controller {
 	}
 
 	private Set<String> similarSearchTags(HttpServletRequest request) throws Exception { // this
-		System.out.println("Compiling list of similar search tags"); // will
 		// be
 		// read from the
 		// relevant JSON
@@ -205,7 +188,6 @@ public class SearchController implements Controller {
 		// only pic top results that actually contain the search term
 		TreeSet<String> results = new TreeSet<String>();
 		String terms = (String) request.getParameter("terms");
-		System.out.println("Search term " + terms);
 		String[] splitSearchTerm = null;
 		if (terms != null) {
 			splitSearchTerm = terms.split(" ");
@@ -229,10 +211,8 @@ public class SearchController implements Controller {
 		try {
 			Object obj = parser.parse(new FileReader(new String(file)));
 			JSONArray array = (JSONArray) obj;
-			System.out.println(array.size());
 
 			autocomplete = new TreeSet<String>(array);
-			System.out.println(autocomplete.size());
 		} catch (ParseException parseException) {
 			System.out.println(parseException);
 			throw new Exception(parseException);

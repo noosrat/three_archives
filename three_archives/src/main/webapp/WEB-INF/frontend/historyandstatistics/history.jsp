@@ -187,15 +187,19 @@
 					<h3>Your favourite(top 3) category updates(if any)</h3>
 				</div>
 				<div class="row">
+				
+				<c:forEach var="favouriteCategoriesUpdates" items="${userFavouriteCategoriesWithRecentUpdates}">
+				
 					<div class="col-sm-4">
 						<div class="panel panel-default">
 							<div class="panel-heading">
-								<h3 class="panel-title">Category</h3>
+								<h3 class="panel-title">${favouriteCategoriesUpdates}</h3>
 							</div>
 							<div class="panel-body">Value</div>
 						</div>
 
 					</div>
+					</c:forEach>
 
 				</div>
 				<!-- container fluid -->

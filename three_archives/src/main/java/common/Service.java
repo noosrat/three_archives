@@ -1,6 +1,6 @@
 package common;
 
-import search.FedoraCommunicator;
+import common.fedora.FedoraCommunicator;
 
 public abstract class Service {
 

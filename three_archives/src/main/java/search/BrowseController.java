@@ -18,7 +18,6 @@ public class BrowseController implements Controller {
 		Browse.initialise();
 		this.browseFedoraObjects(request, response);
 		request.setAttribute("searchCategories", SearchController.retrieveSearchCategories());
-		System.out.println("SEARCH CATEGORIES " + SearchController.retrieveSearchCategories());
 		(new HistoryController()).execute(request, response);
 		return "WEB-INF/frontend/searchandbrowse/searchAndBrowse.jsp";
 	}
@@ -42,9 +41,6 @@ public class BrowseController implements Controller {
 			throws Exception {
 		String category = request.getParameter("category");
 		String value = request.getParameter(category);
-
-		System.out.println("Browse by category " + category + " value " + value);
-
 		/*
 		 * if the category is blank or null it means that it is just general
 		 * browse
@@ -64,7 +60,6 @@ public class BrowseController implements Controller {
 			//this is where we should call the HistoryBrowseMethod to update what the user browses by the most
 //			(new HistoryController()).execute(request, response);
 		}
-		System.out.println("Categories " + Browse.getFilteredBrowsingCategories());
 //		request.setAttribute("browseCategories", Browse.getFilteredBrowsingCategories()); this will only be relevant when we can do filtering on filtering
 		request.setAttribute("browseCategories", Browse.getBrowsingCategories());
 	}

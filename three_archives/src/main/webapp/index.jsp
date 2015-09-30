@@ -55,7 +55,7 @@
                 <div class="fill" style="background-image:url(${pageContext.request.contextPath}/images/spring.jpg);"></div>
                 <div class="carousel-caption">
                     <h2>Sequins, Self and Struggle</h2>
-		 <p><a class="btn btn-large btn-primary" href="${pageContext.request.contextPath}/archives/redirect_sequins">Explore Archive</a></p>
+		 <p><a class="btn btn-large btn-primary" href="${pageContext.request.contextPath}/archives/SequinsSelfStruggle">Explore Archive</a></p>
                 </div>
             </div>
             <div class="item">
@@ -63,7 +63,7 @@
                 <div class="fill" style="background-image:url(${pageContext.request.contextPath}/images/movie.jpg);"></div>
                 <div class="carousel-caption">
                     <h2>Movie Snaps</h2>
-		 <p><a class="btn btn-large btn-primary" href="${pageContext.request.contextPath}/archives/redirect_snaps">Explore Archive</a></p>
+		 <p><a class="btn btn-large btn-primary" href="${pageContext.request.contextPath}/archives/MovieSnaps">Explore Archive</a></p>
                 </div>
             </div>
             <div class="item">
@@ -71,7 +71,7 @@
                 <div class="fill" style="background-image:url(${pageContext.request.contextPath}/images/harfield.jpg);"></div>
                 <div class="carousel-caption">
                     <h2>Harfield Village</h2>
-		 <p><a class="btn btn-large btn-primary" href="${pageContext.request.contextPath}/archives/redirect_harfield">Explore Archive</a></p>
+		 <p><a class="btn btn-large btn-primary" href="${pageContext.request.contextPath}/archives/HarfieldVillage">Explore Archive</a></p>
                 </div>
             </div>
         </div>

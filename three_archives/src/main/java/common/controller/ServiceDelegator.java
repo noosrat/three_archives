@@ -31,7 +31,7 @@ public class ServiceDelegator {
 		return controllers;
 	}
 
-	public String execute(HttpServletRequest request, HttpServletResponse response){
+	public String execute(HttpServletRequest request, HttpServletResponse response) {
 		String url = "index.jsp";
 		String pathInfo = request.getPathInfo().substring(1);
 		try {
@@ -41,21 +41,15 @@ public class ServiceDelegator {
 				url = controllers.get("browse").execute(request, response);
 			} else if (pathInfo.contains("exhibition")) {
 				url = controllers.get("exhibitions").execute(request, response);
-			}else if (pathInfo.contains("maps")) {
-
+			} else if (pathInfo.contains("maps")) {
 				url = controllers.get("maps").execute(request, response);
 			} else if (pathInfo.contains("uploads")) {
 				url = controllers.get("uploads").execute(request, response);
 			} else if (pathInfo.contains("history")) {
 				url = controllers.get("history").execute(request, response);
-			} else if (pathInfo.contains("snaps")) {
+			} else {
 				url = controllers.get("general").execute(request, response);
-			} else if (pathInfo.contains("sequins")) {
-				url = controllers.get("general").execute(request, response);
-			} else if (pathInfo.contains("harfield")) {
-				url = controllers.get("general").execute(request, response);
-
-			} 
+			}
 		} catch (Exception exception) {
 			request.setAttribute("message", exception);
 			exception.printStackTrace();
