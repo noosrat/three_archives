@@ -147,7 +147,7 @@ public class FedoraCommunicator {
 		return datastream;
 	}
 
-	private FedoraDigitalObject populateFedoraDigitalObject(String pid)
+	public FedoraDigitalObject populateFedoraDigitalObject(String pid)
 			throws FedoraException {
 		System.out.println(" populating xxxxxxxxxxxxxxxxxxxxxx");
 		FedoraDigitalObject fedoraDigitalObject = new FedoraDigitalObject(pid);

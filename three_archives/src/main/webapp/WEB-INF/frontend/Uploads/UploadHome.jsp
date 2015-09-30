@@ -6,7 +6,30 @@
   <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
   <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
-	<style>
+ <script src="${pageContext.request.contextPath}/jquery.js"></script>
+
+    
+<script>
+
+    // Scrolls to the selected menu item on the page
+    $(function() {
+        $('a[href*=#]:not([href=#])').click(function() {
+            if (location.pathname.replace(/^\//, '') == this.pathname.replace(/^\//, '') || location.hostname == this.hostname) {
+                var target = $(this.hash);
+                target = target.length ? target : $('[name=' + this.hash.slice(1) + ']');
+                if (target.length) {
+                    $('html,body').animate({
+                        scrollTop: target.offset().top
+                    }, 1000);
+                    return false;
+                }
+            }
+        });
+    });
+    
+
+</script>	
+<style>
   		.thumb {
     			height: 120px;
     			border: 1px solid #000;
@@ -58,27 +81,23 @@
   		</div>
 	</nav> 
 	<div class="container" style="background-color:#fcecdf">
-		
-	<div id="select_files" style="margin:auto; text-align:center; width:400px;">
+		<br>
+	<div id="select_files" style="margin:auto; width:400px; background-color:#FCFFFC;border-radius: 25px;padding:10px;padding-left:80px;border: 2px dashed #333300;">
 				<br>
 				<input type="radio" name="archive" value="Harfield" required>Harfield Village<br>
 				<input type="radio" name="archive" value="Snaps" required>Movie Snaps<br>
 				<input type="radio" name="archive" value="MissGay" required>Miss Gay WC<br>
 				<input type="radio" name="archive" value="SpringQueen" required>Spring Queen<br><br>
-				Enter image path (eg.C:/images/): <input type="text" name="storage_path" id="storage_path" required><br>
+				Enter image path (eg.C:/images/): <input type="text" name="storage_path" id="storage_path" required placeholder="C:/images/"><br><br>
 				<output id="list"></output> 
 				
-				<input type="file" id="files" name="files[]" multiple />
-				
-				<button id="nextButton" type="button" onClick="makeClickable()" >Next</button>	
-			</div>
-			
+				<input type="file" id="files" name="files[]" multiple /><br>
+				<a href="#meta" <button class="btn-success" style="float:center;margin-left:100px" id="nextButton" type="button" onClick="makeClickable()" >Next</button></a><br><br>
+	</div>
+	<section id="meta" > 	
+	<br>	
 	<ul style="list-style-type:none;display:inline;margin:0;padding:0;background-color:#fbe3cf">
 		<li style="display:inline;list-style-type:none;float:left;">
-			
-				
-					
-			
 			<div id="ImageStore"></div>
 		</li>
 		
@@ -95,10 +114,10 @@
 			<div id="metadataForm" style="visibility:hidden;margin-top:10px;">
 				<table class="table table-bordered" style="width:50%;">
 					<thead style="background:#fadabf;">
-						<th>Field</th><th>Value</th>
+						<th>Field</th><th>Value </th>
 					</thead>
 					<tbody style="background:#ffffff">
-						<tr><td>Filename:</th><th> <textarea id="selected_image"></textarea></td></tr>
+						<tr><td>Filename:</td><td> <textarea id="selected_image"></textarea></td></tr>
 						<tr><td>Title:</td> <td><input class="inputs"  id="title"></td></tr>
 						<tr><td>Creator:</td><td> <input class="inputs" id="creator"></td></tr>
 						<tr><td>Event:</td><td> <input class="inputs" id="event"></td></tr>
@@ -125,21 +144,20 @@
 						<tr><td>co-ordinates:</td><td> <input class="inputs" id="cords"></td></tr>
 						<tr><td>Rights:</td><td> <input class="inputs" id="rights"></td></tr>
 						<tr><td>Collection:</td><td> <input class="inputs" id="collections"></td></tr>
+						<tr><td></td><td>  <button type="button" onClick="cancelSelection()">Cancel</button><button type="button" onClick="submitMetadata()">Update</button></td></tr>
 					</tbody>
 				</table>
 			
 			</div> 
 		</li>
-		<li style="display:inline;list-style-type:none;">
-			<button type="button">Cancel</button><button type="button" onClick="submitMetadata()">Update</button>
-		</li>
+		
 	</ul>
+	</section>
 	
 	</div>	
 </form>		
 </body>
 
-	
 
 <script>
 
@@ -252,15 +270,30 @@ function submitMetadata(){
 	var rights=document.getElementById("rights").value;
 	var collections=document.getElementById("collections").value;
 	var cords=document.getElementById("cords").value;
-	
-	document.getElementById(filename).style.display="none";
-	document.getElementById("actions").innerHTML=document.getElementById("actions").value+" "+filename+"% "+title+"% "+creator+"% "+event+"% "+ description+"% "+  publisher+"% "+  contributor +"% "+ date+"% "+  resourcetype+"% "+  format+"% "+  source+"% "+  language+"% "+  relation+"% "+  location +"% "+ rights+"% "+collections+"% "+cords+"%%";
+
+	var doCheck=filename+title+creator+event+description+publisher+contributor+date+resourcetype+format+source+language+relation+location+rights+collections+cords;
+	if(doCheck.indexOf('%') > -1 )
+	{
+		alert("'%' is not a valid character. Please remove it from text.");
+	}
+	else{
+		document.getElementById(filename).style.display="none";
+		document.getElementById("actions").innerHTML=document.getElementById("actions").value+" "+filename+"% "+title+"% "+creator+"% "+event+"% "+ description+"% "+  publisher+"% "+  contributor +"% "+ date+"% "+  resourcetype+"% "+  format+"% "+  source+"% "+  language+"% "+  relation+"% "+  location +"% "+ rights+"% "+collections+"% "+cords+"%%";
+		document.getElementById("able_selected_image").value="true";
+		title=document.getElementById("title").value="";
+		creator=document.getElementById("creator").value="";
+		document.getElementById("metadataForm").style.visibility="hidden";
+		document.getElementById("instruction").style.display="block";
+	}
+}
+function cancelSelection(){
+	var filename= document.getElementById("selected_image").value;
+	document.getElementById(filename).style.border= '';
 	document.getElementById("able_selected_image").value="true";
-	
 	title=document.getElementById("title").value="";
-	creator=document.getElementById("creator").value="";
 	document.getElementById("metadataForm").style.visibility="hidden";
 	document.getElementById("instruction").style.display="block";
+
 }
 
 function makeClickable()
