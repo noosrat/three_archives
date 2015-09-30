@@ -1,5 +1,16 @@
 <!DOCTYPE html>
-<html lang="en">
+<%@page import="common.fedora.Datastream"%>
+<%@page import="common.fedora.DublinCoreDatastream"%>
+<%@page import="common.fedora.FedoraDigitalObject"%>
+<%@page import="search.SearchAndBrowseCategory"%>
+<%@page import="common.fedora.DatastreamID"%>
+
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@ taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql"%>
+<%@ taglib prefix="x" uri="http://java.sun.com/jsp/jstl/xml"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<html>
 
 <head>
 
@@ -12,19 +23,33 @@
 <title>Personal Histories - Centre for Curating The Archive</title>
 
 <!-- Bootstrap Core CSS -->
-<link href="${pageContext.request.contextPath}/css/bootstrap.min.css"
+<link
+	href="${pageContext.request.contextPath}/bootstrap-3.3.5/css/bootstrap.min.css"
 	rel="stylesheet">
+<script type="text/javascript"
+	src="${pageContext.request.contextPath}/js/jquery-1.11.3.js"></script>
+<script type="text/javascript"
+	src="${pageContext.request.contextPath}/bootstrap-3.3.5/js/bootstrap.js"></script>
+<script type="text/javascript"
+	src="${pageContext.request.contextPath}/js/typeahead.js"></script>
 
-<!-- Custom CSS -->
-<link href="${pageContext.request.contextPath}/css/full-slider.css"
-	rel="stylesheet">
-
-<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-<!--[if lt IE 9]>
-        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-    <![endif]-->
+<script type="text/javascript">
+	$(document).ready(function() {
+		var words = "/data/movie.json";
+		var countries = new Bloodhound({
+			datumTokenizer : Bloodhound.tokenizers.whitespace,
+			queryTokenizer : Bloodhound.tokenizers.whitespace,
+			limit : 5,
+			prefetch : {
+				url : words,
+			}
+		});
+		$('#prefetch .typeahead').typeahead(null, {
+			name : 'countries',
+			source : countries
+		});
+	});
+</script>
 
 </head>
 
@@ -41,23 +66,72 @@
 			<div class="collapse navbar-collapse"
 				id="bs-example-navbar-collapse-1">
 				<ul class="nav navbar-nav">
-					<li><a href="${pageContext.request.contextPath}/archives/browse">Browse</a></li>
-					<li><a href="${pageContext.request.contextPath}/archives/redirect_exhibitions">Exhibitions</a></li>
-					<li><a href="${pageContext.request.contextPath}/archives/redirect_maps">Maps</a></li>
-					<li><a href="${pageContext.request.contextPath}/archives/redirect_uploads">Uploads</a></li>
+					<li><a
+						href="${pageContext.request.contextPath}/archives/browse">Browse</a></li>
+					<li><a
+						href="${pageContext.request.contextPath}/archives/redirect_exhibitions">Exhibitions</a></li>
+					<li><a
+						href="${pageContext.request.contextPath}/archives/redirect_maps">Maps</a></li>
+					<li><a
+						href="${pageContext.request.contextPath}/archives/redirect_uploads">Uploads</a></li>
 				</ul>
+				<!-- search components-->
+				
+				<div id="bs-example-navbar-collapse-1"
+					class="collapse navbar-collapse">
+
+					<ul class="nav navbar-nav navbar-right">
+						<li class="dropdown"><a
+							href="${pageContext.request.contextPath}/archives/search_objects"
+							class="dropdown-toggle" data-toggle="dropdown" role="button"
+							aria-haspopup="true" aria-expalinded="false">${searchCategories[0]}<span
+								class="caret"></span></a>
+							<ul class="dropdown-menu">
+								<c:forEach var="searchCategory" items="${searchCategories}">
+									<li><a
+										href="${pageContext.request.contextPath}/archives/search_objects/category=${searchCategory}">${searchCategory}</a></li>
+
+								</c:forEach>
+							</ul></li>
+						<li>
+							<form class="navbar-form navbar-right"
+								action="${pageContext.request.contextPath}/archives/search_objects/category=${searchCategories[0]}"
+								method="post">
+								<div class="form-group">
+									<div id="prefetch">
+										<input
+											class="form-control typeahead tt-query tt-hint tt-dropdown-menu tt-suggestion"
+											data-provider="typeahead" type="text"
+											placeholder="Search Archive" autocomplete="off"
+											spellcheck="false" name="terms">
+									</div>
+								</div>
+
+								<button type="submit" class="btn">Search</button>
+
+								<div class="checkbox">
+									<label> <input type="checkbox" id="limitSearch"
+										name="limitSearch" value="limitSearch"><font
+										color="white"> Limit search to these results</font>
+									</label>
+								</div>
+
+							</form>
+						</li>
+					</ul>
+				</div>
 			</div>
+			<!-- end of search bar components -->
 		</div>
-		<!-- /.container -->
 	</nav>
 
 
 	<div class="container">
 		<div class="row">
 			<div class="col-lg-12 text-center">
-		<br><br><br>
+				<br> <br> <br>
 				<h1>Respective archive home page</h1>
-					</div>
+			</div>
 		</div>
 		<!-- /.row -->
 	</div>
@@ -74,11 +148,6 @@
 	</nav>
 	<!-- /.container -->
 
-	<!-- jQuery -->
-	<script src="${pageContext.request.contextPath}/js/jquery-2.1.4.js"></script>
-
-	<!-- Bootstrap Core JavaScript -->
-	<script src="${pageContext.request.contextPath}/js/bootstrap.min.js"></script>
 
 	<!-- Script to Activate the Carousel -->
 	<script>

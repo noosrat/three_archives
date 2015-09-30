@@ -4,10 +4,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import search.SearchController;
+
 public class GeneralController implements Controller {
 
 	public String execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		HttpSession session = request.getSession();
+		request.setAttribute("searchCategories", SearchController.retrieveSearchCategories());
 		if (request.getPathInfo().substring(1).contains("redirect_sequins")) {
 			session.setAttribute("ARCHIVE", "Sequins, Self and Struggle");
 

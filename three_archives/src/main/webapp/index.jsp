@@ -12,7 +12,7 @@
     <title>Personal Histories - Centre for Curating The Archive</title>
 
     <!-- Bootstrap Core CSS -->
-    <link href="${pageContext.request.contextPath}/css/bootstrap.min.css" rel="stylesheet">
+    <link href="${pageContext.request.contextPath}/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet">
 
     <!-- Custom CSS -->
     <link href="${pageContext.request.contextPath}/css/full-slider.css" rel="stylesheet">
@@ -99,10 +99,10 @@
     <!-- /.container -->
 
     <!-- jQuery -->
-    <script src="${pageContext.request.contextPath}/js/jquery-2.1.4.js"></script>
+    <script src="${pageContext.request.contextPath}/js/jquery-1.11.3.js"></script>
 
     <!-- Bootstrap Core JavaScript -->
-    <script src="${pageContext.request.contextPath}/js/bootstrap.min.js"></script>
+    <script src="${pageContext.request.contextPath}/bootstrap-3.3.5/js/bootstrap.min.js"></script>
 
     <!-- Script to Activate the Carousel -->
     <script>

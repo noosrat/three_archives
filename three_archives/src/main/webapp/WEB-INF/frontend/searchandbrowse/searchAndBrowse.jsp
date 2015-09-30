@@ -1,4 +1,3 @@
-
 <%@page import="common.fedora.Datastream"%>
 <%@page import="common.fedora.DublinCoreDatastream"%>
 <%@page import="common.fedora.FedoraDigitalObject"%>
@@ -9,7 +8,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql"%>
 <%@ taglib prefix="x" uri="http://java.sun.com/jsp/jstl/xml"%>
-<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 
 <html>
 <head>
@@ -21,11 +20,16 @@
 <link rel="stylesheet" type="text/css"
 	href="${pageContext.request.contextPath}/css/search_and_browse.css"></link>
 
-<link href="${pageContext.request.contextPath}/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet">
+<link
+	href="${pageContext.request.contextPath}/bootstrap-3.3.5/css/bootstrap.min.css"
+	rel="stylesheet">
 <!-- <link href="${pageContext.request.contextPath}/css/lightbox.css"
 	rel="stylesheet">-->
-<link href="${pageContext.request.contextPath}/theme/css/sb-admin.css" rel="stylesheet">
-<link href="${pageContext.request.contextPath}/css/bootstrap-lightbox.min.css" 	rel="stylesheet">
+<link href="${pageContext.request.contextPath}/theme/css/sb-admin.css"
+	rel="stylesheet">
+<link
+	href="${pageContext.request.contextPath}/css/bootstrap-lightbox.min.css"
+	rel="stylesheet">
 
 <script type="text/javascript"
 	src="${pageContext.request.contextPath}/js/jquery-1.11.3.js"></script>
@@ -59,8 +63,6 @@ $(document).ready(function() {
 	});
 </script>
 
-
-
 </head>
 
 
@@ -68,16 +70,36 @@ $(document).ready(function() {
 	<div id="wrapper">
 		<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
 			<div class="container-fluid">
+
+
 				<div class="navbar-header">
 
-					<a class="navbar-brand"
-						href="${pageContext.request.contextPath}/archives/browse">${ARCHIVE}</a>
+					<c:choose>
+						<c:when test="${ARCHIVE =='Sequins, Self and Struggle'}">
 
+							<a class="navbar-brand"
+								href="${pageContext.request.contextPath}/archives/redirect_sequins">${ARCHIVE}</a>
+						</c:when>
+						<c:when test="${ARCHIVE =='Harfield Village'}">
+
+							<a class="navbar-brand"
+								href="${pageContext.request.contextPath}/archives/redirect_harfield">${ARCHIVE}</a>
+						</c:when>
+						<c:when test="${ARCHIVE =='Movie Snaps'}">
+
+							<a class="navbar-brand"
+								href="${pageContext.request.contextPath}/archives/redirect_snaps">${ARCHIVE}</a>
+						</c:when>
+					</c:choose>
 				</div>
 
 
+
+
+
+
+
 				<div id="navbar" class="collapse navbar-collapse">
-					
 					<ul class="nav navbar-nav navbar-right top-nav">
 						<li class="dropdown"><a
 							href="${pageContext.request.contextPath}/archives/search_objects"
@@ -88,38 +110,60 @@ $(document).ready(function() {
 								<c:forEach var="searchCategory" items="${searchCategories}">
 									<li><a
 										href="${pageContext.request.contextPath}/archives/search_objects/category=${searchCategory}">${searchCategory}</a></li>
-
 								</c:forEach>
-							</ul>
-					</li>
-					<li>
-					<form class="navbar-form navbar-right"
-						action="${pageContext.request.contextPath}/archives/search_objects/category=${searchCategories[0]}"
-						method="post">
-						<div class="form-group">
-							<div id="prefetch">
-								<input
-									class="form-control typeahead tt-query tt-hint tt-dropdown-menu tt-suggestion"
-									data-provider="typeahead" type="text"
-									placeholder="Search Archive" autocomplete="off"
-									spellcheck="false" name="terms">
-							</div>
-						</div>
-
-						<button type="submit" class="btn">Search</button>
-
-						<div class="checkbox">
-							<label> <input type="checkbox" id="limitSearch"
-								name="limitSearch" value="limitSearch"><font
-								color="white"> Limit search to these results</font>
-							</label>
-						</div>
-
-					</form></li>
+							</ul></li>
+						<li>
+							<form class="navbar-form navbar-right"
+								action="${pageContext.request.contextPath}/archives/search_objects/category=${searchCategories[0]}"
+								method="post">
+								<div class="form-group">
+									<div id="prefetch">
+										<input
+											class="form-control typeahead tt-query tt-hint tt-dropdown-menu tt-suggestion"
+											data-provider="typeahead" type="text"
+											placeholder="Search Archive" autocomplete="off"
+											spellcheck="false" name="terms">
+									</div>
+								</div>
+								<button type="submit" class="btn">Search</button>
+								<div class="checkbox">
+									<label> <input type="checkbox" id="limitSearch"
+										name="limitSearch" value="limitSearch"><font
+										color="white"> Limit search to these results</font>
+									</label>
+								</div>
+							</form>
+						</li>
 					</ul>
-
-
 				</div>
+			</div>
+			<!-- side bar -->
+			<div class="collapse navbar-collapse navbar-ex1-collapse">
+				<ul class="nav navbar-nav side-nav">
+					
+					
+					<li><a href="${pageContext.request.contextPath}/archives/browse" data-toggle="collapse"
+							data-target="${pageContext.request.contextPath}/archives/browse"><i class="fa fa-fw fa-arrows-v"></i>BROWSE ALL
+								<i
+								class="fa fa-fw fa-caret-down"></i> </a>
+					</li>
+					
+					<c:set var="count" value="0" scope="page" />
+					<c:forEach var="category" items="${browseCategories}">
+						<li><a href="javascript:;" data-toggle="collapse"
+							data-target="#demo${count}"><i class="fa fa-fw fa-arrows-v"></i>${category.key}
+								<span class="badge">${fn:length(category.value)}</span><i
+								class="fa fa-fw fa-caret-down"></i> </a>
+							<ul id="demo${count}" class="collapse">
+								<c:forEach var="categoryValue" items="${category.value}">
+									<li><a
+										href="${pageContext.request.contextPath}/archives/browse?category=${category.key}&${category.key}=${categoryValue}">${categoryValue}</a></li>
+								</c:forEach>
+
+							</ul></li>
+						<c:set var="count" value="${count + 1}" scope="page" />
+					</c:forEach>
+				</ul>
 			</div>
 		</nav>
 
@@ -137,40 +181,15 @@ $(document).ready(function() {
 
 				</div>
 			</div>
-
-			<br>
-			<br>
-			<!-- side bar -->
-
-			<div class="collapse navbar-collapse navbar-ex1-collapse">
-				<ul class="nav navbar-nav side-nav">
-					<c:set var="count" value="0" scope="page" />
-					<c:forEach var="category" items="${browseCategories}">
-						<li><a href="javascript:;" data-toggle="collapse"
-							data-target="#demo${count}"><i class="fa fa-fw fa-arrows-v"></i>${category.key}
-								 <span class="badge">${fn:length(category.value)}</span><i class="fa fa-fw fa-caret-down"></i>
-								</a>
-							<ul id="demo${count}" class="collapse">
-								<c:forEach var="categoryValue" items="${category.value}">
-									<li><a
-										href="${pageContext.request.contextPath}/archives/browse?category=${category.key}&${category.key}=${categoryValue}">${categoryValue}</a></li>
-								</c:forEach>
-
-							</ul></li>
-						<c:set var="count" value="${count + 1}" scope="page" />
-					</c:forEach>
-				</ul>
-			</div>
 		</nav>
-
 
 		<div id="page-wrapper">
 			<div class="container-fluid">
 				<div class="row">
 					<div class="col-lg-12">
 						<h3 class="page-header">
-                            <small>${message}</small>
-                        </h3>
+							<small>${message}</small>
+						</h3>
 						<ol class="breadcrumb">
 							<li><i class="fa fa-dashboard"></i>${browseCategory}</li>
 							<li class="active"><i class="fa fa-wrench"></i>
@@ -219,36 +238,33 @@ $(document).ready(function() {
 						<div class="modal-dialog">
 							<div class="modal-content">
 								<div class="modal-body">
-								<!-- 	<table style="width: 100%"> <td>-->
-										<img
-											src="${digitalObject.datastreams['IMG'].content}"
-											class="img-thumbnail img-responsive" alt="image unavailable"></td>
+									<!-- 	<table style="width: 100%"> <td>-->
+									<img src="${digitalObject.datastreams['IMG'].content}"
+										class="img-thumbnail img-responsive" alt="image unavailable">
+									</td> Title: <a
+										href="${pageContext.request.contextPath}/archives/search_objects/category=TITLE?terms=${digitalObject.datastreams['DC'].dublinCoreMetadata['TITLE']}">${digitalObject.datastreams['DC'].dublinCoreMetadata['TITLE']}</a><br>
+									Collection: <a
+										href="${pageContext.request.contextPath}/archives/search_objects/category=COLLECTION?terms=${digitalObject.datastreams['DC'].dublinCoreMetadata['COLLECTION']}">${digitalObject.datastreams['DC'].dublinCoreMetadata['COLLECTION']}</a><br>
+									Contributor: <a
+										href="${pageContext.request.contextPath}/archives/search_objects/category=CONTRIBUTOR?terms=${digitalObject.datastreams['DC'].dublinCoreMetadata['CONTRIBUTOR']}">${digitalObject.datastreams['DC'].dublinCoreMetadata['CONTRIBUTOR']}</a><br>
+									Coverage:
+									${digitalObject.datastreams['DC'].dublinCoreMetadata['COVERAGE']}<br>
+									Creator:
+									${digitalObject.datastreams['DC'].dublinCoreMetadata['CREATOR']}
+									<br> Date: <a
+										href="${pageContext.request.contextPath}/archives/search_objects/category=YEAR?terms=${digitalObject.datastreams['DC'].dublinCoreMetadata['DATE']}">${digitalObject.datastreams['DC'].dublinCoreMetadata['DATE']}</a>
+									<br> Description: <a
+										href="${pageContext.request.contextPath}/archives/search_objects/category=DESCRIPTION?terms=${digitalObject.datastreams['DC'].dublinCoreMetadata['DESCRIPTION']}">${digitalObject.datastreams['DC'].dublinCoreMetadata['DESCRIPTION']}</a><br>
+									Event: <a
+										href="${pageContext.request.contextPath}/archives/search_objects/category=EVENT?terms=${digitalObject.datastreams['DC'].dublinCoreMetadata['EVENT']}">${digitalObject.datastreams['DC'].dublinCoreMetadata['EVENT']}</a><br>
+									Format:
+									${digitalObject.datastreams['DC'].dublinCoreMetadata['FORMAT']}
+									<br> Location: <a
+										href="${pageContext.request.contextPath}/archives/search_objects/category=LOCATION?terms=${digitalObject.datastreams['DC'].dublinCoreMetadata['LOCATION']}">${digitalObject.datastreams['DC'].dublinCoreMetadata['LOCATION']}</a><br>
+									Subject:
+									${digitalObject.datastreams['DC'].dublinCoreMetadata['SUBJECT']}
+									<br>
 
-
-										Title: <a
-											href="${pageContext.request.contextPath}/archives/search_objects/category=TITLE?terms=${digitalObject.datastreams['DC'].dublinCoreMetadata['TITLE']}">${digitalObject.datastreams['DC'].dublinCoreMetadata['TITLE']}</a><br>
-											Collection: <a
-											href="${pageContext.request.contextPath}/archives/search_objects/category=COLLECTION?terms=${digitalObject.datastreams['DC'].dublinCoreMetadata['COLLECTION']}">${digitalObject.datastreams['DC'].dublinCoreMetadata['COLLECTION']}</a><br>
-											Contributor: <a
-											href="${pageContext.request.contextPath}/archives/search_objects/category=CONTRIBUTOR?terms=${digitalObject.datastreams['DC'].dublinCoreMetadata['CONTRIBUTOR']}">${digitalObject.datastreams['DC'].dublinCoreMetadata['CONTRIBUTOR']}</a><br>
-											Coverage:
-											${digitalObject.datastreams['DC'].dublinCoreMetadata['COVERAGE']}<br>
-											Creator:
-											${digitalObject.datastreams['DC'].dublinCoreMetadata['CREATOR']}
-											<br> Date: <a
-											href="${pageContext.request.contextPath}/archives/search_objects/category=YEAR?terms=${digitalObject.datastreams['DC'].dublinCoreMetadata['DATE']}">${digitalObject.datastreams['DC'].dublinCoreMetadata['DATE']}</a>
-											<br> Description: <a
-											href="${pageContext.request.contextPath}/archives/search_objects/category=DESCRIPTION?terms=${digitalObject.datastreams['DC'].dublinCoreMetadata['DESCRIPTION']}">${digitalObject.datastreams['DC'].dublinCoreMetadata['DESCRIPTION']}</a><br>
-											Event: <a
-											href="${pageContext.request.contextPath}/archives/search_objects/category=EVENT?terms=${digitalObject.datastreams['DC'].dublinCoreMetadata['EVENT']}">${digitalObject.datastreams['DC'].dublinCoreMetadata['EVENT']}</a><br>
-											Format:
-											${digitalObject.datastreams['DC'].dublinCoreMetadata['FORMAT']}
-											<br> Location: <a
-											href="${pageContext.request.contextPath}/archives/search_objects/category=LOCATION?terms=${digitalObject.datastreams['DC'].dublinCoreMetadata['LOCATION']}">${digitalObject.datastreams['DC'].dublinCoreMetadata['LOCATION']}</a><br>
-											Subject:
-											${digitalObject.datastreams['DC'].dublinCoreMetadata['SUBJECT']}
-											<br>
-										
 
 								</div>
 
@@ -260,10 +276,10 @@ $(document).ready(function() {
 				</c:forEach>
 			</div>
 			<!-- container fluid -->
-			</div>
 		</div>
-		<!-- wrapper -->
-		<script type="text/javascript"
-			src="${pageContext.request.contextPath}/js/lightbox.js"></script>
+	</div>
+	<!-- wrapper -->
+	<script type="text/javascript"
+		src="${pageContext.request.contextPath}/js/lightbox.js"></script>
 </body>
 </html>

@@ -52,6 +52,8 @@ public class ServiceDelegator {
 				url = controllers.get("general").execute(request, response);
 
 			} 
+			
+				
 		} catch (Exception exception) {
 			request.setAttribute("message", exception);
 			exception.printStackTrace();
