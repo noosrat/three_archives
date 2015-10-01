@@ -27,7 +27,7 @@
       }
     </style>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAkDhZAIvYefYnMLplLMYFBxACznT-8lmA"></script>
-    <!--<script src="markerclusterer.js" type="text/javascript"></script>-->
+    <!--<script src="${pageContext.request.contextPath}/js/markerclusterer.js" type="text/javascript"></script>-->
     <script>
 var map;
 function initialize() {

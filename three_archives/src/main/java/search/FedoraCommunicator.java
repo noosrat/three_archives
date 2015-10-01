@@ -198,7 +198,7 @@ public class FedoraCommunicator {
 		//QueryParameters qp = new QueryParameters("download");
 		
 		param.put(QueryParameters.DOWNLOAD, "true");
-		fedoraClient.execute(fedoraGetRequest.getDatastreamDissemination("IMG",param));
+		fedoraClient.execute((fedoraGetRequest.getDatastreamDissemination("IMG",param)).getObjectXML());
 		
 		}
 	}

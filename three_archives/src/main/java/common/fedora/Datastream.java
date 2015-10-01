@@ -176,8 +176,8 @@ public class Datastream {
 	}
 
 	public String getContent() {
-		return content;
-		//return "http://localhost:8080/fedora/objects/" + getPid() + "/datastreams/" + getDatastreamID() + "/content";
+		//return content;
+		return "http://localhost:8080/fedora/objects/" + getPid() + "/datastreams/" + getDatastreamID() + "/content";
 	}
 
 

@@ -68,5 +68,10 @@ public class DublinCoreDatastream extends Datastream {
 		}
 		return super.toString() + "Dublin core fields \n " + result;
 	}
+	
+	public String getTitle(){
+		
+	return dublinCoreMetadata.get("TITLE");	
+	}
 
 }

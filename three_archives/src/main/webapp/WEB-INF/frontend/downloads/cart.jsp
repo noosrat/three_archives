@@ -31,7 +31,7 @@ for(FedoraDigitalObject object: cart){
 	  System.out.println(object.getDatastreams().get("IMG").getContent());%>
 	 <img src="<%=object.getDatastreams().get("IMG").getContent()%>"></img>
 	<%}%>
-
+<!-- http://localhost:8080/fedora/objects/ms:1/datastreams/IMG/content?download=true&format=xml -->
 <form method="post" action="${pageContext.request.contextPath}/archives/downloads/checkout">
 		<input type="submit" value="Checkout Items" name="checkout"/>
 		</form>
