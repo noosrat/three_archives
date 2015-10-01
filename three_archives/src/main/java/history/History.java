@@ -60,24 +60,16 @@ public class History extends Service {
 		updates.put("EVENT", new TreeSet<String>());
 		updates.put("LOCATION", new TreeSet<String>());
 
-		System.out.println(
-				"ABOUT TO ITERATING THROUGH THE OBJECTS WHICH HAVE BEEN MODIFIED " + objectsRecentlyModified.size());
 		for (FedoraDigitalObject object : objectsRecentlyModified) {
 			DublinCoreDatastream dcDatastream = (DublinCoreDatastream) object.getDatastreams()
 					.get(DatastreamID.DC.name());
-			System.out.println("Dublin Core datastream of object " + dcDatastream.toString());
-
 			for (String dc : updates.keySet()) {
-				System.out.println("dc key " + dc + " current occupants " + updates.get(dc));
 				String item = dcDatastream.getDublinCoreMetadata().get(dc);
 				if (item != null) {
 					updates.get(dc).add(item);
 				}
 			}
 		}
-
-		System.out.println(updates.toString());
-
 		return updates;
 	}
 
@@ -138,15 +130,15 @@ public class History extends Service {
 
 	}
 
-	public HashSet<String> favouriteBrowsingCategoryUpdates(HashMap<String,TreeSet<String>> updatedCategories, Cookie browseCategoryCookie) {
+	public ArrayList<String> favouriteBrowsingCategoryUpdates(HashMap<String,TreeSet<String>> updatedCategories, Cookie browseCategoryCookie) {
 		// ArrayList<FedoraDigitalObject> objects =
 		// retrieveDigitalObjectsAlteredSinceLastVisit(date);
 		System.out.println("Processing favourite category updates with browseCategoryCookie of: " + browseCategoryCookie.getValue());
 		System.out.println("Updated categories "+ updatedCategories.keySet().toString());
 		ArrayList<String> topBrowsingCategories = retrieveTopThreeBrowsingCategories(browseCategoryCookie);
-		HashSet<String> result = new HashSet<String>();
+		ArrayList<String> result = new ArrayList<String>();
 		for (String category : topBrowsingCategories) {
-			if (updatedCategories.keySet().contains(category.toUpperCase())) {
+			if (updatedCategories.keySet().contains(category.toUpperCase()) && !result.contains(category)) {
 				result.add(category);
 			}
 		}

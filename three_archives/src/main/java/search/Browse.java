@@ -68,7 +68,6 @@ public class Browse extends Service {
 	}
 
 	private static void setUpBrowsingCategoriesAndValues(Set<FedoraDigitalObject> fedoraDigitalObjects) {
-		System.out.println("Setting up browsing categories and values ");
 		TreeMap<String, TreeSet<String>> searchAndBrowseCategoriesAndValues = new TreeMap<String, TreeSet<String>>();
 
 		/*
@@ -235,9 +234,7 @@ public class Browse extends Service {
 		TreeMap<String, TreeSet<String>> filteredCategories = new TreeMap<String, TreeSet<String>>(
 				getBrowsingCategories());
 		filteredCategories.remove(filterCategory);
-		System.out.println("Filtered categories " + filteredCategories);
 		setFilteredBrowsingCategories(filteredCategories);
-		System.out.println("Successfully filtered from " + objectsToFilter.size() + " to " + filteredObjects.size());
 		setFilteredDigitalObjects(filteredObjects);
 	}
 

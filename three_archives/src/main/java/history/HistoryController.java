@@ -46,7 +46,7 @@ public class HistoryController implements Controller {
 			if (request.getPathInfo().contains("browse")) {
 				updateCategoryCookieBasedOnCategoryBrowse(request, response);
 			}
-			favouriteUserCategoriesUpdated(request.getSession());
+			// favouriteUserCategoriesUpdated(request.getSession());
 			displayUserSessioAtt(request);
 		}
 		return "WEB-INF/frontend/historyandstatistics/history.jsp";
@@ -58,13 +58,13 @@ public class HistoryController implements Controller {
 				"***********************************************************************************************************************");
 		System.out.println("dateLastVisited: " + session.getAttribute("dateLastVisited"));
 		System.out.println("browseCategoryCookie" + ((Cookie) session.getAttribute("browseCategoryCookie")).getValue());
-		System.out.println("objectsModifiendSinceLastVisit "
-				+ ((ArrayList<FedoraDigitalObject>) session.getAttribute("objectsModifiedSinceLastVisit")).toString());
+		//System.out.println("objectsModifiendSinceLastVisit "
+		//		+ ((ArrayList<FedoraDigitalObject>) session.getAttribute("objectsModifiedSinceLastVisit")).toString());
 		System.out.println("categoriesRecentUpdates "
 				+ ((HashMap<String, TreeSet<String>>) session.getAttribute("categoriesWithRecentUpdates")).keySet()
 						.toString());
 		System.out.println("userFavourites"
-				+ ((HashSet<String>) session.getAttribute("userFavouriteCategoriesWithRecentUpdates")).toString());
+				+ ((ArrayList<String>) session.getAttribute("userFavouriteCategoriesWithRecentUpdates")).toString());
 		System.out.println(
 				"***********************************************************************************************************************");
 
@@ -77,9 +77,9 @@ public class HistoryController implements Controller {
 		if (cookies != null) {
 			for (Cookie cookie : cookies) {
 				cookieNames.add(cookie.getName());
+				System.out.println("User cookie found ....name: " + cookie.getName() + " value: " + cookie.getValue());
 			}
 		}
-		System.out.println("Cookies found " + cookieNames.toString());
 		for (String defaultCookie : defaultCookies.keySet()) {
 			if (!cookieNames.contains(defaultCookie)) {
 				System.out.println("Cookie not found for: " + defaultCookie);
@@ -101,7 +101,9 @@ public class HistoryController implements Controller {
 			extractAndProcessDateLastModified(request, response);
 		}
 		if (session.getAttribute("browseCategoryCookie") == null) {
+			System.out.println("No value for browseCategoryCookie");
 			session.setAttribute("browseCategoryCookie", getBrowseCategoryCookie(request, response));
+			System.out.println("New value for browseCategoryCookie " + ((Cookie)session.getAttribute("browseCategoryCookie")).getValue());
 		}
 		if (session.getAttribute("objectsModifiedSinceLastVisit") == null) {
 			System.out.println("No value for objectsModifiedSinceLastVisit within the session");
@@ -119,10 +121,10 @@ public class HistoryController implements Controller {
 
 		}
 		if (session.getAttribute("userFavouriteCategiresWithRecentUpdates") == null) {
-			System.out.println("No value for updated objects within the session");
+			System.out.println("No value for user favouritecategories within the session");
 			HashMap<String, TreeSet<String>> categories = (HashMap<String, TreeSet<String>>) request.getSession()
 					.getAttribute("categoriesWithRecentUpdates");
-			HashSet<String> favouriteCategories = getHistory().favouriteBrowsingCategoryUpdates(categories,
+			ArrayList<String> favouriteCategories = getHistory().favouriteBrowsingCategoryUpdates(categories,
 					(Cookie) session.getAttribute("browseCategoryCookie"));
 			session.setAttribute("userFavouriteCategoriesWithRecentUpdates", favouriteCategories);
 
@@ -135,10 +137,6 @@ public class HistoryController implements Controller {
 
 	private Cookie initialiseNewCookie(String name, String value) {
 		Cookie cookie = new Cookie(name, value);
-		return initialiseNewCookie(cookie);
-	}
-
-	private Cookie initialiseNewCookie(Cookie cookie) {
 		cookie.setMaxAge(365 * 24 * 60 * 60 * 1000);
 		cookie.setPath("/");
 		return cookie;
@@ -218,22 +216,23 @@ public class HistoryController implements Controller {
 				c.setPath("/");
 				c.setMaxAge(0);
 				response.addCookie(c);
-				break;
 			}
 		}
 		cookie.setValue(categories.toString());
-		response.addCookie(initialiseNewCookie(cookie));
+		System.out.println("OUR NEW CATEGORY COOKIE JUST ABOUT TO ADD TO THE RESPONSE ..Name=" + cookie.getName() + " Value= " +  cookie.getValue() );
+		response.addCookie(initialiseNewCookie(cookie.getName(), cookie.getValue()));
 
 	}
 
-	
-	private void favouriteUserCategoriesUpdated(HttpSession session){
+	private void favouriteUserCategoriesUpdated(HttpSession session) {
 		Cookie categoryCookie = (Cookie) session.getAttribute("browseCategoryCookie");
-		HashMap<String, TreeSet<String>> categories = (HashMap<String, TreeSet<String>>) session.getAttribute("categoriesWithRecentUpdates");
-		session.setAttribute("userFavouriteCategoriesWithRecentUpdates", getHistory().favouriteBrowsingCategoryUpdates(categories, categoryCookie));
-		
+		HashMap<String, TreeSet<String>> categories = (HashMap<String, TreeSet<String>>) session
+				.getAttribute("categoriesWithRecentUpdates");
+		session.setAttribute("userFavouriteCategoriesWithRecentUpdates",
+				getHistory().favouriteBrowsingCategoryUpdates(categories, categoryCookie));
+
 	}
-	
+
 	public static void main(String[] args) {
 		StringBuilder sb = new StringBuilder("Collection:4##Event:3");
 		String splitCookie = "Collection:4";
