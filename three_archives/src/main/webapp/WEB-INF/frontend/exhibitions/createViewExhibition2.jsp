@@ -63,7 +63,7 @@
 	</script>
  <style>
 		.header{
-	 	background: url(${pageContext.request.contextPath}/images/Cover.jpg) no-repeat center center fixed; 
+	 	background: url(${pageContext.request.contextPath}/images/Back.jpg) no-repeat center center fixed; 
 			 -webkit-background-size: cover;
   			-moz-background-size: cover;
   			-o-background-size: cover;
@@ -114,7 +114,7 @@
   					
   				<div class="slider4" >
   				<%int flag=1; %>>
-				<%for(int k=0;k<1;k++){%>
+				<%for(int k=0;k<11;k++){%>
 				<%if (flag%2!=0){ %>>
   					<div class="slide">
 						<%if (images[k]!=null){%>

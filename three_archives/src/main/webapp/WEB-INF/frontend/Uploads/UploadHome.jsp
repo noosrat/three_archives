@@ -1,99 +1,202 @@
+<!DOCTYPE html>
+<%@page import="common.fedora.Datastream"%>
+<%@page import="common.fedora.DublinCoreDatastream"%>
+<%@page import="common.fedora.FedoraDigitalObject"%>
+<%@page import="search.SearchAndBrowseCategory"%>
+<%@page import="common.fedora.DatastreamID"%>
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@ taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql"%>
+<%@ taglib prefix="x" uri="http://java.sun.com/jsp/jstl/xml"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <html>
+
 <head>
+
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+<meta name="description" content="">
+<meta name="author" content="">
+
+<title>Personal Histories - Centre for Curating The Archive</title>
+
+<!-- Bootstrap Core CSS -->
+<link
+	href="${pageContext.request.contextPath}/bootstrap-3.3.5/css/bootstrap.min.css"
+	rel="stylesheet">
+<script type="text/javascript"
+	src="${pageContext.request.contextPath}/js/jquery-1.11.3.js"></script>
+<script type="text/javascript"
+	src="${pageContext.request.contextPath}/bootstrap-3.3.5/js/bootstrap.js"></script>
+<script type="text/javascript"
+	src="${pageContext.request.contextPath}/js/typeahead.js"></script>
+	<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
   <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
- <script src="${pageContext.request.contextPath}/jquery.js"></script>
 
-    
-<script>
-
-    // Scrolls to the selected menu item on the page
-    $(function() {
-        $('a[href*=#]:not([href=#])').click(function() {
-            if (location.pathname.replace(/^\//, '') == this.pathname.replace(/^\//, '') || location.hostname == this.hostname) {
-                var target = $(this.hash);
-                target = target.length ? target : $('[name=' + this.hash.slice(1) + ']');
-                if (target.length) {
-                    $('html,body').animate({
-                        scrollTop: target.offset().top
-                    }, 1000);
-                    return false;
-                }
-            }
-        });
-    });
-    
-
-</script>	
+<script type="text/javascript">
+	$(document).ready(function() {
+		var words = "/data/sequins.json";
+		var countries = new Bloodhound({
+			datumTokenizer : Bloodhound.tokenizers.whitespace,
+			queryTokenizer : Bloodhound.tokenizers.whitespace,
+			limit : 5,
+			prefetch : {
+				url : words,
+			}
+		});
+		$('#prefetch .typeahead').typeahead(null, {
+			name : 'countries',
+			source : countries
+		});
+	});
+</script>
 <style>
-  		.thumb {
+	.thumb {
     			height: 120px;
     			border: 1px solid #000;
     			margin: 10px 5px 0 0;
   		}
 		#instruction{
-			border-radius:10px;
-			border: 2px dashed #000;
+			border-radius:2px;
+			border: 2px solid #000;
 		}
 
 		#ImageStore{
-			width:300px;
+			width:250px;
 			height:700px;
 			//width:700px;
 			//height:600;
-			//border: 1px solid #000;
+			border: 1px solid #000;
 			margin:10px;
 			padding:2px;
 			overflow:auto;
-			display:none;	
+			display:none;
+			text-align:center;	
 		}
 		.inputs{
 			width:100%;
-		}		
-		
-	</style>
+		}	
+		.Sequins{
+			width:150px;
+			height:100px;
+			background-color: #ffffff;
+    			border: 1px solid black;
+    			opacity: 0.8;	
+
+		}
+		h3{
+			margin: 5%;
+    			font-weight: bold;
+    			color: #000000;
+		}
+</style>
+</head>
+
 <body>
-<form method="post" action="${pageContext.request.contextPath}/archives/upload_uploads">
-	<div class="page-header">
-  		<h1>Upload</h1>
-		<textarea id="able_selected_image">false</textarea>
-		<textarea id="actions" name="actions"></textarea>
-	</div>
-	<nav class="navbar navbar-default">
-  		<div class="container-fluid">
-    		<div class="navbar-header">
-      			<a class="navbar-brand" href="#">Personal Histories</a>
-    		</div>
-    		<div>
-      		<ul class="nav navbar-nav">
-        		<li class="active"><a href="#">Home</a></li>
-			<li><a href="#">About</a></li>
-			<li><a href="#">Research</a></li>
-        		<li><a href="#">Exhibitions</a></li>
-        		<li><a href="#">Maps</a></li>
-        		<li><a href="#">Browse</a></li>
-      		</ul>
-   		 </div>
-  		</div>
-	</nav> 
-	<div class="container" style="background-color:#fcecdf">
-		<br>
-	<div id="select_files" style="margin:auto; width:400px; background-color:#FCFFFC;border-radius: 25px;padding:10px;padding-left:80px;border: 2px dashed #333300;">
-				<br>
-				<input type="radio" name="archive" value="Harfield" required>Harfield Village<br>
-				<input type="radio" name="archive" value="Snaps" required>Movie Snaps<br>
-				<input type="radio" name="archive" value="MissGay" required>Miss Gay WC<br>
-				<input type="radio" name="archive" value="SpringQueen" required>Spring Queen<br><br>
-				Enter image path (eg.C:/images/): <input type="text" name="storage_path" id="storage_path" required placeholder="C:/images/"><br><br>
-				<output id="list"></output> 
+
+	<!-- Navigation -->
+	<nav class="navbar navbar-inverse navbar-fixed-top navbar-left"
+		role="navigation">
+		<div class="container-fluid">
+			<!-- Brand and toggle get grouped for better mobile display -->
+			<div class="navbar-header">
+				<a class="navbar-brand" href="#">Sequins, Self and Struggle</a>
+			</div>
+			<div class="collapse navbar-collapse"
+				id="bs-example-navbar-collapse-1">
+				<ul class="nav navbar-nav">
+					<li><a
+						href="${pageContext.request.contextPath}/archives/browse">Browse</a></li>
+					<li><a
+						href="${pageContext.request.contextPath}/archives/redirect_exhibitions">Exhibitions</a></li>
+					<li><a
+						href="${pageContext.request.contextPath}/archives/redirect_maps">Maps</a></li>
+					<li><a
+						href="${pageContext.request.contextPath}/archives/redirect_uploads">Uploads</a></li>
+				</ul>
+				<!-- search components-->
+				<div id="bs-example-navbar-collapse-1"
+					class="collapse navbar-collapse">
+
+					<ul class="nav navbar-nav navbar-right">
+						<li class="dropdown"><a
+							href="${pageContext.request.contextPath}/archives/search_objects"
+							class="dropdown-toggle" data-toggle="dropdown" role="button"
+							aria-haspopup="true" aria-expalinded="false">${searchCategories[0]}<span
+								class="caret"></span></a>
+							<ul class="dropdown-menu">
+								<c:forEach var="searchCategory" items="${searchCategories}">
+									<li><a
+										href="${pageContext.request.contextPath}/archives/search_objects/category=${searchCategory}">${searchCategory}</a></li>
+
+								</c:forEach>
+							</ul></li>
+						<li>
+							<form class="navbar-form navbar-right"
+								action="${pageContext.request.contextPath}/archives/search_objects/category=${searchCategories[0]}"
+								method="post">
+								<div class="form-group">
+									<div id="prefetch">
+										<input
+											class="form-control typeahead tt-query tt-hint tt-dropdown-menu tt-suggestion"
+											data-provider="typeahead" type="text"
+											placeholder="Search Archive" autocomplete="off"
+											spellcheck="false" name="terms">
+									</div>
+								</div>
+
+								<button type="submit" class="btn">Search</button>
+
+								<div class="checkbox">
+									<label> <input type="checkbox" id="limitSearch"
+										name="limitSearch" value="limitSearch"><font
+										color="white"> Limit search to these results</font>
+									</label>
+								</div>
+
+							</form>
+						</li>
+					</ul>
+
+
+				</div>
+			</div>
+			<!-- end of search bar components -->
+
+		</div>
+
+	</nav>
+
+
+	<div class="container">
+		<div class="row">
+			<div class="col-lg-12">
+			
+				<div>		
+					<form method="post" action="${pageContext.request.contextPath}/archives/upload_uploads">
+						<textarea id="able_selected_image" style="display:none">false</textarea>
+						<textarea id="actions" name="actions" style="display:none"></textarea>
+						<br>
+				<div id="select_files" style="margin-left:100px" >
+					<br>
+					<h2>Select Archive</h2>
+					<div>
+						<input type="radio" name="archive" value="Harfield" required>Harfield Village<br>
+						<input type="radio" name="archive" value="Snaps" required>Movie Snaps<br>
+						<input type="radio" name="archive" value="MissGay" required>Miss Gay WC<br>
+						<input type="radio" name="archive" value="SpringQueen" required>Spring Queen<br><br>
+					</div>
+					Enter image path (eg.C:/images/): 
+					<input type="text" name="storage_path" id="storage_path" required placeholder="C:/images/"><br><br>
+					<output id="list"></output> 
 				
-				<input type="file" id="files" name="files[]" multiple /><br>
-				<a href="#meta" <button class="btn-success" style="float:center;margin-left:100px" id="nextButton" type="button" onClick="makeClickable()" >Next</button></a><br><br>
-	</div>
+					<input type="file" id="files" name="files[]" multiple /><br>
+					<a href="#meta"<button class="btn-success" style="float:center;margin-left:200px" id="nextButton" type="button" onClick="makeClickable()" >Next</button></a>
+					<br><br>
+				</div>
 	<section id="meta" > 	
 	<br>	
 	<ul style="list-style-type:none;display:inline;margin:0;padding:0;background-color:#fbe3cf">
@@ -112,12 +215,13 @@
 			</div>
 		 	
 			<div id="metadataForm" style="visibility:hidden;margin-top:10px;">
-				<table class="table table-bordered" style="width:50%;">
+				<table class="table table-bordered" style="width:40%;">
 					<thead style="background:#fadabf;">
 						<th>Field</th><th>Value </th>
 					</thead>
+					<textarea id="selected_image" style="display:none"></textarea>
 					<tbody style="background:#ffffff">
-						<tr><td>Filename:</td><td> <textarea id="selected_image"></textarea></td></tr>
+						
 						<tr><td>Title:</td> <td><input class="inputs"  id="title"></td></tr>
 						<tr><td>Creator:</td><td> <input class="inputs" id="creator"></td></tr>
 						<tr><td>Event:</td><td> <input class="inputs" id="event"></td></tr>
@@ -147,6 +251,7 @@
 						<tr><td></td><td>  <button type="button" onClick="cancelSelection()">Cancel</button><button type="button" onClick="submitMetadata()">Update</button></td></tr>
 					</tbody>
 				</table>
+				<br><br><br>
 			
 			</div> 
 		</li>
@@ -155,10 +260,39 @@
 	</section>
 	
 	</div>	
-</form>		
+</form>	
+
+
+
+				</div>
+			</div>
+		</div>
+		<!-- /.row -->
+	</div>
+	<nav class="navbar navbar-inverse navbar-fixed-bottom navbar-fluid"
+		role="navigation">
+		<div class="container">
+			<!-- Brand and toggle get grouped for better mobile display -->
+			<div class="navbar-header">
+				<a class="navbar-brand" href="${pageContext.request.contextPath}">Personal
+					Histories</a>
+			</div>
+		</div>
+		<!-- /.container -->
+	</nav>
+	<!-- /.container -->
+
+
+	<!-- Script to Activate the Carousel -->
+	<script>
+		$('.carousel').carousel({
+			interval : 5000
+		//changes the speed
+		})
+	</script>
+
 </body>
-
-
+<head>
 <script>
 
   function handleFileSelect(evt) {
@@ -307,6 +441,4 @@ function makeClickable()
 
 </script>
 </head>
-	
-
 </html>

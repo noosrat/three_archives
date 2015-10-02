@@ -1,6 +1,14 @@
 package uploads;
+import java.io.BufferedReader;
 import java.io.File;
-
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.StringReader;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import org.apache.commons.httpclient.HttpMethod;
+import org.xml.sax.InputSource;
 import common.fedora.UploadClient;
 
 
@@ -61,11 +69,9 @@ public class UploadService {
 			rights ="<dc:rights>"+metadataArray[14].trim()+"</dc:rights>";
 			collection =metadataArray[15].trim();
 			cords =metadataArray[16].trim();
-			
 			description ="<dc:description>"+"% collection:"+collection+ "% event:"+event+"%"+metadataArray[4].trim()+"% annotation: %"+"</dc:description>";
 			coverage ="<dc:coverage>"+"% "+location+" % " +cords+" %</dc:coverage>";
 		
-			
 			String meta=title+description+creator+publisher+contributor+date+resourcetype+format+source+language+relation+coverage+rights+subject;
 			
 			String qot="\"";
@@ -76,58 +82,101 @@ public class UploadService {
 				file_path=storage_path+filename;
 				file2= new File(file_path);//
 				//get next PID
-				PID="KEL:"+i;
-				client.POST("/objects/"+PID+"/");//
+				//PID="KEL:"+i;
+				
+				
+				HttpMethod newPIDs=client.POST("/objects/nextPID?format=XML");
+				InputStream newPID_xml=newPIDs.getResponseBodyAsStream();
+				String newPID_xml_String =getStringFromInputStream(newPID_xml);
+				
+				
+				DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+				InputSource src = new InputSource();
+				src.setCharacterStream(new StringReader(newPID_xml_String));
+
+				org.w3c.dom.Document doc =  builder.parse(src);
+				String changeme_pid =  doc.getElementsByTagName("pid").item(0).getTextContent();
+				
+				
+				
+				String newPID=getPID(archive, changeme_pid);
+				System.out.println(newPID);
+				
+				client.POST("/objects/"+newPID+"/");//
 				//add the image to the object
 				if(noXMLformat.equals("image/jpeg"))
 				{
-					client.POST("/objects/"+PID+"/datastreams/IMG?controlGroup=M&mimeType="+noXMLformat,file2,false);
+					client.POST("/objects/"+newPID+"/datastreams/IMG?controlGroup=M&mimeType="+noXMLformat,file2,false);
 				}
 				else if (noXMLformat.equals("video/mp4"))
 				{
-					client.POST("/objects/"+PID+"/datastreams/VID?controlGroup=M&mimeType="+noXMLformat,file2,false);
+					client.POST("/objects/"+newPID+"/datastreams/VID?controlGroup=M&mimeType="+noXMLformat,file2,false);
 				}
 				else if (noXMLformat.equals("audio/mp3"))
 				{
-					client.POST("/objects/"+PID+"/datastreams/AUD?controlGroup=M&mimeType="+noXMLformat,file2,false);
+					client.POST("/objects/"+newPID+"/datastreams/AUD?controlGroup=M&mimeType="+noXMLformat,file2,false);
 				}
 				
 				//add the metadata to the object
-				client.PUT("/objects/"+PID+"/datastreams/DC?controlGroup=M&mimeType=text/xml",startTag+meta+endTag);
+				client.PUT("/objects/"+newPID+"/datastreams/DC?controlGroup=M&mimeType=text/xml",startTag+meta+endTag);
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			//send this information to the client who will then upload the file
-
 		}			
 	}
 	
-	public String getPID(String archive, int pid)
+	public static String getPID(String archive, String pid)
 	{
+		String[] parameters=pid.split(":");
 		String tag;
-		int num=pid;
-		if (archive.equals("Harfield"))
-		{
+		String num=parameters[1];
+		if (archive.equals("Harfield")){
 			tag="hv";
 		}
-		else if(archive.equals("Snaps"))
-		{
+		else if(archive.equals("Snaps")){
 			tag="ms";
 		}
-		else if (archive.equals("MissGay"))
-		{
-			tag="sss";
+		else if (archive.equals("MissGay")){
+			tag="mg";
 		}
-		else if (archive.equals("SpringQueen"))
-		{
-			tag="sss";
+		else if (archive.equals("SpringQueen")){
+			tag="sq";
 		}
-		else
-		{
+		else{
 			tag="nul";
 		}
-		return tag+":"+num;//TODO
+		return tag+":"+num;
 	}
+	
+	// convert InputStream to String
+		private static String getStringFromInputStream(InputStream is) {
+			BufferedReader br = null;
+			StringBuilder sb = new StringBuilder();
+			String line;
+			try {
+
+				br = new BufferedReader(new InputStreamReader(is));
+				while ((line = br.readLine()) != null) {
+					sb.append(line);
+				}
+
+			} catch (IOException e) {
+				e.printStackTrace();
+			} finally {
+				if (br != null) {
+					try {
+						br.close();
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+				}
+			}
+
+			return sb.toString();
+
+		}
+
 
 }

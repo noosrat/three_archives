@@ -50,7 +50,22 @@
 		});
 	});
 </script>
+<style>
+	
+		.Sequins{
+			width:150px;
+			height:100px;
+			background-color: #ffffff;
+    			border: 1px solid black;
+    			opacity: 0.8;	
 
+		}
+		h3{
+			margin: 5%;
+    			font-weight: bold;
+    			color: #000000;
+		}
+</style>
 </head>
 
 <body>
@@ -132,8 +147,11 @@
 	<div class="container">
 		<div class="row">
 			<div class="col-lg-12 text-center">
-				<br> <br> <br>
-				<h1>Respective archive home page</h1>
+			<br><br>
+				<div class="row">
+    				<div class="col-sm-6"><img style="width:100%;position:relative;"src="${pageContext.request.contextPath}/images/MISSGAY.jpg"><div class="Sequins" style="position: absolute; top: 70%;left:40%;z-index:10;"><h3>Miss Gay Western Cape</h3></div></div>
+					<div class="col-sm-6"><img style="width:100%;position:relative"src="${pageContext.request.contextPath}/images/SPRINGQUEEN.jpg"><div class="Sequins" style="position: absolute; top: 70%;left:40%;z-index:10;"><h3>Spring Queen</h3></div></div>
+  				</div>
 			</div>
 		</div>
 		<!-- /.row -->

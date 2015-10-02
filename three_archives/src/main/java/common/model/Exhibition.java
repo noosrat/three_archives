@@ -1,62 +1,115 @@
 package common.model;
 
-import java.util.Random;
+import java.io.Serializable;
+//import java.util.Random;
 
-public class Exhibition {
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+@Entity
+@Table(name="EXHIBITION")
+public class Exhibition implements Serializable  {
+	private static final long serialVersionUID = 1L;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	int id;
 	String title;
-	int exhibitionid;
-	int templateid;
-	String[] media;
-	String[] captions;
-	String creator;
 	String description;
-
+	int templateid;
+	String creator;
+	String media;
+	String captions;
+	
 	public Exhibition() {
 
 	}
-	public Exhibition(String title,int id)
-	{
+	public Exhibition(String title, String description,String media) {
 		this.title=title;
-		this.exhibitionid=id;
-		this.AutoExhibitionGenerator();
+		this.description=description;
+		this.media=media;
 	}
-	public Exhibition(String title,int exID,String tempID,String[] media,String creator,String description, String[] captions)
+	public Exhibition(String title, String description, int templateid, String creator,String media,String captions) {
+		this.title=title;
+		this.description=description;
+		this.templateid=templateid;
+		this.creator=creator;
+		this.media=media;
+		this.captions=captions;
+	}
+	
+	
+	public Exhibition(String title,int exID,String tempID,String media,String creator,String description, String captions)
 	{
 		this.title=title;
-		this.exhibitionid=exID;
+		this.id=exID;
 		this.templateid=Integer.parseInt(tempID);
 		this.media=media;
 		this.creator=creator;
 		this.description=description;
 		this.captions= captions;
 	}
-
-	public void setTemplate(String template)
+	public String getCaptions(){
+		return this.captions;
+	}
+	public void setCaptions(String captions){
+		this.captions=captions;
+	}
+	public int getId() {
+	      return this.id;
+	 }
+	 public void setId( int id ) {
+	     this.id = id;
+	  }
+	 public String getTitle() {
+	      return title;
+	 }
+	 public void setTitle( String title ) {
+	     this.title = title;
+	  }
+	 
+	public void setTemplateid(String template)
 	{
 		this.templateid=Integer.parseInt(template);
 	}
-	
-	
-	public int getExhibitionId()
+	public int getTemplateid()
 	{
-		return(this.exhibitionid);
+		return(templateid);
+	}
+	
+	
+	public void setDescription(String description)
+	{
+		this.description=description;
+	}
+	
+	public String getDescription()
+	{
+		return(this.description);
+	}
+	public void setCreator(String creator)
+	{
+		this.creator=creator;
+	}
+	
+	public String getCreator()
+	{
+		return(this.creator);
 	}
 
-	public String getTitle() {
-		return (this.title);
-	}
-
-	public String[] getMedia() {
+	public String getMedia() {
 		return this.media;
 	}
-	public String getTemplateid()
-	{
-		return (String.valueOf(this.templateid));
+	public void setMedia(String media) {
+		this.media=media;
 	}
 	
 	
+	
 
-	public void AutoExhibitionGenerator() {
+	/*public void AutoExhibitionGenerator() {//remove this method
 		Exhibition exhibition = new Exhibition();
 
 		this.media = new String[10];
@@ -70,5 +123,5 @@ public class Exhibition {
 
 		}
 
-	}
+	}*/
 }
