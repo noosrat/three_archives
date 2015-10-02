@@ -5,6 +5,9 @@
 <%@page import="common.fedora.FedoraDigitalObject"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="java.util.List"%>
+<%@page import="java.util.HashSet"%>
+<%@page import="java.util.Set"%>
+
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
@@ -24,7 +27,7 @@
       }
     </style>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAkDhZAIvYefYnMLplLMYFBxACznT-8lmA"></script>
-    <!--<script src="markerclusterer.js" type="text/javascript"></script>-->
+    <!--<script src="${pageContext.request.contextPath}/js/markerclusterer.js" type="text/javascript"></script>-->
     <script>
 var map;
 function initialize() {
@@ -47,16 +50,16 @@ function initialize() {
 	  });
 	
 	var contextPath='<%=request.getContextPath()%>';
-	
+	<%System.out.println(request.getContextPath());%>
 	map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
 	var markers = [];
 	
-	//<%String path = request.getParameter("image");%>
-	//  var contextPath='<%=request.getContextPath()%>';
-	//  console.log('<%=path%>');
-	  //google.maps.event.addListener(map, 'click', function(e) {
-		//	var newimage = {url: contextPath+'/<%=path%>', size: null, origin: null, anchor: null, scaledSize: new google.maps.Size(40, 40)}
-		  	/* newmarker = new google.maps.Marker({
+	<%String path = request.getParameter("image");%>
+	  var contextPath='<%=request.getContextPath()%>';
+	  console.log('<%=path%>');
+	  google.maps.event.addListener(map, 'click', function(e) {
+			var newimage = {url: contextPath+'/<%=path%>', size: null, origin: null, anchor: null, scaledSize: new google.maps.Size(40, 40)}
+		  	 newmarker = new google.maps.Marker({
 		      	position:  e.latLng,
 		      map: map,
 		      //icon: "images/4.jpg",
@@ -64,13 +67,18 @@ function initialize() {
 		      	title: 'Hello World!'});
 		  	
 		  	//markers.push(newmarker);
-		  });*/
-	
-	<%List<FedoraDigitalObject> coord = (List<FedoraDigitalObject>) request.getAttribute("objects");%>
-	<%System.out.println(coord.isEmpty());%>
-	<%System.out.println(coord.get(0));%>
-	<%System.out.println(coord.get(0).getPid());%>
-	var pid='<%=coord.get(0).getPid()%>'
+		  })
+		  <%System.out.println(request.getContextPath());%>
+		  <%String pid="ms:2";%>
+	<%Set<FedoraDigitalObject> coord = (HashSet<FedoraDigitalObject>) request.getAttribute("objects");
+	 
+	for(FedoraDigitalObject object: coord){
+		 System.out.println(object.getPid());
+		 
+		pid =object.getPid();
+	 }
+		 %>
+	var pid='<%=pid%>'
 	var uu="http://localhost:8080/fedora/objects/"+  pid +"/datastreams/IMG/content";
 	var image1 = {url: uu, size: null, origin: null, anchor: null, scaledSize: new google.maps.Size(40, 40)}
 	console.log(uu)
@@ -146,7 +154,7 @@ google.maps.event.addDomListener(window, 'load', initialize);
   <body>
   <div>
   <img src="${pageContext.request.contextPath}/images/kitten.jpg" alt="Smiley face" height="42" width="42">
-   <img src="http://localhost:8080/fedora/objects/ms:1/datastreams/ms1/content" alt="Smiley face" height="42" width="42">
+   <img src="http://localhost:8080/fedora/objects/ms:1/datastreams/IMG/content" alt="Smiley face" height="42" width="42">
     <img src="http://dreamatico.com/data_images/kitten/kitten-2.jpg" alt="Smiley face" height="42" width="42">
   
   </div>

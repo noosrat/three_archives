@@ -32,14 +32,20 @@ public class FedoraXMLResponseParser {
 	public FedoraXMLResponseParser(InputStream response) throws FedoraException {
 		this.response = response;
 		try {
+			System.out.println("Initialise");
+			System.out.println(response);
 			initialise();
+			System.out.println("Initialise");
 		} catch (Exception ex) {
 			throw new FedoraException("Unable to intialise XML Response Parser ", ex);
 		}
 	}
 
 	private void initialise() throws ParserConfigurationException, SAXException, IOException {
+		System.out.println("In Initialise");
+		System.out.println(response);
 		document = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(response);
+		System.out.println(document);
 		document.getDocumentElement().normalize();
 	}
 
@@ -130,23 +136,30 @@ public class FedoraXMLResponseParser {
 					// point already..we addiitonal fields called EVENT and COLLECTION
 					//the description is in the format <dc:description>Collection:xxxxx%Event:xxxxx%other desc%annotations</dc:description>
 					String[] description = textContent.split("%");
+					System.out.println("split");
+					System.out.println("collection: "+description[0]);
 					dublinCoreMetadata.put("COLLECTION",description[0]);//collection
+					System.out.println("collection: "+description[0]);
 					dublinCoreMetadata.put("EVENT", description[1]);//event
+					System.out.println("event: " + description[1]);
 					dublinCoreMetadata.put(dc.name(), description[2]);//actual description
-
+					System.out.println("split ended for desc: " + description[2]);
 				} else if (dc.equals(DublinCore.COVERAGE)) {
 					// the first part of coverage is the location
 					// the second part can remain in co
 					//coverage structure: <dc:coverage>Location:%21,22,11</dc:coverage>
 					String[] coverage = textContent.split("%");
+					System.out.println("split");
 					dublinCoreMetadata.put("LOCATION", coverage[0]);
 					dublinCoreMetadata.put(dc.name(), coverage[1]);
 				} else {
 					dublinCoreMetadata.put(dc.name(), textContent);
 				}
+				System.out.println("finished metadata pop");
 			}
 
 		}
+		System.out.println("end of metadata for loop");
 		dublinCoreDatastream.setDublinCoreMetadata(dublinCoreMetadata);
 		return dublinCoreDatastream;
 	}

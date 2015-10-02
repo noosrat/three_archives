@@ -74,6 +74,8 @@
 						href="${pageContext.request.contextPath}/archives/redirect_maps">Maps</a></li>
 					<li><a
 						href="${pageContext.request.contextPath}/archives/redirect_uploads">Uploads</a></li>
+					<li><a
+						href="${pageContext.request.contextPath}/archives/redirect_downloads">Downloads</a></li>
 				</ul>
 				<!-- search components-->
 				<div id="bs-example-navbar-collapse-1"

@@ -5,6 +5,7 @@ import java.util.HashMap;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import downloads.DownloadController;
 import exhibitions.ExhibitionController;
 import history.HistoryController;
 import maps.MapController;
@@ -22,6 +23,7 @@ public class ServiceDelegator {
 		controllers.put("exhibitions", new ExhibitionController());
 		controllers.put("general", new GeneralController());
 		controllers.put("maps", new MapController());
+		controllers.put("downloads", new DownloadController());
 		controllers.put("uploads", new UploadController());
 		controllers.put("browse", new BrowseController());
 		controllers.put("history", new HistoryController());
@@ -42,12 +44,14 @@ public class ServiceDelegator {
 			} else if (pathInfo.contains("exhibition")) {
 				url = controllers.get("exhibitions").execute(request, response);
 			}else if (pathInfo.contains("maps")) {
-
 				url = controllers.get("maps").execute(request, response);
+			}else if (pathInfo.contains("downloads")) {
+				url = controllers.get("downloads").execute(request, response);
 			} else if (pathInfo.contains("uploads")) {
 				url = controllers.get("uploads").execute(request, response);
 			} else if (pathInfo.contains("history")) {
 				url = controllers.get("history").execute(request, response);
+
 			} else if (pathInfo.contains("snaps")) {
 				url = controllers.get("general").execute(request, response);
 			} else if (pathInfo.contains("sequins")) {

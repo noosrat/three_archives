@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <%@page import="java.io.PrintWriter"%>
 <%@page import="java.util.List"%>
+<%@page import="common.fedora.FedoraDigitalObject"%>
+<%@page import="common.fedora.FedoraException" %>
 <html>
   <head>
     <title>Simple Map</title>
@@ -144,5 +146,6 @@ google.maps.event.addDomListener(window, 'load', initialize);
 			<input type="submit" value="Sumbit Changes" name="sendPoints"/>
 		</form>
 	<input onclick="deletePolygons();" type=button value="Cancel">
+	<img src=<%=request.getAttribute("test")%>></img>
   </body>
 </html>
