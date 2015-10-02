@@ -25,18 +25,12 @@ public class FedoraClient {
 		return client;
 	}
 
-
 	public static FedoraXMLResponseParser execute(FedoraGetRequest fedoraGetRequest) throws FedoraException {
-
 		WebResource webResource = client.resource(fedoraGetRequest.getRequest().toString());
-		System.out.println("Web Resource");
 		ClientResponse clientResponse = webResource.get(ClientResponse.class);
-		System.out.println("Response");
 		fedoraGetRequest.resetRequest();
 
-
 		if (clientResponse.getStatus() == 200) {
-
 			return new FedoraXMLResponseParser(clientResponse.getEntityInputStream());
 		} else {
 			throw new FedoraException("Request execution unsuccessful " + clientResponse.getStatus());

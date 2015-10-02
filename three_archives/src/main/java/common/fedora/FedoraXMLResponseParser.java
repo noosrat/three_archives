@@ -32,20 +32,14 @@ public class FedoraXMLResponseParser {
 	public FedoraXMLResponseParser(InputStream response) throws FedoraException {
 		this.response = response;
 		try {
-			System.out.println("Initialise");
-			System.out.println(response);
 			initialise();
-			System.out.println("Initialise");
 		} catch (Exception ex) {
 			throw new FedoraException("Unable to intialise XML Response Parser ", ex);
 		}
 	}
 
 	private void initialise() throws ParserConfigurationException, SAXException, IOException {
-		System.out.println("In Initialise");
-		System.out.println(response);
 		document = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(response);
-		System.out.println(document);
 		document.getDocumentElement().normalize();
 	}
 
@@ -107,11 +101,9 @@ public class FedoraXMLResponseParser {
 		Node node = nodeList.item(0);
 		Element element = (Element) node;
 
-		System.out.println("xxxxxx Parsing for loop");
 		for (int index = 0; index < element.getElementsByTagName("datastream").getLength(); index++) {
 			DatastreamID dsID = DatastreamID.valueOf(element.getElementsByTagName("datastream").item(index)
 					.getAttributes().getNamedItem("dsid").getTextContent());
-			System.out.println("Parsing datastream for ID: " + dsID);
 			result.add(dsID);
 		}
 
@@ -120,7 +112,6 @@ public class FedoraXMLResponseParser {
 
 	public DublinCoreDatastream parseDublinCoreDatastream(Datastream datastream)
 			throws ParserConfigurationException, SAXException, IOException {
-		System.out.println("In parseDublinCore");
 		DublinCoreDatastream dublinCoreDatastream = new DublinCoreDatastream(datastream);
 		NodeList nodeList = document.getElementsByTagName("oai_dc:dc");
 		Node node = nodeList.item(0);
@@ -133,33 +124,31 @@ public class FedoraXMLResponseParser {
 				String textContent = element.getElementsByTagName(tagName).item(0).getTextContent();
 				if (dc.equals(DublinCore.DESCRIPTION)) {
 					// we want to parse the elements of the description at this
-					// point already..we addiitonal fields called EVENT and COLLECTION
-					//the description is in the format <dc:description>Collection:xxxxx%Event:xxxxx%other desc%annotations</dc:description>
+					// point already..we addiitonal fields called EVENT and
+					// COLLECTION
+					// the description is in the format
+					// <dc:description>Collection:xxxxx%Event:xxxxx%other
+					// desc%annotations</dc:description>
 					String[] description = textContent.split("%");
-					System.out.println("split");
-					System.out.println("collection: "+description[0]);
-					dublinCoreMetadata.put("COLLECTION",description[0]);//collection
-					System.out.println("collection: "+description[0]);
-					dublinCoreMetadata.put("EVENT", description[1]);//event
-					System.out.println("event: " + description[1]);
-					dublinCoreMetadata.put(dc.name(), description[2]);//actual description
-					System.out.println("split ended for desc: " + description[2]);
+					dublinCoreMetadata.put("COLLECTION", description[0]);// collection
+					dublinCoreMetadata.put("EVENT", description[1]);// event
+					dublinCoreMetadata.put(dc.name(), description[2]);// actual
+																		// description
+
 				} else if (dc.equals(DublinCore.COVERAGE)) {
 					// the first part of coverage is the location
 					// the second part can remain in co
-					//coverage structure: <dc:coverage>Location:%21,22,11</dc:coverage>
+					// coverage structure:
+					// <dc:coverage>Location:%21,22,11</dc:coverage>
 					String[] coverage = textContent.split("%");
-					System.out.println("split");
 					dublinCoreMetadata.put("LOCATION", coverage[0]);
 					dublinCoreMetadata.put(dc.name(), coverage[1]);
 				} else {
 					dublinCoreMetadata.put(dc.name(), textContent);
 				}
-				System.out.println("finished metadata pop");
 			}
 
 		}
-		System.out.println("end of metadata for loop");
 		dublinCoreDatastream.setDublinCoreMetadata(dublinCoreMetadata);
 		return dublinCoreDatastream;
 	}
@@ -199,12 +188,10 @@ public class FedoraXMLResponseParser {
 		datastream.setSize(Integer.parseInt(size));
 		datastream.setVersionable(Boolean.parseBoolean(versionable));
 		datastream.setLocation(location);
-		System.out.println("Successfully parsed datastream object " + datastream.toString());
 		return datastream;
 	}
 
 	public Datastream parseGetDatastream() throws FedoraException {
-		System.out.println("In parseDatastream");
 		NodeList nodeList = document.getElementsByTagName("datastreamProfile");
 		Node node = nodeList.item(0);
 		return parseDatastream(0, node, "");

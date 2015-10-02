@@ -61,7 +61,7 @@
 		<div class="container-fluid">
 			<!-- Brand and toggle get grouped for better mobile display -->
 			<div class="navbar-header">
-				<a class="navbar-brand" href="#">Movie Snaps</a>
+				<a class="navbar-brand" href="${pageContext.request.contextPath}/archives/MovieSnaps">Movie Snaps</a>
 			</div>
 			<div class="collapse navbar-collapse"
 				id="bs-example-navbar-collapse-1">

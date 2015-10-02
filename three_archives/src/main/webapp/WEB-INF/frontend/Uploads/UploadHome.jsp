@@ -194,7 +194,7 @@
 					<output id="list"></output> 
 				
 					<input type="file" id="files" name="files[]" multiple /><br>
-					<a href="#meta"<button class="btn-success" style="float:center;margin-left:200px" id="nextButton" type="button" onClick="makeClickable()" >Next</button></a>
+					<a href="#meta"<button class="btn-success" style="float:center;margin-left:200px" id="nextButton" type="button" onClick="makeClickable()">Next</button></a>
 					<br><br>
 				</div>
 	<section id="meta" > 	

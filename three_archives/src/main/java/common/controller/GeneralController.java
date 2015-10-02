@@ -11,6 +11,7 @@ import javax.servlet.http.HttpSession;
 
 import common.model.Exhibition;
 import exhibitions.ManageExhibition;
+import history.HistoryController;
 import search.SearchController;
 
 public class GeneralController implements Controller {
@@ -24,20 +25,25 @@ public class GeneralController implements Controller {
 		
 		HttpSession session = request.getSession();
 		request.setAttribute("searchCategories", SearchController.retrieveSearchCategories());
-		if (request.getPathInfo().substring(1).contains("redirect_sequins")) {
+		HistoryController historyController = new HistoryController();
+		String pathInfo =  request.getPathInfo().substring(1);
+		System.out.println(pathInfo);
+		if (pathInfo.equalsIgnoreCase("SequinsSelfAndStruggle")){
 			session.setAttribute("ARCHIVE", "Sequins, Self and Struggle");
 			session.setAttribute("MEDIA_CART", cart);
+			historyController.execute(request, response);
+			return "sequinsSelfAndStruggleHome.jsp";
 
-			return "sequinsSelfStruggleHome.jsp";
-
-		} else if (request.getPathInfo().substring(1).contains("redirect_snaps")) {
+		} else if (pathInfo.equalsIgnoreCase("MovieSnaps")) {
 			session.setAttribute("ARCHIVE", "Movie Snaps");
 			session.setAttribute("MEDIA_CART", cart);
+			historyController.execute(request, response);
 			return "movieSnapsHome.jsp";
 
-		} else if (request.getPathInfo().substring(1).contains("redirect_harfield")) {
+		} else if (pathInfo.equalsIgnoreCase("HarfieldVillage")) {
 			session.setAttribute("ARCHIVE", "Harfield Village");
 			session.setAttribute("MEDIA_CART", cart);
+			historyController.execute(request, response);
 			return "harfieldVillageHome.jsp";
 
 		}

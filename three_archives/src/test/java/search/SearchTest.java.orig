@@ -4,6 +4,7 @@ package search;
 public class SearchTest {
 
 	private Search instance;
+	private FedoraCommunicator fedoraCommunicator;
 	
 //	@Before
 //	public void setUp() throws Exception {

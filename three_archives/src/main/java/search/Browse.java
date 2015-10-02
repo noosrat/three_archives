@@ -28,7 +28,6 @@ public class Browse extends Service {
 	public static void initialise() throws FedoraException, SolrServerException {
 		System.out.println("In browse cosntructor");
 		fedoraDigitalObjects = SearchController.getSearch().findFedoraDigitalObjects("*");
-		System.out.println("Processed fedora digital objects, found " + fedoraDigitalObjects.size() + " objects");
 		setUpBrowsingCategoriesAndValues(fedoraDigitalObjects);
 		SearchController.buildAutocompleteJSONFile(fedoraDigitalObjects);
 	}
@@ -69,7 +68,6 @@ public class Browse extends Service {
 	}
 
 	private static void setUpBrowsingCategoriesAndValues(Set<FedoraDigitalObject> fedoraDigitalObjects) {
-		System.out.println("Setting up browsing categories and values ");
 		TreeMap<String, TreeSet<String>> searchAndBrowseCategoriesAndValues = new TreeMap<String, TreeSet<String>>();
 
 		/*
@@ -135,7 +133,6 @@ public class Browse extends Service {
 			searchAndBrowseCategoriesAndValues.put(cat.name(), new TreeSet<String>(values));
 
 		}
-		System.out.println("BROWSING CATEGORIES " + searchAndBrowseCategoriesAndValues);
 		removeEmptyCategories(searchAndBrowseCategoriesAndValues);
 		setBrowsingCategories(searchAndBrowseCategoriesAndValues);
 	}
@@ -155,8 +152,6 @@ public class Browse extends Service {
 			String filterValue) {
 
 		Set<FedoraDigitalObject> filteredObjects = new HashSet<FedoraDigitalObject>(objectsToFilter);
-		System.out.println("About to filter objects" + filteredObjects.toString() + " by : " + filterCategory
-				+ " value=" + filterValue);
 
 		for (Iterator<FedoraDigitalObject> iterator = filteredObjects.iterator(); iterator.hasNext();) {
 			FedoraDigitalObject digitalObject = iterator.next();
@@ -166,7 +161,6 @@ public class Browse extends Service {
 				String title = dc.getDublinCoreMetadata().get(DublinCore.TITLE.name());
 				if (title != null && !title.trim().isEmpty()) {
 					if (!title.startsWith(filterValue)) {
-						System.out.println("removing object with PID " + digitalObject.getPid() + "and title " + title);
 						iterator.remove();
 					}
 				}
@@ -174,7 +168,6 @@ public class Browse extends Service {
 			case YEAR:
 				String date = dc.getDublinCoreMetadata().get(DublinCore.DATE.name());
 				if (!(date != null && date.contains(filterValue))) {
-					System.out.println("removing object with PID " + digitalObject.getPid() + "and date " + date);
 					iterator.remove();
 				}
 				break;
@@ -189,8 +182,6 @@ public class Browse extends Service {
 				String dublinCoreEvent = dc.getDublinCoreMetadata().get("EVENT");
 				if (dublinCoreEvent != null && !dublinCoreEvent.isEmpty()) {
 					if (!(dublinCoreEvent.contains(filterValue))) {
-						System.out.println("removing object with PID " + digitalObject.getPid()
-								+ "and collection value " + dublinCoreEvent);
 						iterator.remove();
 					}
 				}
@@ -204,8 +195,6 @@ public class Browse extends Service {
 				String dublinCoreCollection = dc.getDublinCoreMetadata().get("COLLECTION");
 				if (dublinCoreCollection != null && !dublinCoreCollection.isEmpty()) {
 					if (!(dublinCoreCollection.contains(filterValue))) {
-						System.out.println("removing object with PID " + digitalObject.getPid()
-								+ "and collection value " + dublinCoreCollection);
 						iterator.remove();
 					}
 				}
@@ -228,7 +217,6 @@ public class Browse extends Service {
 				if (t != null && !t.isEmpty()) {
 					format += " " + t.toLowerCase();
 				}
-				System.out.println("********************************************Media type and format found " + format);
 				String media = filterValue.toLowerCase();
 				// check for JPG, JPEG, GIF, PNG
 				if (format != null && !format.isEmpty()) {
@@ -246,9 +234,7 @@ public class Browse extends Service {
 		TreeMap<String, TreeSet<String>> filteredCategories = new TreeMap<String, TreeSet<String>>(
 				getBrowsingCategories());
 		filteredCategories.remove(filterCategory);
-		System.out.println("Filtered categories " + filteredCategories);
 		setFilteredBrowsingCategories(filteredCategories);
-		System.out.println("Successfully filtered from " + objectsToFilter.size() + " to " + filteredObjects.size());
 		setFilteredDigitalObjects(filteredObjects);
 	}
 

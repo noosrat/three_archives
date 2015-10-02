@@ -35,7 +35,7 @@
 
 <script type="text/javascript">
 	$(document).ready(function() {
-		var words = "/data/harfield.json";
+		var words = "/data/sequins.json";
 		var countries = new Bloodhound({
 			datumTokenizer : Bloodhound.tokenizers.whitespace,
 			queryTokenizer : Bloodhound.tokenizers.whitespace,
@@ -50,7 +50,22 @@
 		});
 	});
 </script>
+<style>
+	
+		.Sequins{
+			width:150px;
+			height:100px;
+			background-color: #ffffff;
+    			border: 1px solid black;
+    			opacity: 0.8;	
 
+		}
+		h3{
+			margin: 5%;
+    			font-weight: bold;
+    			color: #000000;
+		}
+</style>
 </head>
 
 <body>
@@ -61,7 +76,7 @@
 		<div class="container-fluid">
 			<!-- Brand and toggle get grouped for better mobile display -->
 			<div class="navbar-header">
-				<a class="navbar-brand" href="#">Harfield Village</a>
+				<a class="navbar-brand" href="${pageContext.request.contextPath}/archives/SequinsSelfAndStruggle">Sequins, Self and Struggle</a>
 			</div>
 			<div class="collapse navbar-collapse"
 				id="bs-example-navbar-collapse-1">
@@ -74,6 +89,8 @@
 						href="${pageContext.request.contextPath}/archives/redirect_maps">Maps</a></li>
 					<li><a
 						href="${pageContext.request.contextPath}/archives/redirect_uploads">Uploads</a></li>
+					<li><a
+						href="${pageContext.request.contextPath}/archives/redirect_downloads">Downloads</a></li>
 				</ul>
 				<!-- search components-->
 				<div id="bs-example-navbar-collapse-1"
@@ -125,14 +142,18 @@
 			<!-- end of search bar components -->
 
 		</div>
+
 	</nav>
 
 
 	<div class="container">
 		<div class="row">
 			<div class="col-lg-12 text-center">
-				<br> <br> <br>
-				<h1>Respective archive home page</h1>
+			<br><br>
+				<div class="row">
+    				<div class="col-sm-6"><img style="width:100%;position:relative;"src="${pageContext.request.contextPath}/images/MISSGAY.jpg"><div class="Sequins" style="position: absolute; top: 70%;left:40%;z-index:10;"><h3>Miss Gay Western Cape</h3></div></div>
+					<div class="col-sm-6"><img style="width:100%;position:relative"src="${pageContext.request.contextPath}/images/SPRINGQUEEN.jpg"><div class="Sequins" style="position: absolute; top: 70%;left:40%;z-index:10;"><h3>Spring Queen</h3></div></div>
+  				</div>
 			</div>
 		</div>
 		<!-- /.row -->

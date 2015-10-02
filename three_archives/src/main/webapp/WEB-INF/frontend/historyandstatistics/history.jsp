@@ -30,12 +30,32 @@
 <link
 	href="${pageContext.request.contextPath}/css/bootstrap-lightbox.min.css"
 	rel="stylesheet">
+<link href="${pageContext.request.contextPath}/css/tagcloud.css"
+	rel="stylesheet">
 
 <script type="text/javascript"
 	src="${pageContext.request.contextPath}/js/jquery-1.11.3.js"></script>
 <script type="text/javascript"
 	src="${pageContext.request.contextPath}/bootstrap-3.3.5/js/bootstrap.js"></script>
+<script src="${pageContext.request.contextPath}/js/jquery.tagcloud.js"
+	type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript" charset="utf-8">
+	$.fn.tagcloud.defaults = {
+		size : {
+			start : 12,
+			end : 20,
+			unit : 'pt'
+		},
+		color : {
+			start : '#cde',
+			end : '#f52'
+		}
+	};
 
+	$(function() {
+		$('#tagcloud a').tagcloud();
+	});
+</script>
 </head>
 
 
@@ -187,22 +207,41 @@
 					<h3>Your favourite(top 3) category updates(if any)</h3>
 				</div>
 				<div class="row">
-					<div class="col-sm-4">
-						<div class="panel panel-default">
-							<div class="panel-heading">
-								<h3 class="panel-title">Category</h3>
-							</div>
-							<div class="panel-body">Value</div>
-						</div>
 
-					</div>
+					<c:forEach var="favouriteCategoriesUpdates"
+						items="${userFavouriteCategoriesWithRecentUpdates}">
+
+						<div class="col-sm-4">
+							<div class="panel panel-default">
+								<div class="panel-heading">
+									<h3 class="panel-title">${favouriteCategoriesUpdates}</h3>
+								</div>
+								<div class="panel-body">Value</div>
+							</div>
+
+						</div>
+					</c:forEach>
 
 				</div>
 				<!-- container fluid -->
 
+				<div id="container">
+					<div id="demo">
+						<div id="tagcloud">
+							<c:forEach var="tag" items="${tagCloud}">
+								<a href="${pageContext.request.contextPath}/archives/search_objects/category=SEARCH_ALL?terms=${tag.key}" rel="${tag.value}">${tag.key}</a>
+							</c:forEach>
+						</div>
+					</div>
+				</div>
 
+				<br>
+				<br>
+				<br>
+				<br>
 			</div>
 		</div>
+
 		<!-- wrapper -->
 		<script type="text/javascript"
 			src="${pageContext.request.contextPath}/js/lightbox.js"></script>

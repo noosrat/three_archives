@@ -35,7 +35,7 @@
 
 <script type="text/javascript">
 	$(document).ready(function() {
-		var words = "/data/harfield.json";
+		var words = "/data/HarfieldVillage.json";
 		var countries = new Bloodhound({
 			datumTokenizer : Bloodhound.tokenizers.whitespace,
 			queryTokenizer : Bloodhound.tokenizers.whitespace,
@@ -61,7 +61,7 @@
 		<div class="container-fluid">
 			<!-- Brand and toggle get grouped for better mobile display -->
 			<div class="navbar-header">
-				<a class="navbar-brand" href="#">Harfield Village</a>
+				<a class="navbar-brand" href="${pageContext.request.contextPath}/archives/HarfieldVillage">Harfield Village</a>
 			</div>
 			<div class="collapse navbar-collapse"
 				id="bs-example-navbar-collapse-1">
@@ -74,8 +74,6 @@
 						href="${pageContext.request.contextPath}/archives/redirect_maps">Maps</a></li>
 					<li><a
 						href="${pageContext.request.contextPath}/archives/redirect_uploads">Uploads</a></li>
-					<li><a
-						href="${pageContext.request.contextPath}/archives/redirect_downloads">Downloads</a></li>
 				</ul>
 				<!-- search components-->
 				<div id="bs-example-navbar-collapse-1"
@@ -144,7 +142,7 @@
 		<div class="container">
 			<!-- Brand and toggle get grouped for better mobile display -->
 			<div class="navbar-header">
-				<a class="navbar-brand" href="${pageContext.request.contextPath}">Personal
+				<a class="navbar-brand" href="${pageContext.request.contextPath}/archives/">Personal
 					Histories</a>
 			</div>
 		</div>

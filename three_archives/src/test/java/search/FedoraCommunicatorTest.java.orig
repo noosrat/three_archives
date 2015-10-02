@@ -4,7 +4,7 @@ package search;
 //remember that we are not trying to test fedora code..we are trying to test OUR code
 public class FedoraCommunicatorTest {
 
-//	private FedoraCommunicator instance;
+	private FedoraCommunicator instance;
 //	private FedoraClient fedoraClient;
 //
 //	@Before

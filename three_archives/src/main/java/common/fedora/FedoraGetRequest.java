@@ -2,14 +2,11 @@ package common.fedora;
 
 import java.util.TreeMap;
 
-import org.apache.log4j.Logger;
-
 /*
  * Notes on the class: our result format is ALWAYS to be in XML
  */
 public class FedoraGetRequest {
 
-	private final static Logger LOG = Logger.getLogger(FedoraGetRequest.class);
 
 	private String persistentIdentifier;
 	private StringBuilder request;
@@ -81,8 +78,6 @@ public class FedoraGetRequest {
 		for (DublinCore dc : toReturn) {
 			getRequest().append(dc.getDescription()).append("=true&");
 		}
-		System.out.println("Request after dublin core fields specified "
-				+ getRequest());
 		setQueryParameters(queryParameters);
 
 		return this;
@@ -91,7 +86,6 @@ public class FedoraGetRequest {
 	// /objects/{pid}/datastreams/{dsID}/content ? [asOfDateTime] [download]
 	// /objects/demo:29/datastreams/DC/content
 	public FedoraGetRequest getDatastreamDissemination(String dsid, TreeMap<QueryParameters, String> queryParameters) {
-		System.out.print("InDatastreamDissemination");
 		getPrefix().append("/datastreams/").append(dsid).append("/content?");
 		setQueryParameters(queryParameters);
 		return this;
@@ -175,15 +169,12 @@ public class FedoraGetRequest {
 		getPrefix().append("/objectXML");
 		return this;
 	}
-	
 
 	private void processParameters() {
 		/*
 		 * we have a whole map of all the parameters now we must append it to
 		 * our string
 		 */
-		System.out.println("Processing parameters" + queryParameters.values());
-
 		for (QueryParameters key : queryParameters.keySet()) {
 			getRequest().append(key.getDescription()).append("=")
 					.append(getQueryParameters().get(key)).append("&");
@@ -194,9 +185,6 @@ public class FedoraGetRequest {
 			getRequest().delete(getRequest().length() - 1,
 					getRequest().length());
 		}
-
-		System.out.println("Finished processing parameters, request: "
-				+ getRequest().toString());
 
 	}
 

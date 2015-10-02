@@ -33,6 +33,10 @@
 <script type="text/javascript"
 	src="${pageContext.request.contextPath}/js/typeahead.js"></script>
 
+<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+  <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+ 
 <script type="text/javascript">
 	$(document).ready(function() {
 		var words = "/data/sequins.json";
@@ -49,22 +53,26 @@
 			source : countries
 		});
 	});
+	// Scrolls to the selected menu item on the page
+    $(function() {
+        $('a[href*=#]:not([href=#])').click(function() {
+            if (location.pathname.replace(/^\//, '') == this.pathname.replace(/^\//, '') || location.hostname == this.hostname) {
+                var target = $(this.hash);
+                target = target.length ? target : $('[name=' + this.hash.slice(1) + ']');
+                if (target.length) {
+                    $('html,body').animate({
+                        scrollTop: target.offset().top
+                    }, 1000);
+                    return false;
+                }
+            }
+        });
+    });
+
 </script>
 <style>
 	
-		.Sequins{
-			width:150px;
-			height:100px;
-			background-color: #ffffff;
-    			border: 1px solid black;
-    			opacity: 0.8;	
 
-		}
-		h3{
-			margin: 5%;
-    			font-weight: bold;
-    			color: #000000;
-		}
 </style>
 </head>
 
@@ -85,12 +93,11 @@
 						href="${pageContext.request.contextPath}/archives/browse">Browse</a></li>
 					<li><a
 						href="${pageContext.request.contextPath}/archives/redirect_exhibitions">Exhibitions</a></li>
+
 					<li><a
 						href="${pageContext.request.contextPath}/archives/redirect_maps">Maps</a></li>
 					<li><a
 						href="${pageContext.request.contextPath}/archives/redirect_uploads">Uploads</a></li>
-					<li><a
-						href="${pageContext.request.contextPath}/archives/redirect_downloads">Downloads</a></li>
 				</ul>
 				<!-- search components-->
 				<div id="bs-example-navbar-collapse-1"
@@ -150,10 +157,25 @@
 		<div class="row">
 			<div class="col-lg-12 text-center">
 			<br><br>
-				<div class="row">
-    				<div class="col-sm-6"><img style="width:100%;position:relative;"src="${pageContext.request.contextPath}/images/MISSGAY.jpg"><div class="Sequins" style="position: absolute; top: 70%;left:40%;z-index:10;"><h3>Miss Gay Western Cape</h3></div></div>
-					<div class="col-sm-6"><img style="width:100%;position:relative"src="${pageContext.request.contextPath}/images/SPRINGQUEEN.jpg"><div class="Sequins" style="position: absolute; top: 70%;left:40%;z-index:10;"><h3>Spring Queen</h3></div></div>
-  				</div>
+				
+
+
+			<form method="post" action="${pageContext.request.contextPath}/archives/create_exhibitions">
+		<br>
+		<h1>Select a template</h1>
+		<ul id="templateSelection" style="list-style-type:none;margin:0;padding:0;margin:auto;">
+			<li style="display:inline;font-weight:bold; padding:10px;">
+				<input type="image" name="selectedTemplate" value=1 src="${pageContext.request.contextPath}/images/template1.jpg" alt="Template 1">
+			</li>
+			<li style="display:inline;font-weight:bold;padding:10px;">
+				<input type="image" name="selectedTemplate" value=2 src="${pageContext.request.contextPath}/images/template2.jpg" alt="Template 2">
+			</li>
+		</ul>
+		<br><br>
+	</form>
+
+
+
 			</div>
 		</div>
 		<!-- /.row -->
@@ -183,3 +205,10 @@
 </body>
 
 </html>
+
+
+
+
+
+
+
