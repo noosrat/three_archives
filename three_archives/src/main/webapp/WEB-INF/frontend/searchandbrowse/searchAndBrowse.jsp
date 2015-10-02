@@ -77,17 +77,17 @@ $(document).ready(function() {
 						<c:when test="${ARCHIVE =='Sequins, Self and Struggle'}">
 
 							<a class="navbar-brand"
-								href="${pageContext.request.contextPath}/archives/redirect_sequins">${ARCHIVE}</a>
+								href="${pageContext.request.contextPath}/archives/SequinsSelfandStruggle">${ARCHIVE}</a>
 						</c:when>
 						<c:when test="${ARCHIVE =='Harfield Village'}">
 
 							<a class="navbar-brand"
-								href="${pageContext.request.contextPath}/archives/redirect_harfield">${ARCHIVE}</a>
+								href="${pageContext.request.contextPath}/archives/HarfieldVillage">${ARCHIVE}</a>
 						</c:when>
 						<c:when test="${ARCHIVE =='Movie Snaps'}">
 
 							<a class="navbar-brand"
-								href="${pageContext.request.contextPath}/archives/redirect_snaps">${ARCHIVE}</a>
+								href="${pageContext.request.contextPath}/archives/MovieSnaps">${ARCHIVE}</a>
 						</c:when>
 					</c:choose>
 				</div>

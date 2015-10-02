@@ -35,7 +35,7 @@
 
 <script type="text/javascript">
 	$(document).ready(function() {
-		var words = "/data/harfield.json";
+		var words = "/data/SequinsSelfsndStruggle.json";
 		var countries = new Bloodhound({
 			datumTokenizer : Bloodhound.tokenizers.whitespace,
 			queryTokenizer : Bloodhound.tokenizers.whitespace,
@@ -61,7 +61,7 @@
 		<div class="container-fluid">
 			<!-- Brand and toggle get grouped for better mobile display -->
 			<div class="navbar-header">
-				<a class="navbar-brand" href="#">Harfield Village</a>
+				<a class="navbar-brand" href="${pageContext.request.contextPath}/archives/SequinsSelfAndStruggle">Sequins, Self and Struggle</a>
 			</div>
 			<div class="collapse navbar-collapse"
 				id="bs-example-navbar-collapse-1">
@@ -125,6 +125,7 @@
 			<!-- end of search bar components -->
 
 		</div>
+
 	</nav>
 
 

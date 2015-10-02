@@ -55,7 +55,7 @@
                 <div class="fill" style="background-image:url(${pageContext.request.contextPath}/images/spring.jpg);"></div>
                 <div class="carousel-caption">
                     <h2>Sequins, Self and Struggle</h2>
-		 <p><a class="btn btn-large btn-primary" href="${pageContext.request.contextPath}/archives/SequinsSelfStruggle">Explore Archive</a></p>
+		 <p><a class="btn btn-large btn-primary" href="${pageContext.request.contextPath}/archives/SequinsSelfandStruggle">Explore Archive</a></p>
                 </div>
             </div>
             <div class="item">

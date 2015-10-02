@@ -17,6 +17,7 @@ import common.fedora.FedoraDigitalObject;
 public class HistoryController implements Controller {
 
 	private static History history = new History();
+	private static String archive;
 	private static HashMap<String, String> defaultCookies = new HashMap<String, String>();
 
 	static {
@@ -37,18 +38,22 @@ public class HistoryController implements Controller {
 		// the following two lines need to happen as soon as we select which
 		// archive we are looking in...before selecting browse
 		String pathInfo = request.getPathInfo().substring(1);
-		if (pathInfo.equals("SequinsSelfStruggle") || pathInfo.equals("MovieSnaps")
-				|| pathInfo.equals("HarfieldVillage")) {
+		if (pathInfo.equalsIgnoreCase("SequinsSelfandStruggle") || pathInfo.equalsIgnoreCase("MovieSnaps")
+				|| pathInfo.equalsIgnoreCase("HarfieldVillage")) {
+			archive = ((String) request.getSession().getAttribute("ARCHIVE")).replaceAll("[^a-zA-Z0-9\\s]", "")
+					.replaceAll("\\s+", "");
 			initialiseUserCookies(request, response);
+			return null;
 		} else {
 			initialiseUserSessionAttributesFromCookies(request, response);
 
 			if (request.getPathInfo().contains("browse")) {
 				updateCategoryCookieBasedOnCategoryBrowse(request, response);
 			}
-			// favouriteUserCategoriesUpdated(request.getSession());
 			displayUserSessioAtt(request);
 		}
+		// for every request we make we must append to the wordle json sting
+		// within the request....and then here we persist it
 		return "WEB-INF/frontend/historyandstatistics/history.jsp";
 	}
 
@@ -58,8 +63,9 @@ public class HistoryController implements Controller {
 				"***********************************************************************************************************************");
 		System.out.println("dateLastVisited: " + session.getAttribute("dateLastVisited"));
 		System.out.println("browseCategoryCookie" + ((Cookie) session.getAttribute("browseCategoryCookie")).getValue());
-		//System.out.println("objectsModifiendSinceLastVisit "
-		//		+ ((ArrayList<FedoraDigitalObject>) session.getAttribute("objectsModifiedSinceLastVisit")).toString());
+		// System.out.println("objectsModifiendSinceLastVisit "
+		// + ((ArrayList<FedoraDigitalObject>)
+		// session.getAttribute("objectsModifiedSinceLastVisit")).toString());
 		System.out.println("categoriesRecentUpdates "
 				+ ((HashMap<String, TreeSet<String>>) session.getAttribute("categoriesWithRecentUpdates")).keySet()
 						.toString());
@@ -103,7 +109,8 @@ public class HistoryController implements Controller {
 		if (session.getAttribute("browseCategoryCookie") == null) {
 			System.out.println("No value for browseCategoryCookie");
 			session.setAttribute("browseCategoryCookie", getBrowseCategoryCookie(request, response));
-			System.out.println("New value for browseCategoryCookie " + ((Cookie)session.getAttribute("browseCategoryCookie")).getValue());
+			System.out.println("New value for browseCategoryCookie "
+					+ ((Cookie) session.getAttribute("browseCategoryCookie")).getValue());
 		}
 		if (session.getAttribute("objectsModifiedSinceLastVisit") == null) {
 			System.out.println("No value for objectsModifiedSinceLastVisit within the session");
@@ -128,6 +135,11 @@ public class HistoryController implements Controller {
 					(Cookie) session.getAttribute("browseCategoryCookie"));
 			session.setAttribute("userFavouriteCategoriesWithRecentUpdates", favouriteCategories);
 
+		}
+		if (session.getAttribute("tagCloud") == null) {
+			System.out.println("The tagcloud value has not been set for the session");
+			String filename = "../webapps/data/" + archive + "TagCloud.txt";
+			session.setAttribute("tagCloud", getHistory().constructTagCloud(filename));
 		}
 		// if(session.) this last one is for what is generally browsed but this
 		// will be stored in a file anyway
@@ -171,14 +183,11 @@ public class HistoryController implements Controller {
 	}
 
 	private Cookie getBrowseCategoryCookie(HttpServletRequest request, HttpServletResponse response) {
-		System.out.println("Getting browse category cookie");
-		String archive = ((String) request.getSession().getAttribute("ARCHIVE")).replaceAll("[^a-zA-Z0-9\\s]", "")
-				.replaceAll("\\s+", "") + "Categories";
-
+		System.out.println("Getting browse category cookie for " + archive);
 		Cookie[] cookies = request.getCookies();
 		System.out.println("COOKIES: " + cookies.length);
 		for (Cookie cookie : cookies) {
-			if (cookie.getName().equalsIgnoreCase(archive)) {
+			if (cookie.getName().equalsIgnoreCase(archive + "Categories")) {
 				return cookie;
 			}
 		}
@@ -219,18 +228,15 @@ public class HistoryController implements Controller {
 			}
 		}
 		cookie.setValue(categories.toString());
-		System.out.println("OUR NEW CATEGORY COOKIE JUST ABOUT TO ADD TO THE RESPONSE ..Name=" + cookie.getName() + " Value= " +  cookie.getValue() );
+		System.out.println("OUR NEW CATEGORY COOKIE JUST ABOUT TO ADD TO THE RESPONSE ..Name=" + cookie.getName()
+				+ " Value= " + cookie.getValue());
 		response.addCookie(initialiseNewCookie(cookie.getName(), cookie.getValue()));
 
 	}
 
-	private void favouriteUserCategoriesUpdated(HttpSession session) {
-		Cookie categoryCookie = (Cookie) session.getAttribute("browseCategoryCookie");
-		HashMap<String, TreeSet<String>> categories = (HashMap<String, TreeSet<String>>) session
-				.getAttribute("categoriesWithRecentUpdates");
-		session.setAttribute("userFavouriteCategoriesWithRecentUpdates",
-				getHistory().favouriteBrowsingCategoryUpdates(categories, categoryCookie));
-
+	public static void persistNecessaryRequestInformation() {
+		String filename = "../webapps/data/" + archive + "TagCloud.txt";
+		getHistory().persistTagCloudText(filename);
 	}
 
 	public static void main(String[] args) {

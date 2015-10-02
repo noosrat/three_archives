@@ -10,6 +10,7 @@ import org.apache.solr.client.solrj.SolrServerException;
 import common.controller.Controller;
 import common.fedora.FedoraDigitalObject;
 import common.fedora.FedoraException;
+import history.History;
 import history.HistoryController;
 
 public class BrowseController implements Controller {
@@ -48,7 +49,12 @@ public class BrowseController implements Controller {
 		if (category == null || category.isEmpty()) {
 			browseAllFedoraObjects(request, response);
 		} else {
-
+			/*
+			 * we want to add these values to our word cloud...both the category and the actual value
+			 * 
+			 */
+			History.addTextToTagCloud(category);
+			History.addTextToTagCloud(value);
 			/*
 			 * our category is not null...therefore we need to start filtering
 			 * the searches by what has been selected by the user

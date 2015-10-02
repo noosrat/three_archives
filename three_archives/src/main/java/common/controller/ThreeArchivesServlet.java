@@ -8,6 +8,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import history.HistoryController;
+
 /**
  * Servlet implementation class ThreeArchivesServlet
  */
@@ -32,6 +34,7 @@ public class ThreeArchivesServlet extends HttpServlet {
 		String result = serviceDelegator.execute(request, response);
 		request.getServletContext().getRequestDispatcher("/" + result).forward(request, response);
 	}
+	
 
 	private void clearAllOtherCookies(HttpServletRequest request, HttpServletResponse response){
 		Cookie[] cookies = request.getCookies();

@@ -11,20 +11,24 @@ public class GeneralController implements Controller {
 
 	public String execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		HttpSession session = request.getSession();
+		
 		request.setAttribute("searchCategories", SearchController.retrieveSearchCategories());
 		HistoryController historyController = new HistoryController();
-		historyController.execute(request, response);
 		String pathInfo =  request.getPathInfo().substring(1);
-		if (pathInfo.equalsIgnoreCase("SequinsSelfStruggle")){
+		System.out.println(pathInfo);
+		if (pathInfo.equalsIgnoreCase("SequinsSelfAndStruggle")){
 			session.setAttribute("ARCHIVE", "Sequins, Self and Struggle");
-			return "sequinsSelfStruggleHome.jsp";
+			historyController.execute(request, response);
+			return "sequinsSelfAndStruggleHome.jsp";
 
 		} else if (pathInfo.equalsIgnoreCase("MovieSnaps")) {
 			session.setAttribute("ARCHIVE", "Movie Snaps");
+			historyController.execute(request, response);
 			return "movieSnapsHome.jsp";
 
 		} else if (pathInfo.equalsIgnoreCase("HarfieldVillage")) {
 			session.setAttribute("ARCHIVE", "Harfield Village");
+			historyController.execute(request, response);
 			return "harfieldVillageHome.jsp";
 
 		}

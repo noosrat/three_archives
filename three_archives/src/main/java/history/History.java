@@ -1,5 +1,11 @@
 package history;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -7,7 +13,6 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -24,6 +29,8 @@ import common.fedora.FedoraDigitalObject;
 import search.Browse;
 
 public class History extends Service {
+
+	private static StringBuilder tagCloudText = new StringBuilder();
 
 	public History() {
 		super();
@@ -46,7 +53,8 @@ public class History extends Service {
 		return recentlyAlteredFedoraDigitalObjects;
 	}
 
-	public HashMap<String, TreeSet<String>> categoriesRecentlyUpdated(ArrayList<FedoraDigitalObject> objectsRecentlyModified) {
+	public HashMap<String, TreeSet<String>> categoriesRecentlyUpdated(
+			ArrayList<FedoraDigitalObject> objectsRecentlyModified) {
 		// we need to iterate through all the objects that have been updated and
 		// pick out all the specific categories that have been updated
 		// initialise hashmap
@@ -120,21 +128,21 @@ public class History extends Service {
 		System.out.println("Sorted List elements " + elements.toString());
 
 		ArrayList<String> topBrowsedCategories = new ArrayList<String>();
-		
+
 		topBrowsedCategories.add(elements.get(0).getKey());
 		topBrowsedCategories.add(elements.get(1).getKey());
 		topBrowsedCategories.add(elements.get(2).getKey());
-		
+
 		System.out.println("TOP CAT: " + topBrowsedCategories.toString());
 		return topBrowsedCategories;
 
 	}
 
-	public ArrayList<String> favouriteBrowsingCategoryUpdates(HashMap<String,TreeSet<String>> updatedCategories, Cookie browseCategoryCookie) {
-		// ArrayList<FedoraDigitalObject> objects =
-		// retrieveDigitalObjectsAlteredSinceLastVisit(date);
-		System.out.println("Processing favourite category updates with browseCategoryCookie of: " + browseCategoryCookie.getValue());
-		System.out.println("Updated categories "+ updatedCategories.keySet().toString());
+	public ArrayList<String> favouriteBrowsingCategoryUpdates(HashMap<String, TreeSet<String>> updatedCategories,
+			Cookie browseCategoryCookie) {
+		System.out.println("Processing favourite category updates with browseCategoryCookie of: "
+				+ browseCategoryCookie.getValue());
+		System.out.println("Updated categories " + updatedCategories.keySet().toString());
 		ArrayList<String> topBrowsingCategories = retrieveTopThreeBrowsingCategories(browseCategoryCookie);
 		ArrayList<String> result = new ArrayList<String>();
 		for (String category : topBrowsingCategories) {
@@ -147,9 +155,71 @@ public class History extends Service {
 
 	}
 
-	public static void main(String[] args) {
-		Cookie c = new Cookie("cat", "Collection:2##Event:0##Subject:5##Exhibition:10");
-		new History().retrieveTopThreeBrowsingCategories(c);
+	/* this must be done with every single search and browse */
+	public static void addTextToTagCloud(String text) {
+		System.out.println("Adding text to tag cloud text...wooohooooo");
+		String[] splitText = text.split(" ");
+		// we want to eliminate any non-character text
+		for (String singleWord : splitText) {
+			String word = singleWord.replaceAll("[^a-zA-Z0-9\\s]", ""); 
+			tagCloudText.append(word).append(",");
+
+		}
+
 	}
 
+	public void persistTagCloudText(String filename) {
+		/*
+		 * this will be dependent on the archive..so maybe from controller we
+		 * should parse in which file we want to look at we continually write
+		 * this...and only when we actually want to make / our tag cloud do we
+		 * go through and manually process the file
+		 */
+		System.out.println("Persisting tag cloud text......");
+		/*
+		 * this needs to be done at the end of every request...do this when we
+		 * are in our servlet just before despatch
+		 */
+
+		try {
+			FileWriter file = new FileWriter(filename,true);
+			System.out.println("Text to persist: " + tagCloudText.toString() + " to file " + filename);
+			file.write(tagCloudText.toString().toLowerCase());
+			file.flush();
+			file.close();
+
+
+		} catch (IOException e) {
+			System.out.println(e);
+		}
+		tagCloudText = new StringBuilder("");
+	}
+
+	private void processTagCloudWords(HashMap<String, Integer> input, String text) {
+		String[] words = text.split(",");
+		for (String word : words) {
+			if (input.containsKey(word)) {
+				input.put(word, input.get(word) + 1);
+			} else {
+				input.put(word, 1);
+			}
+		}
+
+	}
+
+	public HashMap<String, Integer> constructTagCloud(String filename) {
+		System.out.println("constructing tag cloud");
+		HashMap<String, Integer> words = new HashMap<String, Integer>();
+		try {
+			BufferedReader input = new BufferedReader(new FileReader(filename));
+			String line;
+			while ((line = input.readLine()) != null)
+				processTagCloudWords(words, line);
+			input.close();
+		} catch (IOException e) {
+			System.out.println(e);
+		}
+		System.out.println("Cloud constructed with " + words.size() + " words ");
+		return words;
+	}
 }

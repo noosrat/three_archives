@@ -1,10 +1,15 @@
 package common.controller;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.TreeSet;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
+import common.fedora.FedoraDigitalObject;
 import exhibitions.ExhibitionController;
 import history.HistoryController;
 import maps.MapController;
@@ -34,6 +39,7 @@ public class ServiceDelegator {
 	public String execute(HttpServletRequest request, HttpServletResponse response) {
 		String url = "index.jsp";
 		String pathInfo = request.getPathInfo().substring(1);
+		System.out.println("PATHINFO " + pathInfo);
 		try {
 			if (pathInfo.contains("search")) {
 				url = controllers.get("search").execute(request, response);
@@ -48,15 +54,40 @@ public class ServiceDelegator {
 			} else if (pathInfo.contains("history")) {
 				url = controllers.get("history").execute(request, response);
 			} else {
+				System.out.println("PROCESSING GENERAL");
 				url = controllers.get("general").execute(request, response);
+				clearSessionInformation(request.getSession());//this is done when they go back to the homepage of personal histories...so that cookies don't overlap into the differnet archives
 			}
 		} catch (Exception exception) {
-			request.setAttribute("message", exception);
-			exception.printStackTrace();
+			request.setAttribute("message", exception.getMessage());
+			System.out.println(exception);
 
 		}
-
+		persistAllRequestInformation();
 		return url;
+	}
+
+	/* this is everything to be persisted after each request is executed */
+	private void persistAllRequestInformation() {
+		HistoryController.persistNecessaryRequestInformation();
+
+	}
+	//the following all differ per archive
+	private void clearSessionInformation(HttpSession session){
+		System.out.println("Clearing session information");
+		session.setAttribute("browseCategoryCookie", null);
+		session.setAttribute("objectsModifiedSinceLastVisit", null);
+		session.setAttribute("categoriesWithRecentUpdates", null);
+		session.setAttribute("userFavouriteCategoriesWithRecentUpdates", null);
+		session.setAttribute("tagCloud", null);
+		System.out.println("Session information after clearing out");
+		
+		System.out.println("Category cookie: " + session.getAttribute("browseCategoryCookie") + " TagCloud " + session.getAttribute("tagCloud"));
+		
+		
+		
+		
+
 	}
 
 }

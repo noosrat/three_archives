@@ -22,9 +22,11 @@ import common.fedora.DatastreamID;
 import common.fedora.DublinCoreDatastream;
 import common.fedora.FedoraDigitalObject;
 import common.fedora.FedoraException;
+import history.History;
 
 public class SearchController implements Controller {
 
+	private static String archive;
 	private static Search search = new Search();
 
 	public static Search getSearch() {
@@ -33,6 +35,8 @@ public class SearchController implements Controller {
 
 	public String execute(HttpServletRequest request, HttpServletResponse response) {
 		String result = "WEB-INF/frontend/searchandbrowse/searchAndBrowse.jsp";
+		archive = ((String) request.getSession().getAttribute("ARCHIVE")).replaceAll("[^a-zA-Z0-9\\s]", "")
+				.replaceAll("\\s+", "");
 		request.setAttribute("searchCategories", retrieveSearchCategories());
 		request.setAttribute("browseCategories", Browse.getBrowsingCategories());
 		request.setAttribute("autocompletion", autocompleteValues(Browse.getFedoraDigitalObjects()));
@@ -60,6 +64,8 @@ public class SearchController implements Controller {
 
 	private void searchFedoraDigitalObjects(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		String requestPath = request.getPathInfo().substring(1);
+		System.out.println("SEARCHING FEDORA DIGITAL OBJECTS " + requestPath);
+		
 		StringBuilder terms = new StringBuilder("");
 
 		String limit = request.getParameter("limitSearch");
@@ -82,6 +88,9 @@ public class SearchController implements Controller {
 		}
 
 		String s = request.getParameter("terms");
+		System.out.println("VALUE OF TERMS " + s);
+		//we want to add this to our word cloud..this is what has been typed into the search box
+		History.addTextToTagCloud(s);
 		// if (requestPath.contains("search_objects/category")) {
 		// then do all the specific searching
 		String[] splitPath = requestPath.split("=");
@@ -165,7 +174,9 @@ public class SearchController implements Controller {
 		}
 		try {
 
-			FileWriter file = new FileWriter("../webapps/data/harfield.json");
+			String fileName = "../webapps/data/" + archive + ".json";
+
+			FileWriter file = new FileWriter(fileName);
 			file.write(list.toJSONString());
 			file.flush();
 			file.close();
@@ -195,15 +206,8 @@ public class SearchController implements Controller {
 		// now we read in the autocomplete json file
 		JSONParser parser = new JSONParser();
 		StringBuilder file = new StringBuilder("../webapps/data/");
-		String archive = (String) request.getSession().getAttribute("ARCHIVE");
 
-		if (archive.toLowerCase().contains("harfield")) {
-			file.append("harfield.json");
-		} else if (archive.toLowerCase().contains("sequins")) {
-			file.append("sequins.json");
-		} else if (archive.toLowerCase().contains("movie")) {
-			file.append("movie.json");
-		}
+		file.append(archive).append(".json");
 
 		// read in the archive attribute and check which json file we are
 		// reading in
@@ -211,7 +215,6 @@ public class SearchController implements Controller {
 		try {
 			Object obj = parser.parse(new FileReader(new String(file)));
 			JSONArray array = (JSONArray) obj;
-
 			autocomplete = new TreeSet<String>(array);
 		} catch (ParseException parseException) {
 			System.out.println(parseException);

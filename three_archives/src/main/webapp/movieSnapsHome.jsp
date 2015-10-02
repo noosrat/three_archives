@@ -35,7 +35,7 @@
 
 <script type="text/javascript">
 	$(document).ready(function() {
-		var words = "/data/movie.json";
+		var words = "/data/MovieSnaps.json";
 		var countries = new Bloodhound({
 			datumTokenizer : Bloodhound.tokenizers.whitespace,
 			queryTokenizer : Bloodhound.tokenizers.whitespace,
@@ -59,9 +59,9 @@
 	<nav class="navbar navbar-inverse navbar-fixed-top navbar-left"
 		role="navigation">
 		<div class="container-fluid">
-			<!-- Brand and toggle get grouped for better mobile display -->
+			<!-- Brand and toggle get grouped for bettr mobile display -->
 			<div class="navbar-header">
-				<a class="navbar-brand" href="#">Movie Snaps</a>
+				<a class="navbar-brand" href="${pageContext.request.contextPath}/archives/MovieSnaps">Movie Snaps</a>
 			</div>
 			<div class="collapse navbar-collapse"
 				id="bs-example-navbar-collapse-1">
@@ -140,7 +140,7 @@
 		<div class="container">
 			<!-- Brand and toggle get grouped for better mobile display -->
 			<div class="navbar-header">
-				<a class="navbar-brand" href="${pageContext.request.contextPath}">Personal
+				<a class="navbar-brand" href="${pageContext.request.contextPath}/archives/">Personal
 					Histories</a>
 			</div>
 		</div>
