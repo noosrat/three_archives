@@ -129,15 +129,23 @@
 </nav> 
 
 
-
+<%@ page import="common.fedora.FedoraException"%>
+<%@ page import="common.fedora.FedoraClient"%>
+<%@ page import="common.fedora.DublinCore"%>
+<%@ page import="common.fedora.FedoraDigitalObject"%>
+<%@ page import="search.FedoraCommunicator"%>
 <form method="post" action="${pageContext.request.contextPath}/archives/create_exhibitions">
 <ul id="mainEx" style="list-style-type:none;margin:0;padding:0;">
 		<li style="display:inline;float:left;font-weight:bold;">
-			<%String [] cartImages= (String[]) (session.getAttribute("MEDIA_CART")); %>
+			<%String [] cartImages= (String[]) (session.getAttribute("MEDIA_CART")); 
+			FedoraCommunicator fc= new FedoraCommunicator();
+			FedoraDigitalObject ob;%>
 			<div id="cart" class="scroll droptarget droptargetCart" ondrop="drop(event)" ondragover="allowDrop(event)" style="border: 1px solid #aaaaaa; diplay:inline-block; background:#F8F8F8;">
 				<%for (int i=0;i<cartImages.length;i++){ 
-					if(cartImages[i]!=null){%>
-  					<img  src="<%=cartImages[i]%>"  style="width:40%;" ondragstart="dragStart(event)" draggable="true" id="<%=cartImages[i]%>">
+					if(cartImages[i]!=null){
+						ob=null;
+					ob=fc.populateFedoraDigitalObject(cartImages[i]);%>
+  					<img  src="<%=ob.getDatastreams().get("IMG").getContent() %>"  style="width:40%;" ondragstart="dragStart(event)" draggable="true" id="<%=cartImages[i]%>">
   				<%}} %>	
 				
 			</div>
@@ -260,7 +268,7 @@
 
         				</div>
         				<div class="modal-footer">
-          					<input type="submit" value="Next" name="exhibition_det"/>
+          					<input type="submit" value="Save" name="exhibition_det"/>
          
        			 		</div>
        			 		

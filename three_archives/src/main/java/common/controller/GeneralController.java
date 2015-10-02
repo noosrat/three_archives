@@ -1,11 +1,16 @@
 package common.controller;
 
+
 import java.util.ArrayList;
+import java.util.List;
+
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import common.model.Exhibition;
+import exhibitions.ManageExhibition;
 import search.SearchController;
 
 public class GeneralController implements Controller {

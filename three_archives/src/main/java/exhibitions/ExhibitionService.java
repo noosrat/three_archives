@@ -1,15 +1,17 @@
 package exhibitions;
 
+import java.util.List;
+
 import common.Service;
 import common.model.Exhibition;
 
 public class ExhibitionService extends Service {
-
+	ManageExhibition manager=new ManageExhibition();
 	public ExhibitionService() {
 		super();
 	}
 	
-	public Exhibition[] listAllExhibitions()
+	/*public Exhibition[] listAllExhibitions()
 	{
 		Exhibition[] allExhibitions= new Exhibition[5];
 		allExhibitions[0]= new Exhibition("Queens",0);
@@ -19,22 +21,25 @@ public class ExhibitionService extends Service {
 		allExhibitions[4]= new Exhibition("Then and now",4);
 		
 		return allExhibitions;
+	}*/
+	
+	public List<Exhibition> listExhibitions()
+	{
+		@SuppressWarnings("unchecked")
+		List<Exhibition> listExhibitions= manager.listAllExhibitions();
+		return listExhibitions;
 	}
 	
-	public void viewExhibition(int exhibitionId)
+	public Integer saveExhibition(Exhibition exhibition)
 	{
-		//retrieve exhibition with id-exhibitionId
+		return(manager.addExhibition(exhibition));//add exhibition to the db
 	}
 	
-	public void createExhibition()
-	{
-		//Create new exhibition and save it to the db
-	}
+
 	
-	public String[] getExhibition(String exhibitionID)
+	public Exhibition getExhibition(int exhibitionID)
 	{
-		//find titles of all exhibitions with archive type= type
-		return new String[10];
+		return (manager.getExhibition(exhibitionID));//get exhibition with the specific ID
 		
 	}
 	
