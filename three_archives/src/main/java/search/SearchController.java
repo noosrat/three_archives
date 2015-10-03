@@ -2,11 +2,9 @@ package search;
 
 import java.io.File;
 import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -19,8 +17,6 @@ import org.json.simple.parser.JSONParser;
 import org.noggit.JSONParser.ParseException;
 
 import common.controller.Controller;
-import common.fedora.DatastreamID;
-import common.fedora.DublinCoreDatastream;
 import common.fedora.FedoraDigitalObject;
 import common.fedora.FedoraException;
 import history.History;
@@ -75,7 +71,7 @@ public class SearchController implements Controller {
 			// what we need to do here is construct a dolr search with all the
 			// existing items and the new condition..
 			Set<FedoraDigitalObject> exisitingObjects = (Set<FedoraDigitalObject>) request.getSession()
-					.getAttribute("objects");
+					.getAttribute("objectsForArchive");
 			// we need to build the query for fedora
 			terms.append("(");
 			for (FedoraDigitalObject digitalObject : exisitingObjects) {
@@ -85,6 +81,8 @@ public class SearchController implements Controller {
 			// now we can add the rest of the actual query
 			terms.append(" AND ");
 		}
+		
+		
 
 		String s = request.getParameter("terms");
 		System.out.println("VALUE OF TERMS " + s);
@@ -94,7 +92,9 @@ public class SearchController implements Controller {
 		// if (requestPath.contains("search_objects/category")) {
 		// then do all the specific searching
 		String[] splitPath = requestPath.split("=");
+		System.out.println("SPLIT PATH " + splitPath);
 		if (splitPath.length == 2) {
+			System.out.println("SPLIT PATH LENGTH IS TWO");
 			SearchAndBrowseCategory queryCategory = SearchAndBrowseCategory.valueOf(splitPath[1]);
 			// maybe here we just return to the page with re-organised/placed
 			// search items..etc with our one selected and then they can still
@@ -124,12 +124,29 @@ public class SearchController implements Controller {
 
 		Set<FedoraDigitalObject> digitalObjects = new HashSet<FedoraDigitalObject>();
 		digitalObjects = getSearch().findFedoraDigitalObjects(new String(terms));
+		filterFedoraObjectsForSpecificArchive((String)request.getSession().getAttribute("mediaPrefix"),digitalObjects);
+		//need to restrict these for this archive....
+		
 		if ((digitalObjects == null || digitalObjects.isEmpty())) {
 			request.setAttribute("message", "No results to return");
 		}
-		request.getSession().setAttribute("objects", digitalObjects);
+		request.getSession().setAttribute("objectsForArchive", digitalObjects);
 		similarSearchTags(request);
 	}
+	
+	private void filterFedoraObjectsForSpecificArchive(String multiMediaPrefix, Set<FedoraDigitalObject> fedoraDigitalObjects) {
+		for (Iterator<FedoraDigitalObject> iterator = fedoraDigitalObjects.iterator(); iterator.hasNext();) {
+			FedoraDigitalObject element = iterator.next();
+			if (!(element.getPid().contains(multiMediaPrefix))) {
+				iterator.remove(); // remove any object who does not have the
+									// prefix for this archive
+				System.out.println("removing object with pid " + element.getPid());
+			}
+		}
+
+	}
+
+
 
 	public static ArrayList<String> retrieveSearchCategories() {
 		ArrayList<String> result = new ArrayList<String>();
@@ -196,7 +213,7 @@ public class SearchController implements Controller {
 				}
 			}
 		}
-		request.setAttribute("searchTags", results);
+		request.getSession().setAttribute("searchTags", results);
 		return results;
 	}
 

@@ -207,8 +207,8 @@ $(document).ready(function() {
 					</div>
 				</div>
 
-		bc1:	${browseCategories['${browseCategory}']}
-		bc2:	${browseCategories[browseCategory]}
+		bc1:	${browseCategories['${browseCategory}']} <br>
+		bc2:	${browseCategories[browseCategory]} <br>
 			
 				<section id="portfolio">
 					<div class="container">

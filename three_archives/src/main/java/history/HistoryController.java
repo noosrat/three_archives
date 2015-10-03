@@ -35,8 +35,6 @@ public class HistoryController implements Controller {
 	}
 
 	public String execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
-		// the following two lines need to happen as soon as we select which
-		// archive we are looking in...before selecting browse
 		String pathInfo = request.getPathInfo().substring(1);
 		if (pathInfo.equalsIgnoreCase("SequinsSelfandStruggle") || pathInfo.equalsIgnoreCase("MovieSnaps")
 				|| pathInfo.equalsIgnoreCase("HarfieldVillage")) {
@@ -46,7 +44,6 @@ public class HistoryController implements Controller {
 			return null;
 		} else {
 			initialiseUserSessionAttributesFromCookies(request, response);
-
 			if (request.getPathInfo().contains("browse")) {
 				updateCategoryCookieBasedOnCategoryBrowse(request, response);
 			}

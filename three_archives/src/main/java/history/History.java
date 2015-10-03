@@ -157,6 +157,9 @@ public class History extends Service {
 
 	/* this must be done with every single search and browse */
 	public static void addTextToTagCloud(String text) {
+		if (text==null){
+			return;
+		}
 		System.out.println("Adding text to tag cloud text...wooohooooo");
 		String[] splitText = text.split(" ");
 		// we want to eliminate any non-character text

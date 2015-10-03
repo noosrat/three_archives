@@ -28,15 +28,12 @@ public class Browse extends Service {
 
 	public static void initialise(String prefix) throws FedoraException, SolrServerException {
 		System.out.println("In browse cosntructor");
-		fedoraDigitalObjects = SearchController.getSearch().findFedoraDigitalObjects("*");
-//		setUpBrowsingCategoriesAndValues(fedoraDigitalObjects);
 		filterFedoraObjectsForSpecificArchive(prefix);		
 		setUpBrowsingCategoriesAndValues(fedoraDigitalObjectsForArchive);
-//		SearchController.buildAutocompleteJSONFile(fedoraDigitalObjects);//this is per archive..to be done at db stage/upload stage
 	}
 
-	public static Set<FedoraDigitalObject> getFedoraDigitalObjects() {
-		return fedoraDigitalObjects;
+	public static void setFedoraDigitalObjects(Set<FedoraDigitalObject> fedoraDigitalObjects){
+		Browse.fedoraDigitalObjects = fedoraDigitalObjects;
 	}
 
 	public static Set<FedoraDigitalObject> getFilteredDigitalObjects() {
@@ -80,9 +77,9 @@ public class Browse extends Service {
 	
 
 	private static void filterFedoraObjectsForSpecificArchive(String multiMediaPrefix) {
-		Set<FedoraDigitalObject> fedoraDigitalObjects = new HashSet<FedoraDigitalObject>(
-				Browse.getFedoraDigitalObjects());
-		for (Iterator<FedoraDigitalObject> iterator = fedoraDigitalObjects.iterator(); iterator.hasNext();) {
+		System.out.println("PREFIX " + multiMediaPrefix);
+		Set<FedoraDigitalObject> filteredFedoraDigitalObjects = new HashSet<FedoraDigitalObject>(fedoraDigitalObjects);
+		for (Iterator<FedoraDigitalObject> iterator = filteredFedoraDigitalObjects.iterator(); iterator.hasNext();) {
 			FedoraDigitalObject element = iterator.next();
 			if (!(element.getPid().contains(multiMediaPrefix))) {
 				iterator.remove(); // remove any object who does not have the
@@ -91,7 +88,7 @@ public class Browse extends Service {
 			}
 		}
 
-		setFedoraDigitalObjectsForArchive(fedoraDigitalObjects);
+		setFedoraDigitalObjectsForArchive(filteredFedoraDigitalObjects);
 	}
 
 

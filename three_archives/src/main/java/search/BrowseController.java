@@ -1,12 +1,9 @@
 package search;
 
-import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import org.apache.solr.client.solrj.SolrServerException;
 
@@ -19,7 +16,8 @@ import history.HistoryController;
 public class BrowseController implements Controller {
 
 	public String execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
-		Browse.initialise((String)request.getSession().getAttribute("mediaPrefix"));
+		Browse.setFedoraDigitalObjects((Set<FedoraDigitalObject>)(request.getSession().getAttribute("objects")));
+		Browse.initialise((String) request.getSession().getAttribute("mediaPrefix"));
 		// String result = browseFedoraObjects(request, response);
 		browseFedoraObjects(request, response);
 		request.setAttribute("searchCategories", SearchController.retrieveSearchCategories());
@@ -34,7 +32,6 @@ public class BrowseController implements Controller {
 		// this is to return everything in the archive collection...this is just
 		// to illustrate browse temporarily
 		/* we are intiially searching all the fedora objects here */
-		Set<FedoraDigitalObject> fedoraDigitalObjects = Browse.getFedoraDigitalObjects();
 		Set<FedoraDigitalObject> fedoraDigitalObjectsForArchive = Browse.getFedoraDigitalObjectsForArchive(); // we
 																												// cannot
 																												// do
@@ -46,14 +43,10 @@ public class BrowseController implements Controller {
 																												// objects
 		// before we actually set the attribute we need to filter per archive
 
-		if (fedoraDigitalObjects != null && !fedoraDigitalObjects.isEmpty()) {
-			request.getSession().setAttribute("objects", fedoraDigitalObjects);
-			if (!(fedoraDigitalObjectsForArchive.isEmpty())) {
-				request.getSession().setAttribute("objectsForArchive", fedoraDigitalObjectsForArchive);
-			}
-		} else {
+		if (fedoraDigitalObjectsForArchive == null || fedoraDigitalObjectsForArchive.isEmpty()) {
 			request.setAttribute("message", "No results to retuRrn");
 		}
+		request.getSession().setAttribute("objectsForArchive", fedoraDigitalObjectsForArchive);
 	}
 
 	private void browseFedoraObjects(HttpServletRequest request, HttpServletResponse response) throws Exception {

@@ -107,8 +107,7 @@ $(document).ready(function() {
 								class="caret"></span></a>
 							<ul class="dropdown-menu">
 								<c:forEach var="searchCategory" items="${searchCategories}">
-									<li><a
-										href="${pageContext.request.contextPath}/archives/search_objects/category=${searchCategory}">${searchCategory}</a></li>
+									<li><a href="${pageContext.request.contextPath}/archives/search_objects/category=${searchCategory}">${searchCategory}</a></li>
 								</c:forEach>
 							</ul></li>
 						<li>
@@ -210,11 +209,10 @@ $(document).ready(function() {
 				</div>
 
 
-				Other search tags: <br>
 				<c:forEach var="searchTag" items="${searchTags}">
-					<a
-						href="${pageContext.request.contextPath}/archives/search_objects/category=SEARCH_ALL?terms=${searchTag}">${searchTag}</a>
+						<a class="btn btn-primary btn-xs" href="${pageContext.request.contextPath}/archives/search_objects/category=SEARCH_ALL?terms=${searchTag}">${searchTag}</a>
 				</c:forEach>
+<br><br>
 
 				<section id="portfolio">
 					<div class="container">

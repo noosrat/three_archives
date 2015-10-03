@@ -9,6 +9,7 @@ public enum SearchAndBrowseCategory {
 	COLLECTION(Arrays.asList("dc.description")),//search DC description
 	CREATOR(Arrays.asList("dc.creator", "dc.contributor","dc.source")),
 	EVENT(Arrays.asList("dc.description")),//search description
+	DESCRIPTION(Arrays.asList("dc.description")),//search description
 	EXHIBITION(Arrays.asList("dc.description")), //this will be a data type search
 	LOCATION(Arrays.asList("dc.location")), //search dublin core ds
 	MEDIA_TYPE(Arrays.asList("dc.format","dc.type")), //this just filters according to the media types of the datastream
