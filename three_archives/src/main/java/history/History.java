@@ -39,7 +39,7 @@ public class History extends Service {
 	public ArrayList<FedoraDigitalObject> retrieveDigitalObjectsAlteredSinceLastVisit(Date lastVisited) {
 		System.out.println("IN RETRIEVE DIGITAL OJBECTS ALTERED SINCE LAST VISIT");
 		ArrayList<FedoraDigitalObject> recentlyAlteredFedoraDigitalObjects = new ArrayList<FedoraDigitalObject>(
-				Browse.getFedoraDigitalObjects());
+				Browse.getFedoraDigitalObjectsForArchive());
 
 		for (Iterator<FedoraDigitalObject> it = recentlyAlteredFedoraDigitalObjects.iterator(); it.hasNext();) {
 			FedoraDigitalObject obj = it.next();
@@ -161,7 +161,7 @@ public class History extends Service {
 		String[] splitText = text.split(" ");
 		// we want to eliminate any non-character text
 		for (String singleWord : splitText) {
-			String word = singleWord.replaceAll("[^a-zA-Z0-9\\s]", ""); 
+			String word = singleWord.replaceAll("[^a-zA-Z0-9\\s]", "");
 			tagCloudText.append(word).append(",");
 
 		}
@@ -182,12 +182,18 @@ public class History extends Service {
 		 */
 
 		try {
-			FileWriter file = new FileWriter(filename,true);
-			System.out.println("Text to persist: " + tagCloudText.toString() + " to file " + filename);
-			file.write(tagCloudText.toString().toLowerCase());
-			file.flush();
-			file.close();
 
+			File file = new File("../webapps/data/");
+			if (!file.exists()) {
+				System.out.println("OH NO THE DIRECTORY DOES NOT EXIST....WE MUST CREATE IT");
+				file.mkdir();
+			}
+			FileWriter fileWriter = new FileWriter(filename, true);
+
+			System.out.println("Text to persist: " + tagCloudText.toString() + " to file " + filename);
+			fileWriter.write(tagCloudText.toString().toLowerCase());
+			fileWriter.flush();
+			fileWriter.close();
 
 		} catch (IOException e) {
 			System.out.println(e);

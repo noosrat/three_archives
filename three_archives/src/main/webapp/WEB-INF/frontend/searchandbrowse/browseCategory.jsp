@@ -39,8 +39,7 @@
 
 <script type="text/javascript">
 $(document).ready(function() {
-	var archive = '<%=session.getAttribute("ARCHIVE")%>
-	';
+	var archive = '<%=session.getAttribute("ARCHIVE")%>';
 		if (archive == "Sequins, Self and Struggle") {
 			var words = "/data/sequins.json";
 		} else if (archive == "Movie Snaps") {
@@ -140,23 +139,21 @@ $(document).ready(function() {
 			<!-- side bar -->
 			<div class="collapse navbar-collapse navbar-ex1-collapse">
 				<ul class="nav navbar-nav side-nav">
-
-
-					<li><a
-						href="${pageContext.request.contextPath}/archives/browse"
-						data-toggle="collapse"
-						data-target="${pageContext.request.contextPath}/archives/browse"><i
-							class="fa fa-fw fa-arrows-v"></i>BROWSE ALL <i
-							class="fa fa-fw fa-caret-down"></i> </a></li>
-
+					
+					
+					<li><a href="${pageContext.request.contextPath}/archives/browse" data-toggle="collapse"
+							data-target="${pageContext.request.contextPath}/archives/browse"><i class="fa fa-fw fa-arrows-v"></i>BROWSE ALL
+								<i
+								class="fa fa-fw fa-caret-down"></i> </a>
+					</li>
+					
 					<c:set var="count" value="0" scope="page" />
 					<c:forEach var="category" items="${browseCategories}">
-						<!-- <li><a href="${pageContext.request.contextPath}/archives/browse?category=${category.key}" data-toggle="collapse" data-target="${pageContext.request.contextPath}/archives/browse?category=${category.key}"> -->
-						<li><a href="javascript:;" data-toggle="collapse"
-							data-target="#demo${count}"> <i class="fa fa-fw fa-arrows-v"></i>${category.key}
+					<li><a href="javascript:;" data-toggle="collapse" data-target="${pageContext.request.contextPath}/archives/browse?category=${category.key}">
+						<!-- <li><a href="javascript:;" data-toggle="collapse" data-target="#demo${count}">-->
+						<i class="fa fa-fw fa-arrows-v"></i>${category.key}
 								<span class="badge">${fn:length(category.value)}</span><i
-								class="fa fa-fw fa-caret-down"></i>
-						</a>
+								class="fa fa-fw fa-caret-down"></i> </a>
 							<ul id="demo${count}" class="collapse">
 								<c:forEach var="categoryValue" items="${category.value}">
 									<li><a
@@ -210,17 +207,13 @@ $(document).ready(function() {
 					</div>
 				</div>
 
-
-				Other search tags: <br>
-				<c:forEach var="searchTag" items="${searchTags}">
-					<a
-						href="${pageContext.request.contextPath}/archives/search_objects/category=SEARCH_ALL?terms=${searchTag}">${searchTag}</a>
-				</c:forEach>
-
+		bc1:	${browseCategories['${browseCategory}']}
+		bc2:	${browseCategories[browseCategory]}
+			
 				<section id="portfolio">
 					<div class="container">
 						<c:set var="count" value="0" scope="page" />
-						<c:forEach var="digitalObject" items="${objectsForArchive}">
+						<c:forEach var="browseCategory" items="${browseCategories[browseCategory]}">
 							<div class="col-xs-8 col-sm-6 portfolio-item">
 								<a href="#lightbox${count}" class="portfolio-link"
 									data-toggle="modal" data-target="#lightbox${count}">
@@ -235,57 +228,14 @@ $(document).ready(function() {
 										<!-- caption content -->
 									</div> <!-- caption --> <img
 									src="${digitalObject.datastreams['IMG'].content}"
-									class="img-thumbnail img-responsive" alt="image unavailable">
+									class="img-thumbnail img-responsive" alt="image ">
 								</a>
 							</div>
 							<c:set var="count" value="${count + 1}" scope="page" />
 						</c:forEach>
 					</div>
 				</section>
-				<c:set var="count" value="0" scope="page" />
-				<c:forEach var="digitalObject" items="${objectsForArchive}">
-					<div id="lightbox${count}" class="modal fade" tabindex="-1"
-						role="dialog" aria-labelledby="myLargeModalLabel"
-						aria-hidden="true">
-						<div class="modal-dialog">
-							<div class="modal-content">
-								<div class="modal-body">
-									<!-- 	<table style="width: 100%"> <td>-->
-									<img src="${digitalObject.datastreams['IMG'].content}"
-										class="img-thumbnail img-responsive" alt="image unavailable">
-									</td> Title: <a
-										href="${pageContext.request.contextPath}/archives/search_objects/category=TITLE?terms=${digitalObject.datastreams['DC'].dublinCoreMetadata['TITLE']}">${digitalObject.datastreams['DC'].dublinCoreMetadata['TITLE']}</a><br>
-									Collection: <a
-										href="${pageContext.request.contextPath}/archives/search_objects/category=COLLECTION?terms=${digitalObject.datastreams['DC'].dublinCoreMetadata['COLLECTION']}">${digitalObject.datastreams['DC'].dublinCoreMetadata['COLLECTION']}</a><br>
-									Contributor: <a
-										href="${pageContext.request.contextPath}/archives/search_objects/category=CONTRIBUTOR?terms=${digitalObject.datastreams['DC'].dublinCoreMetadata['CONTRIBUTOR']}">${digitalObject.datastreams['DC'].dublinCoreMetadata['CONTRIBUTOR']}</a><br>
-									Coverage:
-									${digitalObject.datastreams['DC'].dublinCoreMetadata['COVERAGE']}<br>
-									Creator:
-									${digitalObject.datastreams['DC'].dublinCoreMetadata['CREATOR']}
-									<br> Date: <a
-										href="${pageContext.request.contextPath}/archives/search_objects/category=YEAR?terms=${digitalObject.datastreams['DC'].dublinCoreMetadata['DATE']}">${digitalObject.datastreams['DC'].dublinCoreMetadata['DATE']}</a>
-									<br> Description: <a
-										href="${pageContext.request.contextPath}/archives/search_objects/category=DESCRIPTION?terms=${digitalObject.datastreams['DC'].dublinCoreMetadata['DESCRIPTION']}">${digitalObject.datastreams['DC'].dublinCoreMetadata['DESCRIPTION']}</a><br>
-									Event: <a
-										href="${pageContext.request.contextPath}/archives/search_objects/category=EVENT?terms=${digitalObject.datastreams['DC'].dublinCoreMetadata['EVENT']}">${digitalObject.datastreams['DC'].dublinCoreMetadata['EVENT']}</a><br>
-									Format:
-									${digitalObject.datastreams['DC'].dublinCoreMetadata['FORMAT']}
-									<br> Location: <a
-										href="${pageContext.request.contextPath}/archives/search_objects/category=LOCATION?terms=${digitalObject.datastreams['DC'].dublinCoreMetadata['LOCATION']}">${digitalObject.datastreams['DC'].dublinCoreMetadata['LOCATION']}</a><br>
-									Subject:
-									${digitalObject.datastreams['DC'].dublinCoreMetadata['SUBJECT']}
-									<br>
 
-
-								</div>
-
-								<button type="button">Place me</button>
-							</div>
-						</div>
-					</div>
-					<c:set var="count" value="${count + 1}" scope="page" />
-				</c:forEach>
 			</div>
 			<!-- container fluid -->
 		</div>

@@ -188,14 +188,10 @@ public class FedoraGetRequest {
 
 	}
 
-	// public static void main(String[] args) throws FedoraException,
-	// IOException{
-	// FedoraGetRequest feGetRequest = new FedoraGetRequest();
-	// feGetRequest.setPersistentIdentifier("sq:3");
-	// feGetRequest.getObjectProfile(new TreeMap<QueryParameters,
-	// String>()).execute();
-	// System.out.println(feGetRequest.getFedoraResponse().getResponse());
-	//
-	// }
+//the below updates the index...it is important that this must happen after UPLOAD to fedora
+	//we need to make a connection to fedoraGsearch and then run this query
+	private void updateIndex(){
+	String query =	"http://localhost:8080/fedoragsearch/rest?operation=updateIndex&action=fromFoxmlFiles&value=";
+	}
 
 }

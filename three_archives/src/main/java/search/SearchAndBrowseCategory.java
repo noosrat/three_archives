@@ -7,14 +7,12 @@ public enum SearchAndBrowseCategory {
 	SEARCH_ALL(Arrays.asList("")),
 	//ACADEMIC_PAPER(Arrays.asList("")), //search description nad maybe title
 	COLLECTION(Arrays.asList("dc.description")),//search DC description
-	CONTRIBUTOR(Arrays.asList("dc:contributor")),
-	CREATOR(Arrays.asList("dc.creator")),
+	CREATOR(Arrays.asList("dc.creator", "dc.contributor","dc.source")),
 	EVENT(Arrays.asList("dc.description")),//search description
 	EXHIBITION(Arrays.asList("dc.description")), //this will be a data type search
 	LOCATION(Arrays.asList("dc.location")), //search dublin core ds
 	MEDIA_TYPE(Arrays.asList("dc.format","dc.type")), //this just filters according to the media types of the datastream
 	TITLE(Arrays.asList("dc.title")), //search in dublin core titile
-	SOURCE(Arrays.asList("dc.source")),
 	SUBJECT(Arrays.asList("dc.title")),// search DC
 	YEAR(Arrays.asList("dc.date")); //search in dublin core date
 	

@@ -1,5 +1,6 @@
 package search;
 
+import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -39,7 +40,12 @@ public class SearchController implements Controller {
 				.replaceAll("\\s+", "");
 		request.setAttribute("searchCategories", retrieveSearchCategories());
 		request.setAttribute("browseCategories", Browse.getBrowsingCategories());
-		request.setAttribute("autocompletion", autocompleteValues(Browse.getFedoraDigitalObjects()));
+		request.setAttribute("autocompletion", autocompleteValues(Browse.getFedoraDigitalObjectsForArchive()));// this
+																												// must
+																												// be
+																												// done
+																												// during
+																												// uploads
 
 		String requestPath = request.getPathInfo().substring(1);
 		if (requestPath != null) {
@@ -65,7 +71,7 @@ public class SearchController implements Controller {
 	private void searchFedoraDigitalObjects(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		String requestPath = request.getPathInfo().substring(1);
 		System.out.println("SEARCHING FEDORA DIGITAL OBJECTS " + requestPath);
-		
+
 		StringBuilder terms = new StringBuilder("");
 
 		String limit = request.getParameter("limitSearch");
@@ -89,7 +95,8 @@ public class SearchController implements Controller {
 
 		String s = request.getParameter("terms");
 		System.out.println("VALUE OF TERMS " + s);
-		//we want to add this to our word cloud..this is what has been typed into the search box
+		// we want to add this to our word cloud..this is what has been typed
+		// into the search box
 		History.addTextToTagCloud(s);
 		// if (requestPath.contains("search_objects/category")) {
 		// then do all the specific searching
@@ -136,6 +143,8 @@ public class SearchController implements Controller {
 		for (SearchAndBrowseCategory cat : SearchAndBrowseCategory.values()) {
 			result.add(cat.name());
 		}
+		// remove unwanted categories
+		result.remove(SearchAndBrowseCategory.MEDIA_TYPE);
 		return result;
 	}
 
@@ -213,6 +222,12 @@ public class SearchController implements Controller {
 		// reading in
 		Set<String> autocomplete;
 		try {
+			File dir = new File("../webapps/data/");
+			if (!dir.exists()) {
+				System.out.println("OH NO THE DIRECTORY DOES NOT EXIST....WE MUST CREATE IT");
+				dir.mkdir();
+			}
+
 			Object obj = parser.parse(new FileReader(new String(file)));
 			JSONArray array = (JSONArray) obj;
 			autocomplete = new TreeSet<String>(array);
