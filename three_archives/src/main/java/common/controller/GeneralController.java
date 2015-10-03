@@ -2,17 +2,15 @@ package common.controller;
 
 
 import java.util.ArrayList;
-import java.util.List;
-
+import java.util.HashMap;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import common.model.Exhibition;
-import exhibitions.ManageExhibition;
 import history.HistoryController;
 import search.SearchController;
+import uploads.AutoCompleteUtility;
 
 public class GeneralController implements Controller {
 
@@ -21,7 +19,6 @@ public class GeneralController implements Controller {
  */
 	public String execute(HttpServletRequest request,HttpServletResponse response) throws Exception 
 	{
-		String result = "";
 		ArrayList<String> cart = new ArrayList<String>();
 		cart.add("ms:1");
 		
@@ -30,6 +27,7 @@ public class GeneralController implements Controller {
 		session.setAttribute("searchCategories", SearchController.retrieveSearchCategories());
 		HistoryController historyController = new HistoryController();
 		String pathInfo =  request.getPathInfo().substring(1);
+		testingAutoComplete();
 		System.out.println(pathInfo);
 		if (pathInfo.equalsIgnoreCase("SequinsSelfAndStruggle")){
 			session.setAttribute("ARCHIVE", "Sequins, Self and Struggle");
@@ -57,6 +55,14 @@ public class GeneralController implements Controller {
 		return "index.jsp";
 	}
 
+	private void testingAutoComplete(){
+		HashMap<String,String> archives = new HashMap<String,String>();
+		//this needs to be thought out for the config layer.
+		archives.put("Sequins,Self and Struggle", "sq");
+		archives.put("Harfield Village", "hv");
+		archives.put("Movie Snaps", "ms");
+		AutoCompleteUtility.refreshAutocompleFile(archives);
+	}
 	//the following all differ per archive
 	private void clearArchiveSessionInformation(HttpSession session){
 		System.out.println("Clearing session information");

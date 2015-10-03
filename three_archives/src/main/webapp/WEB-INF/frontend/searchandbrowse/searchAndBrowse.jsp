@@ -249,34 +249,20 @@ $(document).ready(function() {
 						<div class="modal-dialog">
 							<div class="modal-content">
 								<div class="modal-body">
+								<h3>${digitalObject.datastreams['DC'].dublinCoreMetadata['TITLE']}</h3>
+								<br>
+								
 									<!-- 	<table style="width: 100%"> <td>-->
 									<img src="${digitalObject.datastreams['IMG'].content}"
 										class="img-thumbnail img-responsive" alt="image unavailable">
-									</td> Title: <a
-										href="${pageContext.request.contextPath}/archives/search_objects/category=TITLE?terms=${digitalObject.datastreams['DC'].dublinCoreMetadata['TITLE']}">${digitalObject.datastreams['DC'].dublinCoreMetadata['TITLE']}</a><br>
-									Collection: <a
-										href="${pageContext.request.contextPath}/archives/search_objects/category=COLLECTION?terms=${digitalObject.datastreams['DC'].dublinCoreMetadata['COLLECTION']}">${digitalObject.datastreams['DC'].dublinCoreMetadata['COLLECTION']}</a><br>
-									Contributor: <a
-										href="${pageContext.request.contextPath}/archives/search_objects/category=CONTRIBUTOR?terms=${digitalObject.datastreams['DC'].dublinCoreMetadata['CONTRIBUTOR']}">${digitalObject.datastreams['DC'].dublinCoreMetadata['CONTRIBUTOR']}</a><br>
-									Coverage:
-									${digitalObject.datastreams['DC'].dublinCoreMetadata['COVERAGE']}<br>
-									Creator:
-									${digitalObject.datastreams['DC'].dublinCoreMetadata['CREATOR']}
-									<br> Date: <a
-										href="${pageContext.request.contextPath}/archives/search_objects/category=YEAR?terms=${digitalObject.datastreams['DC'].dublinCoreMetadata['DATE']}">${digitalObject.datastreams['DC'].dublinCoreMetadata['DATE']}</a>
-									<br> Description: <a
-										href="${pageContext.request.contextPath}/archives/search_objects/category=DESCRIPTION?terms=${digitalObject.datastreams['DC'].dublinCoreMetadata['DESCRIPTION']}">${digitalObject.datastreams['DC'].dublinCoreMetadata['DESCRIPTION']}</a><br>
-									Event: <a
-										href="${pageContext.request.contextPath}/archives/search_objects/category=EVENT?terms=${digitalObject.datastreams['DC'].dublinCoreMetadata['EVENT']}">${digitalObject.datastreams['DC'].dublinCoreMetadata['EVENT']}</a><br>
-									Format:
-									${digitalObject.datastreams['DC'].dublinCoreMetadata['FORMAT']}
-									<br> Location: <a
-										href="${pageContext.request.contextPath}/archives/search_objects/category=LOCATION?terms=${digitalObject.datastreams['DC'].dublinCoreMetadata['LOCATION']}">${digitalObject.datastreams['DC'].dublinCoreMetadata['LOCATION']}</a><br>
-									Subject:
-									${digitalObject.datastreams['DC'].dublinCoreMetadata['SUBJECT']}
-									<br>
-
-
+									
+									<!-- can we not try just iterate through the dublinCoreDatastream's metadata -->
+									<c:forEach var="dcMetadata" items="${digitalObject.datastreams['DC'].dublinCoreMetadata}">
+									<c:if test="${dcMetadata.key!='IDENTIFIER' && dcMetadata.key!='TYPE' && dcMetadata.key!='FORMAT'}">
+									${dcMetadata.key}: <a href="${pageContext.request.contextPath}/archives/search_objects/category=${dcMetadata.key}?terms=${dcMetadata.value}">${dcMetadata.value}</a><br>
+									</c:if>
+									
+									</c:forEach>
 								</div>
 
 								<button type="button">Place me</button>

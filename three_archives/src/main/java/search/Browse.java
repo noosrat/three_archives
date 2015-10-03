@@ -32,7 +32,7 @@ public class Browse extends Service {
 //		setUpBrowsingCategoriesAndValues(fedoraDigitalObjects);
 		filterFedoraObjectsForSpecificArchive(prefix);		
 		setUpBrowsingCategoriesAndValues(fedoraDigitalObjectsForArchive);
-		SearchController.buildAutocompleteJSONFile(fedoraDigitalObjects);//this is per archive..to be done at db stage/upload stage
+//		SearchController.buildAutocompleteJSONFile(fedoraDigitalObjects);//this is per archive..to be done at db stage/upload stage
 	}
 
 	public static Set<FedoraDigitalObject> getFedoraDigitalObjects() {

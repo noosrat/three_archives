@@ -40,13 +40,6 @@ public class SearchController implements Controller {
 				.replaceAll("\\s+", "");
 		request.setAttribute("searchCategories", retrieveSearchCategories());
 		request.setAttribute("browseCategories", Browse.getBrowsingCategories());
-		request.setAttribute("autocompletion", autocompleteValues(Browse.getFedoraDigitalObjectsForArchive()));// this
-																												// must
-																												// be
-																												// done
-																												// during
-																												// uploads
-
 		String requestPath = request.getPathInfo().substring(1);
 		if (requestPath != null) {
 			try {
@@ -148,53 +141,6 @@ public class SearchController implements Controller {
 		result.remove(SearchAndBrowseCategory.SUBJECT.name());
 		result.remove(SearchAndBrowseCategory.YEAR.name());
 		return result;
-	}
-
-	private static TreeSet<String> autocompleteValues(Set<FedoraDigitalObject> fedoraDigitalObjects) {
-		TreeSet<String> values = new TreeSet<String>();
-
-		for (FedoraDigitalObject fedoraDigitalObject : fedoraDigitalObjects) {
-			DublinCoreDatastream dublinCoreDatastream = (DublinCoreDatastream) fedoraDigitalObject.getDatastreams()
-					.get(DatastreamID.DC.name());
-
-			for (String dublinCoreFieldValue : dublinCoreDatastream.getDublinCoreMetadata().values()) {
-				String[] splitPercentage = dublinCoreFieldValue.split("%");
-				values.addAll(Arrays.asList(splitPercentage));
-				for (String string : splitPercentage) {
-					// now we split by spaces to get the individual tokents
-					String[] spaceSplit = string.split(" ");
-					values.addAll(Arrays.asList(spaceSplit));
-				}
-			}
-		}
-
-		return values;
-
-	}
-
-	/*
-	 * the below needs to moved to occur whenever there is an upload to the
-	 * database...the data will then be retrieved from the db from the dofields
-	 * table..
-	 */
-	public static void buildAutocompleteJSONFile(Set<FedoraDigitalObject> fedoraDigitalObjects) {
-		JSONArray list = new JSONArray();
-		Set<String> values = autocompleteValues(fedoraDigitalObjects);
-		for (String s : values) {
-			list.add(s);
-		}
-		try {
-
-			String fileName = "../webapps/data/" + archive + ".json";
-
-			FileWriter file = new FileWriter(fileName);
-			file.write(list.toJSONString());
-			file.flush();
-			file.close();
-
-		} catch (IOException e) {
-			System.out.println(e);
-		}
 	}
 
 	private Set<String> similarSearchTags(HttpServletRequest request) throws Exception { // this
