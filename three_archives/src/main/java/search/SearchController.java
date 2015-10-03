@@ -144,7 +144,9 @@ public class SearchController implements Controller {
 			result.add(cat.name());
 		}
 		// remove unwanted categories
-		result.remove(SearchAndBrowseCategory.MEDIA_TYPE);
+		result.remove(SearchAndBrowseCategory.MEDIA_TYPE.name());
+		result.remove(SearchAndBrowseCategory.SUBJECT.name());
+		result.remove(SearchAndBrowseCategory.YEAR.name());
 		return result;
 	}
 

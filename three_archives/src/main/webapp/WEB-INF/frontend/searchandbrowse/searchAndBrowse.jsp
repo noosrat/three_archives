@@ -39,14 +39,13 @@
 
 <script type="text/javascript">
 $(document).ready(function() {
-	var archive = '<%=session.getAttribute("ARCHIVE")%>
-	';
+	var archive = '<%=session.getAttribute("ARCHIVE")%>';
 		if (archive == "Sequins, Self and Struggle") {
-			var words = "/data/sequins.json";
+			var words = "/data/SequinsSelfandStruggle.json";
 		} else if (archive == "Movie Snaps") {
-			var words = "/data/movie.json";
+			var words = "/data/MovieSnaps.json";
 		} else if (archive == "Harfield Village") {
-			var words = "/data/harfield.json";
+			var words = "/data/HarfieldVillage.json";
 		}
 		var countries = new Bloodhound({
 			datumTokenizer : Bloodhound.tokenizers.whitespace,
