@@ -55,7 +55,7 @@ public class GeneralController implements Controller {
 		return "index.jsp";
 	}
 
-	private void testingAutoComplete(){
+	private void testingAutoComplete() throws Exception{
 		HashMap<String,String> archives = new HashMap<String,String>();
 		//this needs to be thought out for the config layer.
 		archives.put("Sequins,Self and Struggle", "sq");

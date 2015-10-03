@@ -226,10 +226,7 @@ $(document).ready(function() {
 
 									<div class="caption">
 										<div class="caption-content">
-											<br> Title:
-											${digitalObject.datastreams['DC'].dublinCoreMetadata['TITLE']}
-											<br> Type:
-											${digitalObject.datastreams['DC'].dublinCoreMetadata['FORMAT']}
+											[VIEW MORE DETAILS]
 										</div>
 										<!-- caption content -->
 									</div> <!-- caption --> <img

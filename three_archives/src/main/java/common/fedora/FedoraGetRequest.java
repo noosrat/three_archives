@@ -18,6 +18,7 @@ public class FedoraGetRequest {
 		this.queryParameters = new TreeMap<QueryParameters, String>();
 	}
 
+	
 	public FedoraGetRequest(String persistentIdentifier) {
 		this();
 		this.persistentIdentifier = persistentIdentifier;
@@ -188,10 +189,5 @@ public class FedoraGetRequest {
 
 	}
 
-//the below updates the index...it is important that this must happen after UPLOAD to fedora
-	//we need to make a connection to fedoraGsearch and then run this query
-	private void updateIndex(){
-	String query =	"http://localhost:8080/fedoragsearch/rest?operation=updateIndex&action=fromFoxmlFiles&value=";
-	}
 
 }

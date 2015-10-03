@@ -17,26 +17,29 @@ import org.json.simple.JSONArray;
 
 import common.fedora.DatastreamID;
 import common.fedora.DublinCoreDatastream;
+import common.fedora.FedoraClient;
 import common.fedora.FedoraDigitalObject;
 import common.fedora.FedoraException;
+import common.fedora.FedoraGetRequest;
 import search.SearchController;
 
 public class AutoCompleteUtility {
 	private HashMap<String, String> archives;
 	private Set<FedoraDigitalObject> fedoraDigitalObjects;
 
-	
-	public static void refreshAutocompleFile(HashMap<String, String> archives){
-		AutoCompleteUtility utility =new AutoCompleteUtility(archives);
-		try{
-		utility.retrieveAllFedoraDigitalObjects();
-		utility.buildAllAutocompleteJSONFiles();}
-		catch(Exception ex){
-			System.out.println("Something seems to have gone wrong while refreshing the autocompletion files ");
+	public static void refreshAutocompleFile(HashMap<String, String> archives) throws Exception {
+		AutoCompleteUtility utility = new AutoCompleteUtility(archives);
+		try {
+			utility.retrieveAllFedoraDigitalObjects();
+			utility.buildAllAutocompleteJSONFiles();
+			utility.updateSolrIndexWithNewFedoraObjects();
+		} catch (Exception ex) {
 			System.out.println(ex);
-		
+			throw new Exception("An error seems to have occurred, please report to IT",ex);
+
 		}
 	}
+
 	/*
 	 * this will get called whenever an upload has been completed....after the
 	 * upload and after the re-index We will regenerate the autocomplete files
@@ -49,7 +52,7 @@ public class AutoCompleteUtility {
 
 	}
 
-	private void retrieveAllFedoraDigitalObjects() throws SolrServerException, FedoraException{
+	private void retrieveAllFedoraDigitalObjects() throws SolrServerException, FedoraException {
 		try {
 			fedoraDigitalObjects = SearchController.getSearch().findFedoraDigitalObjects("*");
 		} catch (FedoraException e) {
@@ -91,7 +94,8 @@ public class AutoCompleteUtility {
 	 * database...the data will then be retrieved from the db from the dofields
 	 * table..
 	 */
-	private void buildAutocompleteJSONFile(String archive, Set<FedoraDigitalObject> filteredObjects) throws IOException {
+	private void buildAutocompleteJSONFile(String archive, Set<FedoraDigitalObject> filteredObjects)
+			throws IOException {
 		JSONArray list = new JSONArray();
 		Set<String> values = autocompleteValues(filteredObjects);
 		for (String s : values) {
@@ -100,7 +104,7 @@ public class AutoCompleteUtility {
 		try {
 
 			String fileName = "../webapps/data/" + archive + ".json";
-			System.out.println("We are making the autocomplere file for " + fileName );
+			System.out.println("We are making the autocomplere file for " + fileName);
 			File dir = new File(fileName);
 			if (!dir.exists()) {
 				System.out.println("OH NO THE DIRECTORY DOES NOT EXIST....WE MUST CREATE IT");
@@ -137,6 +141,20 @@ public class AutoCompleteUtility {
 
 		return values;
 
+	}
+
+	private void updateSolrIndexWithNewFedoraObjects() throws Exception {
+		System.out.println("about to updat solr index");
+		FedoraGetRequest fedoraGetRequest = new FedoraGetRequest();
+		StringBuilder query = new StringBuilder("http://localhost:8080/fedoragsearch/rest?operation=updateIndex&action=fromFoxmlFiles&value=");
+		fedoraGetRequest.setRequest(query);
+		try {
+			FedoraClient.executeWithoutParsingResponse(fedoraGetRequest);
+		} catch (FedoraException e) {
+			System.out.println(e);
+			throw new Exception("Unable to update the index after uploading new items.  Please report to IT",e);
+		}
+		System.out.println("Successfully updated index with new objects");
 	}
 
 }
