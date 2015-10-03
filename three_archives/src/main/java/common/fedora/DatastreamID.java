@@ -1,7 +1,7 @@
 package common.fedora;
 
 public enum DatastreamID {
-	DC("dublin core"), IMG("image"), IMG_LOW_RES("image"), VID("video"), AUD("audio"), PDF("pdf");
+	DC("DUBLIN CORE"), IMG("IMAGE"), IMG_LOW_RES("IMAGE"), VID("VIDEO"), AUD("AUDIO"), PDF("PDF");
 
 	private String description;
 

@@ -25,14 +25,15 @@ public class Browse extends Service {
 	private static TreeMap<String, TreeSet<String>> browsingCategories = new TreeMap<String, TreeSet<String>>();
 	private static TreeMap<String, TreeSet<String>> filteredBrowsingCategories = new TreeMap<String, TreeSet<String>>();
 	private static Set<FedoraDigitalObject> fedoraDigitalObjectsForArchive = new HashSet<FedoraDigitalObject>();
+	private static TreeMap<String, TreeMap<String, Set<FedoraDigitalObject>>> categorisedFedoraDigitalObjects; 
 
 	public static void initialise(String prefix) throws FedoraException, SolrServerException {
 		System.out.println("In browse cosntructor");
-		filterFedoraObjectsForSpecificArchive(prefix);		
+		filterFedoraObjectsForSpecificArchive(prefix);
 		setUpBrowsingCategoriesAndValues(fedoraDigitalObjectsForArchive);
 	}
 
-	public static void setFedoraDigitalObjects(Set<FedoraDigitalObject> fedoraDigitalObjects){
+	public static void setFedoraDigitalObjects(Set<FedoraDigitalObject> fedoraDigitalObjects) {
 		Browse.fedoraDigitalObjects = fedoraDigitalObjects;
 	}
 
@@ -52,12 +53,24 @@ public class Browse extends Service {
 		Browse.browsingCategories = browsingCategories;
 		setFilteredBrowsingCategories(browsingCategories);
 	}
+	
 
 	/*
 	 * populate these values dynamically from the CuREENT set of data being
 	 * browsed?? this makes sure that only necessary things and things that will
 	 * result in actual data will be populated
 	 */
+
+	public static TreeMap<String, TreeMap<String, Set<FedoraDigitalObject>>> getCategorisedFedoraDigitalObjects() {
+		return categorisedFedoraDigitalObjects;
+	}
+
+	private static void setCategorisedFedoraDigitalObjects(
+			TreeMap<String, TreeMap<String, Set<FedoraDigitalObject>>> categorisedFedoraDigitalObjects) {
+		Browse.categorisedFedoraDigitalObjects = categorisedFedoraDigitalObjects;
+	}
+	
+	
 
 	public static Set<FedoraDigitalObject> getFedoraDigitalObjectsForArchive() {
 		return fedoraDigitalObjectsForArchive;
@@ -73,8 +86,8 @@ public class Browse extends Service {
 
 	public static void setFilteredBrowsingCategories(TreeMap<String, TreeSet<String>> filteredBrowsingCategories) {
 		Browse.filteredBrowsingCategories = filteredBrowsingCategories;
+		groupFedoraObjectsInCategoriesAndSubCategories();
 	}
-	
 
 	private static void filterFedoraObjectsForSpecificArchive(String multiMediaPrefix) {
 		System.out.println("PREFIX " + multiMediaPrefix);
@@ -90,7 +103,6 @@ public class Browse extends Service {
 
 		setFedoraDigitalObjectsForArchive(filteredFedoraDigitalObjects);
 	}
-
 
 	private static void setUpBrowsingCategoriesAndValues(Set<FedoraDigitalObject> fedoraDigitalObjects) {
 		TreeMap<String, TreeSet<String>> searchAndBrowseCategoriesAndValues = new TreeMap<String, TreeSet<String>>();
@@ -131,7 +143,7 @@ public class Browse extends Service {
 					break;// search description
 				case EXHIBITION:
 					break; // this will be a database query
-				case MEDIA_TYPE:
+				case FORMAT:
 					String f = dc.get(DublinCore.FORMAT.name());
 					String t = dc.get(DublinCore.TYPE.name());
 
@@ -283,7 +295,7 @@ public class Browse extends Service {
 					iterator.remove();
 				}
 				break;
-			case MEDIA_TYPE: // should we look in the datastream type and
+			case FORMAT: // should we look in the datastream type and
 								// then
 				// in the format of the actual Dc metadata
 				/*
@@ -302,10 +314,11 @@ public class Browse extends Service {
 					format += " " + t.toLowerCase();
 				}
 				String media = filterValue.toLowerCase();
+				
 				// check for JPG, JPEG, GIF, PNG
 				if (format != null && !format.isEmpty()) {
 
-					if (DatastreamID.parseMediaType(format) == DatastreamID.parseDescription(media)) {
+					if (DatastreamID.parseMediaType(format) != DatastreamID.parseDescription(media)) {
 						iterator.remove();
 
 					}
@@ -325,6 +338,64 @@ public class Browse extends Service {
 		System.out.println("Fiiltered objects " + filteredObjects.size());
 		setFilteredBrowsingCategories(filteredCategories);
 		setFilteredDigitalObjects(filteredObjects);
+	}
+
+	private static void groupFedoraObjectsInCategoriesAndSubCategories() {
+		// Map<Catgory, Map<SubCategory,FedoraObjects>>
+		System.out.println("BEGAN GROUPING OUR OBJECTS INTO THEIR SUBCATEGORIES");
+		TreeMap<String, TreeMap<String, Set<FedoraDigitalObject>>> groupedObjects = new TreeMap<String, TreeMap<String, Set<FedoraDigitalObject>>>();
+
+		for (String category : getBrowsingCategories().keySet()) {
+			groupedObjects.put(category, new TreeMap<String, Set<FedoraDigitalObject>>());
+		} // now we have the main categories set up but we still need to fill in
+			// the sub categories as well as the actual objects
+		Set<FedoraDigitalObject> dig = new HashSet<FedoraDigitalObject>(fedoraDigitalObjectsForArchive);
+
+		for (FedoraDigitalObject fedoraDigitalObject : dig) {
+			DublinCoreDatastream dc = (DublinCoreDatastream) fedoraDigitalObject.getDatastreams()
+					.get(DatastreamID.DC.name());
+			HashMap<String, String> dcMetadata = dc.getDublinCoreMetadata();
+			// iterating through objects for this archive
+			for (String category : groupedObjects.keySet()) {
+				//if main category is year look in date...if main cateogry is type look in format too
+				// iterating through our main datastructure..we are going
+				// through all the main categories now..we need to fill in the
+				// sub categories...
+				for (String subCategory : getBrowsingCategories().get(category)) {
+					String tempSub = subCategory;
+					if (category.equalsIgnoreCase("FORMAT")){
+						tempSub = DatastreamID.valueOf(subCategory).getDescription();
+					}
+					
+					if (groupedObjects.get(category).get(tempSub)==null){
+						groupedObjects.get(category).put(tempSub, new HashSet<FedoraDigitalObject>());
+					}
+					// this is iterating through the sub categories which have
+					// been assigned to this main category
+
+					// now we look in the dublin core of the object to see
+					// whether it's category and subcategory match the one we
+					// are in...if they do then we must add it to the internal
+					// list
+					String tempCat = category;
+					if (category.equalsIgnoreCase(SearchAndBrowseCategory.YEAR.name())){
+						tempCat = "DATE";
+					}
+				
+					if (dcMetadata.get(tempCat) != null && dcMetadata.get(tempCat).contains(tempSub)) {
+						// now we know that our sub category exists in the
+						// categor of this object...so the object nees to be
+						// added to the final structure
+						
+						groupedObjects.get(category).get(tempSub).add(fedoraDigitalObject);
+
+					}
+				}
+			}
+			System.out.println("COMPLETED GROUPING OUR OBJECTS INTO THEIR SUBCATEGORIES");
+		}
+		setCategorisedFedoraDigitalObjects(groupedObjects);
+
 	}
 
 }

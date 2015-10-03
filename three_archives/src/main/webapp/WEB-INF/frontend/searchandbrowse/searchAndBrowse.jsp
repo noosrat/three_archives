@@ -148,23 +148,22 @@ $(document).ready(function() {
 							class="fa fa-fw fa-caret-down"></i> </a></li>
 
 					<c:set var="count" value="0" scope="page" />
-					<c:forEach var="category" items="${browseCategories}">
-						<!-- <li><a href="${pageContext.request.contextPath}/archives/browse?category=${category.key}" data-toggle="collapse" data-target="${pageContext.request.contextPath}/archives/browse?category=${category.key}"> -->
-						<li><a href="javascript:;" data-toggle="collapse"
-							data-target="#demo${count}"> <i class="fa fa-fw fa-arrows-v"></i>${category.key}
-								<span class="badge">${fn:length(category.value)}</span><i
-								class="fa fa-fw fa-caret-down"></i>
-						</a>
+					<c:forEach var="category" items="${categoriesAndObjects}">
+						 
+						<li><a href="javascript:;" data-toggle="collapse" data-target="#demo${count}"> <i class="fa fa-fw fa-arrows-v"></i>${category.key}
+								<span class="badge">${fn:length(category.value)}</span><i class="fa fa-fw fa-caret-down"></i>
+						</a> 
 							<ul id="demo${count}" class="collapse">
 								<c:forEach var="categoryValue" items="${category.value}">
-									<li><a
+									<li><a href="${pageContext.request.contextPath}/archives/browse?category=${category.key}&${category.key}=${categoryValue.key}">${categoryValue.key}  <span class="badge">${fn:length(categoryValue.value)}</span></a></li>
+								<!-- 	<li><a
 										href="${pageContext.request.contextPath}/archives/browse?category=${category.key}&${category.key}=${categoryValue}">${categoryValue}</a></li>
-								</c:forEach>
+						 -->		</c:forEach>
 
 							</ul></li>
 						<c:set var="count" value="${count + 1}" scope="page" />
 					</c:forEach>
-					<li>
+										<li>
 
 						<form action="${pageContext.request.contextPath}/archives/history"
 							method="post">
