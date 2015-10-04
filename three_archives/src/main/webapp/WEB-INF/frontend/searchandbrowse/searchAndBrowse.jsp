@@ -39,14 +39,8 @@
 
 <script type="text/javascript">
 $(document).ready(function() {
-	var archive = '<%=session.getAttribute("ARCHIVE")%>';
-		if (archive == "Sequins, Self and Struggle") {
-			var words = "/data/sequins.json";
-		} else if (archive == "Movie Snaps") {
-			var words = "/data/movie.json";
-		} else if (archive == "Harfield Village") {
-			var words = "/data/harfield.json";
-		}
+		var archive ='<%=session.getAttribute("ARCHIVE_CONCAT")%>';
+		var words = "/data/" + archive + ".json";
 		var countries = new Bloodhound({
 			datumTokenizer : Bloodhound.tokenizers.whitespace,
 			queryTokenizer : Bloodhound.tokenizers.whitespace,
@@ -72,32 +66,9 @@ $(document).ready(function() {
 
 
 				<div class="navbar-header">
-
-					<c:choose>
-						<c:when test="${ARCHIVE =='Sequins, Self and Struggle'}">
-
-							<a class="navbar-brand"
-								href="${pageContext.request.contextPath}/archives/SequinsSelfandStruggle">${ARCHIVE}</a>
-						</c:when>
-						<c:when test="${ARCHIVE =='Harfield Village'}">
-
-							<a class="navbar-brand"
-								href="${pageContext.request.contextPath}/archives/HarfieldVillage">${ARCHIVE}</a>
-						</c:when>
-						<c:when test="${ARCHIVE =='Movie Snaps'}">
-
-							<a class="navbar-brand"
-								href="${pageContext.request.contextPath}/archives/MovieSnaps">${ARCHIVE}</a>
-						</c:when>
-					</c:choose>
+					<a class="navbar-brand"
+						href="${pageContext.request.contextPath}/archives/${ARCHIVE_CONCAT}">${ARCHIVE}</a>
 				</div>
-
-
-
-
-
-
-
 				<div id="navbar" class="collapse navbar-collapse">
 					<ul class="nav navbar-nav navbar-right top-nav">
 						<li class="dropdown"><a
@@ -139,14 +110,15 @@ $(document).ready(function() {
 			<!-- side bar -->
 			<div class="collapse navbar-collapse navbar-ex1-collapse">
 				<ul class="nav navbar-nav side-nav">
-					
-					
-					<li><a href="${pageContext.request.contextPath}/archives/browse" data-toggle="collapse"
-							data-target="${pageContext.request.contextPath}/archives/browse"><i class="fa fa-fw fa-arrows-v"></i>BROWSE ALL
-								<i
-								class="fa fa-fw fa-caret-down"></i> </a>
-					</li>
-					
+
+
+					<li><a
+						href="${pageContext.request.contextPath}/archives/browse"
+						data-toggle="collapse"
+						data-target="${pageContext.request.contextPath}/archives/browse"><i
+							class="fa fa-fw fa-arrows-v"></i>BROWSE ALL <i
+							class="fa fa-fw fa-caret-down"></i> </a></li>
+
 					<c:set var="count" value="0" scope="page" />
 					<c:forEach var="category" items="${browseCategories}">
 						<li><a href="javascript:;" data-toggle="collapse"

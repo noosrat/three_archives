@@ -40,8 +40,7 @@ public class HistoryController implements Controller {
 		String pathInfo = request.getPathInfo().substring(1);
 		if (pathInfo.equalsIgnoreCase("SequinsSelfandStruggle") || pathInfo.equalsIgnoreCase("MovieSnaps")
 				|| pathInfo.equalsIgnoreCase("HarfieldVillage")) {
-			archive = ((String) request.getSession().getAttribute("ARCHIVE")).replaceAll("[^a-zA-Z0-9\\s]", "")
-					.replaceAll("\\s+", "");
+			archive = (String)request.getSession().getAttribute("ARCHIVE_CONCAT");
 			initialiseUserCookies(request, response);
 			return null;
 		} else {

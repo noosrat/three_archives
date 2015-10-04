@@ -35,8 +35,7 @@
 
 <script type="text/javascript">
 	$(document).ready(function() {
-		var archive ='<%=session.getAttribute("ARCHIVE_CONCAT")%>';
-		var words = "/data/"+archive+".json";
+		var words = "/data/movie.json";
 		var countries = new Bloodhound({
 			datumTokenizer : Bloodhound.tokenizers.whitespace,
 			queryTokenizer : Bloodhound.tokenizers.whitespace,
@@ -51,22 +50,7 @@
 		});
 	});
 </script>
-<style>
-	
-		.Sequins{
-			width:150px;
-			height:100px;
-			background-color: #ffffff;
-    			border: 1px solid black;
-    			opacity: 0.8;	
 
-		}
-		h3{
-			margin: 5%;
-    			font-weight: bold;
-    			color: #000000;
-		}
-</style>
 </head>
 
 <body>
@@ -77,7 +61,7 @@
 		<div class="container-fluid">
 			<!-- Brand and toggle get grouped for better mobile display -->
 			<div class="navbar-header">
-				<a class="navbar-brand" href="${pageContext.request.contextPath}/archives/${ARCHIVE_CONCAT}">${ARCHIVE}</a>
+				<a class="navbar-brand" href="${pageContext.request.contextPath}/archives/MovieSnaps">Movie Snaps</a> <!-- CHANGE -->
 			</div>
 			<div class="collapse navbar-collapse"
 				id="bs-example-navbar-collapse-1">
@@ -94,6 +78,7 @@
 						href="${pageContext.request.contextPath}/archives/redirect_downloads">Downloads</a></li>
 				</ul>
 				<!-- search components-->
+				
 				<div id="bs-example-navbar-collapse-1"
 					class="collapse navbar-collapse">
 
@@ -136,25 +121,18 @@
 							</form>
 						</li>
 					</ul>
-
-
 				</div>
 			</div>
 			<!-- end of search bar components -->
-
 		</div>
-
 	</nav>
 
 
 	<div class="container">
 		<div class="row">
 			<div class="col-lg-12 text-center">
-			<br><br>
-				<div class="row">
-    				<div class="col-sm-6"><img style="width:100%;position:relative;"src="${pageContext.request.contextPath}/images/MISSGAY.jpg"><div class="Sequins" style="position: absolute; top: 70%;left:40%;z-index:10;"><h3>Miss Gay Western Cape</h3></div></div>
-					<div class="col-sm-6"><img style="width:100%;position:relative"src="${pageContext.request.contextPath}/images/SPRINGQUEEN.jpg"><div class="Sequins" style="position: absolute; top: 70%;left:40%;z-index:10;"><h3>Spring Queen</h3></div></div>
-  				</div>
+				<br> <br> <br>
+				<h1>Respective archive home page</h1>
 			</div>
 		</div>
 		<!-- /.row -->
