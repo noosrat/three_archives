@@ -30,7 +30,7 @@ public class SearchController implements Controller {
 		return search;
 	}
 
-	public String execute(HttpServletRequest request, HttpServletResponse response) {
+	public String execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		String result = "WEB-INF/frontend/searchandbrowse/searchAndBrowse.jsp";
 		archive = ((String) request.getSession().getAttribute("ARCHIVE")).replaceAll("[^a-zA-Z0-9\\s]", "")
 				.replaceAll("\\s+", "");
@@ -53,6 +53,7 @@ public class SearchController implements Controller {
 				request.setAttribute("message", exception.getStackTrace());
 			}
 		}
+		similarSearchTags(request);
 		return result;
 
 	}
@@ -88,7 +89,7 @@ public class SearchController implements Controller {
 		System.out.println("VALUE OF TERMS " + s);
 		// we want to add this to our word cloud..this is what has been typed
 		// into the search box
-		History.addTextToTagCloud(s);
+		History.addTextToTagCloud(s,true);
 		// if (requestPath.contains("search_objects/category")) {
 		// then do all the specific searching
 		String[] splitPath = requestPath.split("=");
@@ -213,7 +214,7 @@ public class SearchController implements Controller {
 				}
 			}
 		}
-		request.getSession().setAttribute("searchTags", results);
+		request.setAttribute("searchTags", results);
 		return results;
 	}
 

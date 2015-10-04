@@ -156,20 +156,22 @@ public class History extends Service {
 	}
 
 	/* this must be done with every single search and browse */
-	public static void addTextToTagCloud(String text) {
+	public static void addTextToTagCloud(String text,boolean tokenize) {
 		if (text==null){
 			return;
 		}
-		System.out.println("Adding text to tag cloud text...wooohooooo");
+		if (tokenize){
 		String[] splitText = text.split(" ");
 		// we want to eliminate any non-character text
 		for (String singleWord : splitText) {
 			String word = singleWord.replaceAll("[^a-zA-Z0-9\\s]", "");
 			tagCloudText.append(word).append(",");
 
-		}
+		}}
+		tagCloudText.append(text.replaceAll("[^a-zA-Z0-9\\s]", "")).append(",");
 
 	}
+
 
 	public void persistTagCloudText(String filename) {
 		/*

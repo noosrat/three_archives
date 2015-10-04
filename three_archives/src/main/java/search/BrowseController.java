@@ -25,7 +25,7 @@ public class BrowseController implements Controller {
 		request.setAttribute("searchCategories", SearchController.retrieveSearchCategories());
 		(new HistoryController()).execute(request, response);
 		// return result;
-		request.setAttribute("categoriesAndObjects", Browse.getCategorisedFedoraDigitalObjects());
+		request.getSession().setAttribute("categoriesAndObjects", Browse.getCategorisedFedoraDigitalObjects());
 		return result;
 	}
 
@@ -68,7 +68,7 @@ public class BrowseController implements Controller {
 			 * and the actual value
 			 * 
 			 */
-			History.addTextToTagCloud(category);
+			History.addTextToTagCloud(category,false);
 			request.setAttribute("browseCategory", category);
 			
 			if (value==null){
@@ -76,7 +76,7 @@ public class BrowseController implements Controller {
 			}
 			
 			
-			History.addTextToTagCloud(value);
+			History.addTextToTagCloud(value,false);
 			/*
 			 * our category is not null...therefore we need to start filtering
 			 * the searches by what has been selected by the user

@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import history.HistoryController;
+import search.Browse;
 import search.BrowseController;
 import search.SearchController;
 import uploads.AutoCompleteUtility;
@@ -83,6 +84,7 @@ public class GeneralController implements Controller {
 		session.setAttribute("tagCloud", null);
 		session.setAttribute("objectsForArchive", null);
 		session.setAttribute("mediaPrefix", null);
+		session.setAttribute("categoriesAndObjects", null);
 		System.out.println("Session information after clearing out");
 
 		System.out.println("Category cookie: " + session.getAttribute("browseCategoryCookie") + " TagCloud "

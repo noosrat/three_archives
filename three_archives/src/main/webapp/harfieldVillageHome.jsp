@@ -100,7 +100,7 @@
 									<div id="prefetch">
 										<input
 											class="form-control typeahead tt-query tt-hint tt-dropdown-menu tt-suggestion"
-											data-provider="typeahead" type="text"
+											data-provider="typeahead"  data-role="tagsinput" type="text"
 											placeholder="Search Archive" autocomplete="off"
 											spellcheck="false" name="terms">
 									</div>

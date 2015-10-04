@@ -28,9 +28,6 @@
 <link href="${pageContext.request.contextPath}/theme/css/sb-admin.css"
 	rel="stylesheet">
 <link
-	href="${pageContext.request.contextPath}/css/thumbnail-gallery.min.css"
-	rel="stylesheet">
-<link
 	href="${pageContext.request.contextPath}/css/bootstrap-lightbox.min.css"
 	rel="stylesheet">
 <script type="text/javascript"
@@ -42,7 +39,7 @@
 
 <script type="text/javascript">
 $(document).ready(function() {
-	var archive = '<%=session.getAttribute("ARCHIVE")%>	';
+	var archive = '<%=session.getAttribute("ARCHIVE")%>';
 		if (archive == "Sequins, Self and Struggle") {
 			var words = "/data/SequinsSelfandStruggle.json";
 		} else if (archive == "Movie Snaps") {
