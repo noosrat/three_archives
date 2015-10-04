@@ -128,7 +128,7 @@ public class ExhibitionController implements Controller {
 					FedoraCommunicator fc= new FedoraCommunicator();
 					cart[0]="KEL:3";
 					cart[1]="KEL:2";
-					cart[2]="KEL:3";
+					cart[2]="KEL:14";
 					cart[3]="KEL:4";
 					cart[4]="KEL:5";
 					cart[5]="KEL:6";
