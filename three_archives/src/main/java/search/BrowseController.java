@@ -20,13 +20,13 @@ public class BrowseController implements Controller {
 	public String execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		Browse.setFedoraDigitalObjects((Set<FedoraDigitalObject>)(request.getSession().getAttribute("objects")));
 		Browse.initialise((String) request.getSession().getAttribute("mediaPrefix"));
-		// String result = browseFedoraObjects(request, response);
+		String result = browseFedoraObjects(request, response);
 		browseFedoraObjects(request, response);
 		request.setAttribute("searchCategories", SearchController.retrieveSearchCategories());
 		(new HistoryController()).execute(request, response);
 		// return result;
 		request.setAttribute("categoriesAndObjects", Browse.getCategorisedFedoraDigitalObjects());
-		return "WEB-INF/frontend/searchandbrowse/searchAndBrowse.jsp";
+		return result;
 	}
 
 	private void browseAllFedoraObjects(HttpServletRequest request, HttpServletResponse response)
@@ -52,9 +52,10 @@ public class BrowseController implements Controller {
 		request.getSession().setAttribute("objectsForArchive", fedoraDigitalObjectsForArchive);
 	}
 
-	private void browseFedoraObjects(HttpServletRequest request, HttpServletResponse response) throws Exception {
+	private String browseFedoraObjects(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		String category = request.getParameter("category");
 		String value = request.getParameter(category);
+		String result = "WEB-INF/frontend/searchandbrowse/searchAndBrowse.jsp";
 		/*
 		 * if the category is blank or null it means that it is just general
 		 * browse
@@ -68,17 +69,26 @@ public class BrowseController implements Controller {
 			 * 
 			 */
 			History.addTextToTagCloud(category);
+			request.setAttribute("browseCategory", category);
+			
+			if (value==null){
+				return "WEB-INF/frontend/searchandbrowse/browseCategory.jsp";
+			}
+			
+			
 			History.addTextToTagCloud(value);
 			/*
 			 * our category is not null...therefore we need to start filtering
 			 * the searches by what has been selected by the user
 			 */
 			Browse.filterFedoraDigitalObjects(Browse.getFedoraDigitalObjectsForArchive(), category, value);
-			request.setAttribute("browseCategory", category);
 			request.setAttribute("categoryValue", value);
+			
+			
 			request.getSession().setAttribute("objectsForArchive", Browse.getFilteredDigitalObjects());
 		}
 		request.setAttribute("browseCategories", Browse.getBrowsingCategories());
+		return result;
 	}
 
 }
