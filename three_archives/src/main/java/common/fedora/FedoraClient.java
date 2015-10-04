@@ -24,6 +24,12 @@ public class FedoraClient {
 	public static Client getClient() {
 		return client;
 	}
+	
+	public static void executeWithoutParsingResponse(FedoraGetRequest fedoraGetRequest) throws FedoraException{
+		WebResource webResource = client.resource(fedoraGetRequest.getRequest().toString());
+		ClientResponse clientResponse = webResource.get(ClientResponse.class);
+		clientResponse.getEntityInputStream();
+	}
 
 	public static FedoraXMLResponseParser execute(FedoraGetRequest fedoraGetRequest) throws FedoraException {
 		WebResource webResource = client.resource(fedoraGetRequest.getRequest().toString());

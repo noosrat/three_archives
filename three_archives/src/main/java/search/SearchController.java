@@ -1,11 +1,10 @@
 package search;
 
+import java.io.File;
 import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -18,8 +17,6 @@ import org.json.simple.parser.JSONParser;
 import org.noggit.JSONParser.ParseException;
 
 import common.controller.Controller;
-import common.fedora.DatastreamID;
-import common.fedora.DublinCoreDatastream;
 import common.fedora.FedoraDigitalObject;
 import common.fedora.FedoraException;
 import history.History;
@@ -33,14 +30,12 @@ public class SearchController implements Controller {
 		return search;
 	}
 
-	public String execute(HttpServletRequest request, HttpServletResponse response) {
+	public String execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		String result = "WEB-INF/frontend/searchandbrowse/searchAndBrowse.jsp";
 		archive = ((String) request.getSession().getAttribute("ARCHIVE")).replaceAll("[^a-zA-Z0-9\\s]", "")
 				.replaceAll("\\s+", "");
 		request.setAttribute("searchCategories", retrieveSearchCategories());
 		request.setAttribute("browseCategories", Browse.getBrowsingCategories());
-		request.setAttribute("autocompletion", autocompleteValues(Browse.getFedoraDigitalObjects()));
-
 		String requestPath = request.getPathInfo().substring(1);
 		if (requestPath != null) {
 			try {
@@ -58,6 +53,7 @@ public class SearchController implements Controller {
 				request.setAttribute("message", exception.getStackTrace());
 			}
 		}
+		similarSearchTags(request);
 		return result;
 
 	}
@@ -65,7 +61,7 @@ public class SearchController implements Controller {
 	private void searchFedoraDigitalObjects(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		String requestPath = request.getPathInfo().substring(1);
 		System.out.println("SEARCHING FEDORA DIGITAL OBJECTS " + requestPath);
-		
+
 		StringBuilder terms = new StringBuilder("");
 
 		String limit = request.getParameter("limitSearch");
@@ -76,7 +72,7 @@ public class SearchController implements Controller {
 			// what we need to do here is construct a dolr search with all the
 			// existing items and the new condition..
 			Set<FedoraDigitalObject> exisitingObjects = (Set<FedoraDigitalObject>) request.getSession()
-					.getAttribute("objects");
+					.getAttribute("objectsForArchive");
 			// we need to build the query for fedora
 			terms.append("(");
 			for (FedoraDigitalObject digitalObject : exisitingObjects) {
@@ -86,11 +82,14 @@ public class SearchController implements Controller {
 			// now we can add the rest of the actual query
 			terms.append(" AND ");
 		}
+		
+		
 
 		String s = request.getParameter("terms");
 		System.out.println("VALUE OF TERMS " + s);
-		//we want to add this to our word cloud..this is what has been typed into the search box
-		History.addTextToTagCloud(s);
+		// we want to add this to our word cloud..this is what has been typed
+		// into the search box
+		History.addTextToTagCloud(s,true);
 		// if (requestPath.contains("search_objects/category")) {
 		// then do all the specific searching
 		String[] splitPath = requestPath.split("=");
@@ -124,66 +123,40 @@ public class SearchController implements Controller {
 
 		Set<FedoraDigitalObject> digitalObjects = new HashSet<FedoraDigitalObject>();
 		digitalObjects = getSearch().findFedoraDigitalObjects(new String(terms));
+		filterFedoraObjectsForSpecificArchive((String)request.getSession().getAttribute("mediaPrefix"),digitalObjects);
+		//need to restrict these for this archive....
+		
 		if ((digitalObjects == null || digitalObjects.isEmpty())) {
 			request.setAttribute("message", "No results to return");
 		}
-		request.getSession().setAttribute("objects", digitalObjects);
+		request.getSession().setAttribute("objectsForArchive", digitalObjects);
 		similarSearchTags(request);
 	}
+	
+	private void filterFedoraObjectsForSpecificArchive(String multiMediaPrefix, Set<FedoraDigitalObject> fedoraDigitalObjects) {
+		for (Iterator<FedoraDigitalObject> iterator = fedoraDigitalObjects.iterator(); iterator.hasNext();) {
+			FedoraDigitalObject element = iterator.next();
+			if (!(element.getPid().contains(multiMediaPrefix))) {
+				iterator.remove(); // remove any object who does not have the
+									// prefix for this archive
+				System.out.println("removing object with pid " + element.getPid());
+			}
+		}
+
+	}
+
+
 
 	public static ArrayList<String> retrieveSearchCategories() {
 		ArrayList<String> result = new ArrayList<String>();
 		for (SearchAndBrowseCategory cat : SearchAndBrowseCategory.values()) {
 			result.add(cat.name());
 		}
+		// remove unwanted categories
+		result.remove(SearchAndBrowseCategory.FORMAT.name());
+		result.remove(SearchAndBrowseCategory.SUBJECT.name());
+		result.remove(SearchAndBrowseCategory.YEAR.name());
 		return result;
-	}
-
-	private static TreeSet<String> autocompleteValues(Set<FedoraDigitalObject> fedoraDigitalObjects) {
-		TreeSet<String> values = new TreeSet<String>();
-
-		for (FedoraDigitalObject fedoraDigitalObject : fedoraDigitalObjects) {
-			DublinCoreDatastream dublinCoreDatastream = (DublinCoreDatastream) fedoraDigitalObject.getDatastreams()
-					.get(DatastreamID.DC.name());
-
-			for (String dublinCoreFieldValue : dublinCoreDatastream.getDublinCoreMetadata().values()) {
-				String[] splitPercentage = dublinCoreFieldValue.split("%");
-				values.addAll(Arrays.asList(splitPercentage));
-				for (String string : splitPercentage) {
-					// now we split by spaces to get the individual tokents
-					String[] spaceSplit = string.split(" ");
-					values.addAll(Arrays.asList(spaceSplit));
-				}
-			}
-		}
-
-		return values;
-
-	}
-
-	/*
-	 * the below needs to moved to occur whenever there is an upload to the
-	 * database...the data will then be retrieved from the db from the dofields
-	 * table..
-	 */
-	public static void buildAutocompleteJSONFile(Set<FedoraDigitalObject> fedoraDigitalObjects) {
-		JSONArray list = new JSONArray();
-		Set<String> values = autocompleteValues(fedoraDigitalObjects);
-		for (String s : values) {
-			list.add(s);
-		}
-		try {
-
-			String fileName = "../webapps/data/" + archive + ".json";
-
-			FileWriter file = new FileWriter(fileName);
-			file.write(list.toJSONString());
-			file.flush();
-			file.close();
-
-		} catch (IOException e) {
-			System.out.println(e);
-		}
 	}
 
 	private Set<String> similarSearchTags(HttpServletRequest request) throws Exception { // this
@@ -213,6 +186,12 @@ public class SearchController implements Controller {
 		// reading in
 		Set<String> autocomplete;
 		try {
+			File dir = new File("../webapps/data/");
+			if (!dir.exists()) {
+				System.out.println("OH NO THE DIRECTORY DOES NOT EXIST....WE MUST CREATE IT");
+				dir.mkdir();
+			}
+
 			Object obj = parser.parse(new FileReader(new String(file)));
 			JSONArray array = (JSONArray) obj;
 			autocomplete = new TreeSet<String>(array);

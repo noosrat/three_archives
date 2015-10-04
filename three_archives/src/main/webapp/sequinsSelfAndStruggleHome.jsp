@@ -35,7 +35,7 @@
 
 <script type="text/javascript">
 	$(document).ready(function() {
-		var words = "/data/sequins.json";
+		var words = "/data/SequinsSelfandStruggle.json";
 		var countries = new Bloodhound({
 			datumTokenizer : Bloodhound.tokenizers.whitespace,
 			queryTokenizer : Bloodhound.tokenizers.whitespace,

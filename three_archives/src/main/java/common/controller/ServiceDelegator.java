@@ -59,7 +59,6 @@ public class ServiceDelegator {
 			} else {
 				System.out.println("PROCESSING GENERAL");
 				url = controllers.get("general").execute(request, response);
-				clearSessionInformation(request.getSession());//this is done when they go back to the homepage of personal histories...so that cookies don't overlap into the differnet archives
 			}
 		} catch (Exception exception) {
 			request.setAttribute("message", exception.getMessage());
@@ -75,22 +74,6 @@ public class ServiceDelegator {
 		HistoryController.persistNecessaryRequestInformation();
 
 	}
-	//the following all differ per archive
-	private void clearSessionInformation(HttpSession session){
-		System.out.println("Clearing session information");
-		session.setAttribute("browseCategoryCookie", null);
-		session.setAttribute("objectsModifiedSinceLastVisit", null);
-		session.setAttribute("categoriesWithRecentUpdates", null);
-		session.setAttribute("userFavouriteCategoriesWithRecentUpdates", null);
-		session.setAttribute("tagCloud", null);
-		System.out.println("Session information after clearing out");
-		
-		System.out.println("Category cookie: " + session.getAttribute("browseCategoryCookie") + " TagCloud " + session.getAttribute("tagCloud"));
-		
-		
-		
-		
-
-	}
+	
 
 }

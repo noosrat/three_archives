@@ -35,7 +35,7 @@
 
 <script type="text/javascript">
 	$(document).ready(function() {
-		var words = "/data/movie.json";
+		var words = "/data/MovieSnaps.json";
 		var countries = new Bloodhound({
 			datumTokenizer : Bloodhound.tokenizers.whitespace,
 			queryTokenizer : Bloodhound.tokenizers.whitespace,

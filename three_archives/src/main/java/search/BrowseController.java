@@ -1,3 +1,5 @@
+
+
 package search;
 
 import java.util.Set;
@@ -16,11 +18,15 @@ import history.HistoryController;
 public class BrowseController implements Controller {
 
 	public String execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
-		Browse.initialise();
-		this.browseFedoraObjects(request, response);
+		Browse.setFedoraDigitalObjects((Set<FedoraDigitalObject>)(request.getSession().getAttribute("objects")));
+		Browse.initialise((String) request.getSession().getAttribute("mediaPrefix"));
+		String result = browseFedoraObjects(request, response);
+		browseFedoraObjects(request, response);
 		request.setAttribute("searchCategories", SearchController.retrieveSearchCategories());
 		(new HistoryController()).execute(request, response);
-		return "WEB-INF/frontend/searchandbrowse/searchAndBrowse.jsp";
+		// return result;
+		request.getSession().setAttribute("categoriesAndObjects", Browse.getCategorisedFedoraDigitalObjects());
+		return result;
 	}
 
 	private void browseAllFedoraObjects(HttpServletRequest request, HttpServletResponse response)
@@ -29,19 +35,27 @@ public class BrowseController implements Controller {
 		// this is to return everything in the archive collection...this is just
 		// to illustrate browse temporarily
 		/* we are intiially searching all the fedora objects here */
-		Set<FedoraDigitalObject> fedoraDigitalObjects = Browse.getFedoraDigitalObjects();
+		Set<FedoraDigitalObject> fedoraDigitalObjectsForArchive = Browse.getFedoraDigitalObjectsForArchive(); // we
+																												// cannot
+																												// do
+																												// this
+																												// without
+																												// first
+																												// getting
+																												// all
+																												// objects
+		// before we actually set the attribute we need to filter per archive
 
-		if (fedoraDigitalObjects != null && !fedoraDigitalObjects.isEmpty()) {
-			request.getSession().setAttribute("objects", fedoraDigitalObjects);
-		} else {
-			request.setAttribute("message", "No results to return");
+		if (fedoraDigitalObjectsForArchive == null || fedoraDigitalObjectsForArchive.isEmpty()) {
+			request.setAttribute("message", "No results to retuRrn");
 		}
+		request.getSession().setAttribute("objectsForArchive", fedoraDigitalObjectsForArchive);
 	}
 
-	private void browseFedoraObjects(HttpServletRequest request, HttpServletResponse response)
-			throws Exception {
+	private String browseFedoraObjects(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		String category = request.getParameter("category");
 		String value = request.getParameter(category);
+		String result = "WEB-INF/frontend/searchandbrowse/searchAndBrowse.jsp";
 		/*
 		 * if the category is blank or null it means that it is just general
 		 * browse
@@ -50,24 +64,31 @@ public class BrowseController implements Controller {
 			browseAllFedoraObjects(request, response);
 		} else {
 			/*
-			 * we want to add these values to our word cloud...both the category and the actual value
+			 * we want to add these values to our word cloud...both the category
+			 * and the actual value
 			 * 
 			 */
-			History.addTextToTagCloud(category);
-			History.addTextToTagCloud(value);
+			History.addTextToTagCloud(category,false);
+			request.setAttribute("browseCategory", category);
+			
+			if (value==null){
+				return "WEB-INF/frontend/searchandbrowse/browseCategory.jsp";
+			}
+			
+			
+			History.addTextToTagCloud(value,false);
 			/*
 			 * our category is not null...therefore we need to start filtering
 			 * the searches by what has been selected by the user
 			 */
-			Browse.filterFedoraDigitalObjects(Browse.getFedoraDigitalObjects(), category, value);//we are filtering through all the digital objects...look at filtering filtered objects when thinking about being able to filter the search
-			request.setAttribute("browseCategory", category);
+			Browse.filterFedoraDigitalObjects(Browse.getFedoraDigitalObjectsForArchive(), category, value);
 			request.setAttribute("categoryValue", value);
-			request.getSession().setAttribute("objects", Browse.getFilteredDigitalObjects());
-			//this is where we should call the HistoryBrowseMethod to update what the user browses by the most
-//			(new HistoryController()).execute(request, response);
+			
+			
+			request.getSession().setAttribute("objectsForArchive", Browse.getFilteredDigitalObjects());
 		}
-//		request.setAttribute("browseCategories", Browse.getFilteredBrowsingCategories()); this will only be relevant when we can do filtering on filtering
 		request.setAttribute("browseCategories", Browse.getBrowsingCategories());
+		return result;
 	}
 
 }

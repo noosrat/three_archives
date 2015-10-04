@@ -107,7 +107,8 @@ $(document).ready(function() {
 								class="caret"></span></a>
 							<ul class="dropdown-menu">
 								<c:forEach var="searchCategory" items="${searchCategories}">
-									<li><a href="${pageContext.request.contextPath}/archives/search_objects/category=${searchCategory}">${searchCategory}</a></li>
+									<li><a
+										href="${pageContext.request.contextPath}/archives/search_objects/category=${searchCategory}">${searchCategory}</a></li>
 								</c:forEach>
 							</ul></li>
 						<li>
@@ -147,12 +148,31 @@ $(document).ready(function() {
 							class="fa fa-fw fa-arrows-v"></i>BROWSE ALL <i
 							class="fa fa-fw fa-caret-down"></i> </a></li>
 
+					<c:set var="count" value="0" scope="page" />
 					<c:forEach var="category" items="${categoriesAndObjects}">
-						<li><a href="${pageContext.request.contextPath}/archives/browse?category=${category.key}" data-toggle="collapse" data-target="#demo${count}"> <i class="fa fa-fw fa-arrows-v"></i>${category.key}
-								<span class="badge">${fn:length(category.value)}</span><i class="fa fa-fw fa-caret-down"></i></a> 
-						</li>
+
+						<!-- <li><a href="javascript:;" data-toggle="collapse" data-target="#demo${count}"> <i class="fa fa-fw fa-arrows-v"></i>${category.key}
+								<span class="badge">${fn:length(category.value)}</span><i class="fa fa-fw fa-caret-down"></i>
+						</a>  -->
+						<li><a
+							href="${pageContext.request.contextPath}/archives/browse?category=${category.key}"
+							data-toggle="collapse" data-target="#demo${count}"> <i
+								class="fa fa-fw fa-arrows-v"></i>${category.key} <span
+								class="badge">${fn:length(category.value)}</span><i
+								class="fa fa-fw fa-caret-down"></i>
+						</a>
+							<ul id="demo${count}" class="collapse">
+								<c:forEach var="categoryValue" items="${category.value}">
+									<li><a
+										href="${pageContext.request.contextPath}/archives/browse?category=${category.key}&${category.key}=${categoryValue.key}">${categoryValue.key}
+											<span class="badge">${fn:length(categoryValue.value)}</span>
+									</a></li>
+								</c:forEach>
+
+							</ul></li>
+						<c:set var="count" value="${count + 1}" scope="page" />
 					</c:forEach>
-										<li>
+					<li>
 
 						<form action="${pageContext.request.contextPath}/archives/history"
 							method="post">
@@ -188,73 +208,47 @@ $(document).ready(function() {
 						<h3 class="page-header">
 							<small>${message}</small>
 						</h3>
-						<ol class="breadcrumb">
-							<li><i class="fa fa-dashboard"></i>${browseCategory}</li>
-							<li class="active"><i class="fa fa-wrench"></i>
-								${categoryValue}</li>
-						</ol>
 					</div>
 				</div>
 
 
 				<c:forEach var="searchTag" items="${searchTags}">
-						<a class="btn btn-primary btn-xs" href="${pageContext.request.contextPath}/archives/search_objects/category=SEARCH_ALL?terms=${searchTag}">${searchTag}</a>
+					<a class="btn btn-primary btn-xs"
+						href="${pageContext.request.contextPath}/archives/search_objects/category=SEARCH_ALL?terms=${searchTag}">${searchTag}</a>
 				</c:forEach>
-<br><br>
+				<br>
+				<!-- <br> B3: ${categoriesAndObjects[browseCategory]}<br> -->
+				<br>
 
-				<section id="portfolio">
+					<h3 class="page-header">${browseCategory}</h3>
+					<section id="portfolio">
 					<div class="container">
-						<c:set var="count" value="0" scope="page" />
-						<c:forEach var="digitalObject" items="${objectsForArchive}">
-							<div class="col-xs-8 col-sm-6 portfolio-item">
-								<a href="#lightbox${count}" class="portfolio-link"
-									data-toggle="modal" data-target="#lightbox${count}">
-
-									<div class="caption">
-										<div class="caption-content">
-											[VIEW MORE DETAILS]
+									<c:forEach var="subCategory"
+										items="${categoriesAndObjects[browseCategory]}">
+										<div class="col-lg-3 col-md-4 col-xs-6 portfolio-item">
+											<a href="${pageContext.request.contextPath}/archives/browse?category=${browseCategory}&${browseCategory}=${subCategory.key}" class="portfolio-link" 	data-target="#">
+												<div class="caption">
+													<div class="caption-content">${subCategory.key}<br>
+													
+													<span class="badge">${fn:length(subCategory.value)}</span>
+													
+													</div>
+													<!-- caption content -->
+												</div> <!-- caption --> 
+												<c:set var="conditionVariable" value="true"/> 
+												<c:forEach var="object"	items="${subCategory.value}">
+													<c:if test="${conditionVariable eq 'true'}">
+														<img class="img-responsive img-thumbnail"
+															src="${object.datastreams['IMG'].content}"
+															alt="image unavailable">
+													</c:if>
+													<c:set var="conditionVariable" value="false" />
+												</c:forEach>
+											</a>
 										</div>
-										<!-- caption content -->
-									</div> <!-- caption --> <img
-									src="${digitalObject.datastreams['IMG'].content}"
-									class="img-thumbnail img-responsive" alt="image unavailable">
-								</a>
-							</div>
-							<c:set var="count" value="${count + 1}" scope="page" />
-						</c:forEach>
-					</div>
-				</section>
-				<c:set var="count" value="0" scope="page" />
-				<c:forEach var="digitalObject" items="${objectsForArchive}">
-					<div id="lightbox${count}" class="modal fade" tabindex="-1"
-						role="dialog" aria-labelledby="myLargeModalLabel"
-						aria-hidden="true">
-						<div class="modal-dialog">
-							<div class="modal-content">
-								<div class="modal-body">
-								<h3>${digitalObject.datastreams['DC'].dublinCoreMetadata['TITLE']}</h3>
-								<br>
-								
-									<!-- 	<table style="width: 100%"> <td>-->
-									<img src="${digitalObject.datastreams['IMG'].content}"
-										class="img-thumbnail img-responsive" alt="image unavailable">
-									
-									<!-- can we not try just iterate through the dublinCoreDatastream's metadata -->
-									<c:forEach var="dcMetadata" items="${digitalObject.datastreams['DC'].dublinCoreMetadata}">
-									<c:if test="${dcMetadata.key!='IDENTIFIER' && dcMetadata.key!='TYPE' && dcMetadata.key!='FORMAT'}">
-									${dcMetadata.key}: <a href="${pageContext.request.contextPath}/archives/search_objects/category=${dcMetadata.key}?terms=${dcMetadata.value}">${dcMetadata.value}</a><br>
-									</c:if>
-									
 									</c:forEach>
-								</div>
-
-								<button type="button">Place me</button>
-							</div>
-						</div>
 					</div>
-					<c:set var="count" value="${count + 1}" scope="page" />
-				</c:forEach>
-			</div>
+					</section>
 			<!-- container fluid -->
 		</div>
 	</div>

@@ -18,6 +18,7 @@ public class FedoraGetRequest {
 		this.queryParameters = new TreeMap<QueryParameters, String>();
 	}
 
+	
 	public FedoraGetRequest(String persistentIdentifier) {
 		this();
 		this.persistentIdentifier = persistentIdentifier;
@@ -188,14 +189,5 @@ public class FedoraGetRequest {
 
 	}
 
-	// public static void main(String[] args) throws FedoraException,
-	// IOException{
-	// FedoraGetRequest feGetRequest = new FedoraGetRequest();
-	// feGetRequest.setPersistentIdentifier("sq:3");
-	// feGetRequest.getObjectProfile(new TreeMap<QueryParameters,
-	// String>()).execute();
-	// System.out.println(feGetRequest.getFedoraResponse().getResponse());
-	//
-	// }
 
 }
