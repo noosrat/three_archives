@@ -181,7 +181,7 @@ public class History extends Service {
 		 * are in our servlet just before despatch
 		 */
 
-		try {
+		/*try {
 			FileWriter file = new FileWriter(filename,true);
 			System.out.println("Text to persist: " + tagCloudText.toString() + " to file " + filename);
 			file.write(tagCloudText.toString().toLowerCase());
@@ -191,7 +191,7 @@ public class History extends Service {
 
 		} catch (IOException e) {
 			System.out.println(e);
-		}
+		}*/
 		tagCloudText = new StringBuilder("");
 	}
 
@@ -210,7 +210,7 @@ public class History extends Service {
 	public HashMap<String, Integer> constructTagCloud(String filename) {
 		System.out.println("constructing tag cloud");
 		HashMap<String, Integer> words = new HashMap<String, Integer>();
-		try {
+		/*try {
 			BufferedReader input = new BufferedReader(new FileReader(filename));
 			String line;
 			while ((line = input.readLine()) != null)
@@ -218,7 +218,7 @@ public class History extends Service {
 			input.close();
 		} catch (IOException e) {
 			System.out.println(e);
-		}
+		}*/
 		System.out.println("Cloud constructed with " + words.size() + " words ");
 		return words;
 	}

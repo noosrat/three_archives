@@ -235,7 +235,7 @@
 				<%@ page import="search.FedoraCommunicator"%>
 				<form method="post" action="${pageContext.request.contextPath}/archives/create_exhibitions">
 			<textarea id="demo" name="user_action" readonly=readonly style="display:none;"></textarea>
-			
+			<input type="submit" value="Back" class="btn btn-primary btn-sm" name="exhibition_det"/>
 			
 			<%String [] cartImages= (String[]) (session.getAttribute("MEDIA_CART")); 
 			FedoraCommunicator fc= new FedoraCommunicator();
@@ -245,7 +245,7 @@
 					if(cartImages[i]!=null){
 						ob=null;
 					ob=fc.populateFedoraDigitalObject(cartImages[i]);%>
-  					<img  src="<%=ob.getDatastreams().get("IMG").getContent() %>"  style="width:40%;" ondragstart="dragStart(event)" draggable="true" id="<%=cartImages[i]%>">
+  					<img class="img-circle"  src="<%=ob.getDatastreams().get("IMG").getContent() %>"  style="width:40%;" ondragstart="dragStart(event)" draggable="true" id="<%=cartImages[i]%>">
   				<%}} %>	
 				
 			</div>
@@ -254,13 +254,13 @@
 		<div class="col-sm-7">	
   		<div class="slider4">
   			<div class="slide">
-				<div class="droptarget droptargetTemplate" id="0" ondrop="drop(event)" ondragover="allowDrop(event)" >		
+				<div class="droptarget droptargetTemplate img-circle" id="0" ondrop="drop(event)" ondragover="allowDrop(event)" >		
 				</div>
 				<div class="caption">
 					<textarea maxlength="50" class="TextArea" rows="2" cols="26"  name="input_cap0" placeholder="Add text to me"></textarea>
 				</div>
 				
-				<div class="droptarget droptargetTemplate" id="1" ondrop="drop(event)" ondragover="allowDrop(event)" >
+				<div class="droptarget droptargetTemplate img-circle" id="1" ondrop="drop(event)" ondragover="allowDrop(event)" >
 				</div>
 				<div class="caption">
 					<textarea maxlength="50" class="TextArea" rows="2" cols="26"  name="input_cap1" placeholder="Add text to me"></textarea>
@@ -268,70 +268,72 @@
 		
 			</div>
 			<div class="slide">
-				<div class="droptarget droptargetTemplate" id="2" ondrop="drop(event)" ondragover="allowDrop(event)" >
+				<div class="droptarget droptargetTemplate img-circle" id="2" ondrop="drop(event)" ondragover="allowDrop(event)" >
 				</div>
 				<div class="caption">
 					<textarea maxlength="50" class="TextArea" rows="2" cols="26"  name="input_cap2" placeholder="Add text to me"></textarea>
 				</div>
-				<div class="droptarget droptargetTemplate" id="3" ondrop="drop(event)"ondragover="allowDrop(event)">
+				<div class="droptarget droptargetTemplate img-circle" id="3" ondrop="drop(event)"ondragover="allowDrop(event)">
 				</div>
 				<div class="caption">
 					<textarea maxlength="50" class="TextArea" rows="2" cols="26"  name="input_cap3" placeholder="Add text to me" ></textarea>
 				</div>
 			</div>
 			<div class="slide">
-				<div class="droptarget droptargetTemplate" id="4" ondrop="drop(event)" ondragover="allowDrop(event)" >
+				<div class="droptarget droptargetTemplate img-circle" id="4" ondrop="drop(event)" ondragover="allowDrop(event)" >
 				</div>
 				<div class="caption">
 					<textarea maxlength="50" class="TextArea" rows="2" cols="26"  name="input_cap4" placeholder="Add text to me"></textarea>
 				</div>
-				<div class="droptarget droptargetTemplate" id="5" ondrop="drop(event)" ondragover="allowDrop(event)">
+				<div class="droptarget droptargetTemplate img-circle" id="5" ondrop="drop(event)" ondragover="allowDrop(event)">
 				</div>
 				<div class="caption">
 					<textarea maxlength="50" class="TextArea" rows="2" cols="26"  name="input_cap5" placeholder="Add text to me"></textarea>
 				</div>
 			</div>	
 			<div class="slide">
-				<div class="droptarget droptargetTemplate" id="6" ondrop="drop(event)" ondragover="allowDrop(event)" >
+				<div class="droptarget droptargetTemplate img-circle" id="6" ondrop="drop(event)" ondragover="allowDrop(event)" >
 				</div>
 				<div class="caption">
 					<textarea maxlength="50" class="TextArea" rows="2" cols="26"  name="input_cap6" placeholder="Add text to me"></textarea>
 				</div>
-				<div class="droptarget droptargetTemplate" id="7" ondrop="drop(event)" ondragover="allowDrop(event)" >
+				<div class="droptarget droptargetTemplate img-circle" id="7" ondrop="drop(event)" ondragover="allowDrop(event)" >
 				</div>
 				<div class="caption">
 					<textarea maxlength="50" class="TextArea" rows="2" cols="26"  name="input_cap7" placeholder="Add text to me"></textarea>
 				</div>
 			</div>
 			<div class="slide">
-				<div class="droptarget droptargetTemplate" id="8" ondrop="drop(event)" ondragover="allowDrop(event)" >
+				<div class="droptarget droptargetTemplate img-circle" id="8" ondrop="drop(event)" ondragover="allowDrop(event)" >
 				</div>
 				<div class="caption">
 					<textarea maxlength="50" class="TextArea" rows="2" cols="26"  name="input_cap8"placeholder="Add text to me" ></textarea>
 				</div>
-				<div class="droptarget droptargetTemplate" id="9" ondrop="drop(event)" ondragover="allowDrop(event)">
+				<div class="droptarget droptargetTemplate img-circle" id="9" ondrop="drop(event)" ondragover="allowDrop(event)">
 				</div>
 				<div class="caption">
 					<textarea maxlength="50" class="TextArea" rows="2" cols="26"  name="input_cap9" placeholder="Add text to me"></textarea>
 				</div>
 			</div>
 			<div class="slide">
-				<div class="droptarget droptargetTemplate" id="10" ondrop="drop(event)" ondragover="allowDrop(event)">
+				<div class="droptarget droptargetTemplate img-circle" id="10" ondrop="drop(event)" ondragover="allowDrop(event)">
 				</div>
 				<div class="caption">
 					<textarea maxlength="50" class="TextArea" rows="2" cols="26"  name="input_cap10" placeholder="Add text to me"></textarea>
 				</div>
-				<div class="droptarget droptargetTemplate" id="11" ondrop="drop(event)" ondragover="allowDrop(event)">
+				<div class="droptarget droptargetTemplate img-circle" id="11" ondrop="drop(event)" ondragover="allowDrop(event)">
 				</div>
 				<div class="caption">
 					<textarea maxlength="50" class="TextArea" rows="2" cols="26"  name="input_cap11" placeholder="Add text to me"></textarea>
 				</div>
 			</div>
 		</div>
-	</div>
+		</div>
 		<div class="col-sm-1">
-			<button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#myModal">Next</button>
-		</div>	
+			 <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#myModal">Next</button>
+		</div>
+		
+	
 		
 		
 			
@@ -362,7 +364,7 @@
         				</div>
         				<div class="modal-footer">
           					<input type="submit" value="Save" class="btn btn-primary btn-sm" name="exhibition_det"/>
-         					
+         
        			 		</div>
        			 		
       			</div>

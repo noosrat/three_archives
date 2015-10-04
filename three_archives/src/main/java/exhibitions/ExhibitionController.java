@@ -90,6 +90,10 @@ public class ExhibitionController implements Controller {
 			{
 				result = "WEB-INF/frontend/exhibitions/createViewExhibition2.jsp";
 			}
+			else if (templateid==3)
+			{
+				result = "WEB-INF/frontend/exhibitions/createViewExhibition3.jsp";
+			}
 			
 		} 
 		
@@ -122,22 +126,6 @@ public class ExhibitionController implements Controller {
 			try {	
 					String[] cart= new String[20];
 					FedoraCommunicator fc= new FedoraCommunicator();
-
-					/*FedoraDigitalObject ob=fc.populateFedoraDigitalObject("KEL:1");
-					FedoraDigitalObject ob2=fc.populateFedoraDigitalObject("KEL:2");
-					cart[0]=ob.getDatastreams().get("IMG").getContent(); 
-					cart[1]=ob2.getDatastreams().get("IMG").getContent(); 
-					cart[2]="http://localhost:8080/fedora/objects/KEL:3/datastreams/IMG/content";
-					cart[3]="http://localhost:8080/fedora/objects/KEL:4/datastreams/IMG/content";
-					cart[4]="http://localhost:8080/fedora/objects/KEL:5/datastreams/IMG/content";
-					cart[5]="http://localhost:8080/fedora/objects/KEL:6/datastreams/IMG/content";
-					cart[6]="http://localhost:8080/fedora/objects/KEL:7/datastreams/IMG/content";
-					cart[7]="http://localhost:8080/fedora/objects/KEL:8/datastreams/IMG/content";
-					cart[8]="http://localhost:8080/fedora/objects/KEL:9/datastreams/IMG/content";
-					cart[9]="http://localhost:8080/fedora/objects/KEL:10/datastreams/IMG/content";
-					cart[10]="http://localhost:8080/fedora/objects/KEL:11/datastreams/IMG/content";
-					cart[11]="http://localhost:8080/fedora/objects/KEL:12/datastreams/IMG/content";
-					cart[12]="http://localhost:8080/fedora/objects/KEL:13/datastreams/IMG/content";*/
 					cart[0]="KEL:3";
 					cart[1]="KEL:2";
 					cart[2]="KEL:3";
@@ -158,9 +146,13 @@ public class ExhibitionController implements Controller {
 						result = "WEB-INF/frontend/exhibitions/populateTemplate1.jsp";
 					}
 					
-					else {
+					else if(selectedTemplate.equals("2")){
 						session.setAttribute("TEMPLATE_ID",selectedTemplate);
 						result = "WEB-INF/frontend/exhibitions/populateTemplate2.jsp";
+					}
+					else {
+						session.setAttribute("TEMPLATE_ID",selectedTemplate);
+						result = "WEB-INF/frontend/exhibitions/populateTemplate3.jsp";
 					}
 					
 				
@@ -201,7 +193,7 @@ public class ExhibitionController implements Controller {
 				String exhibitionTitle= request.getParameter("Title");
 				String exhibitionDescription= request.getParameter("Description");
 				String exhibitionCreator= request.getParameter("Creator");
-				String exhibitionViewable= request.getParameter("viewable");
+		
 				int templateid=Integer.parseInt((String)session.getAttribute("TEMPLATE_ID"));
 				
 				String mediaString=(String) session.getAttribute("POPULATED_TEMPLATE");
@@ -222,26 +214,12 @@ public class ExhibitionController implements Controller {
 				String excaptionsString="";
 				for(int i=0;i<captions.length;i++)
 				{
+						captions[i]=captions[i].replace("%", "percent");
 						excaptionsString=excaptionsString+captions[i]+" %";
 				}
 				
-				/*request.setAttribute("PopulatedTemplateArray",media);
-				request.setAttribute("ExhibitionTitle",exhibitionTitle);
-				request.setAttribute("ExhibitionDescription",exhibitionDescription);
-				request.setAttribute("ExhibitionCreator",exhibitionCreator);
-				request.setAttribute("ExhibitionViewable",exhibitionViewable);
-				
-				session.setAttribute("TITLE",exhibitionTitle);
-				session.setAttribute("DESCRIPTION",exhibitionDescription);
-				session.setAttribute("CREATOR",exhibitionCreator);
-				session.setAttribute("VIEWABLE",exhibitionViewable);
-				
-				
-				session.setAttribute("POPULATED_TEMPLATE_ARRAY",media);
-				result = "WEB-INF/frontend/exhibitions/createViewExhibition.jsp";*/
-				
 				//save the exhibition
-				Integer id=service.saveExhibition(new Exhibition(exhibitionTitle,exhibitionDescription,templateid,exhibitionCreator,exmediaString,excaptionsString));
+				Integer id=service.saveExhibition(new Exhibition(exhibitionTitle.replace("%", "percent"),exhibitionDescription.replace("%", "percent"),templateid,exhibitionCreator.replace("%", "percent"),exmediaString,excaptionsString));
 				
 				if(session.getAttribute("TEMPLATE_ID").equals("1")){
 				
@@ -299,6 +277,34 @@ public class ExhibitionController implements Controller {
 					session.setAttribute("CAPTIONS",captionss);
 					//View before saving
 					result = "WEB-INF/frontend/exhibitions/createViewExhibition2.jsp";//View before saving	
+				}
+				else if(session.getAttribute("TEMPLATE_ID").equals("3")){
+					Exhibition exhibition=service.getExhibition(id);
+					String title=exhibition.getTitle();
+					String description=exhibition.getDescription();
+					String creator=exhibition.getCreator();
+					String[] images= exhibition.getMedia().split("%");
+					for (int j=0;j<images.length;j++)
+					{
+						images[j]=images[j].trim();
+						if(images[j].equals("")){
+							images[j]=null;
+						}
+						else{
+							images[j]="http://localhost:8080/fedora/objects/"+images[j]+"/datastreams/IMG/content";
+						}
+					}
+					
+					String[] captionss= exhibition.getCaptions().split("%");
+					request.setAttribute("images", images);
+					request.setAttribute("ExhibitionTitle",title);
+					request.setAttribute("ExhibitionDescription",description);
+					request.setAttribute("ExhibitionCreator",creator);
+					
+					request.setAttribute("PopulatedTemplateArray",images); 
+					session.setAttribute("CAPTIONS",captionss);
+					//View before saving
+					result = "WEB-INF/frontend/exhibitions/createViewExhibition3.jsp";//View before saving	
 				}
 			}
 			else if(action.equals("Back"))

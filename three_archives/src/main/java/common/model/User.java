@@ -26,15 +26,15 @@ public class User implements Serializable {
  
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
-	String username;
-	String password;
-	String role;
-	public Long getId() {
+	private int id;
+	private String username;
+	private String password;
+	private String role;
+	public int getId() {
 		return id;
 	}
  
-	public void setId(Long id) {
+	public void setId(int id) {
 		this.id = id;
 	}
  

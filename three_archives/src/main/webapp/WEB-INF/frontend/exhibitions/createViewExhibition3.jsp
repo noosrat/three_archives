@@ -117,7 +117,7 @@
 					<% for (int j=0;j<11;j++){%>
   					<div class="slide">
 						<%if (images[j]!=null){%>
-						<div class="droptarget droptargetTemplate">
+						<div class="droptarget droptargetTemplate img-circle">
 							<img src="<%=images[j]%>">
 						</div>
 						<%}
@@ -137,7 +137,7 @@
 						</div>
 						<%}%>
 						<%if (images[j+1]!=null){%>
-						<div class="droptarget droptargetTemplate">
+						<div class="droptarget droptargetTemplate img-circle">
 							<img src="<%=images[j+1]%>">
 						</div>
 						<%}

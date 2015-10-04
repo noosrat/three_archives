@@ -32,6 +32,9 @@
 	src="${pageContext.request.contextPath}/bootstrap-3.3.5/js/bootstrap.js"></script>
 <script type="text/javascript"
 	src="${pageContext.request.contextPath}/js/typeahead.js"></script>
+<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+  <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 
 <script type="text/javascript">
 	$(document).ready(function() {
@@ -51,6 +54,12 @@
 	});
 </script>
 <style>
+	 
+  .carousel-inner > .item > img,
+  .carousel-inner > .item > a > img {
+      margin: auto;
+  }
+
 	
 		.Sequins{
 			width:150px;
@@ -147,13 +156,78 @@
 
 
 	<div class="container">
+	<p></p><br><br><br>
 		<div class="row">
-			<div class="col-lg-12 text-center">
-			<br><br>
-				<div class="row">
-    				<div class="col-sm-6"><img style="width:100%;position:relative;"src="${pageContext.request.contextPath}/images/MISSGAY.jpg"><div class="Sequins" style="position: absolute; top: 70%;left:40%;z-index:10;"><h3>Miss Gay Western Cape</h3></div></div>
-					<div class="col-sm-6"><img style="width:100%;position:relative"src="${pageContext.request.contextPath}/images/SPRINGQUEEN.jpg"><div class="Sequins" style="position: absolute; top: 70%;left:40%;z-index:10;"><h3>Spring Queen</h3></div></div>
-  				</div>
+			<div class="col-lg-12" style="text-align:center">
+				<h2>About Sequins, Self & Struggle</h2>
+				<div class="well well-lg" style="background-color:	#FFF0F0"> <p>This project is a collaboration among the Departments of Drama at Royal Holloway and Queen Mary, University of London (UK), The Centre for Curating the Archive and the Centre for African Studies at the University of Cape Town, Africana Studies at Brown University (US) and the District 6 Museum. The primary aims are to research, document and disseminate archives of the Spring Queen and Miss Gay Western Cape pageants performed by disparate 'coloured' communities in greater Cape Town.</p>
+
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-lg-12" style="text-align:center">
+				 <div id="myCarousel" class="carousel slide" data-ride="carousel">
+    <!-- Indicators -->
+    <ol class="carousel-indicators">
+      <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+      <li data-target="#myCarousel" data-slide-to="1"></li>
+     
+    </ol>
+
+    <!-- Wrapper for slides -->
+    <div class="carousel-inner" role="listbox">
+
+      <div class="item active">
+		<div class="row">
+			<div class="col-lg-3" style="text-align:center">
+        			<img src="${pageContext.request.contextPath}/images/10.jpg" width="200">
+			</div>
+			<div class="col-lg-3" style="text-align:center">
+        			<img src="${pageContext.request.contextPath}/images/15.jpg" width="200">
+			</div>
+			<div class="col-lg-3" style="text-align:center">
+        			<img src="${pageContext.request.contextPath}/images/2.jpg" width="200">
+			</div>
+			<div class="col-lg-3" style="text-align:center">
+        			<img src="${pageContext.request.contextPath}/images/3.jpg" width="200">
+			</div>
+		</div>
+ 
+      </div>
+
+      <div class="item">
+        <div class="row">
+			<div class="col-lg-3" style="text-align:center">
+        			<img src="${pageContext.request.contextPath}/images/5.jpg" width="200">
+			</div>
+			<div class="col-lg-3" style="text-align:center">
+        			<img src="${pageContext.request.contextPath}/images/6.jpg" width="200">
+			</div>
+			<div class="col-lg-3" style="text-align:center">
+        			<img src="${pageContext.request.contextPath}/images/7.jpg" width="200">
+			</div>
+			<div class="col-lg-3" style="text-align:center">
+        			<img src="${pageContext.request.contextPath}/images/8.jpg" width="200">
+			</div>
+		</div>
+  
+      </div>
+    
+     
+  
+    </div>
+
+    <!-- Left and right controls -->
+    <a class="left carousel-control" href="#myCarousel" role="button" data-slide="prev">
+      <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+      <span class="sr-only">Previous</span>
+    </a>
+    <a class="right carousel-control" href="#myCarousel" role="button" data-slide="next">
+      <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+      <span class="sr-only">Next</span>
+    </a>
+  </div>
 			</div>
 		</div>
 		<!-- /.row -->

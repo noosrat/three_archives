@@ -145,16 +145,10 @@
 
 
 	<div class="container">
+	<p></p><br><br><br><br>
 		<div class="row">
 			<div class="col-lg-12 text-center">
-			<br><br>
-				
-
-
-
-
-
-
+			
 <%@ page import="common.model.Exhibition"%>
 <%@ page import="java.util.List"%>
 <%List<Exhibition> exhibitions= ((List<Exhibition>)request.getAttribute("all_exhibitions")); %>
@@ -173,9 +167,7 @@
 	<input type="submit" value="View Exhibition"/>	
 </form>
 
-
-
-
+<br><br><br><br><br><p></p>
 
 			</div>
 		</div>

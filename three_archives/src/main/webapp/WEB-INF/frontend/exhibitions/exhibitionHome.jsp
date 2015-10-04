@@ -166,19 +166,17 @@
 	<div class="container">
 		<div class="row">
 			<div class="col-lg-12 text-center">
-			<br><br>
-				<div class="row">
+			<br><br><br><br>
+				
 					<form method="post" action="${pageContext.request.contextPath}/archives/view_exhibitions">
 
 					
-    					<div class="col-sm-6">
 						<button type="submit" name="view_all_exhibitions" value="View All Exhibitions" class="btn btn-primary btn-lg" style="height:100px;width:200px;">View Exhibitions</button>
-					</div>
-					<div class="col-sm-6">
+						<br><br>
 						<button type="submit" name="create_exhibition" value="Create Exhibition" class="btn btn-primary btn-lg" style="height:100px;width:200px;">Create Exhibitions</button>
-					</div>
+					
 					</form>
-  				</div>
+  				
 			</div>
 		</div>
 		<!-- /.row -->

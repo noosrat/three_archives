@@ -21,12 +21,15 @@ public class ManageExhibition {
 	   /* Method to CREATE an exhibition in the database */
 	   public Integer addExhibition(Exhibition exhibition){
 		   Integer ID=0;
+		   System.out.println("started saving");
 			  SessionFactory sessionFactory = new Configuration().configure().buildSessionFactory();
 		      Session session =sessionFactory.openSession();
 		      session.beginTransaction();
 		      ID=(Integer)session.save(exhibition); 
+		      System.out.println("saved");
 		      session.getTransaction().commit();
 		      session.close(); 
+		      System.out.println(ID);
 		      return ID;
 		   }
 	   /* Method to RETRIEVE an exhibition in the database */

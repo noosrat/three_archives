@@ -63,18 +63,12 @@
 	</script>
  <style>
 		.header{
-	 	background: url(${pageContext.request.contextPath}/images/Back.jpg) no-repeat center center fixed; 
+	 	background: url(${pageContext.request.contextPath}/images/Cover.jpg) no-repeat center center fixed; 
 			 -webkit-background-size: cover;
   			-moz-background-size: cover;
   			-o-background-size: cover;
   			background-size: cover;
-			-moz-filter: url("data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\'><filter id=\'grayscale\'><feColorMatrix type=\'matrix\' values=\'0.3333 0.3333 0.3333 0 0 0.3333 0.3333 0.3333 0 0 0.3333 0.3333 0.3333 0 0 0 0 0 1 0\'/></filter></svg>#grayscale");
-         	-o-filter: url("data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\'><filter id=\'grayscale\'><feColorMatrix type=\'matrix\' values=\'0.3333 0.3333 0.3333 0 0 0.3333 0.3333 0.3333 0 0 0.3333 0.3333 0.3333 0 0 0 0 0 1 0\'/></filter></svg>#grayscale");
-         	-webkit-filter: grayscale(100%);
-        	filter: gray;
-         	filter: url("data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\'><filter id=\'grayscale\'><feColorMatrix type=\'matrix\' values=\'0.3333 0.3333 0.3333 0 0 0.3333 0.3333 0.3333 0 0 0.3333 0.3333 0.3333 0 0 0 0 0 1 0\'/></filter></svg>#grayscale");
-			color: black;
-			opacity: 0.3;
+			
 }
 		
 		.droptargetTemplate {

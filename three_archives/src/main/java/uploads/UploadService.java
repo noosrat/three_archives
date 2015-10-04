@@ -50,7 +50,6 @@ public class UploadService {
 			String[] metadataArray;
 			
 			metadataArray =files[i].split(delimeter2);
-			
 			filename =metadataArray[0].trim();
 			title ="<dc:title>"+metadataArray[1].trim()+"</dc:title>";
 			creator ="<dc:creator>"+metadataArray[2].trim()+"</dc:creator>";
@@ -84,11 +83,9 @@ public class UploadService {
 				//get next PID
 				//PID="KEL:"+i;
 				
-				
 				HttpMethod newPIDs=client.POST("/objects/nextPID?format=XML");
 				InputStream newPID_xml=newPIDs.getResponseBodyAsStream();
 				String newPID_xml_String =getStringFromInputStream(newPID_xml);
-				
 				
 				DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
 				InputSource src = new InputSource();
@@ -96,9 +93,7 @@ public class UploadService {
 
 				org.w3c.dom.Document doc =  builder.parse(src);
 				String changeme_pid =  doc.getElementsByTagName("pid").item(0).getTextContent();
-				
-				
-				
+					
 				String newPID=getPID(archive, changeme_pid);
 				System.out.println(newPID);
 				
