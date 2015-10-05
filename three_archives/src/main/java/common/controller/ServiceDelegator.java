@@ -1,16 +1,11 @@
 package common.controller;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.TreeSet;
 
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import downloads.DownloadController;
-import common.fedora.FedoraDigitalObject;
 import exhibitions.ExhibitionController;
 import history.HistoryController;
 import maps.MapController;

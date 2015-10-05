@@ -42,14 +42,8 @@
 
 <script type="text/javascript">
 $(document).ready(function() {
-	var archive = '<%=session.getAttribute("ARCHIVE")%>';
-		if (archive == "Sequins, Self and Struggle") {
-			var words = "/data/SequinsSelfandStruggle.json";
-		} else if (archive == "Movie Snaps") {
-			var words = "/data/MovieSnaps.json";
-		} else if (archive == "Harfield Village") {
-			var words = "/data/HarfieldVillage.json";
-		}
+		var archive ='<%=session.getAttribute("ARCHIVE_CONCAT")%>';
+		var words = "/data/" + archive + ".json";
 		var countries = new Bloodhound({
 			datumTokenizer : Bloodhound.tokenizers.whitespace,
 			queryTokenizer : Bloodhound.tokenizers.whitespace,
@@ -76,32 +70,9 @@ $(document).ready(function() {
 
 
 				<div class="navbar-header">
-
-					<c:choose>
-						<c:when test="${ARCHIVE =='Sequins, Self and Struggle'}">
-
-							<a class="navbar-brand"
-								href="${pageContext.request.contextPath}/archives/SequinsSelfandStruggle">${ARCHIVE}</a>
-						</c:when>
-						<c:when test="${ARCHIVE =='Harfield Village'}">
-
-							<a class="navbar-brand"
-								href="${pageContext.request.contextPath}/archives/HarfieldVillage">${ARCHIVE}</a>
-						</c:when>
-						<c:when test="${ARCHIVE =='Movie Snaps'}">
-
-							<a class="navbar-brand"
-								href="${pageContext.request.contextPath}/archives/MovieSnaps">${ARCHIVE}</a>
-						</c:when>
-					</c:choose>
+					<a class="navbar-brand"
+						href="${pageContext.request.contextPath}/archives/${ARCHIVE_CONCAT}">${ARCHIVE}</a>
 				</div>
-
-
-
-
-
-
-
 				<div id="navbar" class="collapse navbar-collapse">
 					<ul class="nav navbar-nav navbar-right top-nav">
 						<li class="dropdown"><a
@@ -123,7 +94,7 @@ $(document).ready(function() {
 										<input
 											class="typeahead tt-query tt-hint tt-dropdown-menu tt-suggestion"
 											data-provider="typeahead" type="text"
-											placeholder="${terms}" autocomplete="off"
+											placeholder="Search Archive" autocomplete="off"
 											spellcheck="false" name="terms">
 									</div>
 								</div>

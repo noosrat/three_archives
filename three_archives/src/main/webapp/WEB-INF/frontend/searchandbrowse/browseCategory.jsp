@@ -30,8 +30,7 @@
 <link
 	href="${pageContext.request.contextPath}/css/bootstrap-lightbox.min.css"
 	rel="stylesheet">
-	<link
-	href="${pageContext.request.contextPath}/css/typeahead.css"
+<link href="${pageContext.request.contextPath}/css/typeahead.css"
 	rel="stylesheet">
 <script type="text/javascript"
 	src="${pageContext.request.contextPath}/js/jquery-1.11.3.js"></script>
@@ -42,14 +41,8 @@
 
 <script type="text/javascript">
 $(document).ready(function() {
-	var archive = '<%=session.getAttribute("ARCHIVE")%>';
-		if (archive == "Sequins, Self and Struggle") {
-			var words = "/data/SequinsSelfandStruggle.json";
-		} else if (archive == "Movie Snaps") {
-			var words = "/data/MovieSnaps.json";
-		} else if (archive == "Harfield Village") {
-			var words = "/data/HarfieldVillage.json";
-		}
+	var archive ='<%=session.getAttribute("ARCHIVE_CONCAT")%>';
+		var words = "/data/" + archive + ".json";
 		var countries = new Bloodhound({
 			datumTokenizer : Bloodhound.tokenizers.whitespace,
 			queryTokenizer : Bloodhound.tokenizers.whitespace,
@@ -75,24 +68,8 @@ $(document).ready(function() {
 
 
 				<div class="navbar-header">
-
-					<c:choose>
-						<c:when test="${ARCHIVE =='Sequins, Self and Struggle'}">
-
-							<a class="navbar-brand"
-								href="${pageContext.request.contextPath}/archives/SequinsSelfandStruggle">${ARCHIVE}</a>
-						</c:when>
-						<c:when test="${ARCHIVE =='Harfield Village'}">
-
-							<a class="navbar-brand"
-								href="${pageContext.request.contextPath}/archives/HarfieldVillage">${ARCHIVE}</a>
-						</c:when>
-						<c:when test="${ARCHIVE =='Movie Snaps'}">
-
-							<a class="navbar-brand"
-								href="${pageContext.request.contextPath}/archives/MovieSnaps">${ARCHIVE}</a>
-						</c:when>
-					</c:choose>
+					<a class="navbar-brand"
+						href="${pageContext.request.contextPath}/archives/${ARCHIVE_CONCAT}">${ARCHIVE}</a>
 				</div>
 
 
@@ -223,38 +200,39 @@ $(document).ready(function() {
 				<!-- <br> B3: ${categoriesAndObjects[browseCategory]}<br> -->
 				<br>
 
-					<h3 class="page-header">${browseCategory}</h3>
-					<section id="portfolio">
-									<c:forEach var="subCategory"
-										items="${categoriesAndObjects[browseCategory]}">
-										<div class="col-lg-3 col-md-4 col-xs-6 portfolio-item">
-											<a href="${pageContext.request.contextPath}/archives/browse?category=${browseCategory}&${browseCategory}=${subCategory.key}" class="portfolio-link" 	data-target="#">
-												<div class="caption">
-													<div class="caption-content">${subCategory.key}<br>
-													
-													<span class="badge">${fn:length(subCategory.value)}</span>
-													
-													</div>
-													<!-- caption content -->
-												</div> <!-- caption --> 
-												<c:set var="conditionVariable" value="true"/> 
-												<c:forEach var="object"	items="${subCategory.value}">
-													<c:if test="${conditionVariable eq 'true'}">
-														<img class="img-responsive img-thumbnail"
-															src="${object.datastreams['IMG'].content}"
-															alt="image unavailable">
-													</c:if>
-													<c:set var="conditionVariable" value="false" />
-												</c:forEach>
-											</a>
-										</div>
-									</c:forEach>
-					</section>
-			<!-- container fluid -->
+				<h3 class="page-header">${browseCategory}</h3>
+				<section id="portfolio">
+					<c:forEach var="subCategory"
+						items="${categoriesAndObjects[browseCategory]}">
+						<div class="col-lg-3 col-md-4 col-xs-6 portfolio-item">
+							<a
+								href="${pageContext.request.contextPath}/archives/browse?category=${browseCategory}&${browseCategory}=${subCategory.key}"
+								class="portfolio-link" data-target="#">
+								<div class="caption">
+									<div class="caption-content">${subCategory.key}<br>
+
+										<span class="badge">${fn:length(subCategory.value)}</span>
+
+									</div>
+									<!-- caption content -->
+								</div> <!-- caption --> <c:set var="conditionVariable" value="true" />
+								<c:forEach var="object" items="${subCategory.value}">
+									<c:if test="${conditionVariable eq 'true'}">
+										<img class="img-responsive img-thumbnail"
+											src="${object.datastreams['IMG'].content}"
+											alt="image unavailable">
+									</c:if>
+									<c:set var="conditionVariable" value="false" />
+								</c:forEach>
+							</a>
+						</div>
+					</c:forEach>
+				</section>
+				<!-- container fluid -->
+			</div>
 		</div>
-	</div>
-	<!-- wrapper -->
-	<script type="text/javascript"
-		src="${pageContext.request.contextPath}/js/lightbox.js"></script>
+		<!-- wrapper -->
+		<script type="text/javascript"
+			src="${pageContext.request.contextPath}/js/lightbox.js"></script>
 </body>
 </html>

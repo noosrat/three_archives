@@ -1,5 +1,3 @@
-
-
 package search;
 
 import java.util.Set;
@@ -19,7 +17,7 @@ public class BrowseController implements Controller {
 
 	public String execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		Browse.setFedoraDigitalObjects((Set<FedoraDigitalObject>)(request.getSession().getAttribute("objects")));
-		Browse.initialise((String) request.getSession().getAttribute("mediaPrefix"));
+		Browse.initialise((String) request.getSession().getAttribute("MEDIA_PREFIX"));
 		String result = browseFedoraObjects(request, response);
 		browseFedoraObjects(request, response);
 		request.setAttribute("searchCategories", SearchController.retrieveSearchCategories());
@@ -35,15 +33,7 @@ public class BrowseController implements Controller {
 		// this is to return everything in the archive collection...this is just
 		// to illustrate browse temporarily
 		/* we are intiially searching all the fedora objects here */
-		Set<FedoraDigitalObject> fedoraDigitalObjectsForArchive = Browse.getFedoraDigitalObjectsForArchive(); // we
-																												// cannot
-																												// do
-																												// this
-																												// without
-																												// first
-																												// getting
-																												// all
-																												// objects
+		Set<FedoraDigitalObject> fedoraDigitalObjectsForArchive = Browse.getFedoraDigitalObjectsForArchive(); 
 		// before we actually set the attribute we need to filter per archive
 
 		if (fedoraDigitalObjectsForArchive == null || fedoraDigitalObjectsForArchive.isEmpty()) {

@@ -32,8 +32,7 @@ public class SearchController implements Controller {
 
 	public String execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		String result = "WEB-INF/frontend/searchandbrowse/searchAndBrowse.jsp";
-		archive = ((String) request.getSession().getAttribute("ARCHIVE")).replaceAll("[^a-zA-Z0-9\\s]", "")
-				.replaceAll("\\s+", "");
+		archive = (String) request.getSession().getAttribute("ARCHIVE_CONCAT");
 		request.setAttribute("searchCategories", retrieveSearchCategories());
 		request.setAttribute("browseCategories", Browse.getBrowsingCategories());
 		String requestPath = request.getPathInfo().substring(1);
@@ -121,7 +120,7 @@ public class SearchController implements Controller {
 
 		Set<FedoraDigitalObject> digitalObjects = new HashSet<FedoraDigitalObject>();
 		digitalObjects = getSearch().findFedoraDigitalObjects(new String(terms));
-		filterFedoraObjectsForSpecificArchive((String) request.getSession().getAttribute("mediaPrefix"),
+		filterFedoraObjectsForSpecificArchive((String) request.getSession().getAttribute("MEDIA_PREFIX"),
 				digitalObjects);
 		// need to restrict these for this archive....
 
@@ -132,7 +131,8 @@ public class SearchController implements Controller {
 		similarSearchTags(request);
 	}
 
-	private void filterFedoraObjectsForSpecificArchive(String multiMediaPrefix, Set<FedoraDigitalObject> fedoraDigitalObjects) {
+	private void filterFedoraObjectsForSpecificArchive(String multiMediaPrefix,
+			Set<FedoraDigitalObject> fedoraDigitalObjects) {
 		for (Iterator<FedoraDigitalObject> iterator = fedoraDigitalObjects.iterator(); iterator.hasNext();) {
 			FedoraDigitalObject element = iterator.next();
 			if (!(element.getPid().contains(multiMediaPrefix))) {
@@ -156,63 +156,48 @@ public class SearchController implements Controller {
 		return result;
 	}
 
-	private Set<String> similarSearchTags(HttpServletRequest request) throws Exception { // this
-		// be
-		// read from the
-		// relevant JSON
-		// file and
-		// taken into a
-		// set and then
-		// the matching
-		// tags are
-		// displayed
-		// only pic top results that actually contain the search term
+	private void similarSearchTags(HttpServletRequest request) throws Exception { // this
 		TreeSet<String> results = new TreeSet<String>();
 		String terms = (String) request.getParameter("terms");
 		String[] splitSearchTerm = null;
-		if (terms==null){
-			return results;
+		if (terms == null) {
+			return;
 		}
-			splitSearchTerm = terms.split(" ");
-			// now we read in the autocomplete json file
-			JSONParser parser = new JSONParser();
-			StringBuilder file = new StringBuilder("../webapps/data/");
+		splitSearchTerm = terms.split(" ");
+		// now we read in the autocomplete json file
+		JSONParser parser = new JSONParser();
+		StringBuilder file = new StringBuilder("../webapps/data/");
 
-			file.append(archive).append(".json");
+		file.append(archive).append(".json");
 
-			// read in the archive attribute and check which json file we are
-			// reading in
-			Set<String> autocomplete;
-			try {
-				File dir = new File("../webapps/data/");
-				if (!dir.exists()) {
-					System.out.println("OH NO THE DIRECTORY DOES NOT EXIST....WE MUST CREATE IT");
-					dir.mkdir();
-				}
-
-				Object obj = parser.parse(new FileReader(new String(file)));
-				JSONArray array = (JSONArray) obj;
-				autocomplete = new TreeSet<String>(array);
-			} catch (ParseException parseException) {
-				System.out.println(parseException);
-				throw new Exception(parseException);
+		// read in the archive attribute and check which json file we are
+		// reading in
+		Set<String> autocomplete;
+		try {
+			File dir = new File("../webapps/data/");
+			if (!dir.exists()) {
+				System.out.println("OH NO THE DIRECTORY DOES NOT EXIST....WE MUST CREATE IT");
+				dir.mkdir();
 			}
 
-			// now we go trough out array and we select items to have as tags
+			Object obj = parser.parse(new FileReader(new String(file)));
+			JSONArray array = (JSONArray) obj;
+			autocomplete = new TreeSet<String>(array);
+		} catch (ParseException parseException) {
+			System.out.println(parseException);
+			throw new Exception(parseException);
+		}
 
-			for (String auto : autocomplete) {
-				for (String term : splitSearchTerm) {
-					if (auto.toLowerCase().contains(term.toLowerCase())) {
-						results.add(auto);
-						break; // breaking out since the whole auto line will be
-								// addedd so we don't need to check the other
-								// terms
-								// existience
-					}
+		// now we go trough out array and we select items to have as tags
+
+		for (String auto : autocomplete) {
+			for (String term : splitSearchTerm) {
+				if (auto.toLowerCase().contains(term.toLowerCase())) {
+					results.add(auto);
+					break;
 				}
 			}
-			request.setAttribute("searchTags", results);
-		return results;
-}
-
+		}
+		request.setAttribute("searchTags", results);
+	}
 }

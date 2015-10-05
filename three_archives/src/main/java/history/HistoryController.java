@@ -3,7 +3,6 @@ package history;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.TreeSet;
 
 import javax.servlet.http.Cookie;
@@ -36,14 +35,14 @@ public class HistoryController implements Controller {
 
 	public String execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		String pathInfo = request.getPathInfo().substring(1);
-		if (pathInfo.equalsIgnoreCase("SequinsSelfandStruggle") || pathInfo.equalsIgnoreCase("MovieSnaps")
-				|| pathInfo.equalsIgnoreCase("HarfieldVillage")) {
-			archive = ((String) request.getSession().getAttribute("ARCHIVE")).replaceAll("[^a-zA-Z0-9\\s]", "")
-					.replaceAll("\\s+", "");
+		archive = (String) request.getSession().getAttribute("ARCHIVE_CONCAT");
+
+		if (pathInfo.contains(archive)) {
 			initialiseUserCookies(request, response);
 			return null;
 		} else {
 			initialiseUserSessionAttributesFromCookies(request, response);
+
 			if (request.getPathInfo().contains("browse")) {
 				updateCategoryCookieBasedOnCategoryBrowse(request, response);
 			}
@@ -235,20 +234,4 @@ public class HistoryController implements Controller {
 		String filename = "../webapps/data/" + archive + "TagCloud.txt";
 		getHistory().persistTagCloudText(filename);
 	}
-
-	public static void main(String[] args) {
-		StringBuilder sb = new StringBuilder("Collection:4##Event:3");
-		String splitCookie = "Collection:4";
-		int indexBegin = sb.indexOf(splitCookie);
-		int indexEnd = indexBegin + splitCookie.length();
-		sb.replace(indexBegin, indexEnd, "Collection" + ":" + 200000002);
-		System.out.println("New categories " + sb);
-
-		String a = "Sequins,Self and Struggle";
-
-		String b = a.replaceAll("[^a-zA-Z0-9\\s]", "").replaceAll("\\s+", "");
-
-		System.out.println(b);
-	}
-
 }

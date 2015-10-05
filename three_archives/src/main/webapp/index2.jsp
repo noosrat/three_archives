@@ -42,12 +42,39 @@
     <!-- Full Page Image Background Carousel Header -->
     <header id="myCarousel" class="carousel slide">
         <!-- Indicators -->
-        <ol class="carousel-indicators"> <!-- CHANGE DYNAMICALLY GENERATE DEPENDENT ON ARCHIVES WE HAVE --><li data-target="#myCarousel" data-slide-to="0" class="active"></li><li data-target="#myCarousel" data-slide-to="1"></li><li data-target="#myCarousel" data-slide-to="2"></li>
+        <ol class="carousel-indicators">
+            <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+            <li data-target="#myCarousel" data-slide-to="1"></li>
+            <li data-target="#myCarousel" data-slide-to="2"></li>
+            
         </ol>
 	 
         <!-- Wrapper for Slides -->
-        <div class="carousel-inner"><div class="item active"><div class="fill" style="background-image:url(${pageContext.request.contextPath}/images/spring.jpg);"></div><div class="carousel-caption"><h2>Sequins, Self AndStruggle </h2><p><a class="btn btn-large btn-primary" href="${pageContext.request.contextPath}/archives/SequinsSelfAndStruggle">Explore Archive</a></p></div></div>
-        <div class="item"><div class="fill" style="background-image:url(${pageContext.request.contextPath}/images/movie.jpg);"></div><div class="carousel-caption"><h2>Movie Snaps</h2><p><a class="btn btn-large btn-primary" href="${pageContext.request.contextPath}/archives/MovieSnaps">Explore Archive</a></p></div></div><div class="item"><div class="fill" style="background-image:url(${pageContext.request.contextPath}/images/harfield.jpg);"></div><div class="carousel-caption"><h2>Harfield Village	</h2><p><a class="btn btn-large btn-primary" href="${pageContext.request.contextPath}/archives/HarfieldVillage">Explore Archive</a></p></div></div>
+        <div class="carousel-inner">
+            <div class="item active">
+                <!-- Set the first background image using inline CSS below. -->
+                <div class="fill" style="background-image:url(${pageContext.request.contextPath}/images/spring.jpg);"></div>
+                <div class="carousel-caption">
+                    <h2>Sequins, Self and Struggle</h2>
+		 <p><a class="btn btn-large btn-primary" href="${pageContext.request.contextPath}/archives/SequinsSelfandStruggle">Explore Archive</a></p>
+                </div>
+            </div>
+            <div class="item">
+                <!-- Set the second background image using inline CSS below. -->
+                <div class="fill" style="background-image:url(${pageContext.request.contextPath}/images/movie.jpg);"></div>
+                <div class="carousel-caption">
+                    <h2>Movie Snaps</h2>
+		 <p><a class="btn btn-large btn-primary" href="${pageContext.request.contextPath}/archives/MovieSnaps">Explore Archive</a></p>
+                </div>
+            </div>
+            <div class="item">
+                <!-- Set the third background image using inline CSS below. -->
+                <div class="fill" style="background-image:url(${pageContext.request.contextPath}/images/harfield.jpg);"></div>
+                <div class="carousel-caption">
+                    <h2>Harfield Village</h2>
+		 <p><a class="btn btn-large btn-primary" href="${pageContext.request.contextPath}/archives/HarfieldVillage">Explore Archive</a></p>
+                </div>
+            </div>
         </div>
 
         <!-- Controls -->
@@ -57,6 +84,7 @@
         <a class="right carousel-control" href="#myCarousel" data-slide="next">
             <span class="icon-next"></span>
         </a>
+
     </header>
 
 

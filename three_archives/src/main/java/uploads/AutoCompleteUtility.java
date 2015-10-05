@@ -10,8 +10,6 @@ import java.util.Iterator;
 import java.util.Set;
 import java.util.TreeSet;
 
-import javax.ws.rs.core.Request;
-
 import org.apache.solr.client.solrj.SolrServerException;
 import org.json.simple.JSONArray;
 
