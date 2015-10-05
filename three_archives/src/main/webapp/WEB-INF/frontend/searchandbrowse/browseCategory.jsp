@@ -222,7 +222,6 @@ $(document).ready(function() {
 
 					<h3 class="page-header">${browseCategory}</h3>
 					<section id="portfolio">
-					<div class="container">
 									<c:forEach var="subCategory"
 										items="${categoriesAndObjects[browseCategory]}">
 										<div class="col-lg-3 col-md-4 col-xs-6 portfolio-item">
@@ -247,7 +246,6 @@ $(document).ready(function() {
 											</a>
 										</div>
 									</c:forEach>
-					</div>
 					</section>
 			<!-- container fluid -->
 		</div>
