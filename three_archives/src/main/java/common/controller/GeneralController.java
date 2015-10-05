@@ -15,13 +15,13 @@ import search.SearchController;
 
 public class GeneralController implements Controller {
 	private static HashMap<String, PropertiesHandler> ARCHIVES;
-	//here we need a static map associating each service with a url ending
-	private final static HashMap<String,String> services = new HashMap<String, String>();
-	
-	static{
+	// here we need a static map associating each service with a url ending
+	private final static HashMap<String, String> services = new HashMap<String, String>();
+
+	static {
 		services.put("searchandbrowse", "browse");
 		services.put("historyandstatistics", "");
-		services.put("exhibitions","redirect_exhibitions" );
+		services.put("exhibitions", "redirect_exhibitions");
 		services.put("uploads", "redirect_uploads");
 		services.put("maps", "redirect_maps");
 		services.put("downloads", "redirect_downloads");
@@ -30,7 +30,7 @@ public class GeneralController implements Controller {
 
 	public String execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		String result = "";
-		
+
 		ArrayList<String> cart = new ArrayList<String>();
 		cart.add("ms:1");
 		HttpSession session = request.getSession();
@@ -40,62 +40,69 @@ public class GeneralController implements Controller {
 		HistoryController historyController = new HistoryController();
 		historyController.execute(request, response);
 
-		return "home.jsp";
-		
+		String archive = (String) request.getSession().getAttribute("ARCHIVE_CONCAT");
+		String first = archive.substring(0, 1);
+		result = first.toLowerCase() + archive.substring(1) + "Home.jsp";
+		return result;
+		// "home.jsp";
+
 	}
-	private void storeAllArchivePropertiesWithinSession(HttpServletRequest request){
+
+	private void storeAllArchivePropertiesWithinSession(HttpServletRequest request) {
 		loadArchiveProperties();
 		HttpSession session = request.getSession();
-		if (request.getPathInfo()!=null){
-		for (String archive: ARCHIVES.keySet()){
-			System.out.println("Properties file : " + archive);
-			String name = ARCHIVES.get(archive).getProperty("archive.name").replaceAll("[^a-zA-Z0-9\\s]", "").replaceAll("\\s+", "");
-			System.out.println("Archive name : " + name);
-			if (request.getPathInfo().substring(1).equalsIgnoreCase(name)){
-				session.setAttribute("ARCHIVE", ARCHIVES.get(archive).getProperty("archive.name"));
-				System.out.println("THIS IS THE ARCHIVE " + session.getAttribute("ARCHIVE"));
-				session.setAttribute("ARCHIVE_CONCAT", name);
-				session.setAttribute("MEDIA_PREFIX", ARCHIVES.get(archive).getProperty("archive.multimedia.prefix"));
-				HashMap<String,Boolean> services = new HashMap<String,Boolean>();
-				for (String property: ARCHIVES.get(archive).getAllPropertyNames()){
-					if (property.contains("service.")){
-						//we are dealing with services
-						services.put(property.substring(8),Boolean.parseBoolean(ARCHIVES.get(archive).getProperty(property)));
+		if (request.getPathInfo() != null) {
+			for (String archive : ARCHIVES.keySet()) {
+				System.out.println("Properties file : " + archive);
+				String name = ARCHIVES.get(archive).getProperty("archive.name").replaceAll("[^a-zA-Z0-9\\s]", "")
+						.replaceAll("\\s+", "");
+				System.out.println("Archive name : " + name);
+				if (request.getPathInfo().substring(1).equalsIgnoreCase(name)) {
+					System.out.println("WE FOUND A MATCHING PROPERTIES FILE");
+					session.setAttribute("ARCHIVE", ARCHIVES.get(archive).getProperty("archive.name"));
+					System.out.println("THIS IS THE ARCHIVE " + session.getAttribute("ARCHIVE"));
+					session.setAttribute("ARCHIVE_CONCAT", name);
+					session.setAttribute("MEDIA_PREFIX",
+							ARCHIVES.get(archive).getProperty("archive.multimedia.prefix"));
+					HashMap<String, Boolean> services = new HashMap<String, Boolean>();
+					for (String property : ARCHIVES.get(archive).getAllPropertyNames()) {
+						if (property.contains("service.")) {
+							// we are dealing with services
+							services.put(property.substring(8),
+									Boolean.parseBoolean(ARCHIVES.get(archive).getProperty(property)));
+						}
 					}
+					break;
 				}
 			}
-				break;
-			}
-		}else{
+		} else {
 			request.setAttribute("message", "SOMETHING SEEMS TO HAVE GONE WRONG.  CONTACT IT");
 		}
-		
-	}
-		
-//		
-//		if (pathInfo.equalsIgnoreCase("SequinsSelfAndStruggle")) {
-//			session.setAttribute("ARCHIVE", "Sequins, Self and Struggle");
-//			session.setAttribute("MEDIA_CART", cart);
-//			historyController.execute(request, response);
-//			return "sequinsSelfAndStruggleHome.jsp";
-//
-//		} else if (pathInfo.equalsIgnoreCase("MovieSnaps")) {
-//			session.setAttribute("ARCHIVE", "Movie Snaps");
-//			session.setAttribute("MEDIA_CART", cart);
-//			historyController.execute(request, response);
-//			return "movieSnapsHome.jsp";
-//
-//		} else if (pathInfo.equalsIgnoreCase("HarfieldVillage")) {
-//			session.setAttribute("ARCHIVE", "Harfield Village");
-//			session.setAttribute("MEDIA_CART", cart);
-//			historyController.execute(request, response);
-//			return "harfieldVillageHome.jsp";
-//
-//		}
-//
-//		return "index.jsp";
-	
 
+	}
+
+	//
+	// if (pathInfo.equalsIgnoreCase("SequinsSelfAndStruggle")) {
+	// session.setAttribute("ARCHIVE", "Sequins, Self and Struggle");
+	// session.setAttribute("MEDIA_CART", cart);
+	// historyController.execute(request, response);
+	// return "sequinsSelfAndStruggleHome.jsp";
+	//
+	// } else if (pathInfo.equalsIgnoreCase("MovieSnaps")) {
+	// session.setAttribute("ARCHIVE", "Movie Snaps");
+	// session.setAttribute("MEDIA_CART", cart);
+	// historyController.execute(request, response);
+	// return "movieSnapsHome.jsp";
+	//
+	// } else if (pathInfo.equalsIgnoreCase("HarfieldVillage")) {
+	// session.setAttribute("ARCHIVE", "Harfield Village");
+	// session.setAttribute("MEDIA_CART", cart);
+	// historyController.execute(request, response);
+	// return "harfieldVillageHome.jsp";
+	//
+	// }
+	//
+	// return "index.jsp";
 
 	private void loadArchiveProperties() {
 		ARCHIVES = new HashMap<String, PropertiesHandler>();
