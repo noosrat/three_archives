@@ -26,6 +26,9 @@
 <link
 	href="${pageContext.request.contextPath}/bootstrap-3.3.5/css/bootstrap.min.css"
 	rel="stylesheet">
+	<link
+	href="${pageContext.request.contextPath}/css/typeahead.css"
+	rel="stylesheet">
 <script type="text/javascript"
 	src="${pageContext.request.contextPath}/js/jquery-1.11.3.js"></script>
 <script type="text/javascript"
@@ -74,6 +77,8 @@
 						href="${pageContext.request.contextPath}/archives/redirect_maps">Maps</a></li>
 					<li><a
 						href="${pageContext.request.contextPath}/archives/redirect_uploads">Uploads</a></li>
+					<li><a
+						href="${pageContext.request.contextPath}/archives/redirect_downloads">Downloads</a></li>
 				</ul>
 				<!-- search components-->
 				<div id="bs-example-navbar-collapse-1"
@@ -99,8 +104,8 @@
 								<div class="form-group">
 									<div id="prefetch">
 										<input
-											class="form-control typeahead tt-query tt-hint tt-dropdown-menu tt-suggestion"
-											data-provider="typeahead" type="text"
+											class="typeahead tt-query tt-hint tt-dropdown-menu tt-suggestion"
+											data-provider="typeahead"  data-role="tagsinput" type="text"
 											placeholder="Search Archive" autocomplete="off"
 											spellcheck="false" name="terms">
 									</div>

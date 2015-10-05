@@ -82,14 +82,12 @@ public class SearchController implements Controller {
 			// now we can add the rest of the actual query
 			terms.append(" AND ");
 		}
-		
-		
 
 		String s = request.getParameter("terms");
 		System.out.println("VALUE OF TERMS " + s);
 		// we want to add this to our word cloud..this is what has been typed
 		// into the search box
-		History.addTextToTagCloud(s,true);
+		History.addTextToTagCloud(s, true);
 		// if (requestPath.contains("search_objects/category")) {
 		// then do all the specific searching
 		String[] splitPath = requestPath.split("=");
@@ -123,16 +121,17 @@ public class SearchController implements Controller {
 
 		Set<FedoraDigitalObject> digitalObjects = new HashSet<FedoraDigitalObject>();
 		digitalObjects = getSearch().findFedoraDigitalObjects(new String(terms));
-		filterFedoraObjectsForSpecificArchive((String)request.getSession().getAttribute("mediaPrefix"),digitalObjects);
-		//need to restrict these for this archive....
-		
+		filterFedoraObjectsForSpecificArchive((String) request.getSession().getAttribute("mediaPrefix"),
+				digitalObjects);
+		// need to restrict these for this archive....
+
 		if ((digitalObjects == null || digitalObjects.isEmpty())) {
 			request.setAttribute("message", "No results to return");
 		}
 		request.getSession().setAttribute("objectsForArchive", digitalObjects);
 		similarSearchTags(request);
 	}
-	
+
 	private void filterFedoraObjectsForSpecificArchive(String multiMediaPrefix, Set<FedoraDigitalObject> fedoraDigitalObjects) {
 		for (Iterator<FedoraDigitalObject> iterator = fedoraDigitalObjects.iterator(); iterator.hasNext();) {
 			FedoraDigitalObject element = iterator.next();
@@ -144,8 +143,6 @@ public class SearchController implements Controller {
 		}
 
 	}
-
-
 
 	public static ArrayList<String> retrieveSearchCategories() {
 		ArrayList<String> result = new ArrayList<String>();
@@ -173,47 +170,49 @@ public class SearchController implements Controller {
 		TreeSet<String> results = new TreeSet<String>();
 		String terms = (String) request.getParameter("terms");
 		String[] splitSearchTerm = null;
-		if (terms != null) {
-			splitSearchTerm = terms.split(" ");
+		if (terms==null){
+			return results;
 		}
-		// now we read in the autocomplete json file
-		JSONParser parser = new JSONParser();
-		StringBuilder file = new StringBuilder("../webapps/data/");
+			splitSearchTerm = terms.split(" ");
+			// now we read in the autocomplete json file
+			JSONParser parser = new JSONParser();
+			StringBuilder file = new StringBuilder("../webapps/data/");
 
-		file.append(archive).append(".json");
+			file.append(archive).append(".json");
 
-		// read in the archive attribute and check which json file we are
-		// reading in
-		Set<String> autocomplete;
-		try {
-			File dir = new File("../webapps/data/");
-			if (!dir.exists()) {
-				System.out.println("OH NO THE DIRECTORY DOES NOT EXIST....WE MUST CREATE IT");
-				dir.mkdir();
+			// read in the archive attribute and check which json file we are
+			// reading in
+			Set<String> autocomplete;
+			try {
+				File dir = new File("../webapps/data/");
+				if (!dir.exists()) {
+					System.out.println("OH NO THE DIRECTORY DOES NOT EXIST....WE MUST CREATE IT");
+					dir.mkdir();
+				}
+
+				Object obj = parser.parse(new FileReader(new String(file)));
+				JSONArray array = (JSONArray) obj;
+				autocomplete = new TreeSet<String>(array);
+			} catch (ParseException parseException) {
+				System.out.println(parseException);
+				throw new Exception(parseException);
 			}
 
-			Object obj = parser.parse(new FileReader(new String(file)));
-			JSONArray array = (JSONArray) obj;
-			autocomplete = new TreeSet<String>(array);
-		} catch (ParseException parseException) {
-			System.out.println(parseException);
-			throw new Exception(parseException);
-		}
+			// now we go trough out array and we select items to have as tags
 
-		// now we go trough out array and we select items to have as tags
-
-		for (String auto : autocomplete) {
-			for (String term : splitSearchTerm) {
-				if (auto.contains(term)) {
-					results.add(auto);
-					break; // breaking out since the whole auto line will be
-							// addedd so we don't need to check the other terms
-							// existience
+			for (String auto : autocomplete) {
+				for (String term : splitSearchTerm) {
+					if (auto.toLowerCase().contains(term.toLowerCase())) {
+						results.add(auto);
+						break; // breaking out since the whole auto line will be
+								// addedd so we don't need to check the other
+								// terms
+								// existience
+					}
 				}
 			}
-		}
-		request.setAttribute("searchTags", results);
+			request.setAttribute("searchTags", results);
 		return results;
-	}
+}
 
 }

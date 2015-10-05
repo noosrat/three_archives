@@ -30,6 +30,9 @@
 <link
 	href="${pageContext.request.contextPath}/css/bootstrap-lightbox.min.css"
 	rel="stylesheet">
+	<link
+	href="${pageContext.request.contextPath}/css/typeahead.css"
+	rel="stylesheet">
 <script type="text/javascript"
 	src="${pageContext.request.contextPath}/js/jquery-1.11.3.js"></script>
 <script type="text/javascript"
@@ -57,7 +60,8 @@ $(document).ready(function() {
 		});
 		$('#prefetch .typeahead').typeahead(null, {
 			name : 'countries',
-			source : countries
+			source : countries.ttAdapter(),
+			
 		});
 	});
 </script>
@@ -117,9 +121,9 @@ $(document).ready(function() {
 								<div class="form-group">
 									<div id="prefetch">
 										<input
-											class="form-control typeahead tt-query tt-hint tt-dropdown-menu tt-suggestion"
+											class="typeahead tt-query tt-hint tt-dropdown-menu tt-suggestion"
 											data-provider="typeahead" type="text"
-											placeholder="Search Archive" autocomplete="off"
+											placeholder="${terms}" autocomplete="off"
 											spellcheck="false" name="terms">
 									</div>
 								</div>
@@ -203,10 +207,10 @@ $(document).ready(function() {
 <br><br>
 
 				<section id="portfolio">
-					<div class="container">
+				<!-- 	<div class="container"> -->
 						<c:set var="count" value="0" scope="page" />
 						<c:forEach var="digitalObject" items="${objectsForArchive}">
-							<div class="col-xs-8 col-sm-6 portfolio-item">
+							<div class="col-lg-3 col-sm-4 col-xs-6 portfolio-item">
 								<a href="#lightbox${count}" class="portfolio-link"
 									data-toggle="modal" data-target="#lightbox${count}">
 
@@ -222,7 +226,7 @@ $(document).ready(function() {
 							</div>
 							<c:set var="count" value="${count + 1}" scope="page" />
 						</c:forEach>
-					</div>
+		<!-- 			</div> -->
 				</section>
 				<c:set var="count" value="0" scope="page" />
 				<c:forEach var="digitalObject" items="${objectsForArchive}">
@@ -235,17 +239,19 @@ $(document).ready(function() {
 								<h3>${digitalObject.datastreams['DC'].dublinCoreMetadata['TITLE']}</h3>
 								<br>
 								
-									<!-- 	<table style="width: 100%"> <td>-->
+									<table> 
+									<td>
 									<img src="${digitalObject.datastreams['IMG'].content}"
-										class="img-thumbnail img-responsive" alt="image unavailable">
+										class="img-thumbnail img-responsive" alt="image unavailable"></td>
 									
 									<!-- can we not try just iterate through the dublinCoreDatastream's metadata -->
-									<c:forEach var="dcMetadata" items="${digitalObject.datastreams['DC'].dublinCoreMetadata}">
+									<td><c:forEach var="dcMetadata" items="${digitalObject.datastreams['DC'].dublinCoreMetadata}">
 									<c:if test="${dcMetadata.key!='IDENTIFIER' && dcMetadata.key!='TYPE' && dcMetadata.key!='FORMAT'}">
 									${dcMetadata.key}: <a href="${pageContext.request.contextPath}/archives/search_objects/category=${dcMetadata.key}?terms=${dcMetadata.value}">${dcMetadata.value}</a><br>
 									</c:if>
 									
-									</c:forEach>
+									</c:forEach></td>
+									</table>
 								</div>
 
 								<button type="button">Place me</button>

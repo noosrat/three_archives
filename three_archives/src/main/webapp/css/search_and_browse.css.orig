@@ -1,11 +1,9 @@
-#portfolio{
-}
 #portfolio .portfolio-item {
 	display: block;
 	max-width: 300px;
-	padding: 0 0 0 0;
+	min-width: 250px;
+	width: 100%;
 	border-collapse: collapse;
-	max-height: 300px;
 }
 
 #portfolio .portfolio-item .portfolio-link {

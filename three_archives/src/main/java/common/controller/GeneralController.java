@@ -1,6 +1,5 @@
 package common.controller;
 
-
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -8,8 +7,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import common.model.Exhibition;
-import exhibitions.ManageExhibition;
 import history.HistoryController;
 import search.Browse;
 import search.BrowseController;

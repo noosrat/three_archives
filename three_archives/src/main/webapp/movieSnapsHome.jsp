@@ -26,6 +26,9 @@
 <link
 	href="${pageContext.request.contextPath}/bootstrap-3.3.5/css/bootstrap.min.css"
 	rel="stylesheet">
+	<link
+	href="${pageContext.request.contextPath}/css/typeahead.css"
+	rel="stylesheet">
 <script type="text/javascript"
 	src="${pageContext.request.contextPath}/js/jquery-1.11.3.js"></script>
 <script type="text/javascript"
@@ -102,7 +105,7 @@
 								<div class="form-group">
 									<div id="prefetch">
 										<input
-											class="form-control typeahead tt-query tt-hint tt-dropdown-menu tt-suggestion"
+											class="typeahead tt-query tt-hint tt-dropdown-menu tt-suggestion"
 											data-provider="typeahead" type="text"
 											placeholder="Search Archive" autocomplete="off"
 											spellcheck="false" name="terms">

@@ -32,6 +32,9 @@
 	rel="stylesheet">
 <link href="${pageContext.request.contextPath}/css/tagcloud.css"
 	rel="stylesheet">
+	<link
+	href="${pageContext.request.contextPath}/css/typeahead.css"
+	rel="stylesheet">
 
 <script type="text/javascript"
 	src="${pageContext.request.contextPath}/js/jquery-1.11.3.js"></script>

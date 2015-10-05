@@ -30,6 +30,9 @@
 <link
 	href="${pageContext.request.contextPath}/css/bootstrap-lightbox.min.css"
 	rel="stylesheet">
+	<link
+	href="${pageContext.request.contextPath}/css/typeahead.css"
+	rel="stylesheet">
 <script type="text/javascript"
 	src="${pageContext.request.contextPath}/js/jquery-1.11.3.js"></script>
 <script type="text/javascript"
@@ -118,7 +121,7 @@ $(document).ready(function() {
 								<div class="form-group">
 									<div id="prefetch">
 										<input
-											class="form-control typeahead tt-query tt-hint tt-dropdown-menu tt-suggestion"
+											class="typeahead tt-query tt-hint tt-dropdown-menu tt-suggestion"
 											data-provider="typeahead" type="text"
 											placeholder="Search Archive" autocomplete="off"
 											spellcheck="false" name="terms">
@@ -222,7 +225,6 @@ $(document).ready(function() {
 
 					<h3 class="page-header">${browseCategory}</h3>
 					<section id="portfolio">
-					<div class="container">
 									<c:forEach var="subCategory"
 										items="${categoriesAndObjects[browseCategory]}">
 										<div class="col-lg-3 col-md-4 col-xs-6 portfolio-item">
@@ -247,7 +249,6 @@ $(document).ready(function() {
 											</a>
 										</div>
 									</c:forEach>
-					</div>
 					</section>
 			<!-- container fluid -->
 		</div>

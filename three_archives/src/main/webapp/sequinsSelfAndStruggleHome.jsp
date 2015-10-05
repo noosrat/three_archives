@@ -26,6 +26,9 @@
 <link
 	href="${pageContext.request.contextPath}/bootstrap-3.3.5/css/bootstrap.min.css"
 	rel="stylesheet">
+	<link
+	href="${pageContext.request.contextPath}/css/typeahead.css"
+	rel="stylesheet">
 <script type="text/javascript"
 	src="${pageContext.request.contextPath}/js/jquery-1.11.3.js"></script>
 <script type="text/javascript"
@@ -110,30 +113,27 @@
 								</c:forEach>
 							</ul></li>
 						<li>
-							<form class="navbar-form navbar-right"
+						
+						<form class="navbar-form navbar-right"
 								action="${pageContext.request.contextPath}/archives/search_objects/category=${searchCategories[0]}"
 								method="post">
 								<div class="form-group">
 									<div id="prefetch">
 										<input
-											class="form-control typeahead tt-query tt-hint tt-dropdown-menu tt-suggestion"
+											class="typeahead tt-query tt-hint tt-dropdown-menu tt-suggestion"
 											data-provider="typeahead" type="text"
-											placeholder="Search Archive" autocomplete="off"
+											placeholder="${terms}" autocomplete="off"
 											spellcheck="false" name="terms">
 									</div>
 								</div>
-
 								<button type="submit" class="btn">Search</button>
-
 								<div class="checkbox">
 									<label> <input type="checkbox" id="limitSearch"
 										name="limitSearch" value="limitSearch"><font
 										color="white"> Limit search to these results</font>
 									</label>
 								</div>
-
-							</form>
-						</li>
+							</form>						</li>
 					</ul>
 
 
