@@ -89,6 +89,9 @@
 		.caption{
 			margin:2px;
 		}
+		img{
+			margin:auto;
+		}
     		
 	</style>
 
@@ -118,27 +121,27 @@
   					<div class="slide">
 						<%if (images[j]!=null){%>
 						<div class="droptarget droptargetTemplate img-circle">
-							<img src="<%=images[j]%>">
+							<img class="img-circle" src="<%=images[j]%>">
 						</div>
 						<%}
 						else{%>
-						<div class="droptarget droptargetTemplate" style="visibility:hidden">
+						<div class="droptarget droptargetTemplate " style="visibility:hidden">
 						</div>
 						<%}%>
 						<%if (captions[j]!=null){%>	
 						<div class="caption">
 							
-							<div style="height:40px;width:210px;" name="input_cap1"><%=captions[j] %></div>
+							<div style="height:40px;width:210px;" ><%=captions[j] %></div>
 						</div>
 						<%}
 						else{%>
 						<div class="caption">
-							<textarea class="TextArea" rows="2" cols="26"  name="input_cap1" readonly=readonly style="visibility:hidden"></textarea>
+							<textarea class="TextArea" rows="2" cols="26"  readonly=readonly style="visibility:hidden"></textarea>
 						</div>
 						<%}%>
 						<%if (images[j+1]!=null){%>
 						<div class="droptarget droptargetTemplate img-circle">
-							<img src="<%=images[j+1]%>">
+							<img class="img-circle" src="<%=images[j+1]%>">
 						</div>
 						<%}
 						else{%>
@@ -147,12 +150,12 @@
 						<%}%>
 						<%if (captions[j+1]!=null){%>
 						<div class="caption">	
-							<div style="height:40px;width:210px;"  name="input_cap1"><%=captions[j+1] %></div>
+							<div style="height:40px;width:210px;"><%=captions[j+1] %></div>
 						</div>
 						<%}
 						else{%>
 						<div class="caption">
-							<textarea class="TextArea" rows="2" cols="26"  name="input_cap1" readonly=readonly style="visibility:hidden"></textarea>
+							<textarea class="TextArea" rows="2" cols="26" readonly=readonly style="visibility:hidden"></textarea>
 						</div>
 						<%}%>
 						<%j++;%>

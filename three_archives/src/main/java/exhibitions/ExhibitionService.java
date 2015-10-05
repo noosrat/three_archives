@@ -11,18 +11,6 @@ public class ExhibitionService extends Service {
 		super();
 	}
 	
-	/*public Exhibition[] listAllExhibitions()
-	{
-		Exhibition[] allExhibitions= new Exhibition[5];
-		allExhibitions[0]= new Exhibition("Queens",0);
-		allExhibitions[1]= new Exhibition("Media coverage",1);
-		allExhibitions[2]= new Exhibition("In the eyes of a queen",2);
-		allExhibitions[3]= new Exhibition("Remembering removals",3);
-		allExhibitions[4]= new Exhibition("Then and now",4);
-		
-		return allExhibitions;
-	}*/
-	
 	public List<Exhibition> listExhibitions()
 	{
 		@SuppressWarnings("unchecked")

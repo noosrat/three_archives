@@ -1,22 +1,14 @@
 package exhibitions;
-import java.util.Iterator;
 
 import common.model.Exhibition;
-
-
 import java.util.List;
-///import org.hibernate.mapping.List;
-import org.hibernate.HibernateException; 
-import org.hibernate.Query;
 import org.hibernate.Criteria;
 import org.hibernate.Session; 
-import org.hibernate.Transaction;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 
 
 public class ManageExhibition {
-	private static SessionFactory factory; 
 	
 	   /* Method to CREATE an exhibition in the database */
 	   public Integer addExhibition(Exhibition exhibition){

@@ -21,8 +21,7 @@ public class ExhibitionController implements Controller {
 			HttpSession session = request.getSession();
 			session.setAttribute("ARCHIVE", "seqiuns");
 			return "WEB-INF/frontend/exhibitions/exhibitionHome.jsp";
-		}
-		
+		}	
 		return exhibitions(request, response);
 	}
 	
@@ -49,7 +48,6 @@ public class ExhibitionController implements Controller {
 		if (request.getParameter("selectedExhibit") != null) 
 		{
 			
-			String selectedExhibit = request.getParameter("selectedExhibit");
 			int exhibitionId = Integer.parseInt(request.getParameter("selectedExhibit"));
 			
 			Exhibition exhibition=service.getExhibition(exhibitionId);
@@ -69,8 +67,7 @@ public class ExhibitionController implements Controller {
 				}
 			}
 			
-			// images = allExhibitions.get(exhibitionId).getMedia();
-			//images[i]="http://localhost:8080/fedora/objects/sq:15/datastreams/IMG/content";
+			
 			String[] captions= exhibition.getCaptions().split("%");
 			
 			
@@ -128,7 +125,7 @@ public class ExhibitionController implements Controller {
 					FedoraCommunicator fc= new FedoraCommunicator();
 					cart[0]="KEL:3";
 					cart[1]="KEL:2";
-					cart[2]="KEL:14";
+					cart[2]="KEL:3";
 					cart[3]="KEL:4";
 					cart[4]="KEL:5";
 					cart[5]="KEL:6";
@@ -164,26 +161,31 @@ public class ExhibitionController implements Controller {
 		}
 		if (request.getParameter("exhibition_det")!=null)
 		{
+			
 			String action=request.getParameter("exhibition_det");
+		
 			if(action.equals("Save"))
 			{
+				
 				//Get the captions as well
 				String [] captions=new String[12];
-				if(!(request.getParameter("input_cap0").equals(""))){captions[0]=request.getParameter("input_cap0");}
-				if(!(request.getParameter("input_cap1").equals(""))){captions[1]=request.getParameter("input_cap1");}
-				if(!(request.getParameter("input_cap2").equals(""))){captions[2]=request.getParameter("input_cap2");}
-				if(!(request.getParameter("input_cap3").equals(""))){captions[3]=request.getParameter("input_cap3");}
-				if(!(request.getParameter("input_cap4").equals(""))){captions[4]=request.getParameter("input_cap4");}
-				if(!(request.getParameter("input_cap5").equals(""))){captions[5]=request.getParameter("input_cap5");}
-				if(!(request.getParameter("input_cap6").equals(""))){captions[6]=request.getParameter("input_cap6");}
-				if(!(request.getParameter("input_cap7").equals(""))){captions[7]=request.getParameter("input_cap7");}
-				if(!(request.getParameter("input_cap8").equals(""))){captions[8]=request.getParameter("input_cap8");}
-				if(!(request.getParameter("input_cap9").equals(""))){captions[9]=request.getParameter("input_cap9");}
-				if(!(request.getParameter("input_cap10").equals(""))){captions[10]=request.getParameter("input_cap10");}
-				if(!(request.getParameter("input_cap11").equals(""))){captions[11]=request.getParameter("input_cap11");}
+				
+				if(!(request.getParameter("input_cap0").equals(""))){captions[0]=(String)request.getParameter("input_cap0");}
+				if(!(request.getParameter("input_cap1").equals(""))){captions[1]=(String)request.getParameter("input_cap1");}
+				if(!(request.getParameter("input_cap2").equals(""))){captions[2]=(String)request.getParameter("input_cap2");}
+				if(!(request.getParameter("input_cap3").equals(""))){captions[3]=(String)request.getParameter("input_cap3");}
+				if(!(request.getParameter("input_cap4").equals(""))){captions[4]=(String)request.getParameter("input_cap4");}
+				if(!(request.getParameter("input_cap5").equals(""))){captions[5]=(String)request.getParameter("input_cap5");}
+				if(!(request.getParameter("input_cap6").equals(""))){captions[6]=(String)request.getParameter("input_cap6");}
+				if(!(request.getParameter("input_cap7").equals(""))){captions[7]=(String)request.getParameter("input_cap7");}
+				if(!(request.getParameter("input_cap8").equals(""))){captions[8]=(String)request.getParameter("input_cap8");}
+				if(!(request.getParameter("input_cap9").equals(""))){captions[9]=(String)request.getParameter("input_cap9");}
+				if(!(request.getParameter("input_cap10").equals(""))){captions[10]=(String)request.getParameter("input_cap10");}
+				if(!(request.getParameter("input_cap11").equals(""))){captions[11]=(String)request.getParameter("input_cap11");}
 				
 				session.setAttribute("CAPTIONS", captions);
 				String userAction=request.getParameter("user_action");
+				
 				session.setAttribute("POPULATED_TEMPLATE",userAction);
 				
 				//get all the exhibition content
@@ -193,29 +195,42 @@ public class ExhibitionController implements Controller {
 				String exhibitionTitle= request.getParameter("Title");
 				String exhibitionDescription= request.getParameter("Description");
 				String exhibitionCreator= request.getParameter("Creator");
+				
 		
 				int templateid=Integer.parseInt((String)session.getAttribute("TEMPLATE_ID"));
 				
 				String mediaString=(String) session.getAttribute("POPULATED_TEMPLATE");
 				String[] media=new String[12];
 				media=service.processTemplate(mediaString);
-				
+			
 				String exmediaString="";
 				for(int i=0;i<media.length;i++)
 				{
 					if(media[i]!=null)
 					{
+						System.out.println(i);
 						exmediaString=exmediaString+media[i]+" %";
 					}
 					else{
+						System.out.println(i);
 						exmediaString=exmediaString+" %";
 					}
 				}
+			
 				String excaptionsString="";
 				for(int i=0;i<captions.length;i++)
 				{
+					
+					if(captions[i]!=null)
+					{
 						captions[i]=captions[i].replace("%", "percent");
 						excaptionsString=excaptionsString+captions[i]+" %";
+					}
+					else{
+						System.out.println(i);
+						excaptionsString=excaptionsString+" %";
+					}
+						
 				}
 				
 				//save the exhibition

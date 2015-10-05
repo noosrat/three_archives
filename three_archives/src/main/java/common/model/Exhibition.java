@@ -105,23 +105,4 @@ public class Exhibition implements Serializable  {
 	public void setMedia(String media) {
 		this.media=media;
 	}
-	
-	
-	
-
-	/*public void AutoExhibitionGenerator() {//remove this method
-		Exhibition exhibition = new Exhibition();
-
-		this.media = new String[10];
-		Random random = new Random();
-		int randomNum;
-
-		for (int i = 0; i < 10; i++) {
-			randomNum = random.nextInt(15 - 1);
-
-			this.media[i] = "/images/" + String.valueOf(randomNum) + ".jpg";
-
-		}
-
-	}*/
 }

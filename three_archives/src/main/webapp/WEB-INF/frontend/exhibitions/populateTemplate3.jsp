@@ -223,6 +223,7 @@
 
 
 	<div class="container">
+	<form method="post" action="${pageContext.request.contextPath}/archives/create_exhibitions">
 	<p> </p><br><br><br>
 		<div class="row" >
 			<div class="col-sm-4">
@@ -233,7 +234,7 @@
 				<%@ page import="common.fedora.DublinCore"%>
 				<%@ page import="common.fedora.FedoraDigitalObject"%>
 				<%@ page import="search.FedoraCommunicator"%>
-				<form method="post" action="${pageContext.request.contextPath}/archives/create_exhibitions">
+				
 			<textarea id="demo" name="user_action" readonly=readonly style="display:none;"></textarea>
 			<input type="submit" value="Back" class="btn btn-primary btn-sm" name="exhibition_det"/>
 			
@@ -332,10 +333,7 @@
 		<div class="col-sm-1">
 			 <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#myModal">Next</button>
 		</div>
-		
-	
-		
-		
+		</div>
 			
 		
 			<div class="modal fade" id="myModal" role="dialog" style="z-index:30000">
@@ -378,11 +376,6 @@
 </form>
 				
 
-
-
-			</div>
-		</div>
-		<!-- /.row -->
 	</div>
 	<nav class="navbar navbar-inverse navbar-fixed-bottom navbar-fluid"
 		role="navigation">

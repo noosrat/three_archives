@@ -82,7 +82,9 @@
 			margin:2px;
 			text-align:center;
 		}
-    	
+    	img{
+			margin:auto;
+		}
 	</style>
 
 </head>

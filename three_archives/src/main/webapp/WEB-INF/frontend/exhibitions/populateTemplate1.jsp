@@ -223,35 +223,32 @@
 
 
 	<div class="container">
+	<form method="post" action="${pageContext.request.contextPath}/archives/create_exhibitions">
 	<p> </p><br><br><br>
 		<div class="row" >
 			<div class="col-sm-4">
-			
-
 				<%@ page import="common.fedora.FedoraException"%>
 				<%@ page import="common.fedora.FedoraClient"%>
 				<%@ page import="common.fedora.DublinCore"%>
 				<%@ page import="common.fedora.FedoraDigitalObject"%>
 				<%@ page import="search.FedoraCommunicator"%>
-				<form method="post" action="${pageContext.request.contextPath}/archives/create_exhibitions">
-			<textarea id="demo" name="user_action" readonly=readonly style="display:none;"></textarea>
-			
-			
-			<%String [] cartImages= (String[]) (session.getAttribute("MEDIA_CART")); 
-			FedoraCommunicator fc= new FedoraCommunicator();
-			FedoraDigitalObject ob;%>
-			<div id="cart" class="scroll droptarget droptargetCart" ondrop="drop(event)" ondragover="allowDrop(event)" style="border: 1px solid #aaaaaa; diplay:inline-block; background:#F8F8F8;">
-				<%for (int i=0;i<cartImages.length;i++){ 
-					if(cartImages[i]!=null){
-						ob=null;
-					ob=fc.populateFedoraDigitalObject(cartImages[i]);%>
-  					<img  src="<%=ob.getDatastreams().get("IMG").getContent() %>"  style="width:40%;" ondragstart="dragStart(event)" draggable="true" id="<%=cartImages[i]%>">
-  				<%}} %>	
 				
+					<textarea id="demo" name="user_action" readonly=readonly style="display:none;"></textarea>
+					<%String [] cartImages= (String[]) (session.getAttribute("MEDIA_CART")); 
+					FedoraCommunicator fc= new FedoraCommunicator();
+					FedoraDigitalObject ob;%>
+					<div id="cart" class="scroll droptarget droptargetCart" ondrop="drop(event)" ondragover="allowDrop(event)" style="border: 1px solid #aaaaaa; diplay:inline-block; background:#F8F8F8;">
+							<%for (int i=0;i<cartImages.length;i++){ 
+									if(cartImages[i]!=null){
+										ob=null;
+										ob=fc.populateFedoraDigitalObject(cartImages[i]);%>
+  										<img  class="img-thumbnail" src="<%=ob.getDatastreams().get("IMG").getContent() %>"  style="width:40%;" ondragstart="dragStart(event)" draggable="true" id="<%=cartImages[i]%>">
+  							<%}} %>	
+				
+					</div>
 			</div>
-		</div>
 		
-		<div class="col-sm-7">	
+			<div class="col-sm-7">	
   		<div class="slider4">
   			<div class="slide">
 				<div class="droptarget droptargetTemplate" id="0" ondrop="drop(event)" ondragover="allowDrop(event)" >		
@@ -307,7 +304,7 @@
 				<div class="droptarget droptargetTemplate" id="8" ondrop="drop(event)" ondragover="allowDrop(event)" >
 				</div>
 				<div class="caption">
-					<textarea maxlength="50" class="TextArea" rows="2" cols="26"  name="input_cap8"placeholder="Add text to me" ></textarea>
+					<textarea maxlength="50" class="TextArea" rows="2" cols="26"  name="input_cap8" placeholder="Add text to me" ></textarea>
 				</div>
 				<div class="droptarget droptargetTemplate" id="9" ondrop="drop(event)" ondragover="allowDrop(event)">
 				</div>
@@ -328,14 +325,11 @@
 				</div>
 			</div>
 		</div>
-	</div>
+		</div>
 		<div class="col-sm-1">
 			<button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#myModal">Next</button>
 		</div>	
-		
-		
 			
-		
 			<div class="modal fade" id="myModal" role="dialog" style="z-index:30000">
     			<div class="modal-dialog">
     				<div class="modal-content">
@@ -356,8 +350,7 @@
 		 					<div class="form-group">
       							<label for="usr">Creator</label>
       							<input type="text" name="Creator" class="form-control">
-    						</div>
-								
+    						</div>		
 
         				</div>
         				<div class="modal-footer">
@@ -370,18 +363,14 @@
     		</div>
   </div>
 					
-			
+		</div>	
 		
-
+		
 </form>
-				
-
-
-
-			</div>
-		</div>
-		<!-- /.row -->
 	</div>
+		
+	
+	
 	<nav class="navbar navbar-inverse navbar-fixed-bottom navbar-fluid"
 		role="navigation">
 		<div class="container">

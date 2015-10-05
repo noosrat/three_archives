@@ -81,7 +81,7 @@ public class UploadService {
 				file_path=storage_path+filename;
 				file2= new File(file_path);//
 				//get next PID
-				//PID="KEL:"+i;
+				
 				
 				HttpMethod newPIDs=client.POST("/objects/nextPID?format=XML");
 				InputStream newPID_xml=newPIDs.getResponseBodyAsStream();

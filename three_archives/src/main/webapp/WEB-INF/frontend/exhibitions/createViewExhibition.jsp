@@ -89,6 +89,9 @@
 		.caption{
 			margin:2px;
 		}
+		img{
+			margin:auto;
+		}
     		
 	</style>
 

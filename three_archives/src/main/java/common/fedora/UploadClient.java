@@ -1,17 +1,10 @@
 package common.fedora;
 
 import java.io.File;
-import java.io.IOException;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
-
-import org.apache.commons.httpclient.Header;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpMethod;
 import org.apache.commons.httpclient.UsernamePasswordCredentials;
 import org.apache.commons.httpclient.auth.AuthScope;
-import org.apache.commons.httpclient.methods.DeleteMethod;
 import org.apache.commons.httpclient.methods.EntityEnclosingMethod;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.methods.PostMethod;
@@ -174,8 +167,7 @@ public class UploadClient {
 	    public HttpMethod POST(String query_uri) throws Exception {
 	        return submitRequest("POST", query_uri);
 	    }
-
-	    
+  
 	    public HttpMethod POST(String query_uri, String xml_string)throws Exception {
 	        return submitRequest("POST", query_uri, xml_string);
 	    }
