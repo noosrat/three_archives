@@ -144,6 +144,8 @@ public class FedoraXMLResponseParser {
 					System.out.println("event: " + description[1]);
 					dublinCoreMetadata.put(dc.name(), description[2]);//actual description
 					System.out.println("split ended for desc: " + description[2]);
+					dublinCoreMetadata.put("ANNOTATIONS", description[3]);//annotations
+					System.out.println("split ended for desc: " + description[2]);
 				} else if (dc.equals(DublinCore.COVERAGE)) {
 					// the first part of coverage is the location
 					// the second part can remain in co

@@ -15,7 +15,9 @@ public class GeneralController implements Controller {
 	{
 		String result = "";
 		ArrayList<String> cart = new ArrayList<String>();
+		//String cart ="";
 		cart.add("ms:1");
+		cart.add("ms:2");
 		
 		HttpSession session = request.getSession();
 		request.setAttribute("searchCategories", SearchController.retrieveSearchCategories());

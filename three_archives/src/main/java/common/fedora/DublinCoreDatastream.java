@@ -73,5 +73,15 @@ public class DublinCoreDatastream extends Datastream {
 		
 	return dublinCoreMetadata.get("TITLE");	
 	}
+	
+	public String getCoverage(){
+		
+		return dublinCoreMetadata.get("COVERAGE");	
+		}
+
+	public String getAnnotations(){
+		
+		return dublinCoreMetadata.get("ANNOTATIONS");	
+		}
 
 }

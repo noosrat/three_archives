@@ -5,7 +5,7 @@
 <%@page import="common.fedora.FedoraException" %>
 <html>
   <head>
-    <title>Simple Map</title>
+    <title>Map</title>
     <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
     <meta charset="utf-8">
     <style>
@@ -30,34 +30,73 @@ function initialize() {
   //loop though text file with polygon paths
   var contextPath='<%=request.getContextPath()%>';
   <%List<String> polygons =(List<String>) request.getAttribute("points");%>
-  console.log(<%=polygons%>);
+  console.log('<%=polygons%>');
   var markers = [];
   var polys = [];
   var polys1 = "";
  
-  function deletePolygons()
-  {
-	  for (var i = 0; i < polys.length; i++) {
-		    polys[i].setMap(null);
+  //function deletePolygons()
+  //{
+	//  for (var i = 0; i < polys.length; i++) {
+		//    polys[i].setMap(null);
 		  
-		    polys = [];  
-  }
-  }
+		  //  polys = [];  
+  //}
+  //}
   
-  function deleteMarkers() {
-	  for (var j = 0; j < markers.length; j++) {
-	    markers[j].setMap(null);
+  //function deleteMarkers() {
+	//  for (var j = 0; j < markers.length; j++) {
+	  //  markers[j].setMap(null);
 	  
-	    markers = [];
-	  }
-	}
+	    //markers = [];
+	  //}
+	//}
+  ///////this wont work//////fix/////
   
   <%for (int l = 0; l < polygons.size(); l++) {
-	    polygons.get(l).split(";");
+	    String[] corners = polygons.get(l).split(";");
+	    System.out.println("in loop");%>
+	    
+	    var path=[];
+	    console.log("in loop");
+	    
+	    <%for (int m = 0; m<corners.length;m++){
+	    	String[] latlng = corners[m].split("&");%>
+	    
+	    
+	    var corner = new google.maps.LatLng(<%=Float.parseFloat(latlng[0])%>,<%=Float.parseFloat(latlng[1])%>);
+	    path.push(corner);
+	    
+	    <%}%>
+	    
+	    var har
+	    har = new google.maps.Polygon({
+	        paths: path,
+	        strokeColor: '#000000',
+	        strokeOpacity: 0.8,
+	        strokeWeight: 2,
+	        fillColor: '#FFFFFF',
+	        fillOpacity: 0.35
+	      });
+
+	      har.setMap(map);
+
+	      google.maps.event.addListener(har, 'mouseover', function(e) {
+	    		console.log('mouseover')  
+	    		this.setOptions({fillColor:'#00FF00'});
+	    	  });
+
+	    google.maps.event.addListener(har, 'mouseout', function(e) {
+	    		console.log('mouseout')  
+	    		this.setOptions({fillColor:'#FFFFFF'});
+	    	  });
+	    
 	     
-}%>
-   
-  
+<%}%>
+//////////////setup from db////////////////// 
+
+
+  /////////////////////////////////////////
   
   
   var rightclicks = 0
@@ -75,7 +114,7 @@ function initialize() {
 
 	    }
 	    else if (rightclicks == 1)
-	    	{console.log(coords);
+	    	{//console.log(coords);
 	    	
 	    	var har
 	    	har = new google.maps.Polygon({
@@ -98,15 +137,18 @@ function initialize() {
           		console.log('mouseout')  
           		this.setOptions({fillColor:'#FFFFFF'});
           	  });
-             
+            console.log(points); 
 	    	polys.push(har);
-	    	polys1.concat(points, ";");
+	    	polys1=polys1.concat(points, "\n");
             console.log("end");
-	    	deleteMarkers();
-	    	console.log("writing to file"); 
+            console.log("before delete: "+polys1);
+	    	//deleteMarkers();
+	    	//console.log("writing to file: " + polys1); 
 	    	//loadXMLDoc(points);
+	    	console.log("before demo: "+polys1);
 	    	document.getElementById("demo").innerHTML = polys1;
-	    	console.log(points)
+	    	//console.log(points);
+	    	console.log("in demo: "+polys1);
 	    	//writeToFile(coords1)
 	    	rightclicks=0;}
 	  });
@@ -114,7 +156,7 @@ function initialize() {
   google.maps.event.addListener(map, 'click', function(e) {
 	  //placeMarker(e.latLng, map);
 	  coords = coords.concat("new google.maps.LatLng("+e.latLng.lat() + ", " + e.latLng.lng()+"),\n");
-	  points = points.concat("lat: " +e.latLng.lat() + ", long: " + e.latLng.lng()+";");
+	  points = points.concat(e.latLng.lat() + "&" + e.latLng.lng()+";");
 	  coords1.push(e.latLng);
 	  console.log("corner");
 	  
@@ -130,7 +172,7 @@ function placeMarker(position, map) {
 	    map: map,
 	    //icon: contextPath+"/images/dot.png"
 	  });
-	  map.panTo(position);
+	  //map.panTo(position);
 
 	}
 
@@ -146,6 +188,5 @@ google.maps.event.addDomListener(window, 'load', initialize);
 			<input type="submit" value="Sumbit Changes" name="sendPoints"/>
 		</form>
 	<input onclick="deletePolygons();" type=button value="Cancel">
-	<img src=<%=request.getAttribute("test")%>></img>
   </body>
 </html>

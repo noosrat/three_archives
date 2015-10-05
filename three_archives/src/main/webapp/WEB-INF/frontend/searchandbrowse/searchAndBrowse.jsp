@@ -276,7 +276,10 @@ $(document).ready(function() {
 
 								</div>
 
-								<button type="button">Place me</button>
+								<form name="map" method="post" action="${pageContext.request.contextPath}/archives/redirect_maps/place?image=${digitalObject.pid}">
+									<!-- place word map in url-->
+   									<input type="submit" value="Place Me" />
+								</form>
 							</div>
 						</div>
 					</div>

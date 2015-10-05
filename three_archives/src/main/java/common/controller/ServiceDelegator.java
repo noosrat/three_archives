@@ -1,5 +1,6 @@
 package common.controller;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import javax.servlet.http.HttpServletRequest;
@@ -35,6 +36,21 @@ public class ServiceDelegator {
 
 	public String execute(HttpServletRequest request, HttpServletResponse response){
 		String url = "index.jsp";
+		System.out.println(request.getParameter("addedtocart"));
+		if(request.getParameter("addedtocart")!=null){
+			System.out.println("in add to car");
+			ArrayList<String> cart = (ArrayList<String>) request.getSession().getAttribute("MEDIA_CART");
+			String selected=request.getParameter("addedtocart");
+			String[] selectedList=selected.split(">");
+			
+			for (int k=0; k<selectedList.length; k++){
+				cart.add(selectedList[k]);
+			
+			request.getSession().setAttribute("MEDIA_CART", cart);	
+			}
+			
+			
+		}
 		String pathInfo = request.getPathInfo().substring(1);
 		try {
 			if (pathInfo.contains("search")) {

@@ -2,6 +2,8 @@ package maps;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -13,94 +15,130 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import common.controller.Controller;
+import common.fedora.DublinCoreDatastream;
 import common.fedora.FedoraDigitalObject;
+import common.fedora.UploadClient;
 
 public class MapController implements Controller {
 
+	UploadClient client=new UploadClient("http://localhost:8080/fedora", "fedoraAdmin","12345",null);
+	String title;
+	String creator;
+	String event;
+	String subject;
+	String description;
+	String publisher;
+	String contributor;
+	String date;
+	String resourcetype;
+	String format;
+	String source;
+	String language;
+	String relation;
+	String coverage;
+	String rights;
+	String collection;
+	String location;
+	
 	public String execute(HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
 		String archive = (String) request.getSession().getAttribute("ARCHIVE");
-		if (request.getPathInfo().substring(1).contains("redirect_maps")) {
+		Map search = new Map();
+		request.setAttribute("digitalObject", search.place("ms:3"));
+		request.setAttribute("placement", 1);
+			
 			if (archive.equalsIgnoreCase("Harfield Village")){
-				Map mp = new Map();
-			request.setAttribute("test", mp.test() );
-			request.setAttribute("points", read());
-//			
-			//setAttribute to points array for to be sent (points are from database)
-			
-			return "WEB-INF/frontend/maps/harfieldoverview.jsp";}
-			else {
-				return "WEB-INF/frontend/imageviewer.jsp";}
-		}
-		else if (request.getPathInfo().substring(1).contains("polygon")) {
-
-			String points = (String) request.getParameter("polypoints");
-			System.out.println(points);
-			
-			PrintWriter file = new PrintWriter("points.txt");
-			//split points then loop
-			file.println(points);
-			file.close();
+				
+				if (request.getPathInfo().substring(1).contains("polygon")) {
+	
+					String points = (String) request.getParameter("polypoints");
+					System.out.println(points);
+					
+					PrintWriter file = new PrintWriter(new FileWriter(
+						    new File("points.txt"), 
+						    true /* append = true */));
+					//PrintWriter file = new PrintWriter("points.txt");
+					//split points then loop
+					file.append(points);
+					file.close();
+					
+					//request.setAttribute("points", read());
+					//string maniulation send to database
+				}
 			
 			request.setAttribute("points", read());
-			//string maniulation send to database
 			return "WEB-INF/frontend/maps/harfieldoverview.jsp";
-		}
-		
-		else if (request.getPathInfo().substring(1).contains("har")) {
-
-			List<FedoraDigitalObject> MapPic = (List<FedoraDigitalObject>) request.getAttribute("digitalObject");
 			
-			request.setAttribute("MapPic", MapPic);
+			//setAttribute to points array for to be sent (points are from database)
+			}
+			else if (archive.equalsIgnoreCase("Movie Snaps")){
+			if (request.getPathInfo().substring(1).contains("place")) {
+				
+				String pid = request.getParameter("image");
+				FedoraDigitalObject image = search.place(pid);
+				request.setAttribute("digitalObject", image);	
+			}
 			
 			Set<FedoraDigitalObject> digitalObjects = new HashSet<FedoraDigitalObject>();
-			Map search = new Map();
 			digitalObjects = search.findFedoraDigitalObjects("&query=coverage~*");	
-			//digitalObjects = search.findFedoraDigitalObjects("kitten");	
 			request.setAttribute("objects", digitalObjects);
 			
-		
-			return "WEB-INF/frontend/maps/mapoverview.jsp";
-		}
-		else return null;
-
+			return "WEB-INF/frontend/maps/mapoverview.jsp";}
+			
+			else{
+				if(request.getPathInfo().substring(1).contains("place")){
+					String pid = request.getParameter("image");
+					FedoraDigitalObject image = search.place(pid);
+					request.setAttribute("digitalObject", image);
+					request.setAttribute("placement", 0);
+					
+					Set<FedoraDigitalObject> digitalObjects = new HashSet<FedoraDigitalObject>();
+					digitalObjects = search.findFedoraDigitalObjects("&query=coverage~*");	
+					request.setAttribute("objects", digitalObjects);
+					
+					return "WEB-INF/frontend/maps/mapoverview.jsp";
+				}
+				else if(request.getPathInfo().substring(1).contains("done")){
+					
+					String cover = request.getParameter("latlng");
+					//putrequest
+					Set<FedoraDigitalObject> digitalObjects = new HashSet<FedoraDigitalObject>();
+					digitalObjects = search.findFedoraDigitalObjects("&query=coverage~*");	
+					request.setAttribute("objects", digitalObjects);
+					
+					return "WEB-INF/frontend/maps/mapoverview.jsp";
+				}
+				else{request.setAttribute("view", search.place("ms:3"));
+				if (request.getParameter("annotations")!=null){
+					//put annotations 
+					FedoraDigitalObject digi=(FedoraDigitalObject) request.getAttribute("view");
+					title=((DublinCoreDatastream) digi.getDatastreams().get("DC")).getDublinCoreMetadata().get("TITLE");
+					creator=((DublinCoreDatastream) digi.getDatastreams().get("DC")).getDublinCoreMetadata().get("CREATOR");
+					event=((DublinCoreDatastream) digi.getDatastreams().get("DC")).getDublinCoreMetadata().get("EVENT");
+					subject=((DublinCoreDatastream) digi.getDatastreams().get("DC")).getDublinCoreMetadata().get("SUBJECT");
+					description=((DublinCoreDatastream) digi.getDatastreams().get("DC")).getDublinCoreMetadata().get("DESCRIPTION");
+					publisher=((DublinCoreDatastream) digi.getDatastreams().get("DC")).getDublinCoreMetadata().get("PUBLISHER");
+					contributor=((DublinCoreDatastream) digi.getDatastreams().get("DC")).getDublinCoreMetadata().get("CONTRIBUTOR");
+					date=((DublinCoreDatastream) digi.getDatastreams().get("DC")).getDublinCoreMetadata().get("DATE");
+					resourcetype=((DublinCoreDatastream) digi.getDatastreams().get("DC")).getDublinCoreMetadata().get("RESOURCETYPE");
+					format=((DublinCoreDatastream) digi.getDatastreams().get("DC")).getDublinCoreMetadata().get("FORMAT");
+					source=((DublinCoreDatastream) digi.getDatastreams().get("DC")).getDublinCoreMetadata().get("SOURCE");
+					language=((DublinCoreDatastream) digi.getDatastreams().get("DC")).getDublinCoreMetadata().get("LANGUAGE");
+					relation=((DublinCoreDatastream) digi.getDatastreams().get("DC")).getDublinCoreMetadata().get("RELATION");
+					coverage=((DublinCoreDatastream) digi.getDatastreams().get("DC")).getDublinCoreMetadata().get("COVERAGE");
+					rights=((DublinCoreDatastream) digi.getDatastreams().get("DC")).getDublinCoreMetadata().get("RIGHTS");
+					collection=((DublinCoreDatastream) digi.getDatastreams().get("DC")).getDublinCoreMetadata().get("COLLECTION");
+					location=((DublinCoreDatastream) digi.getDatastreams().get("DC")).getDublinCoreMetadata().get("LOCATION");
+					
+					
+				}
+				return "WEB-INF/frontend/imageviewer.jsp";}
+				
+			}
 	}
 	
-	public String browse(HttpServletRequest request,
-			HttpServletResponse response) throws Exception {
-		if (request.getPathInfo().substring(1).contains("redirect_maps2")) {
-
-			/*List<FedoraDigitalObject> digitalObjects = new ArrayList<FedoraDigitalObject>();
-			Search search = new Search();
-			digitalObjects = search.findFedoraDigitalObjects("coverage~*");
-			
-			request.setAttribute("objects", digitalObjects);*/
-			
-			return "WEB-INF/frontend/imageviewer.jsp";
-		}
-		else if (request.getPathInfo().substring(1).contains("redirect_har_maps")) {
-
-			/*List<FedoraDigitalObject> digitalObjects = new ArrayList<FedoraDigitalObject>();
-			Search search = new Search();
-			digitalObjects = search.findFedoraDigitalObjects("coverage~*");
-			
-			request.setAttribute("objects", digitalObjects);*/
-			
-			return "WEB-INF/frontend/maps/harfieldoverview.jsp";
-		}
-		else return null;
-
-	}
 	
-	/*public String place(HttpServletRequest request,
-			HttpServletResponse response) throws Exception {
-		if (request.getPathInfo().substring(1).contains("redirect_maps")) {
 
-			return "WEB-INF/frontend/maps/mapoverview.jsp";
-		}
-		else return null;
-
-	}*/
 	List<String> read()
 	{	
 		File file = new File("points.txt");
