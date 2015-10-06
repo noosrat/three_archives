@@ -9,6 +9,8 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql"%>
 <%@ taglib prefix="x" uri="http://java.sun.com/jsp/jstl/xml"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+
 
 <html>
 <head>
@@ -32,8 +34,7 @@
 	rel="stylesheet">
 <link href="${pageContext.request.contextPath}/css/tagcloud.css"
 	rel="stylesheet">
-	<link
-	href="${pageContext.request.contextPath}/css/typeahead.css"
+<link href="${pageContext.request.contextPath}/css/typeahead.css"
 	rel="stylesheet">
 
 <script type="text/javascript"
@@ -94,6 +95,52 @@
 
 			<br> <br>
 			<!-- side bar -->
+
+			<div class="collapse navbar-collapse navbar-ex1-collapse">
+				<ul class="nav navbar-nav side-nav">
+
+
+					<li><a
+						href="${pageContext.request.contextPath}/archives/browse"
+						data-toggle="collapse"
+						data-target="${pageContext.request.contextPath}/archives/browse"><i
+							class="fa fa-fw fa-arrows-v"></i>BROWSE ALL <i
+							class="fa fa-fw fa-caret-down"></i> </a></li>
+
+					<c:forEach var="category" items="${categoriesAndObjects}">
+						<li><a
+							href="${pageContext.request.contextPath}/archives/browse?category=${category.key}"
+							data-toggle="collapse" data-target="#demo${count}"> <i
+								class="fa fa-fw fa-arrows-v"></i>${category.key} <span
+								class="badge">${fn:length(category.value)}</span><i
+								class="fa fa-fw fa-caret-down"></i></a></li>
+					</c:forEach>
+					<li>
+
+						<form action="${pageContext.request.contextPath}/archives/history"
+							method="post">
+
+							<input type="submit" value="While you were away..." />
+
+						</form>
+					</li>
+					<li>
+						<div id="container">
+							<div id="demo">
+								<div id="tagcloud">
+									<c:forEach var="tag" items="${tagCloud}">
+										<a
+											href="${pageContext.request.contextPath}/archives/search_objects/category=SEARCH_ALL?terms=${tag.key}"
+											rel="${tag.value}">${tag.key}</a>
+									</c:forEach>
+								</div>
+							</div>
+						</div>
+
+					</li>
+				</ul>
+
+			</div>
 
 		</nav>
 
@@ -232,16 +279,15 @@
 					<div id="demo">
 						<div id="tagcloud">
 							<c:forEach var="tag" items="${tagCloud}">
-								<a href="${pageContext.request.contextPath}/archives/search_objects/category=SEARCH_ALL?terms=${tag.key}" rel="${tag.value}">${tag.key}</a>
+								<a
+									href="${pageContext.request.contextPath}/archives/search_objects/category=SEARCH_ALL?terms=${tag.key}"
+									rel="${tag.value}">${tag.key}</a>
 							</c:forEach>
 						</div>
 					</div>
 				</div>
 
-				<br>
-				<br>
-				<br>
-				<br>
+				<br> <br> <br> <br>
 			</div>
 		</div>
 

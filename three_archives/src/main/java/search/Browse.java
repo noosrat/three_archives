@@ -1,8 +1,11 @@
 package search;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -25,7 +28,7 @@ public class Browse extends Service {
 	private static TreeMap<String, TreeSet<String>> browsingCategories = new TreeMap<String, TreeSet<String>>();
 	private static TreeMap<String, TreeSet<String>> filteredBrowsingCategories = new TreeMap<String, TreeSet<String>>();
 	private static Set<FedoraDigitalObject> fedoraDigitalObjectsForArchive = new HashSet<FedoraDigitalObject>();
-	private static TreeMap<String, TreeMap<String, Set<FedoraDigitalObject>>> categorisedFedoraDigitalObjects; 
+	private static TreeMap<String, TreeMap<String, Set<FedoraDigitalObject>>> categorisedFedoraDigitalObjects;
 
 	public static void initialise(String prefix) throws FedoraException, SolrServerException {
 		System.out.println("In browse cosntructor");
@@ -53,7 +56,6 @@ public class Browse extends Service {
 		Browse.browsingCategories = browsingCategories;
 		setFilteredBrowsingCategories(browsingCategories);
 	}
-	
 
 	/*
 	 * populate these values dynamically from the CuREENT set of data being
@@ -69,8 +71,6 @@ public class Browse extends Service {
 			TreeMap<String, TreeMap<String, Set<FedoraDigitalObject>>> categorisedFedoraDigitalObjects) {
 		Browse.categorisedFedoraDigitalObjects = categorisedFedoraDigitalObjects;
 	}
-	
-	
 
 	public static Set<FedoraDigitalObject> getFedoraDigitalObjectsForArchive() {
 		return fedoraDigitalObjectsForArchive;
@@ -296,7 +296,7 @@ public class Browse extends Service {
 				}
 				break;
 			case FORMAT: // should we look in the datastream type and
-								// then
+							// then
 				// in the format of the actual Dc metadata
 				/*
 				 * for now just look in the dublin core record for the
@@ -314,7 +314,7 @@ public class Browse extends Service {
 					format += " " + t.toLowerCase();
 				}
 				String media = filterValue.toLowerCase();
-				
+
 				// check for JPG, JPEG, GIF, PNG
 				if (format != null && !format.isEmpty()) {
 
@@ -357,17 +357,18 @@ public class Browse extends Service {
 			HashMap<String, String> dcMetadata = dc.getDublinCoreMetadata();
 			// iterating through objects for this archive
 			for (String category : groupedObjects.keySet()) {
-				//if main category is year look in date...if main cateogry is type look in format too
+				// if main category is year look in date...if main cateogry is
+				// type look in format too
 				// iterating through our main datastructure..we are going
 				// through all the main categories now..we need to fill in the
 				// sub categories...
 				for (String subCategory : getBrowsingCategories().get(category)) {
 					String tempSub = subCategory;
-					if (category.equalsIgnoreCase("FORMAT")){
+					if (category.equalsIgnoreCase("FORMAT")) {
 						tempSub = DatastreamID.valueOf(subCategory).getDescription();
 					}
-					
-					if (groupedObjects.get(category).get(tempSub)==null){
+
+					if (groupedObjects.get(category).get(tempSub) == null) {
 						groupedObjects.get(category).put(tempSub, new HashSet<FedoraDigitalObject>());
 					}
 					// this is iterating through the sub categories which have
@@ -378,15 +379,15 @@ public class Browse extends Service {
 					// are in...if they do then we must add it to the internal
 					// list
 					String tempCat = category;
-					if (category.equalsIgnoreCase(SearchAndBrowseCategory.YEAR.name())){
+					if (category.equalsIgnoreCase(SearchAndBrowseCategory.YEAR.name())) {
 						tempCat = "DATE";
 					}
-				
+
 					if (dcMetadata.get(tempCat) != null && dcMetadata.get(tempCat).contains(tempSub)) {
 						// now we know that our sub category exists in the
 						// categor of this object...so the object nees to be
 						// added to the final structure
-						
+
 						groupedObjects.get(category).get(tempSub).add(fedoraDigitalObject);
 
 					}
@@ -395,6 +396,29 @@ public class Browse extends Service {
 			System.out.println("COMPLETED GROUPING OUR OBJECTS INTO THEIR SUBCATEGORIES");
 		}
 		setCategorisedFedoraDigitalObjects(groupedObjects);
+
+	}
+
+	public static LinkedHashSet<FedoraDigitalObject> sortResults(String value, Set<FedoraDigitalObject> fedoraObjects) {
+		ArrayList<FedoraDigitalObject> objectList = new ArrayList<FedoraDigitalObject>(fedoraObjects);
+		switch (SearchAndBrowseCategory.valueOf(value)) {
+		case TITLE:
+			System.out.println("TITLE");
+			Collections.sort(objectList, new FedoraDigitalObjectTitleComparator());
+			break;
+		case YEAR:
+			System.out.println("YEAR");
+			Collections.sort(objectList, new FedoraDigitalObjectDateComparator());
+			break;
+
+		}
+		for (FedoraDigitalObject f : objectList) {
+			DublinCoreDatastream d = (DublinCoreDatastream) f.getDatastreams().get("DC");
+			System.out.println(f.getPid() + " " + d.getDublinCoreMetadata().get("DATE") + " "
+					+ d.getDublinCoreMetadata().get("TITLE"));
+		}
+		LinkedHashSet<FedoraDigitalObject> result = new LinkedHashSet<FedoraDigitalObject>(objectList);
+		return result;
 
 	}
 

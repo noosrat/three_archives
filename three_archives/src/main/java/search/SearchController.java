@@ -83,6 +83,7 @@ public class SearchController implements Controller {
 		}
 
 		String s = request.getParameter("terms");
+		request.getSession().setAttribute("terms", s);
 		System.out.println("VALUE OF TERMS " + s);
 		// we want to add this to our word cloud..this is what has been typed
 		// into the search box

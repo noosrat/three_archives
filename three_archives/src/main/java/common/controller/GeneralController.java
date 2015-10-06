@@ -3,11 +3,14 @@ package common.controller;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Set;
+import java.util.TreeSet;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import common.fedora.FedoraDigitalObject;
 import configuration.IndexPage;
 import configuration.PropertiesHandler;
 import history.HistoryController;
@@ -49,8 +52,8 @@ public class GeneralController implements Controller {
 
 		if (session.getAttribute("objects") == null) {
 			session.setAttribute("objects", SearchController.getSearch().findFedoraDigitalObjects("*"));//this is getting all of the archive documents...
+			
 		}
-		
 		browseController.execute(request, response);
 		historyController.execute(request, response);
 		String archive = (String) request.getSession().getAttribute("ARCHIVE_CONCAT");

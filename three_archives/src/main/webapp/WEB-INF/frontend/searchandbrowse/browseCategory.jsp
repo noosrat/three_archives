@@ -72,12 +72,6 @@ $(document).ready(function() {
 						href="${pageContext.request.contextPath}/archives/${ARCHIVE_CONCAT}">${ARCHIVE}</a>
 				</div>
 
-
-
-
-
-
-
 				<div id="navbar" class="collapse navbar-collapse">
 					<ul class="nav navbar-nav navbar-right top-nav">
 						<li class="dropdown"><a
@@ -190,27 +184,17 @@ $(document).ready(function() {
 						</h3>
 					</div>
 				</div>
-
-
-				<c:forEach var="searchTag" items="${searchTags}">
-					<a class="btn btn-primary btn-xs"
-						href="${pageContext.request.contextPath}/archives/search_objects/category=SEARCH_ALL?terms=${searchTag}">${searchTag}</a>
-				</c:forEach>
-				<br>
-				<!-- <br> B3: ${categoriesAndObjects[browseCategory]}<br> -->
-				<br>
-
 				<h3 class="page-header">${browseCategory}</h3>
 				<section id="portfolio">
 					<c:forEach var="subCategory"
 						items="${categoriesAndObjects[browseCategory]}">
-						<div class="col-lg-3 col-md-4 col-xs-6 portfolio-item">
+						
+						<div class="col-lg-3 col-md-4 col-xs-6 portfolio-item thumbnail">
 							<a
 								href="${pageContext.request.contextPath}/archives/browse?category=${browseCategory}&${browseCategory}=${subCategory.key}"
 								class="portfolio-link" data-target="#">
 								<div class="caption">
 									<div class="caption-content">${subCategory.key}<br>
-
 										<span class="badge">${fn:length(subCategory.value)}</span>
 
 									</div>
