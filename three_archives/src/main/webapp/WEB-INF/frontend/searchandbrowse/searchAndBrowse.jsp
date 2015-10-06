@@ -217,7 +217,7 @@ $(document).ready(function() {
 									
 									<!-- can we not try just iterate through the dublinCoreDatastream's metadata -->
 									<td><c:forEach var="dcMetadata" items="${digitalObject.datastreams['DC'].dublinCoreMetadata}">
-									<c:if test="${dcMetadata.key!='IDENTIFIER' && dcMetadata.key!='TYPE' && dcMetadata.key!='FORMAT'}">
+									<c:if test="${dcMetadata.key!='IDENTIFIER' && dcMetadata.key!='TYPE' && dcMetadata.key!='FORMAT' && dcMetadata.key!='COVERAGE' && dcMetadata.key!='ANNOTATIONS'}">
 									${dcMetadata.key}: <a href="${pageContext.request.contextPath}/archives/search_objects/category=${dcMetadata.key}?terms=${dcMetadata.value}">${dcMetadata.value}</a><br>
 									</c:if>
 									
@@ -225,7 +225,10 @@ $(document).ready(function() {
 									</table>
 								</div>
 
-								<button type="button">Place me</button>
+								<form name="map" method="post" action="${pageContext.request.contextPath}/archives/redirect_maps/place?image=${digitalObject.pid}">
+									<!-- place word map in url-->
+   									<input type="submit" value="Place Me" />
+								</form>
 							</div>
 						</div>
 					</div>

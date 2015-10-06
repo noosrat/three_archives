@@ -38,37 +38,34 @@ public class DownloadController implements Controller{
 		
 		Download download = new Download();
 		ArrayList<String> cart = (ArrayList<String>) request.getSession().getAttribute("MEDIA_CART");
+		//String cart = (String) request.getSession().getAttribute("MEDIA_CART");
+		//String [] cartList=cart.split(">");
 		Set<FedoraDigitalObject> cartObjects = download.getFedoraDigitalObjects(cart);
 		
 		request.setAttribute("cart", cartObjects);
 		//FedoraDigitalObject ob = populateFedoraDigitalObject(${cart})
 		if (request.getPathInfo().substring(1).contains("checkout")){
-			 
+			System.out.println(request.getParameter("deletions"));
+			if (request.getParameter("deletions")!=null)
+			{	 
+			String deletions=request.getParameter("deletions");
+			String delete[] = deletions.split(",");
+			
+			for (int k=0; k<delete.length;k++){
+				download.removeFromCart(cart, delete[k]);
+			}
+		}
+			//download.removeFromCart(cart, deletions);
+			request.getSession().setAttribute("MEDIA_CART", cart);
+			cartObjects = download.getFedoraDigitalObjects(cart);
+			
+			request.setAttribute("cart", cartObjects);
+			
+			/*request.setAttribute("cart", cartObjects);*/
+			
 			 response.setContentType("application/zip");
 		     response.setHeader("Content-Disposition", "attachment; filename=\"allfiles.zip\"");
 
-			
-			
-			
-			/*HttpClient httpClient = new HttpClient();
-		        httpClient.getParams().setParameter(CoreProtocolPNames.PROTOCOL_VERSION, HttpVersion.HTTP_1_1);
-
-
-		        HttpGet httpGet = new HttpGet("http://localhost:8080/fedora/objects/ms:1/datastreams/IMG/content?download=true&format=xml");
-		       // HttpResponse response = httpClient.execute(httpGet);
-
-		        System.out.println(response.getStatus());
-
-		        InputStream in = ((HttpResponse) response).getEntity().getContent();*/
-		     	
-		     	
-		        
-		        
-		        //String tDir = System.getProperty("java.io.tmpdir"); String path = tDir + "tmp" + ".pdf"; f = new File(path); f.deleteOnExit();
-		        
-		       
-		        
-		        
 		        ServletOutputStream out = response.getOutputStream();
 				ZipOutputStream zos = new ZipOutputStream(new BufferedOutputStream(out));
 				int k=0;
@@ -112,33 +109,10 @@ public class DownloadController implements Controller{
 		     	}
 				zos.close();
 				
-				byte []b;
-
-
-		       /* File []s=f.listFiles();
-		        for(int i=0;i<s.length;i++)
-		        {
-		        	b=new byte[1024];
-		            FileInputStream fin=new FileInputStream(s[i]);
-		            zout.putNextEntry(new ZipEntry(s[i].getName()));
-		            int length;
-		            while((length=fin.read(b, 0, 1024))>0)
-		            {
-		                zout.write(b,0,length);
-		            }
-		            zout.closeEntry();
-		            fin.close();
-		        }
-		        zout.close();
+			//download.downloadFedoraDigitalObjects(cartObjects);*/
 			
-			
-			
-			
-			download.downloadFedoraDigitalObjects(cartObjects);*/
-			return "WEB-INF/frontend/downloads/cart.jsp";
 		}
-		else {
-			return "WEB-INF/frontend/downloads/cart.jsp";}
+		
+		return "WEB-INF/frontend/downloads/cart.jsp";
 	}
-
 }

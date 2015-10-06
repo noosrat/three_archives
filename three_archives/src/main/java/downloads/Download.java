@@ -20,6 +20,7 @@ public class Download extends Service{
 	{
 		Set<FedoraDigitalObject> obs = new HashSet<FedoraDigitalObject>();
 		for (int k=0; k<cart.size(); k++){
+		//for (int k=0; k<cart.length; k++){
 		obs.add(getFedoraCommunicator().populateFedoraDigitalObject(cart.get(k)));
 		}
 		return obs;
@@ -28,5 +29,10 @@ public class Download extends Service{
 	public void downloadFedoraDigitalObjects(Set<FedoraDigitalObject> obs) throws FedoraException, SolrServerException{
 //		return getFedoraCommunicator().findFedoraDigitalObjectsUsingSearchTerms(terms);
 		getFedoraCommunicator().downloadFedoraDigitalObjectUsingObjects(obs);
+	}
+	
+	public void removeFromCart(ArrayList<String> cart, String pid){
+		
+		cart.remove(cart.indexOf(pid));
 	}
 }

@@ -28,6 +28,7 @@ public class GeneralController implements Controller {
 		services.put("maps", "redirect_maps");
 		services.put("downloads", "redirect_downloads");
 		services.put("annotations", "");
+
 	}
 
 	/*
@@ -39,6 +40,7 @@ public class GeneralController implements Controller {
 
 		ArrayList<String> cart = new ArrayList<String>();
 		cart.add("ms:1");
+		cart.add("ms:2");
 		HttpSession session = request.getSession();
 		clearArchiveSessionInformation(session);
 		request.getSession().setAttribute("searchCategories", SearchController.retrieveSearchCategories());
