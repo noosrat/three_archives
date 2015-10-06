@@ -46,8 +46,8 @@
         </ol>
 	 
         <!-- Wrapper for Slides -->
-        <div class="carousel-inner"><div class="item active"><div class="fill" style="background-image:url(${pageContext.request.contextPath}/images/spring.jpg);"></div><div class="carousel-caption"><h2>Sequins, Self AndStruggle </h2><p><a class="btn btn-large btn-primary" href="${pageContext.request.contextPath}/archives/SequinsSelfAndStruggle">Explore Archive</a></p></div></div>
-        <div class="item"><div class="fill" style="background-image:url(${pageContext.request.contextPath}/images/movie.jpg);"></div><div class="carousel-caption"><h2>Movie Snaps</h2><p><a class="btn btn-large btn-primary" href="${pageContext.request.contextPath}/archives/MovieSnaps">Explore Archive</a></p></div></div><div class="item"><div class="fill" style="background-image:url(${pageContext.request.contextPath}/images/harfield.jpg);"></div><div class="carousel-caption"><h2>Harfield Village	</h2><p><a class="btn btn-large btn-primary" href="${pageContext.request.contextPath}/archives/HarfieldVillage">Explore Archive</a></p></div></div>
+        <div class="carousel-inner"><div class="item active"><div class="fill" style="background-image:url(${pageContext.request.contextPath}/images/spring.jpg);"></div><div class="carousel-caption"><h2>Sequins, Self And Struggle </h2><p><a class="btn btn-large btn-primary" href="${pageContext.request.contextPath}/archives/SequinsSelfAndStruggle">Explore Archive</a></p></div></div><div class="item"><div class="fill" style="background-image:url(${pageContext.request.contextPath}/images/movie.jpg);"></div><div class="carousel-caption"><h2>Movie Snaps</h2><p><a class="btn btn-large btn-primary" href="${pageContext.request.contextPath}/archives/MovieSnaps">Explore Archive</a></p></div></div>
+        <div class="item"><div class="fill" style="background-image:url(${pageContext.request.contextPath}/images/harfield.jpg);"></div><div class="carousel-caption"><h2>Harfield Village	</h2><p><a class="btn btn-large btn-primary" href="${pageContext.request.contextPath}/archives/HarfieldVillage">Explore Archive</a></p></div></div>
         </div>
 
         <!-- Controls -->

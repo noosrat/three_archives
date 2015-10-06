@@ -130,12 +130,18 @@ public class FedoraXMLResponseParser {
 					// <dc:description>Collection:xxxxx%Event:xxxxx%other
 					// desc%annotations</dc:description>
 					String[] description = textContent.split("%");
-
-					dublinCoreMetadata.put("COLLECTION", description[0].trim());// collection
-					dublinCoreMetadata.put("EVENT", description[1].trim());// event
-					dublinCoreMetadata.put(dc.name(), description[2].trim());// actual
-					dublinCoreMetadata.put("ANNOTATIONS", description[3]);//annotations
-
+					System.out.println("DESCRIPTION SIZE " + description.length);
+					switch (description.length) {
+					case 4:
+						dublinCoreMetadata.put("ANNOTATIONS", description[3]);// annotations
+					case 3:
+						dublinCoreMetadata.put(dc.name(), description[2].trim());// actual
+					case 2:
+						dublinCoreMetadata.put("EVENT", description[1].trim());// event
+					case 1:
+						dublinCoreMetadata.put("COLLECTION", description[0].trim());
+						break;
+					}
 
 				} else if (dc.equals(DublinCore.COVERAGE)) {
 					// the first part of coverage is the location

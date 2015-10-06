@@ -9,7 +9,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql"%>
 <%@ taglib prefix="x" uri="http://java.sun.com/jsp/jstl/xml"%>
-<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <html>
 
 <head>
@@ -26,8 +26,7 @@
 <link
 	href="${pageContext.request.contextPath}/bootstrap-3.3.5/css/bootstrap.min.css"
 	rel="stylesheet">
-	<link
-	href="${pageContext.request.contextPath}/css/typeahead.css"
+<link href="${pageContext.request.contextPath}/css/typeahead.css"
 	rel="stylesheet">
 <script type="text/javascript"
 	src="${pageContext.request.contextPath}/js/jquery-1.11.3.js"></script>
@@ -38,7 +37,8 @@
 
 <script type="text/javascript">
 	$(document).ready(function() {
-		var words = "/data/HarfieldVillage.json";
+		var archive ='<%=session.getAttribute("ARCHIVE_CONCAT")%>';
+		var words = "/data/" + archive + ".json";
 		var countries = new Bloodhound({
 			datumTokenizer : Bloodhound.tokenizers.whitespace,
 			queryTokenizer : Bloodhound.tokenizers.whitespace,
@@ -59,32 +59,27 @@
 <body>
 
 	<!-- Navigation -->
-	<nav class="navbar navbar-inverse navbar-fixed-top navbar-left"
-		role="navigation">
-		<div class="container-fluid">
-			<!-- Brand and toggle get grouped for better mobile display -->
-			<div class="navbar-header">
-				<a class="navbar-brand" href="${pageContext.request.contextPath}/archives/HarfieldVillage">Harfield Village</a>
-			</div>
-			<div class="collapse navbar-collapse"
-				id="bs-example-navbar-collapse-1">
-				<ul class="nav navbar-nav">
-					<li><a
-						href="${pageContext.request.contextPath}/archives/browse">Browse</a></li>
-					<li><a
-						href="${pageContext.request.contextPath}/archives/redirect_exhibitions">Exhibitions</a></li>
-					<li><a
-						href="${pageContext.request.contextPath}/archives/redirect_maps">Maps</a></li>
-					<li><a
-						href="${pageContext.request.contextPath}/archives/redirect_uploads">Uploads</a></li>
-					<li><a
-						href="${pageContext.request.contextPath}/archives/redirect_downloads">Downloads</a></li>
-				</ul>
-				<!-- search components-->
-				<div id="bs-example-navbar-collapse-1"
-					class="collapse navbar-collapse">
+	<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+			<div class="container-fluid">
 
-					<ul class="nav navbar-nav navbar-right">
+
+				<div class="navbar-header">
+					<a class="navbar-brand"
+						href="${pageContext.request.contextPath}/archives/${ARCHIVE_CONCAT}">${ARCHIVE}</a>
+				</div>
+				<div id="navbar" class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">>
+				<ul class="nav navbar-nav">
+					<c:forEach var="service" items="${SERVICES}">
+						<c:if test="${service.value!='' && service.value!= ' '}">
+							<li><a
+								href="${pageContext.request.contextPath}/archives/${service.value}">${service.key}</a></li>
+							<li>
+						</c:if>
+					</c:forEach>
+
+				</ul>
+					<c:if test="${not empty SERVICES['Browse']}">
+					<ul class="nav navbar-nav navbar-right top-nav">
 						<li class="dropdown"><a
 							href="${pageContext.request.contextPath}/archives/search_objects"
 							class="dropdown-toggle" data-toggle="dropdown" role="button"
@@ -94,10 +89,13 @@
 								<c:forEach var="searchCategory" items="${searchCategories}">
 									<li><a
 										href="${pageContext.request.contextPath}/archives/search_objects/category=${searchCategory}">${searchCategory}</a></li>
-
 								</c:forEach>
 							</ul></li>
+							
+							
+					
 						<li>
+						
 							<form class="navbar-form navbar-right"
 								action="${pageContext.request.contextPath}/archives/search_objects/category=${searchCategories[0]}"
 								method="post">
@@ -105,32 +103,24 @@
 									<div id="prefetch">
 										<input
 											class="typeahead tt-query tt-hint tt-dropdown-menu tt-suggestion"
-											data-provider="typeahead"  data-role="tagsinput" type="text"
-											placeholder="Search Archive" autocomplete="off"
+											data-provider="typeahead" type="text"
+											placeholder="Search Archive" value="${terms}" autocomplete="off"
 											spellcheck="false" name="terms">
 									</div>
 								</div>
-
 								<button type="submit" class="btn">Search</button>
-
 								<div class="checkbox">
 									<label> <input type="checkbox" id="limitSearch"
 										name="limitSearch" value="limitSearch"><font
 										color="white"> Limit search to these results</font>
 									</label>
 								</div>
-
 							</form>
 						</li>
 					</ul>
-
-
+				</c:if>
 				</div>
-			</div>
-			<!-- end of search bar components -->
-
-		</div>
-	</nav>
+			</div>	</nav>
 
 
 	<div class="container">
@@ -142,12 +132,14 @@
 		</div>
 		<!-- /.row -->
 	</div>
+
+
 	<nav class="navbar navbar-inverse navbar-fixed-bottom navbar-fluid"
 		role="navigation">
 		<div class="container">
 			<!-- Brand and toggle get grouped for better mobile display -->
 			<div class="navbar-header">
-				<a class="navbar-brand" href="${pageContext.request.contextPath}/archives/">Personal
+				<a class="navbar-brand" href="${pageContext.request.contextPath}">Personal
 					Histories</a>
 			</div>
 		</div>

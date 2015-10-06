@@ -8,7 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import configuration.IndexPage;
+import configuration.ArchivalService;
 import configuration.PropertiesHandler;
 import history.HistoryController;
 import search.BrowseController;
@@ -17,30 +17,15 @@ import uploads.AutoCompleteUtility;
 
 public class GeneralController implements Controller {
 	private static HashMap<String, PropertiesHandler> ARCHIVES;
-	// here we need a static map associating each service with a url ending
-	private final static HashMap<String, String> services = new HashMap<String, String>();
-
-	static {
-		services.put("searchandbrowse", "browse");
-		services.put("historyandstatistics", "");
-		services.put("exhibitions", "redirect_exhibitions");
-		services.put("uploads", "redirect_uploads");
-		services.put("maps", "redirect_maps");
-		services.put("downloads", "redirect_downloads");
-		services.put("annotations", "");
-
-	}
-
 	/*
 	 * this is where we should actually set all the session variables that are
 	 * specific to the archives.........
 	 */
 	public String execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		String result = "";
-
 		ArrayList<String> cart = new ArrayList<String>();
-		cart.add("ms:1");
-		cart.add("ms:2");
+		//cart.add("ms:1");
+		//cart.add("ms:2");
 		HttpSession session = request.getSession();
 		clearArchiveSessionInformation(session);
 		request.getSession().setAttribute("searchCategories", SearchController.retrieveSearchCategories());
@@ -51,8 +36,8 @@ public class GeneralController implements Controller {
 
 		if (session.getAttribute("objects") == null) {
 			session.setAttribute("objects", SearchController.getSearch().findFedoraDigitalObjects("*"));//this is getting all of the archive documents...
+			
 		}
-		
 		browseController.execute(request, response);
 		historyController.execute(request, response);
 		String archive = (String) request.getSession().getAttribute("ARCHIVE_CONCAT");
@@ -64,9 +49,13 @@ public class GeneralController implements Controller {
 	}
 
 	private void storeAllArchivePropertiesWithinSession(HttpServletRequest request) {
-		loadArchiveProperties();
+		if (ARCHIVES==null){
+			loadArchiveProperties();
+		}
+		System.out.println("PROCESSING ARCHIVE PROPERTIES");
 		HttpSession session = request.getSession();
 		if (request.getPathInfo() != null) {
+			
 			for (String archive : ARCHIVES.keySet()) {
 				System.out.println("Properties file : " + archive);
 				String name = ARCHIVES.get(archive).getProperty("archive.name").replaceAll("[^a-zA-Z0-9\\s]", "")
@@ -79,14 +68,20 @@ public class GeneralController implements Controller {
 					session.setAttribute("ARCHIVE_CONCAT", name);
 					session.setAttribute("MEDIA_PREFIX",
 							ARCHIVES.get(archive).getProperty("archive.multimedia.prefix"));
-					HashMap<String, Boolean> services = new HashMap<String, Boolean>();
+					HashMap<String,String> services = new HashMap<String,String>();
 					for (String property : ARCHIVES.get(archive).getAllPropertyNames()) {
-						if (property.contains("service.")) {
+						System.out.println("PROCESSING ARCHIVE SERVICES");
+						System.out.println("property : " + property  + " value " + Boolean.parseBoolean(ARCHIVES.get(archive).getProperty(property)));
+						if (property.contains("service.") && Boolean.parseBoolean(ARCHIVES.get(archive).getProperty(property))) {
 							// we are dealing with services
-							services.put(property.substring(8),
-									Boolean.parseBoolean(ARCHIVES.get(archive).getProperty(property)));
+							ArchivalService service =ArchivalService.parseServiceProperty(property.substring(8));
+							services.put(service.getInterfaceName(),service.getRedirect_url());
 						}
 					}
+					//instead of having many front-end service elements let us just send through a fully mapped services map 
+					// Map<Service Frontend Name, Service Mapping>  for each of the archives dependent on what they have
+					session.setAttribute("SERVICES", services);
+					
 					break;
 				}
 			}
@@ -114,17 +109,19 @@ public class GeneralController implements Controller {
 		session.setAttribute("tagCloud", null);
 		session.setAttribute("objectsForArchive", null);
 		session.setAttribute("categoriesAndObjects", null);
+		session.setAttribute("terms", null);
 		System.out.println("Session information after clearing out");
 	}
 
 	private void loadArchiveProperties() {
+		System.out.println("IN LOAD ARCHIVE PROPERTIES");
 		ARCHIVES = new HashMap<String, PropertiesHandler>();
-		ClassLoader classLoader = IndexPage.class.getClassLoader();
+		ClassLoader classLoader = GeneralController.class.getClassLoader();
 		File directory = new File(classLoader.getResource("configuration").getFile());
 		if (directory != null) {
 			for (File file : directory.listFiles()) {
 				if (file.getName().contains(".properties") && !file.getName().contains("general")) {
-					ARCHIVES.put(file.getName(), new PropertiesHandler("configuration/" + file.getName()));
+					ARCHIVES.put(file.getName(), new PropertiesHandler(file.getAbsolutePath()));
 				}
 			}
 		}

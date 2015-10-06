@@ -6,7 +6,7 @@
     }
     #container {
       margin: 0 auto;
-      width: 300px;
+      width: 700px;
     }
 		h1 { font-size: 3.8em; color: #000000; margin-bottom: 3px; }
 		h1 .small { font-size: 0.4em; }
@@ -28,8 +28,7 @@
   	}
 
   	#tagcloud a:hover {
-  	  font-weight:bold;
-  	  font-size:18px;
+  	  text-decoration: underline;
   	}
 
   	#tagcloud {
