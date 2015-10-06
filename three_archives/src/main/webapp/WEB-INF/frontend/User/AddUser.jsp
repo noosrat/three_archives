@@ -1,9 +1,6 @@
 <!DOCTYPE html>
-<%@page import="common.fedora.Datastream"%>
-<%@page import="common.fedora.DublinCoreDatastream"%>
-<%@page import="common.fedora.FedoraDigitalObject"%>
-<%@page import="search.SearchAndBrowseCategory"%>
-<%@page import="common.fedora.DatastreamID"%>
+
+
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql"%>
@@ -31,6 +28,9 @@
 	src="${pageContext.request.contextPath}/bootstrap-3.3.5/js/bootstrap.js"></script>
 <script type="text/javascript"
 	src="${pageContext.request.contextPath}/js/typeahead.js"></script>
+<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+  <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 
 <script type="text/javascript">
 	$(document).ready(function() {
@@ -50,6 +50,12 @@
 	});
 </script>
 <style>
+	 
+  .carousel-inner > .item > img,
+  .carousel-inner > .item > a > img {
+      margin: auto;
+  }
+
 	
 		.Sequins{
 			width:150px;
@@ -75,7 +81,7 @@
 		<div class="container-fluid">
 			<!-- Brand and toggle get grouped for better mobile display -->
 			<div class="navbar-header">
-				<a class="navbar-brand" href="#">Sequins, Self and Struggle</a>
+				<a class="navbar-brand" href="${pageContext.request.contextPath}/archives/SequinsSelfAndStruggle">Sequins, Self and Struggle</a>
 			</div>
 			<div class="collapse navbar-collapse"
 				id="bs-example-navbar-collapse-1">
@@ -86,8 +92,15 @@
 						href="${pageContext.request.contextPath}/archives/redirect_exhibitions">Exhibitions</a></li>
 					<li><a
 						href="${pageContext.request.contextPath}/archives/redirect_maps">Maps</a></li>
+					<%if (session.getAttribute("USER")!=null){
+						if (session.getAttribute("USER").equals("ADMINISTRATOR")){%>
+							<li><a
+								href="${pageContext.request.contextPath}/archives/redirect_uploads">Uploads</a></li>
+								<li><a
+								href="${pageContext.request.contextPath}/archives/redirect_user">Edit users</a></li>
+					<%}} %>
 					<li><a
-						href="${pageContext.request.contextPath}/archives/redirect_uploads">Uploads</a></li>
+						href="${pageContext.request.contextPath}/archives/redirect_downloads">Downloads</a></li>
 				</ul>
 				<!-- search components-->
 				<div id="bs-example-navbar-collapse-1"
@@ -142,31 +155,28 @@
 
 	</nav>
 
+
 	<div class="container">
-	<p></p><br><br><br><br>
-		<div class="row">
-			<div class="col-lg-12 text-center">
-			
-<%@ page import="common.model.Exhibition"%>
-<%@ page import="java.util.List"%>
-<%List<Exhibition> exhibitions= ((List<Exhibition>)request.getAttribute("all_exhibitions")); %>
-
-<form method="post" action="${pageContext.request.contextPath}/archives/view_exhibitions">
-	<h1>Exhibition:</h1><br>
-	<%int i; %>
-	<% for (i=1; i<=exhibitions.size();i++){ %>
-	<input type="radio" name="selectedExhibit" value=<%=exhibitions.get(i-1).getId()%> > <%out.println(exhibitions.get(i-1).getTitle());%></input> <br>
-	 
-	<br>
-	<%} %>
-	<input type="submit" value="View Exhibition"/>	
-</form>
-
-<br><br><br><br><br><p></p>
-
+		<p></p><br><br><br>
+			<div class="row">
+				<div class="col-lg-12" style="text-align:center">	
+				<h2>Add user</h2>
+				<form role="form" method="post" action="${pageContext.request.contextPath}/archives/add_user">
+  					<div class="form-group">
+    					<label for="email">Enter username</label>
+   						 <input type="email" class="form-control" id="email">
+  					</div>
+  					<div class="form-group">
+    					<label for="pwd">Enter password</label>
+    					<input type="password" class="form-control" id="pwd">
+  					</div>
+  					
+  					<input type="submit" value="Add user" class="btn btn-primary btn-sm" name="add_user"/>
+			</form>
+						
+				
+				</div>
 			</div>
-		</div>
-		<!-- /.row -->
 	</div>
 	<nav class="navbar navbar-inverse navbar-fixed-bottom navbar-fluid"
 		role="navigation">
@@ -193,4 +203,3 @@
 </body>
 
 </html>
-

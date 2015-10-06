@@ -4,7 +4,6 @@
 <html>
 <head>
   <title>View exhibition</title>
-  <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link href="${pageContext.request.contextPath}/stylish-portfolio.css" rel="stylesheet">
   <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
@@ -61,18 +60,23 @@
   		});
 		});
 	</script>
+	<script>
+		
+		function customise(image){
+			document.getElementById("top").style.backgroundImage=image;
+		}
+	</script>
  <style>
  	
-		.header{
-	 	background: url(${pageContext.request.contextPath}/images/Cover.jpg) no-repeat center center fixed; 
-			 -webkit-background-size: cover;
+		#top{
+	 	 	-webkit-background-size:cover;
+			-moz-background-size: cover;
   			-moz-background-size: cover;
   			-o-background-size: cover;
-  			background-size: cover;	
-}
-	.about{
-		
-	}
+  			background-size: cover;
+  			height:100%;
+		}
+	
 		.droptargetCart {
  			margin: 5px;
     		padding: 5px;
@@ -96,7 +100,7 @@
 	</style>
 
 </head>
-<body>
+<body onload="customise('url(<%=request.getAttribute("ExhibitionCover")%>)')">
 	<header id="top" class="header">
        <div class="text-vertical-center">
             <h1>"<%out.println(request.getAttribute("ExhibitionTitle")); %>"</h1>
@@ -121,7 +125,7 @@
   					<div class="slide">
 						<%if (images[j]!=null){%>
 						<div class="droptarget droptargetTemplate">
-							<img src="<%=images[j]%>">
+							<img style="<%=request.getAttribute("ExhibitionBorder") %>" src="<%=images[j]%>">
 						</div>
 						<%}
 						else{%>
@@ -141,7 +145,7 @@
 						<%}%>
 						<%if (images[j+1]!=null){%>
 						<div class="droptarget droptargetTemplate">
-							<img src="<%=images[j+1]%>">
+							<img style="<%=request.getAttribute("ExhibitionBorder") %>" src="<%=images[j+1]%>">
 						</div>
 						<%}
 						else{%>

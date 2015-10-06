@@ -10,6 +10,8 @@ import javax.servlet.http.HttpSession;
 import common.controller.Controller;
 import common.fedora.FedoraException;
 import common.model.Exhibition;
+import common.model.ManageUsers;
+import common.model.User;
 import search.FedoraCommunicator;
 
 public class ExhibitionController implements Controller {
@@ -32,6 +34,21 @@ public class ExhibitionController implements Controller {
 		HttpSession session = request.getSession();
 		
 		List<Exhibition> allExhibitions = new ArrayList<Exhibition>();
+		
+		if(request.getParameter("authorise")!=null)
+		{
+			ManageUsers userManager=new ManageUsers();
+			
+			System.out.println("AUTHOR");
+			String username=request.getParameter("new_username");
+			System.out.println("eu "+username);
+			String password=request.getParameter("new_pwd");
+			System.out.println("ep "+password);
+			String role=userManager.approveUser(username, password);
+			System.out.println("er "+role);
+			session.setAttribute("USER", role);
+			return "index.jsp";
+		}
 		if (request.getParameter("view_all_exhibitions") != null) 
 		{
 			String action = request.getParameter("view_all_exhibitions");
@@ -55,6 +72,8 @@ public class ExhibitionController implements Controller {
 			String description=exhibition.getDescription();
 			int templateid=exhibition.getTemplateid();
 			String creator=exhibition.getCreator();
+			String cover=exhibition.getCover();
+			String border=exhibition.getBorder();
 			String[] images= exhibition.getMedia().split("%");
 			for (int j=0;j<images.length;j++)
 			{
@@ -66,29 +85,25 @@ public class ExhibitionController implements Controller {
 					images[j]="http://localhost:8080/fedora/objects/"+images[j]+"/datastreams/IMG/content";
 				}
 			}
-			
-			
+					
 			String[] captions= exhibition.getCaptions().split("%");
-			
-			
+		
 			request.setAttribute("images", images);
 			request.setAttribute("ExhibitionTitle",title);
 			request.setAttribute("ExhibitionDescription",description);
 			request.setAttribute("ExhibitionCreator",creator);
-			
+			request.setAttribute("ExhibitionCover",cover);
+			request.setAttribute("ExhibitionBorder",border);
 			request.setAttribute("PopulatedTemplateArray",images); 
 			session.setAttribute("CAPTIONS",captions);
 			response.setContentType("text/html");
-			if(templateid==1)
-			{
+			if(templateid==1){
 				result = "WEB-INF/frontend/exhibitions/createViewExhibition.jsp";
 			}
-			else if (templateid==2)
-			{
+			else if (templateid==2){
 				result = "WEB-INF/frontend/exhibitions/createViewExhibition2.jsp";
 			}
-			else if (templateid==3)
-			{
+			else if (templateid==3){
 				result = "WEB-INF/frontend/exhibitions/createViewExhibition3.jsp";
 			}
 			
@@ -97,45 +112,27 @@ public class ExhibitionController implements Controller {
 		if (request.getParameter("create_exhibition") != null) 
 		{
 			String action = request.getParameter("create_exhibition");
-			if (action.equals("Create Exhibition")) 
-			{
-				result = "WEB-INF/frontend/exhibitions/ExhibitionLogin.jsp";
-			}
-		}
-		
-		if (request.getParameter("login_to_create_exhibition") != null) 
-		{
-			String name= request.getParameter("name");
-			String password= request.getParameter("password");
-			String proceed="APPROVE"; //TODO Process user id and password
-			if (proceed.equals("APPROVE")) 
-			{
-				result = "WEB-INF/frontend/exhibitions/createExhibition.jsp";
-			}
-			else
-			{
-				return "WEB-INF/frontend/exhibitions/exhibitionHome.jsp";
-			}	
-			
+			result = "WEB-INF/frontend/exhibitions/createExhibition.jsp";
+					
 		}
 		
 		if (request.getParameter("selectedTemplate")!=null ){
 			try {	
-					String[] cart= new String[20];
+					ArrayList<String> cart= new ArrayList<String>();
 					FedoraCommunicator fc= new FedoraCommunicator();
-					cart[0]="KEL:3";
-					cart[1]="KEL:2";
-					cart[2]="KEL:3";
-					cart[3]="KEL:4";
-					cart[4]="KEL:5";
-					cart[5]="KEL:6";
-					cart[6]="KEL:7";
-					cart[7]="KEL:8";
-					cart[8]="KEL:9";
-					cart[9]="KEL:10";
-					cart[10]="KEL:11";
-					cart[11]="KEL:12";
-					cart[12]="KEL:13";	
+					cart.add("KEL:3");
+					cart.add("KEL:2");
+					cart.add("KEL:3");
+					cart.add("KEL:4");
+					cart.add("KEL:5");
+					cart.add("KEL:6");
+					cart.add("KEL:7");
+					cart.add("KEL:8");
+					cart.add("KEL:9");
+					cart.add("KEL:10");
+					cart.add("KEL:11");
+					cart.add("KEL:12");
+					cart.add("KEL:13");	
 					session.setAttribute("MEDIA_CART", cart);
 					String selectedTemplate=request.getParameter("selectedTemplate");
 					if(selectedTemplate.equals("1")){
@@ -155,7 +152,6 @@ public class ExhibitionController implements Controller {
 				
 			} 
 			catch (Exception e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
@@ -195,8 +191,8 @@ public class ExhibitionController implements Controller {
 				String exhibitionTitle= request.getParameter("Title");
 				String exhibitionDescription= request.getParameter("Description");
 				String exhibitionCreator= request.getParameter("Creator");
-				
-		
+				String exhibitioncover=request.getParameter("cover");
+				String exhibitionborder=request.getParameter("border");
 				int templateid=Integer.parseInt((String)session.getAttribute("TEMPLATE_ID"));
 				
 				String mediaString=(String) session.getAttribute("POPULATED_TEMPLATE");
@@ -234,14 +230,16 @@ public class ExhibitionController implements Controller {
 				}
 				
 				//save the exhibition
-				Integer id=service.saveExhibition(new Exhibition(exhibitionTitle.replace("%", "percent"),exhibitionDescription.replace("%", "percent"),templateid,exhibitionCreator.replace("%", "percent"),exmediaString,excaptionsString));
+				Integer id=service.saveExhibition(new Exhibition(exhibitionTitle.replace("%", "percent"),exhibitionDescription.replace("%", "percent"),templateid,exhibitionCreator.replace("%", "percent"),exmediaString,excaptionsString,exhibitioncover,exhibitionborder));
 				
 				if(session.getAttribute("TEMPLATE_ID").equals("1")){
-				
+					
 					Exhibition exhibition=service.getExhibition(id);
 					String title=exhibition.getTitle();
 					String description=exhibition.getDescription();
 					String creator=exhibition.getCreator();
+					String cover=exhibition.getCover();
+					String border=exhibition.getBorder();
 					String[] images= exhibition.getMedia().split("%");
 					for (int j=0;j<images.length;j++)
 					{
@@ -259,7 +257,8 @@ public class ExhibitionController implements Controller {
 					request.setAttribute("ExhibitionTitle",title);
 					request.setAttribute("ExhibitionDescription",description);
 					request.setAttribute("ExhibitionCreator",creator);
-					
+					request.setAttribute("ExhibitionCover",cover);
+					request.setAttribute("ExhibitionBorder",border);
 					request.setAttribute("PopulatedTemplateArray",images); 
 					session.setAttribute("CAPTIONS",captionss);
 					result = "WEB-INF/frontend/exhibitions/createViewExhibition.jsp";//View before saving
@@ -270,6 +269,8 @@ public class ExhibitionController implements Controller {
 					String title=exhibition.getTitle();
 					String description=exhibition.getDescription();
 					String creator=exhibition.getCreator();
+					String cover=exhibition.getCover();
+					String border=exhibition.getBorder();
 					String[] images= exhibition.getMedia().split("%");
 					for (int j=0;j<images.length;j++)
 					{
@@ -287,7 +288,8 @@ public class ExhibitionController implements Controller {
 					request.setAttribute("ExhibitionTitle",title);
 					request.setAttribute("ExhibitionDescription",description);
 					request.setAttribute("ExhibitionCreator",creator);
-					
+					request.setAttribute("ExhibitionCover",cover);
+					request.setAttribute("ExhibitionBorder",border);
 					request.setAttribute("PopulatedTemplateArray",images); 
 					session.setAttribute("CAPTIONS",captionss);
 					//View before saving
@@ -298,6 +300,8 @@ public class ExhibitionController implements Controller {
 					String title=exhibition.getTitle();
 					String description=exhibition.getDescription();
 					String creator=exhibition.getCreator();
+					String cover=exhibition.getCover();
+					String border=exhibition.getBorder();
 					String[] images= exhibition.getMedia().split("%");
 					for (int j=0;j<images.length;j++)
 					{
@@ -315,7 +319,8 @@ public class ExhibitionController implements Controller {
 					request.setAttribute("ExhibitionTitle",title);
 					request.setAttribute("ExhibitionDescription",description);
 					request.setAttribute("ExhibitionCreator",creator);
-					
+					request.setAttribute("ExhibitionCover",cover);
+					request.setAttribute("ExhibitionBorder",border);
 					request.setAttribute("PopulatedTemplateArray",images); 
 					session.setAttribute("CAPTIONS",captionss);
 					//View before saving

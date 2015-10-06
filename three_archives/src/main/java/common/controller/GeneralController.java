@@ -7,6 +7,8 @@ import java.util.List;
 
 
 
+
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -24,12 +26,16 @@ public class GeneralController implements Controller {
 		String result = "";
 		ArrayList<String> cart = new ArrayList<String>();
 		cart.add("ms:1");
-
+		ManageUsers userManager= new ManageUsers();
+		userManager.addUser(new User("admin","admin","ADMINISTRATOR"));
+		
 		HttpSession session = request.getSession();
 		request.setAttribute("searchCategories", SearchController.retrieveSearchCategories());
 		HistoryController historyController = new HistoryController();
 		String pathInfo =  request.getPathInfo().substring(1);
 		System.out.println(pathInfo);
+		
+		
 		if (pathInfo.equalsIgnoreCase("SequinsSelfAndStruggle")){
 			session.setAttribute("ARCHIVE", "Sequins, Self and Struggle");
 			session.setAttribute("MEDIA_CART", cart);

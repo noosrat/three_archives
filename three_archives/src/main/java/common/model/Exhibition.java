@@ -22,6 +22,8 @@ public class Exhibition implements Serializable  {
 	String creator;
 	String media;
 	String captions;
+	String cover;
+	String border;
 	
 	public Exhibition() {
 
@@ -31,25 +33,29 @@ public class Exhibition implements Serializable  {
 		this.description=description;
 		this.media=media;
 	}
-	public Exhibition(String title, String description, int templateid, String creator,String media,String captions) {
+	public Exhibition(String title, String description, int templateid, String creator,String media,String captions, String cover, String border) {
 		this.title=title;
 		this.description=description;
 		this.templateid=templateid;
 		this.creator=creator;
 		this.media=media;
 		this.captions=captions;
+		this.cover=cover;
+		this.border=border;
 	}
 	
 	
-	public Exhibition(String title,int exID,String tempID,String media,String creator,String description, String captions)
-	{
-		this.title=title;
-		this.id=exID;
-		this.templateid=Integer.parseInt(tempID);
-		this.media=media;
-		this.creator=creator;
-		this.description=description;
-		this.captions= captions;
+	public String getBorder(){
+		return this.border;
+	}
+	public void setBorder(String border){
+		this.border=border;
+	}
+	public String getCover(){
+		return this.cover;
+	}
+	public void setCover(String cover){
+		this.cover=cover;
 	}
 	public String getCaptions(){
 		return this.captions;

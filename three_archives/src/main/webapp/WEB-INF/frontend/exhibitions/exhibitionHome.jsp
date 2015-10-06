@@ -10,6 +10,8 @@
 <%@ taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql"%>
 <%@ taglib prefix="x" uri="http://java.sun.com/jsp/jstl/xml"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ page import="java.util.List"%>
+<%@ page import="java.util.ArrayList"%>
 <html>
 
 <head>
@@ -106,8 +108,13 @@
 
 					<li><a
 						href="${pageContext.request.contextPath}/archives/redirect_maps">Maps</a></li>
-					<li><a
-						href="${pageContext.request.contextPath}/archives/redirect_uploads">Uploads</a></li>
+					<%if (session.getAttribute("USER")!=null){
+						if (session.getAttribute("USER").equals("ADMINISTRATOR")){%>
+							<li><a
+								href="${pageContext.request.contextPath}/archives/redirect_uploads">Uploads</a></li>
+								<li><a
+								href="${pageContext.request.contextPath}/archives/redirect_user">Users</a></li>
+					<%}} %>
 				</ul>
 				<!-- search components-->
 				<div id="bs-example-navbar-collapse-1"
@@ -173,8 +180,13 @@
 					
 						<button type="submit" name="view_all_exhibitions" value="View All Exhibitions" class="btn btn-primary btn-lg" style="height:100px;width:200px;">View Exhibitions</button>
 						<br><br>
-						<button type="submit" name="create_exhibition" value="Create Exhibition" class="btn btn-primary btn-lg" style="height:100px;width:200px;">Create Exhibitions</button>
-					
+						<%if (session.getAttribute("USER")!=null){
+							if(((ArrayList<String>)session.getAttribute("MEDIA_CART")).size()==0){%>
+								<div><h2>Your media cart is empty. Add items during browse first</h2></div>
+							<% }
+							else if (session.getAttribute("USER").equals("privileged")){%>
+							<button type="submit" name="create_exhibition" value="Create Exhibition" class="btn btn-primary btn-lg" style="height:100px;width:200px;">Create Exhibitions</button>
+						<%}} %>
 					</form>
   				
 			</div>

@@ -96,8 +96,16 @@
 						href="${pageContext.request.contextPath}/archives/redirect_exhibitions">Exhibitions</a></li>
 					<li><a
 						href="${pageContext.request.contextPath}/archives/redirect_maps">Maps</a></li>
-					<li><a
-						href="${pageContext.request.contextPath}/archives/redirect_uploads">Uploads</a></li>
+						
+					<%if (session.getAttribute("USER")!=null){
+						if (session.getAttribute("USER").equals("ADMINISTRATOR")){%>
+							<li><a
+								href="${pageContext.request.contextPath}/archives/redirect_uploads">Upload</a></li>
+								<li><a
+								href="${pageContext.request.contextPath}/archives/redirect_user">Users</a></li>
+					<%}} %>
+					
+					
 					<li><a
 						href="${pageContext.request.contextPath}/archives/redirect_downloads">Downloads</a></li>
 				</ul>

@@ -106,9 +106,25 @@
     	div.scroll img{
     		padding:10px;
     	}
-		
+		#toolBox{
+			height:40px;
+			width:240px;
+		}
+		.thumb {
+    			height: 100px;
+    			border: 1px solid #000;
+    			margin: 10px 5px 0 0;
+  		}
 	</style>
 <script>
+function selectBorder(event){
+	document.getElementById(event).style.border= '10px solid blue';
+	document.getElementById("border").value=event;	
+}
+function selectImage(event) {
+	document.getElementById(event).style.border= '10px solid blue';
+	document.getElementById("cover").value=event;	
+}
 	function dragStart(event) {
     	event.dataTransfer.setData("Text", event.target.id);   
 	}
@@ -163,8 +179,13 @@
 						href="${pageContext.request.contextPath}/archives/redirect_exhibitions">Exhibitions</a></li>
 					<li><a
 						href="${pageContext.request.contextPath}/archives/redirect_maps">Maps</a></li>
-					<li><a
-						href="${pageContext.request.contextPath}/archives/redirect_uploads">Uploads</a></li>
+					<%if (session.getAttribute("USER")!=null){
+						if (session.getAttribute("USER").equals("ADMINISTRATOR")){%>
+							<li><a
+								href="${pageContext.request.contextPath}/archives/redirect_uploads">Upload</a></li>
+								<li><a
+								href="${pageContext.request.contextPath}/archives/redirect_user">Users</a></li>
+					<%}} %>
 					<li><a
 						href="${pageContext.request.contextPath}/archives/redirect_downloads">Downloads</a></li>
 				</ul>
@@ -234,20 +255,73 @@
 				<%@ page import="common.fedora.DublinCore"%>
 				<%@ page import="common.fedora.FedoraDigitalObject"%>
 				<%@ page import="search.FedoraCommunicator"%>
-				
+				<%@ page import="java.util.ArrayList"%>
+				<%@ page import="java.util.List"%>
+			<textarea id="cover" name="cover" readonly=readonly style="display:none;" ></textarea>
+			<textarea id="border" name="border" readonly=readonly style="display:none;"></textarea>		
 			<textarea id="demo" name="user_action" readonly=readonly style="display:none;"></textarea>
 			<input type="submit" value="Back" class="btn btn-primary btn-sm" name="exhibition_det"/>
-			
-			<%String [] cartImages= (String[]) (session.getAttribute("MEDIA_CART")); 
-			FedoraCommunicator fc= new FedoraCommunicator();
-			FedoraDigitalObject ob;%>
-			<div id="cart" class="scroll droptarget droptargetCart" ondrop="drop(event)" ondragover="allowDrop(event)" style="border: 1px solid #aaaaaa; diplay:inline-block; background:#F8F8F8;">
-				<%for (int i=0;i<cartImages.length;i++){ 
-					if(cartImages[i]!=null){
-						ob=null;
-					ob=fc.populateFedoraDigitalObject(cartImages[i]);%>
-  					<img class="img-circle"  src="<%=ob.getDatastreams().get("IMG").getContent() %>"  style="width:40%;" ondragstart="dragStart(event)" draggable="true" id="<%=cartImages[i]%>">
-  				<%}} %>	
+			<div id="toolBox">
+						<ul id="mainEx" style="list-style-type:none;margin:auto;padding:5px;text-align:center">
+							<li style="display:inline;">
+								<input type="button" style= "width:25px;height:25px;background: url('${pageContext.request.contextPath}/images/icons/coverIcon.jpg') no-repeat;" data-toggle="modal" data-target="#backgroundImage">
+							</li>
+					
+							<li style="display:inline; ">
+								<input type="button" style= "width:25px;height:25px;background: url('${pageContext.request.contextPath}/images/icons/borderIcon.jpg') no-repeat;" data-toggle="modal" data-target="#imageBorders">
+							</li>
+
+						</ul>
+			</div>
+				<div class="modal fade" id="backgroundImage" role="dialog" style="z-index:30000">
+    			<div class="modal-dialog">
+    				<div class="modal-content">
+       					 <div class="modal-header">
+          						<button type="button" class="close" data-dismiss="modal">&times;</button>
+          						<h4 class="modal-title">Select a cover photo</h4>
+        				</div>
+        				<div class="modal-body">
+      							<img class="thumb" onclick="selectImage(this.id)" src="${pageContext.request.contextPath}/images/covers/Cover.jpg" id="${pageContext.request.contextPath}/images/covers/Cover.jpg" />
+								<img class="thumb" onclick="selectImage(this.id)" src="${pageContext.request.contextPath}/images/covers/Cover2.jpg" id="${pageContext.request.contextPath}/images/covers/Cover2.jpg" />
+								<img class="thumb" onclick="selectImage(this.id)" src="${pageContext.request.contextPath}/images/covers/Cover3.jpg" id="${pageContext.request.contextPath}/images/covers/Cover3.jpg" />
+								<img class="thumb" onclick="selectImage(this.id)" src="${pageContext.request.contextPath}/images/covers/Cover4.jpg" id="${pageContext.request.contextPath}/images/covers/Cover4.jpg" />
+								<img class="thumb" onclick="selectImage(this.id)" src="${pageContext.request.contextPath}/images/covers/Cover5.jpg" id="${pageContext.request.contextPath}/images/covers/Cover5.jpg" />
+        				</div>
+       			 		<div class="modal-footer">
+        					<button type="button" class="btn btn-default" data-dismiss="modal">Save</button>
+      					</div>
+      				</div>
+     			</div>
+  				</div>
+
+			<div class="modal fade" id="imageBorders" role="dialog" style="z-index:30000">
+    			<div class="modal-dialog">
+    				<div class="modal-content">
+       					 <div class="modal-header">
+          						<button type="button" class="close" data-dismiss="modal">&times;</button>
+          						<h4 class="modal-title">Select an image border</h4>
+        				</div>
+        				<div class="modal-body">
+          					<img class="thumb" onclick="selectBorder(this.id)" src="${pageContext.request.contextPath}/images/icons/noBorder.jpg" alt="none" id="border:0px solid black"" />	
+						<img class="thumb" onclick="selectBorder(this.id)" src="${pageContext.request.contextPath}/images/icons/thinBorder.jpg" alt="none" id="border:5px solid black" />
+						<img class="thumb" onclick="selectBorder(this.id)" src="${pageContext.request.contextPath}/images/icons/thickBorder.jpg" alt="none" id="border:10px solid black" />
+        				</div>
+        				<div class="modal-footer">
+        					<button type="button" class="btn btn-default" data-dismiss="modal">Save</button>
+      					</div>	
+      			</div>
+    		</div>
+  		</div>
+			<%ArrayList<String> cartImages= (ArrayList<String>) (session.getAttribute("MEDIA_CART")); 
+					FedoraCommunicator fc= new FedoraCommunicator();
+					FedoraDigitalObject ob;%>
+					<div id="cart" class="scroll droptarget droptargetCart" ondrop="drop(event)" ondragover="allowDrop(event)" style="border: 1px solid #aaaaaa; diplay:inline-block; background:#F8F8F8;">
+							<%for (int i=0;i<cartImages.size();i++){ 
+									if(cartImages.get(i)!=null){
+										ob=null;
+										ob=fc.populateFedoraDigitalObject(cartImages.get(i));%>
+  										<img  class="img-thumbnail" src="<%=ob.getDatastreams().get("IMG").getContent() %>"  style="width:40%;" ondragstart="dragStart(event)" draggable="true" id="<%=cartImages.get(i)%>">
+  							<%}} %>	
 				
 			</div>
 		</div>

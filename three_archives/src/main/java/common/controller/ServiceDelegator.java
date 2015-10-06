@@ -17,6 +17,7 @@ import maps.MapController;
 import search.BrowseController;
 import search.SearchController;
 import uploads.UploadController;
+import User.UserController;
 
 public class ServiceDelegator {
 	// handle exceptions in this method
@@ -32,6 +33,7 @@ public class ServiceDelegator {
 		controllers.put("uploads", new UploadController());
 		controllers.put("browse", new BrowseController());
 		controllers.put("history", new HistoryController());
+		controllers.put("user", new UserController());
 	}
 
 	public HashMap<String, Controller> getControllers() {
@@ -56,7 +58,10 @@ public class ServiceDelegator {
 				url = controllers.get("uploads").execute(request, response);
 			} else if (pathInfo.contains("history")) {
 				url = controllers.get("history").execute(request, response);
-			} else {
+			} 
+			else if (pathInfo.contains("user")) {
+				url = controllers.get("user").execute(request, response);
+			}else {
 				System.out.println("PROCESSING GENERAL");
 				url = controllers.get("general").execute(request, response);
 				clearSessionInformation(request.getSession());//this is done when they go back to the homepage of personal histories...so that cookies don't overlap into the differnet archives

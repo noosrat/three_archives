@@ -2,7 +2,6 @@
 <html lang="en">
 
 <head>
-
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -83,15 +82,68 @@
         <a class="right carousel-control" href="#myCarousel" data-slide="next">
             <span class="icon-next"></span>
         </a>
-
+	<div>
+	<p></p><br><br><br>	
+		</div>
     </header>
+	<div class="modal fade" id="login" role="dialog" style="z-index:30000">
+	<form role="form" method="post" action="${pageContext.request.contextPath}/archives/auth_user">
+    			<div class="modal-dialog">
+    				<div class="modal-content">
+       					 <div class="modal-header">
+          						<button type="button" class="close" data-dismiss="modal">&times;</button>
+          						<h4 class="modal-title">Enter details</h4>
+        				</div>
+        				<div class="modal-body">
+        				
+          					<div class="form-group">
+    							<label for="username">User name:</label>
+    								<input class="form-control" id="username" name="new_username">
+  							</div>
+  							<div class="form-group">
+    							<label for="pwd">Password:</label>
+    							<input type="password" class="form-control" id="pwd" name="new_pwd">
+  							</div>
+        				
+        				</div>
+					<div class="modal-footer">
+        					<input type="submit" value="Submit" class="btn btn-primary btn-sm" name="authorise"/>
+      					</div>
+       			 		
+      				</div>
+     
+    			</div>
+    			</form>
+    			
+  		</div>
 
-
-     <nav class="navbar navbar-inverse navbar-fixed-bottom" role="navigation">
+     <nav class="navbar navbar-inverse" role="navigation">
         <div class="container">
             <!-- Brand and toggle get grouped for better mobile display -->
             <div class="navbar-header">
                 <a class="navbar-brand" href="#">Three Archives</a>
+                <%if (session.getAttribute("USER")==null){%>
+                <a style="margin-left:600px;" data-toggle="modal" data-target="#login" class="navbar-brand" href="#login">Login</a>
+                <%}
+                
+                else if (session.getAttribute("USER").equals("false")){%>
+                <div style="margin-left:600px;" class="navbar-brand">Credentials incorrect</div>
+                <a style="margin-left:600px;" data-toggle="modal" data-target="#login" class="navbar-brand" href="#login">Login</a>
+                <%} 
+                else if (session.getAttribute("USER").equals("ADMINISTRATOR")){%>
+                
+                	<div style="margin-left:600px;" class="navbar-brand">Logged on as Administrator</div>
+                	<form role="form" method="post" action="${pageContext.request.contextPath}/archives/logout_user">
+                		<input type="submit" value="logout" class="btn btn-primary btn-xs navbar-brand" name="logout"/>
+                	</form>
+                <%}
+                else if(session.getAttribute("USER").equals("privileged")){%>
+                	
+                	<div style="margin-left:600px;" class="navbar-brand">Logged on as a privileged user</div>
+                	<form role="form" method="post" action="${pageContext.request.contextPath}/archives/logout_user">
+                		<input type="submit" value="logout" class="btn btn-primary btn-xs navbar-brand" name="logout"/>
+                	</form>
+                <%} %>
             </div>
         </div>
         <!-- /.container -->

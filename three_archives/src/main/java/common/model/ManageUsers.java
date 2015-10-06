@@ -1,23 +1,14 @@
 package common.model;
-import java.util.Iterator;
 
-import common.model.Exhibition;
 
 import java.util.List;
 
-import org.hibernate.Hibernate;
-import org.hibernate.HibernateException; 
-import org.hibernate.Query;
 import org.hibernate.Criteria;
 import org.hibernate.Session; 
-import org.hibernate.Transaction;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 
 public class ManageUsers {
-	private static SessionFactory factory; 
-	
-	
 	   //method to add user to the db
 	   public void addUser(User user){
 			  SessionFactory sessionFactory = new Configuration().configure().buildSessionFactory();
@@ -39,14 +30,13 @@ public class ManageUsers {
 	        return users;
 	    }
 	   
-	   public boolean approveUser(String username, String password)
+	   public String approveUser(String username, String password)
 	   {
-		   boolean approve=false;
-		   
+		   String approve="false";
 		   List users=listAllUsers();
 		   String name;
 		   String pass;
-		   
+		   String role;
 		   for (int i=0; i<users.size();i++)
 		   {
 			   name=((User)users.get(i)).getUsername();
@@ -55,11 +45,12 @@ public class ManageUsers {
 			   {
 				   if(pass.equals(password))
 				   {
-					   approve=true;
+					   role=((User)users.get(i)).getRole();
+					   approve=role;
 				   }
 				   else
 				   {
-					   approve=false;
+					   approve="false";
 				   }
 			   }
 		   }
