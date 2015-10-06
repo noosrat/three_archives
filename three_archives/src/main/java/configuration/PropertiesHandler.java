@@ -1,5 +1,7 @@
 package configuration;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
@@ -11,9 +13,8 @@ public class PropertiesHandler {
 
 	public PropertiesHandler(String fileName) {
 		configurationProperties = new Properties();
-		InputStream in = this.getClass().getClassLoader().getResourceAsStream(fileName);
-		System.out.println("Read all properties from file");
 		try {
+			InputStream in = new FileInputStream(new File(fileName));
 			configurationProperties.load(in);
 		} catch (IOException e) {
 			e.printStackTrace();

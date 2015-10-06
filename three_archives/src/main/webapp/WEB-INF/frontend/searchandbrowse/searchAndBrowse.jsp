@@ -73,19 +73,18 @@ $(document).ready(function() {
 						href="${pageContext.request.contextPath}/archives/${ARCHIVE_CONCAT}">${ARCHIVE}</a>
 				</div>
 				<div id="navbar" class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">>
-					
-					<ul class="nav navbar-nav">
-					<li><a
-						href="${pageContext.request.contextPath}/archives/browse">Browse</a></li>
-					<li><a
-						href="${pageContext.request.contextPath}/archives/redirect_exhibitions">Exhibitions</a></li>
-					<li><a
-						href="${pageContext.request.contextPath}/archives/redirect_maps">Maps</a></li>
-					<li><a
-						href="${pageContext.request.contextPath}/archives/redirect_uploads">Uploads</a></li>
-					<li><a
-						href="${pageContext.request.contextPath}/archives/redirect_downloads">Downloads</a></li>
+				<ul class="nav navbar-nav">
+					<c:forEach var="service" items="${SERVICES}">
+
+						<c:if test="${service.value!=''}">
+							<li><a
+								href="${pageContext.request.contextPath}/archives/${service.value}">${service.key}</a></li>
+							<li>
+						</c:if>
+					</c:forEach>
+
 				</ul>
+					<c:if test="${not empty SERVICES['Browse']}">
 					<ul class="nav navbar-nav navbar-right top-nav">
 						<li class="dropdown"><a
 							href="${pageContext.request.contextPath}/archives/search_objects"
@@ -100,7 +99,9 @@ $(document).ready(function() {
 							</ul></li>
 							
 							
+					
 						<li>
+						
 							<form class="navbar-form navbar-right"
 								action="${pageContext.request.contextPath}/archives/search_objects/category=${searchCategories[0]}"
 								method="post">
@@ -123,6 +124,7 @@ $(document).ready(function() {
 							</form>
 						</li>
 					</ul>
+				</c:if>
 				</div>
 			</div>
 			<!-- side bar -->
@@ -145,15 +147,15 @@ $(document).ready(function() {
 								class="badge">${fn:length(category.value)}</span><i
 								class="fa fa-fw fa-caret-down"></i></a></li>
 					</c:forEach>
+					<c:if test="${not empty SERVICES['History']}">
 					<li>
 
-						<form action="${pageContext.request.contextPath}/archives/history"
-							method="post">
-
-							<input type="submit" value="While you were away..." />
+						<form action="${pageContext.request.contextPath}/archives/history"	method="post">
+							<input type="submit" value="Updated Items" />
 
 						</form>
 					</li>
+					</c:if>
 				</ul>
 			</div>
 		</nav>

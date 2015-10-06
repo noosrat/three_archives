@@ -116,15 +116,6 @@
 								class="fa fa-fw fa-caret-down"></i></a></li>
 					</c:forEach>
 					<li>
-
-						<form action="${pageContext.request.contextPath}/archives/history"
-							method="post">
-
-							<input type="submit" value="While you were away..." />
-
-						</form>
-					</li>
-					<li>
 						<div id="container">
 							<div id="demo">
 								<div id="tagcloud">
@@ -144,82 +135,71 @@
 
 		</nav>
 
-		${message}
+
 
 
 
 		<div id="page-wrapper">
 			<div class="container-fluid">
-
-
-				<section id="portfolio">
-					<div class="container">
-						<c:set var="count" value="0" scope="page" />
-						<c:forEach var="digitalObject"
-							items="${objectsModifiedSinceLastVisit}">
-							<div class="col-xs-8 col-sm-6 portfolio-item">
-								<a href="#lightbox${count}" class="portfolio-link"
-									data-toggle="modal" data-target="#lightbox${count}">
-
-									<div class="caption">
-										<div class="caption-content">
-											<br> Title:
-											${digitalObject.datastreams['DC'].dublinCoreMetadata['TITLE']}
-											<br> Type:
-											${digitalObject.datastreams['DC'].dublinCoreMetadata['FORMAT']}
-										</div>
-										<!-- caption content -->
-									</div> <!-- caption --> <img
-									src="${digitalObject.datastreams['IMG'].content}"
-									class="img-thumbnail img-responsive" alt="image unavailable">
-								</a>
-							</div>
-							<c:set var="count" value="${count + 1}" scope="page" />
-						</c:forEach>
+				<div class="row">
+					<div class="col-lg-12">
+						<h3 class="page-header">
+							<small>${message}</small>
+						</h3>
 					</div>
+				</div>
+				<h3 class="page-header">Updated Items</h3>
+				<section id="portfolio">
+					<c:set var="count" value="0" scope="page" />
+					<c:forEach var="digitalObject"
+						items="${objectsModifiedSinceLastVisit}">
+						<div class="col-lg-3 col-md-4 col-xs-6 portfolio-item thumbnail">
+							<a href="#lightbox${count}" class="portfolio-link"
+								data-toggle="modal" data-target="#lightbox${count}">
 
-
-				</section>
-				<c:set var="count" value="0" scope="page" />
-				<c:forEach var="digitalObject"
-					items="${objectsModifiedSinceLastVisit}">
+								<div class="caption">
+									<div class="caption-content">
+										<br> Title:
+										${digitalObject.datastreams['DC'].dublinCoreMetadata['TITLE']}
+										<br> Type:
+										${digitalObject.datastreams['DC'].dublinCoreMetadata['FORMAT']}
+									</div>
+									<!-- caption content -->
+								</div> <!-- caption --> <img
+								src="${digitalObject.datastreams['IMG'].content}"
+								class="img-thumbnail img-responsive" alt="image unavailable">
+							</a>
+						</div>
+						<c:set var="count" value="${count + 1}" scope="page" />
+					</c:forEach>
+			</section>
+			<c:set var="count" value="0" scope="page" />
+				<c:forEach var="digitalObject" items="${objectsModifiedSinceLastVisit}">
 					<div id="lightbox${count}" class="modal fade" tabindex="-1"
 						role="dialog" aria-labelledby="myLargeModalLabel"
 						aria-hidden="true">
 						<div class="modal-dialog">
 							<div class="modal-content">
 								<div class="modal-body">
-									<table style="width: 100%">
+									<h3>${digitalObject.datastreams['DC'].dublinCoreMetadata['TITLE']}</h3>
+									<br>
+
+									<table>
 										<td><img
 											src="${digitalObject.datastreams['IMG'].content}"
 											class="img-thumbnail img-responsive" alt="image unavailable"></td>
 
+										<!-- can we not try just iterate through the dublinCoreDatastream's metadata -->
+										<td><c:forEach var="dcMetadata"
+												items="${digitalObject.datastreams['DC'].dublinCoreMetadata}">
+												<c:if
+													test="${dcMetadata.key!='IDENTIFIER' && dcMetadata.key!='TYPE' && dcMetadata.key!='FORMAT'}">
+									${dcMetadata.key}: <a
+														href="${pageContext.request.contextPath}/archives/search_objects/category=${dcMetadata.key}?terms=${dcMetadata.value}">${dcMetadata.value}</a>
+													<br>
+												</c:if>
 
-										<td>Title: <a
-											href="${pageContext.request.contextPath}/archives/search_objects/category=TITLE?terms=${digitalObject.datastreams['DC'].dublinCoreMetadata['TITLE']}">${digitalObject.datastreams['DC'].dublinCoreMetadata['TITLE']}</a><br>
-											Collection: <a
-											href="${pageContext.request.contextPath}/archives/search_objects/category=COLLECTION?terms=${digitalObject.datastreams['DC'].dublinCoreMetadata['COLLECTION']}">${digitalObject.datastreams['DC'].dublinCoreMetadata['COLLECTION']}</a><br>
-											Contributor: <a
-											href="${pageContext.request.contextPath}/archives/search_objects/category=CONTRIBUTOR?terms=${digitalObject.datastreams['DC'].dublinCoreMetadata['CONTRIBUTOR']}">${digitalObject.datastreams['DC'].dublinCoreMetadata['CONTRIBUTOR']}</a><br>
-											Coverage:
-											${digitalObject.datastreams['DC'].dublinCoreMetadata['COVERAGE']}<br>
-											Creator:
-											${digitalObject.datastreams['DC'].dublinCoreMetadata['CREATOR']}
-											<br> Date: <a
-											href="${pageContext.request.contextPath}/archives/search_objects/category=YEAR?terms=${digitalObject.datastreams['DC'].dublinCoreMetadata['DATE']}">${digitalObject.datastreams['DC'].dublinCoreMetadata['DATE']}</a>
-											<br> Description: <a
-											href="${pageContext.request.contextPath}/archives/search_objects/category=DESCRIPTION?terms=${digitalObject.datastreams['DC'].dublinCoreMetadata['DESCRIPTION']}">${digitalObject.datastreams['DC'].dublinCoreMetadata['DESCRIPTION']}</a><br>
-											Event: <a
-											href="${pageContext.request.contextPath}/archives/search_objects/category=EVENT?terms=${digitalObject.datastreams['DC'].dublinCoreMetadata['EVENT']}">${digitalObject.datastreams['DC'].dublinCoreMetadata['EVENT']}</a><br>
-											Format:
-											${digitalObject.datastreams['DC'].dublinCoreMetadata['FORMAT']}
-											<br> Location: <a
-											href="${pageContext.request.contextPath}/archives/search_objects/category=LOCATION?terms=${digitalObject.datastreams['DC'].dublinCoreMetadata['LOCATION']}">${digitalObject.datastreams['DC'].dublinCoreMetadata['LOCATION']}</a><br>
-											Subject:
-											${digitalObject.datastreams['DC'].dublinCoreMetadata['SUBJECT']}
-											<br>
-										</td>
-
+											</c:forEach></td>
 									</table>
 								</div>
 
@@ -230,69 +210,76 @@
 					<c:set var="count" value="${count + 1}" scope="page" />
 				</c:forEach>
 
-				<br> <br>
+			<br> <br>
 
-
-				<div class="page-header">
-					<h3>General Updates</h3>
-				</div>
-				<div class="row">
-					<c:forEach var="updatedCategory"
-						items="${categoriesWithRecentUpdates}">
-						<div class="col-sm-4">
-							<div class="panel panel-default">
-								<div class="panel-heading">
-									<h3 class="panel-title">${updatedCategory.key}</h3>
-								</div>
-								<c:forEach var="updatedValues" items="${updatedCategory.value}">
-									<div class="panel-body">${updatedValues}</div>
-								</c:forEach>
+<div id="container">
+			<div class="page-header">
+				<h3>General Updates</h3>
+			</div>
+			<div class="row">
+			Updated Collections:<br>
+			Updated Events:<br>
+			Updated Year:<br>
+			Update Creator: <br>
+			ALL THE SEARCH AND BROWSE CATEGORIES POSSIBLE
+			</div>
+			<div class="row">
+				<c:forEach var="updatedCategory"
+					items="${categoriesWithRecentUpdates}">
+					<div class="col-sm-4">
+						<div class="panel panel-default">
+							<div class="panel-heading">
+								<h3 class="panel-title">${updatedCategory.key}</h3>
 							</div>
-
-						</div>
-					</c:forEach>
-				</div>
-
-				<div class="page-header">
-					<h3>Your favourite(top 3) category updates(if any)</h3>
-				</div>
-				<div class="row">
-
-					<c:forEach var="favouriteCategoriesUpdates"
-						items="${userFavouriteCategoriesWithRecentUpdates}">
-
-						<div class="col-sm-4">
-							<div class="panel panel-default">
-								<div class="panel-heading">
-									<h3 class="panel-title">${favouriteCategoriesUpdates}</h3>
-								</div>
-								<div class="panel-body">Value</div>
-							</div>
-
-						</div>
-					</c:forEach>
-
-				</div>
-				<!-- container fluid -->
-
-				<div id="container">
-					<div id="demo">
-						<div id="tagcloud">
-							<c:forEach var="tag" items="${tagCloud}">
-								<a
-									href="${pageContext.request.contextPath}/archives/search_objects/category=SEARCH_ALL?terms=${tag.key}"
-									rel="${tag.value}">${tag.key}</a>
+							<c:forEach var="updatedValues" items="${updatedCategory.value}">
+								<div class="panel-body">${updatedValues}</div>
 							</c:forEach>
 						</div>
+
+					</div>
+				</c:forEach>
+			</div>
+
+			<div class="page-header">
+				<h3>Your favourite(top 3) category updates(if any)</h3>
+			</div>
+			<div class="row">
+
+				<c:forEach var="favouriteCategoriesUpdates"
+					items="${userFavouriteCategoriesWithRecentUpdates}">
+
+					<div class="col-sm-4">
+						<div class="panel panel-default">
+							<div class="panel-heading">
+								<h3 class="panel-title">${favouriteCategoriesUpdates}</h3>
+							</div>
+							<div class="panel-body">Value</div>
+						</div>
+
+					</div>
+				</c:forEach>
+
+			</div>
+			<!-- container fluid -->
+</div>
+			<div id="container">
+				<div id="demo">
+					<div id="tagcloud">
+						<c:forEach var="tag" items="${tagCloud}">
+							<a
+								href="${pageContext.request.contextPath}/archives/search_objects/category=SEARCH_ALL?terms=${tag.key}"
+								rel="${tag.value}">${tag.key}</a>
+						</c:forEach>
 					</div>
 				</div>
-
-				<br> <br> <br> <br>
 			</div>
-		</div>
 
-		<!-- wrapper -->
-		<script type="text/javascript"
-			src="${pageContext.request.contextPath}/js/lightbox.js"></script>
+			<br> <br> <br> <br>
+		</div>
+	</div>
+</div>
+	<!-- wrapper -->
+	<script type="text/javascript"
+		src="${pageContext.request.contextPath}/js/lightbox.js"></script>
 </body>
 </html>

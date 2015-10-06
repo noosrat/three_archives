@@ -183,11 +183,14 @@ public class HistoryController implements Controller {
 		Cookie[] cookies = request.getCookies();
 		System.out.println("COOKIES: " + cookies.length);
 		for (Cookie cookie : cookies) {
-			if (cookie.getName().equalsIgnoreCase(archive + "Categories")) {
-				return cookie;
+			if (cookie.getName() != null) {
+				if (cookie.getName().equalsIgnoreCase(archive + "Categories")) {
+					return cookie;
+				}
 			}
 		}
-		return null;
+		
+		return initialiseNewCookie(request.getSession().getAttribute("ARCHIVE_CONCAT")+"Categories", "Collection:0##Creator:0##Event:0##Exhibition:0##Location:0##Subject:0##Contributor:0##Source:0");
 
 	}
 
