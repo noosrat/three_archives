@@ -47,6 +47,7 @@ public class ManageUsers {
 				   {
 					   role=((User)users.get(i)).getRole();
 					   approve=role;
+					break;
 				   }
 				   else
 				   {
