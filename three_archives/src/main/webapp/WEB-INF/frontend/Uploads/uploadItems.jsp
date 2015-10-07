@@ -161,7 +161,7 @@
 
 			<h3>Files uploaded successfully</h3>	
 <form method="post" action="${pageContext.request.contextPath}/archives/upload_uploads">
-	<input type="submit" value="Upload more files" name="upload_more_files">
+	<input class="btn btn-primary" type="submit" value="Upload more files" name="upload_more_files">
 </form>
 
 

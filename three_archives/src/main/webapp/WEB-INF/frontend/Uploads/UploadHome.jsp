@@ -55,43 +55,37 @@
 </script>
 <style>
 	.thumb {
-    			height: 120px;
+    			height: 100px;
     			border: 1px solid #000;
     			margin: 10px 5px 0 0;
   		}
 		#instruction{
-			border-radius:2px;
-			border: 2px solid #000;
+			border-radius:5px;
+			border: 2px solid gray;
+			box-shadow: 5px 5px 5px -4px #888;
+			background-color:#ffffff;
+			display:none;
+			width:300px;
+			text-align:center;
+			margin:auto;
+			margin-top:200px;
+			
 		}
 
 		#ImageStore{
 			width:250px;
-			height:700px;
-			//width:700px;
-			//height:600;
-			border: 1px solid #000;
-			margin:10px;
+			height:500px;
+			background-color:#ffffff
+			margin:auto;
 			padding:2px;
 			overflow:auto;
 			display:none;
-			text-align:center;	
+				
 		}
 		.inputs{
 			width:100%;
 		}	
-		.Sequins{
-			width:150px;
-			height:100px;
-			background-color: #ffffff;
-    			border: 1px solid black;
-    			opacity: 0.8;	
-
-		}
-		h3{
-			margin: 5%;
-    			font-weight: bold;
-    			color: #000000;
-		}
+		
 </style>
 </head>
 
@@ -170,95 +164,105 @@
 
 	</nav>
 
-
-	<div class="container">
+	<div class="container-fluid">
+		<p></p><br><br>
 		<div class="row">
-			<div class="col-lg-12">
-			
+			<div class="col-lg-3" style="background-color:#F5FFFF; box-shadow: 5px 0 5px -2px #888;min-height: 700px; padding-left:30px;">
+			 
 				<div>		
 					<form method="post" action="${pageContext.request.contextPath}/archives/upload_uploads">
 						<textarea id="able_selected_image" style="display:none">false</textarea>
 						<textarea id="actions" name="actions" style="display:none"></textarea>
-						<br>
-				<div id="select_files" style="margin-left:100px" >
-					<br>
-					<h2>Select Archive</h2>
-					<div>
-						<input type="radio" name="archive" value="Harfield" required>Harfield Village<br>
-						<input type="radio" name="archive" value="Snaps" required>Movie Snaps<br>
-						<input type="radio" name="archive" value="MissGay" required>Miss Gay WC<br>
-						<input type="radio" name="archive" value="SpringQueen" required>Spring Queen<br><br>
-					</div>
-					Enter image path (eg.C:/images/): 
-					<input type="text" name="storage_path" id="storage_path" required placeholder="C:/images/"><br><br>
-					<output id="list"></output> 
-				
-					<input type="file" id="files" name="files[]" multiple /><br>
-					<a href="#meta"<button class="btn-success" style="float:center;margin-left:200px" id="nextButton" type="button" onClick="makeClickable()">Next</button></a>
 					<br><br>
-				</div>
-	<section id="meta" > 	
-	<br>	
-	<ul style="list-style-type:none;display:inline;margin:0;padding:0;background-color:#fbe3cf">
-		<li style="display:inline;list-style-type:none;float:left;">
-			<div id="ImageStore"></div>
-		</li>
-		
-		<li style="display:inline;list-style-type:none;">	
-			<div id="instruction" style="background-color:#ffffff;display:none;width:300px;text-align:center;margin-top:200px; margin-left:400px;">
-				<h2>Select image to add metadata</h2>
-				
-  					<input type="submit" value="No thanx, I'm done" name="upload_files">
+  					<div class="panel-group">
+    						<div class="panel panel-default">
+      							<div class="panel-heading">
+        							<h4 class="panel-title">
+          								<a data-toggle="collapse" href="#collapse1">Get started</a>
+        							</h4>
+      							</div>
+     							 <div id="collapse1" class="panel-collapse collapse">
+        							<div class="panel-body">
+									<div id="select_files" >
+
+					<h3>Select Archive</h3>
+					<div>
+						<input type="radio" name="archive" value="Harfield" required>Harfield Village
+						<input type="radio" name="archive" value="Snaps" required>Movie Snaps<br>	
+						<input type="radio" name="archive" value="MissGay" required>Miss Gay WC
+						<input type="radio" name="archive" value="SpringQueen" required>Spring Queen<br>
+					</div>
+					<div>
+					<h3>Enter path of files:</h3>
+					<input type="text" name="storage_path" id="storage_path" required placeholder="eg. C:/images/"><br><br>
+					<output id="list"></output> 
+					<input type="file" id="files" name="files[]" multiple/>
+
+					<button class="btn btn-primary btn-sm" style="float:center;margin-left:200px" id="nextButton" type="button" onClick="makeClickable()">Next</button>
+					<br>
+					</div>
 					
 				
+				</div>
+
+
+
+								</div>
+        							
+      							</div>
+    						</div>
+  					</div>
+				
+			</div>
+			<div style="display:inline;list-style-type:none;float:left;">
+					<div id="ImageStore"></div>
+					</div>
+					<p> </p><br><br><br>
+		</div>
+	<div class="col-lg-8" style="margin-left:10px; background-color:#FFFFFF">
+		
+			<div id="instruction" >
+				<h3>Select image to add metadata</h3>
+				
+  					<input class="button btn btn-primary btn-sm" type="submit" value="Next" name="upload_files">
 				<br><br>
 			</div>
 		 	
-			<div id="metadataForm" style="visibility:hidden;margin-top:10px;">
-				<table class="table table-bordered" style="width:40%;">
-					<thead style="background:#fadabf;">
+			<div id="metadataForm" style="visibility:hidden;">
+				<table class="table table-bordered" style="width:80%;">
+					<thead style="background:#cae6e6;">
 						<th>Field</th><th>Value </th>
 					</thead>
 					<textarea id="selected_image" style="display:none"></textarea>
 					<tbody style="background:#ffffff">
 						
-						<tr><td>Title:</td> <td><input class="inputs"  id="title"></td></tr>
-						<tr><td>Creator:</td><td> <input class="inputs" id="creator"></td></tr>
-						<tr><td>Event:</td><td> <input class="inputs" id="event"></td></tr>
-						<tr><td>Description:</td><td> <input class="inputs" id="description"></td></tr>
-						<tr><td>Publisher:</td><td> <input class="inputs" id="publisher"></td></tr>
-						<tr><td>Contributor:</td><td> <input class="inputs" id="contributor"></td></tr>
-						<tr><td>Date:</td><td> <input class="inputs" id="date"></td></tr>
-						<tr><td>Resource type:</td><td> <input class="inputs" id="resourcetype"></td></tr>
-						<tr>
-							<td>Format:</td>
-							<td> 
-								<select id="format">
+						<tr><td>Title:</td> <td><input class="inputs"  id="title" placeholder="A name given to the resource."></td></tr>
+						<tr><td>Creator:</td><td> <input class="inputs" id="creator" placeholder="An entity primarily responsible for making the resource."></td></tr>
+						<tr><td>Event:</td><td> <input class="inputs" id="event" placeholder="Event to which the object is related"></td></tr>
+						<tr><td>Description:</td><td> <input class="inputs" id="description" placeholder="An account of the resource."></td></tr>
+						<tr><td>Publisher:</td><td> <input class="inputs" id="publisher" placeholder=" 	An entity responsible for making the resource available."></td></tr>
+						<tr><td>Contributor:</td><td> <input class="inputs" id="contributor" placeholder="An entity responsible for making contributions to the resource."></td></tr>
+						<tr><td>Date:</td><td> <input class="inputs" id="date" placeholder="A point or period of time associated with an event in the lifecycle of the resource."></td></tr>
+						<tr><td>Resource type:</td><td> <input class="inputs" id="resourcetype" placeholder="The nature or genre of the resource."></td></tr>
+						<tr><td>Source:</td><td> <input class="inputs" id="source" placeholder="A related resource from which the described resource is derived."></td></tr>
+						<tr><td>Language:</td><td> <input class="inputs" id="language" placeholder="A language of the resource."></td></tr>
+						<tr><td>Relation:</td><td> <input class="inputs" id="relation" placeholder="A related resource."></td></tr>
+						<tr><td>Location:</td><td> <input class="inputs" id="location" placeholder="The spatial or temporal topic of the resource."></td></tr>
+						<tr><td>co-ordinates:</td><td> <input class="inputs" id="cords" placeholder="The spatial or temporal topic of the resource"></td></tr>
+						<tr><td>Rights:</td><td> <input class="inputs" id="rights" placeholder=" 	Information about rights held in and over the resource."></td></tr>
+						<tr><td>Collection:</td><td> <input class="inputs" id="collections" placeholder="The topic of the resource."></td></tr>
+						<tr><td>Format:</td><td> <select id="format">
   									<option value="image/jpeg">Image</option>
   									<option value="video/mp4">Video</option>
   									<option value="audio/mp3">Audio</option>
   									
-								</select>
-							</td>
-						</tr>
-						<tr><td>Source:</td><td> <input class="inputs" id="source"></td></tr>
-						<tr><td>Language:</td><td> <input class="inputs" id="language"></td></tr>
-						<tr><td>Relation:</td><td> <input class="inputs" id="relation"></td></tr>
-						<tr><td>Location:</td><td> <input class="inputs" id="location"></td></tr>
-						<tr><td>co-ordinates:</td><td> <input class="inputs" id="cords"></td></tr>
-						<tr><td>Rights:</td><td> <input class="inputs" id="rights"></td></tr>
-						<tr><td>Collection:</td><td> <input class="inputs" id="collections"></td></tr>
-						<tr><td></td><td>  <button type="button" onClick="cancelSelection()">Cancel</button><button type="button" onClick="submitMetadata()">Update</button></td></tr>
+								</select> <button style="float:right;margin-left:5px" type="button" class="button btn btn-primary btn-xs" onClick="submitMetadata()">Update</button> <button type="button" style="float:right;" class="btn btn-primary btn-xs" onClick="cancelSelection()">Cancel</button></td></tr>
 					</tbody>
 				</table>
 				<br><br><br>
 			
 			</div> 
-		</li>
 		
-	</ul>
-	</section>
-	
 	</div>	
 </form>	
 
@@ -373,14 +377,16 @@ function selectImage(event) {
 		alert("this is already added");
 	}
 	else if (document.getElementById("able_selected_image").value!="false")
-	{			
+	{
+				
 		document.getElementById("able_selected_image").value="false"
 		document.getElementById("instruction").style.display="none";
 		document.getElementById("metadataForm").style.visibility="visible";
 		var x=document.getElementById("selected_image").value;	
 		document.getElementById("selected_image").innerHTML =event;	
     		document.getElementById("selected_image").innerHTML =event;
-    		document.getElementById(event).style.border= '10px solid green';
+    		document.getElementById(event).style.border= '10px solid black';
+		
 	}
 	
 }
@@ -432,11 +438,11 @@ function cancelSelection(){
 
 function makeClickable()
 {
-	document.getElementById("select_files").style.diplay="none";
+	//document.getElementById("select_files").style.diplay="none";
 	document.getElementById("nextButton").style.display="none";
 	document.getElementById("able_selected_image").value="true"
 	document.getElementById("instruction").style.display="block";
-	document.getElementById("files").style.display="none";
+	//document.getElementById("files").style.display="none";
 }
 
 </script>

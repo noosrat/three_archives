@@ -25,22 +25,22 @@ public class ThreeArchivesServlet extends HttpServlet {
 			throws ServletException, IOException {
 		System.out.println("Entered Servlet");
 
-		// just wnat to quickly clear out the cookie values we have first
+		//just wnat to quickly clear out the cookie values we have first
 		System.out.println("PathInfo : " + request.getPathInfo());
+//		clearAllOtherCookies(request,response);
 		// clearAllOtherCookies(request,response);
 		ServiceDelegator serviceDelegator = new ServiceDelegator();
 		String result = serviceDelegator.execute(request, response);
 		request.getServletContext().getRequestDispatcher("/" + result).forward(request, response);
 	}
+	
 
-
-
-	private void clearAllOtherCookies(HttpServletRequest request, HttpServletResponse response) {
+	private void clearAllOtherCookies(HttpServletRequest request, HttpServletResponse response){
 		Cookie[] cookies = request.getCookies();
 		System.out.println("WE FOUND THIS MANY COOKIES " + cookies.length);
-		for (Cookie c : cookies) {
-			if (!(c.getName().equalsIgnoreCase("dateLastVisited"))) {
-				// we want to remove all of teh cookies
+		for (Cookie c: cookies){
+			if (!(c.getName().equalsIgnoreCase("dateLastVisited"))){
+				//we want to remove all of teh cookies
 				c.setValue(null);
 				c.setMaxAge(0);
 				c.setPath("/");
@@ -49,9 +49,8 @@ public class ThreeArchivesServlet extends HttpServlet {
 		}
 		System.out.println("We now have " + request.getCookies().length + " cookies");
 		request.getServletContext().getRequestDispatcher("/index.jsp");
-
+		
 	}
-
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
 	 *      response)

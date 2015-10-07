@@ -96,8 +96,13 @@
 
 					<li><a
 						href="${pageContext.request.contextPath}/archives/redirect_maps">Maps</a></li>
-					<li><a
-						href="${pageContext.request.contextPath}/archives/redirect_uploads">Uploads</a></li>
+					<%if (session.getAttribute("USER")!=null){
+						if (session.getAttribute("USER").equals("ADMINISTRATOR")){%>
+							<li><a
+								href="${pageContext.request.contextPath}/archives/redirect_uploads">Uploads</a></li>
+								<li><a
+								href="${pageContext.request.contextPath}/archives/redirect_user">Users</a></li>
+					<%}} %>
 				</ul>
 				<!-- search components-->
 				<div id="bs-example-navbar-collapse-1"
@@ -165,10 +170,13 @@
 		<h1>Select a template</h1>
 		<ul id="templateSelection" style="list-style-type:none;margin:0;padding:0;margin:auto;">
 			<li style="display:inline;font-weight:bold; padding:10px;">
-				<input type="image" name="selectedTemplate" value=1 src="${pageContext.request.contextPath}/images/template1.jpg" alt="Template 1">
+				<input type="image" name="selectedTemplate" value=1 src="${pageContext.request.contextPath}/images/icons/template1.jpg" alt="Template 1">
 			</li>
 			<li style="display:inline;font-weight:bold;padding:10px;">
-				<input type="image" name="selectedTemplate" value=2 src="${pageContext.request.contextPath}/images/template2.jpg" alt="Template 2">
+				<input type="image" name="selectedTemplate" value=2 src="${pageContext.request.contextPath}/images/icons/template2.jpg" alt="Template 2">
+			</li>
+			<li style="display:inline;font-weight:bold;padding:10px;">
+				<input type="image" name="selectedTemplate" value=3 src="${pageContext.request.contextPath}/images/icons/template3.jpg" alt="Template 3">
 			</li>
 		</ul>
 		<br><br>

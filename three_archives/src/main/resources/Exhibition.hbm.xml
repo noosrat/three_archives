@@ -17,6 +17,7 @@
       <property name="creator" column="exhibition_creator" type="string"/>
       <property name="media" column="exhibition_media" type="string"/>
       <property name="captions" column="exhibition_captions" type="string"/>
+      <property name="cover" column="exhibition_cover" type="string"/>
      
    </class>
 </hibernate-mapping>

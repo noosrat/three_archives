@@ -4,7 +4,6 @@
 <%@page import="common.fedora.FedoraDigitalObject"%>
 <%@page import="search.SearchAndBrowseCategory"%>
 <%@page import="common.fedora.DatastreamID"%>
-
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql"%>
@@ -143,24 +142,14 @@
 
 	</nav>
 
-
 	<div class="container">
+	<p></p><br><br><br><br>
 		<div class="row">
 			<div class="col-lg-12 text-center">
-			<br><br>
-				
-
-
-
-
-
-
+			
 <%@ page import="common.model.Exhibition"%>
 <%@ page import="java.util.List"%>
 <%List<Exhibition> exhibitions= ((List<Exhibition>)request.getAttribute("all_exhibitions")); %>
-
-
-
 
 <form method="post" action="${pageContext.request.contextPath}/archives/view_exhibitions">
 	<h1>Exhibition:</h1><br>
@@ -173,9 +162,7 @@
 	<input type="submit" value="View Exhibition"/>	
 </form>
 
-
-
-
+<br><br><br><br><br><p></p>
 
 			</div>
 		</div>

@@ -1,13 +1,26 @@
 package common.controller;
 
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+
+
+
+
+
+
+
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import common.model.Exhibition;
+import common.model.ManageUsers;
+import common.model.User;
+import exhibitions.ManageExhibition;
 import configuration.ArchivalService;
 import configuration.PropertiesHandler;
 import history.HistoryController;
@@ -21,11 +34,13 @@ public class GeneralController implements Controller {
 	 * this is where we should actually set all the session variables that are
 	 * specific to the archives.........
 	 */
-	public String execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
+	public String execute(HttpServletRequest request,HttpServletResponse response) throws Exception {
 		String result = "";
 		ArrayList<String> cart = new ArrayList<String>();
 		//cart.add("ms:1");
-		//cart.add("ms:2");
+		//ManageUsers userManager= new ManageUsers();
+		//userManager.addUser(new User("admin","admin","ADMINISTRATOR"));
+		//userManager.addUser(new User("student","student","privileged"));
 		HttpSession session = request.getSession();
 		clearArchiveSessionInformation(session);
 		request.getSession().setAttribute("searchCategories", SearchController.retrieveSearchCategories());
@@ -33,6 +48,8 @@ public class GeneralController implements Controller {
 		storeAllArchivePropertiesWithinSession(request);
 		HistoryController historyController = new HistoryController();
 		BrowseController browseController = new BrowseController();
+		String pathInfo =  request.getPathInfo().substring(1);
+		System.out.println(pathInfo);
 
 		if (session.getAttribute("objects") == null) {
 			session.setAttribute("objects", SearchController.getSearch().findFedoraDigitalObjects("*"));//this is getting all of the archive documents...

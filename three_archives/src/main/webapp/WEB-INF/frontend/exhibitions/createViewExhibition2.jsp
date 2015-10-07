@@ -4,7 +4,6 @@
 <html>
 <head>
   <title>View exhibition</title>
-  <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link href="${pageContext.request.contextPath}/stylish-portfolio.css" rel="stylesheet">
   <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
@@ -13,7 +12,6 @@
   <link type="text/css" href="${pageContext.request.contextPath}/jquery.bxslider/jquery.bxslider.css" rel="stylesheet" />
   <script src="${pageContext.request.contextPath}/jquery.js"></script>
   <script src="${pageContext.request.contextPath}/jquery.bxslider/jquery.bxslider.min.js"></script>
-    
     
 <script>
     // Closes the sidebar menu
@@ -61,21 +59,21 @@
   		});
 		});
 	</script>
+	<script>
+		
+		function customise(image){
+			document.getElementById("top").style.backgroundImage=image;
+		}
+	</script>
  <style>
-		.header{
-	 	background: url(${pageContext.request.contextPath}/images/Back.jpg) no-repeat center center fixed; 
-			 -webkit-background-size: cover;
+		#top{
+	 	 	-webkit-background-size:cover;
+			-moz-background-size: cover;
   			-moz-background-size: cover;
   			-o-background-size: cover;
   			background-size: cover;
-			-moz-filter: url("data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\'><filter id=\'grayscale\'><feColorMatrix type=\'matrix\' values=\'0.3333 0.3333 0.3333 0 0 0.3333 0.3333 0.3333 0 0 0.3333 0.3333 0.3333 0 0 0 0 0 1 0\'/></filter></svg>#grayscale");
-         	-o-filter: url("data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\'><filter id=\'grayscale\'><feColorMatrix type=\'matrix\' values=\'0.3333 0.3333 0.3333 0 0 0.3333 0.3333 0.3333 0 0 0.3333 0.3333 0.3333 0 0 0 0 0 1 0\'/></filter></svg>#grayscale");
-         	-webkit-filter: grayscale(100%);
-        	filter: gray;
-         	filter: url("data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\'><filter id=\'grayscale\'><feColorMatrix type=\'matrix\' values=\'0.3333 0.3333 0.3333 0 0 0.3333 0.3333 0.3333 0 0 0.3333 0.3333 0.3333 0 0 0 0 0 1 0\'/></filter></svg>#grayscale");
-			color: black;
-			opacity: 0.3;
-}
+  			height:100%;
+		}
 		
 		.droptargetTemplate {
    			width: 210px; 
@@ -88,11 +86,13 @@
 			margin:2px;
 			text-align:center;
 		}
-    	
+    	img{
+			margin:auto;
+		}
 	</style>
 
 </head>
-<body>
+<body onload="customise('url(<%=request.getAttribute("ExhibitionCover")%>)')">
 	<header id="top" class="header">
        <div class="text-vertical-center">
             <h1>"<%out.println(request.getAttribute("ExhibitionTitle")); %>"</h1>
@@ -119,7 +119,7 @@
   					<div class="slide">
 						<%if (images[k]!=null){%>
 							<div class="droptarget droptargetTemplate">
-								<img src="<%=images[k]%>">
+								<img style="<%=request.getAttribute("ExhibitionBorder") %>" src="<%=images[k]%>">
 							</div>	
 						<%}else{%>
 							<div class="droptarget droptargetTemplate">
@@ -149,7 +149,7 @@
 						<%}%>
 						<%if (images[k+1]!=null){%>
 							<div class="droptarget droptargetTemplate">
-								<img src="<%=images[k+1]%>">
+								<img style="<%=request.getAttribute("ExhibitionBorder") %>" src="<%=images[k+1]%>">
 							</div>	
 						<%}else{%>
 							<div class="droptarget droptargetTemplate">

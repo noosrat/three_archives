@@ -1,21 +1,45 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-    pageEncoding="ISO-8859-1"%>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE html>
+<%@page import="common.fedora.Datastream"%>
+<%@page import="common.fedora.DublinCoreDatastream"%>
+<%@page import="common.fedora.FedoraDigitalObject"%>
+<%@page import="search.SearchAndBrowseCategory"%>
+<%@page import="common.fedora.DatastreamID"%>
+
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@ taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql"%>
+<%@ taglib prefix="x" uri="http://java.sun.com/jsp/jstl/xml"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <html>
+
 <head>
-  <title>Template 1</title>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/stylesheet.css"></link>
-  <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="">
+<meta name="author" content="">
+
+<title>Personal Histories - Centre for Curating The Archive</title>
+
+<!-- Bootstrap Core CSS -->
+<link
+	href="${pageContext.request.contextPath}/bootstrap-3.3.5/css/bootstrap.min.css"
+	rel="stylesheet">
+<script type="text/javascript"
+	src="${pageContext.request.contextPath}/js/jquery-1.11.3.js"></script>
+<script type="text/javascript"
+	src="${pageContext.request.contextPath}/bootstrap-3.3.5/js/bootstrap.js"></script>
+<script type="text/javascript"
+	src="${pageContext.request.contextPath}/js/typeahead.js"></script>
+ <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
   <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
-  
-  <link type="text/css" href="${pageContext.request.contextPath}/jquery.bxslider/jquery.bxslider.css" rel="stylesheet" />
-	<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/stylesheet.css"></link>
-	<script src="${pageContext.request.contextPath}/jquery.bxslider/jquery.bxslider.min.js"></script>
-	<script>
-		$(document).ready(function(){
+
+<link type="text/css" href="${pageContext.request.contextPath}/jquery.bxslider/jquery.bxslider.css" rel="stylesheet" />
+<script src="${pageContext.request.contextPath}/jquery.bxslider/jquery.bxslider.min.js"></script>
+<script>
+	$(document).ready(function(){
  		 $('.slider4').bxSlider({
    		 slideWidth: 210,
    		 minSlides: 2,
@@ -26,8 +50,35 @@
 		hideControlOnEnd:true
   		});
 		});
-	</script>
- <style>
+	
+		$('#prefetch .typeahead').typeahead(null, {
+			name : 'countries',
+			source : countries
+		});
+	
+</script>
+<style>
+	
+		.Sequins{
+			width:150px;
+			height:100px;
+			background-color: #ffffff;
+    			border: 1px solid black;
+    			opacity: 0.8;	
+
+		}
+		h3{
+			margin: 5%;
+    			font-weight: bold;
+    			color: #000000;
+		}
+		#toolBox{
+			height:40px;
+			width:240px;
+			text-align:center;
+		}
+</style>
+<style>
 		.droptargetCart {
  			margin: 5px;
     		padding: 5px;
@@ -59,9 +110,21 @@
     	div.scroll img{
     		padding:10px;
     	}
-		
+		.thumb {
+    			height: 100px;
+    			border: 1px solid #000;
+    			margin: 10px 5px 0 0;
+  		}
 	</style>
 <script>
+	function selectBorder(event){
+		document.getElementById(event).style.border= '10px solid blue';
+		document.getElementById("border").value=event;	
+	}
+	function selectImage(event) {
+		document.getElementById(event).style.border= '10px solid blue';
+		document.getElementById("cover").value=event;	
+	}
 	function dragStart(event) {
     	event.dataTransfer.setData("Text", event.target.id);   
 	}
@@ -94,77 +157,192 @@
     	}
 	}
 </script>
+
 </head>
+
 <body>
-<div class="container-fluid">
-  <div class="header">
-	<%if (session.getAttribute("ARCHIVE").equals("sequins")){ %>
-    		<h1>Sequins, Self and Struggle</h1> 
-	<%}
-	else if (session.getAttribute("ARCHIVE").equals("snaps")){%>
-		<h1>Movie Snaps</h1> 
-	<%}
-	else if (session.getAttribute("ARCHIVE").equals("harfield")){%>
-		<h1>Harfield Village</h1> 
-	<%}%>
-     <a href="#" class="btn btn-info btn-lg"><span class="glyphicon glyphicon-search"></span> Search</a>     
-  </div>     
 
- <nav class="navbar navbar-default">
-  <div class="container-fluid">
-    <div class="navbar-header">
-      <a class="navbar-brand" href="#">Personal Histories</a>
-    </div>
-    <div>
-      <ul class="nav navbar-nav">
-        <li class="active"><a href="#">Home</a></li>
-	<li><a href="#">About</a></li>
-	<li><a href="#">Research</a></li>
-        <li><a href="#">Exhibitions</a></li>
-        <li><a href="#">Maps</a></li>
-        <li><a href="#">Browse</a></li>
-      </ul>
-    </div>
-  </div>
-</nav> 
-
-
-<%@ page import="common.fedora.FedoraException"%>
-<%@ page import="common.fedora.FedoraClient"%>
-<%@ page import="common.fedora.DublinCore"%>
-<%@ page import="common.fedora.FedoraDigitalObject"%>
-<%@ page import="search.FedoraCommunicator"%>
-<form method="post" action="${pageContext.request.contextPath}/archives/create_exhibitions">
-<ul id="mainEx" style="list-style-type:none;margin:0;padding:0;">
-		<li style="display:inline;float:left;font-weight:bold;">
-			<%String [] cartImages= (String[]) (session.getAttribute("MEDIA_CART")); 
-			FedoraCommunicator fc= new FedoraCommunicator();
-			FedoraDigitalObject ob;%>
-			<div id="cart" class="scroll droptarget droptargetCart" ondrop="drop(event)" ondragover="allowDrop(event)" style="border: 1px solid #aaaaaa; diplay:inline-block; background:#F8F8F8;">
-				<%for (int i=0;i<cartImages.length;i++){ 
-					if(cartImages[i]!=null){
-						ob=null;
-					ob=fc.populateFedoraDigitalObject(cartImages[i]);%>
-  					<img  src="<%=ob.getDatastreams().get("IMG").getContent() %>"  style="width:40%;" ondragstart="dragStart(event)" draggable="true" id="<%=cartImages[i]%>">
-  				<%}} %>	
-				
+	<!-- Navigation -->
+	<nav class="navbar navbar-inverse navbar-fixed-top navbar-left"
+		role="navigation">
+		<div class="container-fluid">
+			<!-- Brand and toggle get grouped for better mobile display -->
+			<div class="navbar-header">
+				<a class="navbar-brand" href="${pageContext.request.contextPath}/archives/SequinsSelfAndStruggle">Sequins, Self and Struggle</a>
 			</div>
-		</li>
-		<li style="display:inline; float:left;margin-left:50px;">
+			<div class="collapse navbar-collapse"
+				id="bs-example-navbar-collapse-1">
+				<ul class="nav navbar-nav">
+					<li><a
+						href="${pageContext.request.contextPath}/archives/browse">Browse</a></li>
+					<li><a
+						href="${pageContext.request.contextPath}/archives/redirect_exhibitions">Exhibitions</a></li>
+					<li><a
+						href="${pageContext.request.contextPath}/archives/redirect_maps">Maps</a></li>
+					<%if (session.getAttribute("USER")!=null){
+						if (session.getAttribute("USER").equals("ADMINISTRATOR")){%>
+							<li><a
+								href="${pageContext.request.contextPath}/archives/redirect_uploads">Upload</a></li>
+								<li><a
+								href="${pageContext.request.contextPath}/archives/redirect_user">Users</a></li>
+					<%}} %>
+					<li><a
+						href="${pageContext.request.contextPath}/archives/redirect_downloads">Downloads</a></li>
+				</ul>
+				<!-- search components-->
+				<div id="bs-example-navbar-collapse-1"
+					class="collapse navbar-collapse">
+
+					<ul class="nav navbar-nav navbar-right">
+						<li class="dropdown"><a
+							href="${pageContext.request.contextPath}/archives/search_objects"
+							class="dropdown-toggle" data-toggle="dropdown" role="button"
+							aria-haspopup="true" aria-expalinded="false">${searchCategories[0]}<span
+								class="caret"></span></a>
+							<ul class="dropdown-menu">
+								<c:forEach var="searchCategory" items="${searchCategories}">
+									<li><a
+										href="${pageContext.request.contextPath}/archives/search_objects/category=${searchCategory}">${searchCategory}</a></li>
+
+								</c:forEach>
+							</ul></li>
+						<li>
+							<form class="navbar-form navbar-right"
+								action="${pageContext.request.contextPath}/archives/search_objects/category=${searchCategories[0]}"
+								method="post">
+								<div class="form-group">
+									<div id="prefetch">
+										<input
+											class="form-control typeahead tt-query tt-hint tt-dropdown-menu tt-suggestion"
+											data-provider="typeahead" type="text"
+											placeholder="Search Archive" autocomplete="off"
+											spellcheck="false" name="terms">
+									</div>
+								</div>
+
+								<button type="submit" class="btn">Search</button>
+
+								<div class="checkbox">
+									<label> <input type="checkbox" id="limitSearch"
+										name="limitSearch" value="limitSearch"><font
+										color="white"> Limit search to these results</font>
+									</label>
+								</div>
+
+							</form>
+						</li>
+					</ul>
+
+
+				</div>
+			</div>
+			<!-- end of search bar components -->
+
+		</div>
+
+	</nav>
+
+
+	<div class="container">
+	<form method="post" action="${pageContext.request.contextPath}/archives/create_exhibitions">
+	<p> </p><br><br><br>
+		<div class="row" >
+			<div class="col-sm-4">
+				<%@ page import="common.fedora.FedoraException"%>
+				<%@ page import="common.fedora.FedoraClient"%>
+				<%@ page import="common.fedora.DublinCore"%>
+				<%@ page import="common.fedora.FedoraDigitalObject"%>
+				<%@ page import="search.FedoraCommunicator"%>
+				<%@ page import="java.util.ArrayList"%>
+				<%@ page import="java.util.List"%>
+					<textarea id="cover" name="cover" readonly=readonly style="display:none;" ></textarea>
+					<textarea id="border" name="border" readonly=readonly style="display:none;"></textarea>
+					<textarea id="demo" name="user_action" readonly=readonly style="display:none;"></textarea>
+					<div id="toolBox">
+					<h1>Toolbox</h1>
+						<ul id="mainEx" style="list-style-type:none;margin:auto;padding:5px;text-align:center">
+							<li style="display:inline;">
+								<input type="button" style= "width:25px;height:25px;background: url('${pageContext.request.contextPath}/images/icons/coverIcon.jpg') no-repeat;" data-toggle="modal" data-target="#backgroundImage">
+							</li>
+					
+							<li style="display:inline; ">
+								<input type="button" style= "width:25px;height:25px;background: url('${pageContext.request.contextPath}/images/icons/borderIcon.jpg') no-repeat;" data-toggle="modal" data-target="#imageBorders">
+							</li>
+
+						</ul>
+						</div>
+					<div class="modal fade" id="backgroundImage" role="dialog" style="z-index:30000">
+    			<div class="modal-dialog">
+    				<div class="modal-content">
+       					 <div class="modal-header">
+          						<button type="button" class="close" data-dismiss="modal">&times;</button>
+          						<h4 class="modal-title">Select a cover photo</h4>
+        				</div>
+        				<div class="modal-body">
+      							<img class="thumb" onclick="selectImage(this.id)" src="${pageContext.request.contextPath}/images/covers/Cover.jpg" id="${pageContext.request.contextPath}/images/covers/Cover.jpg" />
+								<img class="thumb" onclick="selectImage(this.id)" src="${pageContext.request.contextPath}/images/covers/Cover2.jpg" id="${pageContext.request.contextPath}/images/covers/Cover2.jpg" />
+								<img class="thumb" onclick="selectImage(this.id)" src="${pageContext.request.contextPath}/images/covers/Cover3.jpg" id="${pageContext.request.contextPath}/images/covers/Cover3.jpg" />
+								<img class="thumb" onclick="selectImage(this.id)" src="${pageContext.request.contextPath}/images/covers/Cover4.jpg" id="${pageContext.request.contextPath}/images/covers/Cover4.jpg" />
+								<img class="thumb" onclick="selectImage(this.id)" src="${pageContext.request.contextPath}/images/covers/Cover5.jpg" id="${pageContext.request.contextPath}/images/covers/Cover5.jpg" />
+        				</div>
+        				<div class="modal-footer">
+        					<button type="button" class="btn btn-default" data-dismiss="modal">Save</button>
+      					</div>
+       			 		
+      			</div>
+     
+    		</div>
+  </div>
+
+
+
+<div class="modal fade" id="imageBorders" role="dialog" style="z-index:30000">
+    			<div class="modal-dialog">
+    				<div class="modal-content">
+       					 <div class="modal-header">
+          						<button type="button" class="close" data-dismiss="modal">&times;</button>
+          						<h4 class="modal-title">Select an image border</h4>
+        				</div>
+        				<div class="modal-body">
+          					<img class="thumb" onclick="selectBorder(this.id)" src="${pageContext.request.contextPath}/images/icons/noBorder.jpg" alt="none" id="border:0px solid black"" />	
+						<img class="thumb" onclick="selectBorder(this.id)" src="${pageContext.request.contextPath}/images/icons/thinBorder.jpg" alt="none" id="border:5px solid black" />
+						<img class="thumb" onclick="selectBorder(this.id)" src="${pageContext.request.contextPath}/images/icons/thickBorder.jpg" alt="none" id="border:10px solid black" />
+        				</div>
+        				<div class="modal-footer">
+        					<button type="button" class="btn btn-default" data-dismiss="modal">Save</button>
+      					</div>	
+       			 		
+      			</div>
+     
+    		</div>
+  </div>
+					<%ArrayList<String> cartImages= (ArrayList<String>) (session.getAttribute("MEDIA_CART")); 
+					FedoraCommunicator fc= new FedoraCommunicator();
+					FedoraDigitalObject ob;%>
+					<div id="cart" class="scroll droptarget droptargetCart" ondrop="drop(event)" ondragover="allowDrop(event)" style="border: 1px solid #aaaaaa; diplay:inline-block; background:#F8F8F8;">
+							<%for (int i=0;i<cartImages.size();i++){ 
+									if(cartImages.get(i)!=null){
+										ob=null;
+										ob=fc.populateFedoraDigitalObject(cartImages.get(i));%>
+  										<img src="<%=ob.getDatastreams().get("IMG").getContent() %>"  style="width:40%;" ondragstart="dragStart(event)" draggable="true" id="<%=cartImages.get(i)%>">
+  							<%}} %>	
+				
+					</div>
+			</div>
 		
-			
+			<div class="col-sm-7">	
   		<div class="slider4">
   			<div class="slide">
 				<div class="droptarget droptargetTemplate" id="0" ondrop="drop(event)" ondragover="allowDrop(event)" >		
 				</div>
 				<div class="caption">
-					<textarea class="TextArea" rows="2" cols="26"  name="input_cap0" placeholder="Add text to me"></textarea>
+					<textarea maxlength="50" class="TextArea" rows="2" cols="26"  name="input_cap0" placeholder="Add text to me"></textarea>
 				</div>
 				
 				<div class="droptarget droptargetTemplate" id="1" ondrop="drop(event)" ondragover="allowDrop(event)" >
 				</div>
 				<div class="caption">
-					<textarea class="TextArea" rows="2" cols="26"  name="input_cap1" placeholder="Add text to me"></textarea>
+					<textarea maxlength="50" class="TextArea" rows="2" cols="26"  name="input_cap1" placeholder="Add text to me"></textarea>
 				</div>
 		
 			</div>
@@ -172,72 +350,69 @@
 				<div class="droptarget droptargetTemplate" id="2" ondrop="drop(event)" ondragover="allowDrop(event)" >
 				</div>
 				<div class="caption">
-					<textarea class="TextArea" rows="2" cols="26"  name="input_cap2" placeholder="Add text to me"></textarea>
+					<textarea maxlength="50" class="TextArea" rows="2" cols="26"  name="input_cap2" placeholder="Add text to me"></textarea>
 				</div>
 				<div class="droptarget droptargetTemplate" id="3" ondrop="drop(event)"ondragover="allowDrop(event)">
 				</div>
 				<div class="caption">
-					<textarea class="TextArea" rows="2" cols="26"  name="input_cap3" placeholder="Add text to me" ></textarea>
+					<textarea maxlength="50" class="TextArea" rows="2" cols="26"  name="input_cap3" placeholder="Add text to me" ></textarea>
 				</div>
 			</div>
 			<div class="slide">
 				<div class="droptarget droptargetTemplate" id="4" ondrop="drop(event)" ondragover="allowDrop(event)" >
 				</div>
 				<div class="caption">
-					<textarea class="TextArea" rows="2" cols="26"  name="input_cap4" placeholder="Add text to me"></textarea>
+					<textarea maxlength="50" class="TextArea" rows="2" cols="26"  name="input_cap4" placeholder="Add text to me"></textarea>
 				</div>
 				<div class="droptarget droptargetTemplate" id="5" ondrop="drop(event)" ondragover="allowDrop(event)">
 				</div>
 				<div class="caption">
-					<textarea class="TextArea" rows="2" cols="26"  name="input_cap5" placeholder="Add text to me"></textarea>
+					<textarea maxlength="50" class="TextArea" rows="2" cols="26"  name="input_cap5" placeholder="Add text to me"></textarea>
 				</div>
 			</div>	
 			<div class="slide">
 				<div class="droptarget droptargetTemplate" id="6" ondrop="drop(event)" ondragover="allowDrop(event)" >
 				</div>
 				<div class="caption">
-					<textarea class="TextArea" rows="2" cols="26"  name="input_cap6" placeholder="Add text to me"></textarea>
+					<textarea maxlength="50" class="TextArea" rows="2" cols="26"  name="input_cap6" placeholder="Add text to me"></textarea>
 				</div>
 				<div class="droptarget droptargetTemplate" id="7" ondrop="drop(event)" ondragover="allowDrop(event)" >
 				</div>
 				<div class="caption">
-					<textarea class="TextArea" rows="2" cols="26"  name="input_cap7" placeholder="Add text to me"></textarea>
+					<textarea maxlength="50" class="TextArea" rows="2" cols="26"  name="input_cap7" placeholder="Add text to me"></textarea>
 				</div>
 			</div>
 			<div class="slide">
 				<div class="droptarget droptargetTemplate" id="8" ondrop="drop(event)" ondragover="allowDrop(event)" >
 				</div>
 				<div class="caption">
-					<textarea class="TextArea" rows="2" cols="26"  name="input_cap8"placeholder="Add text to me" ></textarea>
+					<textarea maxlength="50" class="TextArea" rows="2" cols="26"  name="input_cap8" placeholder="Add text to me" ></textarea>
 				</div>
 				<div class="droptarget droptargetTemplate" id="9" ondrop="drop(event)" ondragover="allowDrop(event)">
 				</div>
 				<div class="caption">
-					<textarea class="TextArea" rows="2" cols="26"  name="input_cap9" placeholder="Add text to me"></textarea>
+					<textarea maxlength="50" class="TextArea" rows="2" cols="26"  name="input_cap9" placeholder="Add text to me"></textarea>
 				</div>
 			</div>
 			<div class="slide">
 				<div class="droptarget droptargetTemplate" id="10" ondrop="drop(event)" ondragover="allowDrop(event)">
 				</div>
 				<div class="caption">
-					<textarea class="TextArea" rows="2" cols="26"  name="input_cap10" placeholder="Add text to me"></textarea>
+					<textarea maxlength="50" class="TextArea" rows="2" cols="26"  name="input_cap10" placeholder="Add text to me"></textarea>
 				</div>
 				<div class="droptarget droptargetTemplate" id="11" ondrop="drop(event)" ondragover="allowDrop(event)">
 				</div>
 				<div class="caption">
-					<textarea class="TextArea" rows="2" cols="26"  name="input_cap11" placeholder="Add text to me"></textarea>
+					<textarea maxlength="50" class="TextArea" rows="2" cols="26"  name="input_cap11" placeholder="Add text to me"></textarea>
 				</div>
 			</div>
 		</div>
-		
-	
-		</li>
-		<li style="display:inline; float:left;margin-left:50px;">
-			<textarea id="demo" name="user_action" readonly=readonly style="display:none;"></textarea>
-			<input type="submit" value="Back" name="exhibition_det"/>
-			 <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Next</button>
+		</div>
+		<div class="col-sm-1">
+			<button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#myModal">Next</button>
+		</div>	
 			
-			<div class="modal fade" id="myModal" role="dialog">
+			<div class="modal fade" id="myModal" role="dialog" style="z-index:30000">
     			<div class="modal-dialog">
     				<div class="modal-content">
        					 <div class="modal-header">
@@ -257,19 +432,12 @@
 		 					<div class="form-group">
       							<label for="usr">Creator</label>
       							<input type="text" name="Creator" class="form-control">
-    						</div>
-								<label>Make exhibition publicly viewable</label><br>
-									<label class="radio-inline">
-      								<input type="radio" name="viewable" value="No" >No
-    							</label>
-    						<label class="radio-inline">
-      							<input type="radio" name="viewable" value="yes">Yes
-    						</label>
+    						</div>		
 
         				</div>
         				<div class="modal-footer">
-          					<input type="submit" value="Save" name="exhibition_det"/>
-         
+          					<input type="submit" value="Save" class="btn btn-primary btn-sm" name="exhibition_det"/>
+         					
        			 		</div>
        			 		
       			</div>
@@ -277,12 +445,52 @@
     		</div>
   </div>
 					
-			
+		</div>	
 		
-		</li>
-	</ul>
-
+		
 </form>
-</div>
+	</div>
+		
+	
+	
+	<nav class="navbar navbar-inverse navbar-fixed-bottom navbar-fluid"
+		role="navigation">
+		<div class="container">
+			<!-- Brand and toggle get grouped for better mobile display -->
+			<div class="navbar-header">
+				<a class="navbar-brand" href="${pageContext.request.contextPath}">Personal Histories</a>
+			</div>
+		</div>
+		<!-- /.container -->
+	</nav>
+	<!-- /.container -->
+
+
+	<!-- Script to Activate the Carousel -->
+	<script>
+		$('.carousel').carousel({
+			interval : 5000
+		//changes the speed
+		})
+	</script>
+
 </body>
+
 </html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

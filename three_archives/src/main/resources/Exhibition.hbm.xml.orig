@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+ "-//Hibernate/Hibernate Mapping DTD//EN"
+ "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd"> 
+
+<hibernate-mapping>
+   <class name="Exhibition" table="EXHIBITION">
+      <meta attribute="class-description">
+         This class contains the exhibitions. 
+      </meta>
+      <id name="id" type="int" column="id">
+         <generator class="native"/>
+      </id>
+      <property name="title" column="exhibition_title" type="string"/>
+      <property name="description" column="exhibition_description" type="string"/>
+      <property name="templateid" column="exhibition_templateid" type="int"/>
+      <property name="creator" column="exhibition_creator" type="string"/>
+      <property name="media" column="exhibition_media" type="string"/>
+      <property name="captions" column="exhibition_captions" type="string"/>
+     
+   </class>
+</hibernate-mapping>

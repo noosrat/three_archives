@@ -2,17 +2,22 @@ package common.controller;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.TreeSet;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import downloads.DownloadController;
+import common.fedora.FedoraDigitalObject;
 import exhibitions.ExhibitionController;
 import history.HistoryController;
 import maps.MapController;
 import search.BrowseController;
 import search.SearchController;
 import uploads.UploadController;
+import User.UserController;
 
 public class ServiceDelegator {
 	// handle exceptions in this method
@@ -28,6 +33,7 @@ public class ServiceDelegator {
 		controllers.put("uploads", new UploadController());
 		controllers.put("browse", new BrowseController());
 		controllers.put("history", new HistoryController());
+		controllers.put("user", new UserController());
 	}
 
 	public HashMap<String, Controller> getControllers() {
@@ -67,7 +73,10 @@ public class ServiceDelegator {
 				url = controllers.get("uploads").execute(request, response);
 			} else if (pathInfo.contains("history")) {
 				url = controllers.get("history").execute(request, response);
-			} else {
+			} 
+			else if (pathInfo.contains("user")) {
+				url = controllers.get("user").execute(request, response);
+			}else {
 				System.out.println("PROCESSING GENERAL");
 				url = controllers.get("general").execute(request, response);
 			}

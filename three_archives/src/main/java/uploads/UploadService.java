@@ -11,7 +11,6 @@ import org.apache.commons.httpclient.HttpMethod;
 import org.xml.sax.InputSource;
 import common.fedora.UploadClient;
 
-
 public class UploadService {
 	
 	public void upload(String files_string, String storage_path,String archive)
@@ -50,12 +49,10 @@ public class UploadService {
 			String[] metadataArray;
 			
 			metadataArray =files[i].split(delimeter2);
-			
 			filename =metadataArray[0].trim();
 			title ="<dc:title>"+metadataArray[1].trim()+"</dc:title>";
 			creator ="<dc:creator>"+metadataArray[2].trim()+"</dc:creator>";
 			event =metadataArray[3].trim();//event
-			
 			publisher ="<dc:publisher>"+metadataArray[5].trim()+"</dc:publisher>";
 			contributor ="<dc:contributor>"+metadataArray[6].trim()+"</dc:contributor>";
 			date ="<dc:date>"+metadataArray[7].trim()+"</dc:date>";
@@ -82,13 +79,11 @@ public class UploadService {
 				file_path=storage_path+filename;
 				file2= new File(file_path);//
 				//get next PID
-				//PID="KEL:"+i;
 				
 				
 				HttpMethod newPIDs=client.POST("/objects/nextPID?format=XML");
 				InputStream newPID_xml=newPIDs.getResponseBodyAsStream();
 				String newPID_xml_String =getStringFromInputStream(newPID_xml);
-				
 				
 				DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
 				InputSource src = new InputSource();
@@ -96,9 +91,7 @@ public class UploadService {
 
 				org.w3c.dom.Document doc =  builder.parse(src);
 				String changeme_pid =  doc.getElementsByTagName("pid").item(0).getTextContent();
-				
-				
-				
+					
 				String newPID=getPID(archive, changeme_pid);
 				System.out.println(newPID);
 				
@@ -139,10 +132,10 @@ public class UploadService {
 			tag="ms";
 		}
 		else if (archive.equals("MissGay")){
-			tag="mg";
+			tag="sss";
 		}
 		else if (archive.equals("SpringQueen")){
-			tag="sq";
+			tag="sss";
 		}
 		else{
 			tag="nul";
