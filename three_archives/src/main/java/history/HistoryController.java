@@ -3,6 +3,7 @@ package history;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Set;
 import java.util.TreeSet;
 
 import javax.servlet.http.Cookie;
@@ -12,6 +13,7 @@ import javax.servlet.http.HttpSession;
 
 import common.controller.Controller;
 import common.fedora.FedoraDigitalObject;
+import search.Browse;
 
 public class HistoryController implements Controller {
 
@@ -37,6 +39,7 @@ public class HistoryController implements Controller {
 		String pathInfo = request.getPathInfo().substring(1);
 		archive = (String) request.getSession().getAttribute("ARCHIVE_CONCAT");
 
+		System.out.println("PATH INFO" + pathInfo);
 		if (pathInfo.contains(archive)) {
 			initialiseUserCookies(request, response);
 			return null;
@@ -48,11 +51,13 @@ public class HistoryController implements Controller {
 			}
 			displayUserSessioAtt(request);
 		}
+		
 		// for every request we make we must append to the wordle json sting
 		// within the request....and then here we persist it
 		return "WEB-INF/frontend/historyandstatistics/history.jsp";
 	}
 
+	
 	private void displayUserSessioAtt(HttpServletRequest req) {
 		HttpSession session = req.getSession();
 		System.out.println(

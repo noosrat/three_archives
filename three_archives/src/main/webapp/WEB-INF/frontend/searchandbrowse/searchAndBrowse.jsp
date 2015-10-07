@@ -95,7 +95,8 @@ $(document).ready(function() {
 									<li><a
 										href="${pageContext.request.contextPath}/archives/search_objects/category=${searchCategory}">${searchCategory}</a></li>
 								</c:forEach>
-							</ul></li>
+							</li>
+							</ul>
 							
 							
 					
@@ -107,7 +108,7 @@ $(document).ready(function() {
 								<div class="form-group">
 									<div id="prefetch">
 										<input
-											class="typeahead tt-query tt-hint tt-dropdown-menu tt-suggestion"
+											class="form-control typeahead tt-query tt-hint tt-dropdown-menu tt-suggestion"
 											data-provider="typeahead" type="text"
 											placeholder="Search Archive" value="${terms}" autocomplete="off"
 											spellcheck="false" name="terms">
@@ -127,6 +128,8 @@ $(document).ready(function() {
 				</div>
 			</div>
 			<!-- side bar -->
+
+
 			<div class="collapse navbar-collapse navbar-ex1-collapse">
 				<ul class="nav navbar-nav side-nav">
 
@@ -141,18 +144,25 @@ $(document).ready(function() {
 					<c:forEach var="category" items="${categoriesAndObjects}">
 						<li><a
 							href="${pageContext.request.contextPath}/archives/browse?category=${category.key}"
-							data-toggle="collapse" data-target="#demo${count}"> <i
-								class="fa fa-fw fa-arrows-v"></i>${category.key} <span
-								class="badge">${fn:length(category.value)}</span><i
-								class="fa fa-fw fa-caret-down"></i></a></li>
+							data-toggle="collapse" data-target="#demo${count}"> ${category.key} <span
+								class="badge">${fn:length(category.value)}</span></a></li>
 					</c:forEach>
+					
 					<c:if test="${not empty SERVICES['History']}">
 					<li>
 
-						<form action="${pageContext.request.contextPath}/archives/history"	method="post">
-							<input type="submit" value="Updated Items" />
-
-						</form>
+					<font color="white">
+					RECENT UPDATES:
+					${fn:length(objectsModifiedSinceLastVisit)} updated since your last visit
+					<br>
+					<c:forEach var="update" items="${userFavouriteCategoriesWithRecentUpdates}">
+						<li>
+						${update}
+						</li>
+					
+					</c:forEach>
+					have been updated.  <a href="${pageContext.request.contextPath}/archives/history" >Explore</a> more updates.
+					</font>
 					</li>
 					</c:if>
 				</ul>
@@ -182,14 +192,17 @@ $(document).ready(function() {
 						<h3 class="page-header">
 							<small>${message}</small>
 						</h3>
+						
 						<div>
-							<h4>${fn:length(objectsForArchive)} results returned for
-								search : ${terms}</h4>
-							<table>
-							<td align="right"><a class="btn btn-primary" href="${pageContext.request.contextPath}/archives/browse/ORDER_BY=TITLE">sort results by title</a> </td>
-							<td align="right"><a class="btn btn-primary" href="${pageContext.request.contextPath}/archives/browse/ORDER_BY=YEAR">sort results by year</a></td>
+							<h4> <span
+								class="badge">${fn:length(objectsForArchive)}</span> results returned for
+								search : "${terms}"</h4>
+							<table style="width:100%">
+							<td align="right"><a class="btn btn-primary" href="${pageContext.request.contextPath}/archives/browse/ORDER_BY=TITLE">sort results by title</a> 
+							<a class="btn btn-primary" href="${pageContext.request.contextPath}/archives/browse/ORDER_BY=YEAR">sort results by year</a></td>
 							</table>
 						</div>
+						
 						<ol class="breadcrumb">
 							<li><i class="fa fa-dashboard"></i>${browseCategory}</li>
 							<li class="active"><i class="fa fa-wrench"></i>
@@ -207,27 +220,20 @@ $(document).ready(function() {
 				</div>
 				<br> <br>
 
-
-<!-- 				<c:forEach var="searchTag" items="${searchTags}">
-					<a class="btn btn-primary btn-xs"
-						href="${pageContext.request.contextPath}/archives/search_objects/category=SEARCH_ALL?terms=${searchTag}">${searchTag}</a>
-				</c:forEach>
-				<br> <br>
- -->
 				<section id="portfolio">
 					<div class="container-fluid"> 
 					<c:set var="count" value="0" scope="page" />
 					<c:forEach var="digitalObject" items="${objectsForArchive}">
 						<div class="col-lg-3 col-sm-4 col-xs-6 portfolio-item">
-							<a href="#lightbox${count}" class="portfolio-link"
+							<a href="#lightbox${count}"
 								data-toggle="modal" data-target="#lightbox${count}">
 
-								<div class="caption">
+								<!-- <div class="caption">
 									<div class="caption-content">[VIEW MORE DETAILS]</div>
-									<!-- caption content -->
-								</div> <!-- caption --> <img
+								</div> --> <!-- caption --> <img
 								src="${digitalObject.datastreams['IMG'].content}"
-								class="img-thumbnail img-responsive" alt="image unavailable">
+								class="img-thumbnail img-responsive" alt="image unavailable" style="height: 300px; width: 100%; display: block;">
+<!--  								class="img-thumbnail img-responsive" alt="image unavailable" style="width: 300px; max-height: 500px"> -->
 							</a>
 						</div>
 						<c:set var="count" value="${count + 1}" scope="page" />

@@ -53,7 +53,6 @@
 		});
 	});
 </script>
-
 </head>
 
 <body>
@@ -102,7 +101,7 @@
 								<div class="form-group">
 									<div id="prefetch">
 										<input
-											class="typeahead tt-query tt-hint tt-dropdown-menu tt-suggestion"
+											class="form-control typeahead tt-query tt-hint tt-dropdown-menu tt-suggestion"
 											data-provider="typeahead" type="text"
 											placeholder="Search Archive" value="${terms}" autocomplete="off"
 											spellcheck="false" name="terms">
@@ -120,20 +119,20 @@
 					</ul>
 				</c:if>
 				</div>
-			</div>	</nav>
+			</div>
+	</nav>
 
 
 	<div class="container">
 		<div class="row">
 			<div class="col-lg-12 text-center">
-				<br> <br> <br>
-				<h1>Respective archive home page</h1>
+				<br> <br>
+				<div class="row">
+				</div>
 			</div>
 		</div>
 		<!-- /.row -->
 	</div>
-
-
 	<nav class="navbar navbar-inverse navbar-fixed-bottom navbar-fluid"
 		role="navigation">
 		<div class="container">

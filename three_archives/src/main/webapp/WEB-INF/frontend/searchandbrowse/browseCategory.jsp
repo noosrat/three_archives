@@ -165,12 +165,7 @@ $(document).ready(function() {
 					</c:forEach>
 					<li>
 
-						<form action="${pageContext.request.contextPath}/archives/history"
-							method="post">
 
-							<input type="submit" value="While you were away..." />
-
-						</form>
 					</li>
 				</ul>
 			</div>
@@ -211,8 +206,7 @@ $(document).ready(function() {
 								href="${pageContext.request.contextPath}/archives/browse?category=${browseCategory}&${browseCategory}=${subCategory.key}"
 								class="portfolio-link" data-target="#">
 								<div class="caption">
-									<div class="caption-content">${subCategory.key}<br>
-										<span class="badge">${fn:length(subCategory.value)}</span>
+									<div class="caption-content">Album: ${subCategory.key}<br> Items:	<span class="badge">${fn:length(subCategory.value)}</span>
 
 									</div>
 									<!-- caption content -->
@@ -221,7 +215,7 @@ $(document).ready(function() {
 									<c:if test="${conditionVariable eq 'true'}">
 										<img class="img-responsive img-thumbnail"
 											src="${object.datastreams['IMG'].content}"
-											alt="image unavailable">
+											alt="album unavailable" style="height: 300px; width: 100%; display: block;">
 									</c:if>
 									<c:set var="conditionVariable" value="false" />
 								</c:forEach>
