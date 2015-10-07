@@ -1,5 +1,7 @@
 package search;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
@@ -17,6 +19,7 @@ public class BrowseController implements Controller {
 
 	public String execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		String result = "WEB-INF/frontend/searchandbrowse/searchAndBrowse.jsp";
+		request.getSession().setAttribute("searchTags", null);
 		if (request.getPathInfo().contains("ORDER_BY")) {
 			// we do not need to process anything we just need to sort the
 			// results we already have
@@ -56,6 +59,7 @@ public class BrowseController implements Controller {
 		if (fedoraDigitalObjectsForArchive == null || fedoraDigitalObjectsForArchive.isEmpty()) {
 			request.setAttribute("message", "No results to retuRrn");
 		}
+		request.getSession().setAttribute("terms", null);
 		request.getSession().setAttribute("objectsForArchive", fedoraDigitalObjectsForArchive);
 	}
 
@@ -66,28 +70,40 @@ public class BrowseController implements Controller {
 		 * if the category is blank or null it means that it is just general
 		 * browse
 		 */
+		System.out.println("**************************** browsing by cat" + category);
 		if (category == null || category.isEmpty()) {
 			browseAllFedoraObjects(request, response);
 		} else {
+			if (category.equalsIgnoreCase("TITLE")) {
+				// we need to build the search tags and set them in the session
+
+				String s = "";
+				for (char alphabet = 'A'; alphabet <= 'Z'; alphabet++) {
+					s += alphabet + ";";
+				}
+
+				request.setAttribute("alphaTags", Arrays.asList(s.split(";")));
+			}
 			/*
 			 * we want to add these values to our word cloud...both the category
 			 * and the actual value
 			 * 
 			 */
 			History.addTextToTagCloud(category, false);
-			request.setAttribute("browseCategory", category);
+			request.getSession().setAttribute("browseCategory", category);
 
 			if (value == null) {
 				return "WEB-INF/frontend/searchandbrowse/browseCategory.jsp";
 			}
 
 			History.addTextToTagCloud(value, false);
+
 			/*
 			 * our category is not null...therefore we need to start filtering
 			 * the searches by what has been selected by the user
 			 */
 			Browse.filterFedoraDigitalObjects(Browse.getFedoraDigitalObjectsForArchive(), category, value);
-			request.setAttribute("categoryValue", value);
+			request.getSession().setAttribute("categoryValue", value);
 
 			request.getSession().setAttribute("objectsForArchive", Browse.getFilteredDigitalObjects());
 		}

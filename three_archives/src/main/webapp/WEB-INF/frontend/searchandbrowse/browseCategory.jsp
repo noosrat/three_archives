@@ -92,9 +92,13 @@ $(document).ready(function() {
 								aria-haspopup="true" aria-expalinded="false">${searchCategories[0]}<span
 									class="caret"></span></a>
 								<ul class="dropdown-menu">
+									<c:set var="first" value="true" />
 									<c:forEach var="searchCategory" items="${searchCategories}">
-										<li><a
-											href="${pageContext.request.contextPath}/archives/search_objects/category=${searchCategory}">${searchCategory}</a></li>
+										<c:if test="${first ne 'true'}">
+											<li><a
+												href="${pageContext.request.contextPath}/archives/search_objects/category=${searchCategory}">${searchCategory}</a></li>
+										</c:if>
+										<c:set var="first" value="false" />
 									</c:forEach>
 								</ul></li>
 
@@ -108,26 +112,21 @@ $(document).ready(function() {
 									<div class="form-group">
 										<div id="prefetch">
 											<input
-												class="typeahead tt-query tt-hint tt-dropdown-menu tt-suggestion"
+												class="form-control typeahead tt-query tt-hint tt-dropdown-menu tt-suggestion"
 												data-provider="typeahead" type="text"
 												placeholder="Search Archive" value="${terms}"
 												autocomplete="off" spellcheck="false" name="terms">
 										</div>
 									</div>
-									<button type="submit" class="btn">Search</button>
-									<div class="checkbox">
-										<label> <input type="checkbox" id="limitSearch"
-											name="limitSearch" value="limitSearch"><font
-											color="white"> Limit search to these results</font>
-										</label>
-									</div>
+									<button type="submit" class="btn btn-default">
+										<i class="glyphicon glyphicon-search"></i>
+									</button>
 								</form>
 							</li>
 						</ul>
 					</c:if>
 				</div>
 			</div>
-			<!-- side bar -->
 			<div class="collapse navbar-collapse navbar-ex1-collapse">
 				<ul class="nav navbar-nav side-nav">
 
@@ -138,37 +137,43 @@ $(document).ready(function() {
 						data-target="${pageContext.request.contextPath}/archives/browse"><i
 							class="fa fa-fw fa-arrows-v"></i>BROWSE ALL <i
 							class="fa fa-fw fa-caret-down"></i> </a></li>
-
-					<c:set var="count" value="0" scope="page" />
+					<hr>
 					<c:forEach var="category" items="${categoriesAndObjects}">
-
-						<!-- <li><a href="javascript:;" data-toggle="collapse" data-target="#demo${count}"> <i class="fa fa-fw fa-arrows-v"></i>${category.key}
-								<span class="badge">${fn:length(category.value)}</span><i class="fa fa-fw fa-caret-down"></i>
-						</a>  -->
 						<li><a
 							href="${pageContext.request.contextPath}/archives/browse?category=${category.key}"
-							data-toggle="collapse" data-target="#demo${count}"> <i
-								class="fa fa-fw fa-arrows-v"></i>${category.key} <span
-								class="badge">${fn:length(category.value)}</span><i
-								class="fa fa-fw fa-caret-down"></i>
-						</a>
-							<ul id="demo${count}" class="collapse">
-								<c:forEach var="categoryValue" items="${category.value}">
-									<li><a
-										href="${pageContext.request.contextPath}/archives/browse?category=${category.key}&${category.key}=${categoryValue.key}">${categoryValue.key}
-											<span class="badge">${fn:length(categoryValue.value)}</span>
-									</a></li>
-								</c:forEach>
-
-							</ul></li>
-						<c:set var="count" value="${count + 1}" scope="page" />
+							data-toggle="collapse" data-target="#demo${count}">
+								${category.key} <span class="badge" style="float: right;">${fn:length(category.value)}</span>
+						</a></li>
 					</c:forEach>
-					<li>
+					<p></p>
+					<p></p>
+					<c:if test="${not empty SERVICES['History']}">
+
+						<li><a href="javascript:;" data-toggle="collapse"
+							data-target="#demo"><i class="fa fa-fw fa-arrows-v"></i>
+								RECENT UPDATES<i class="fa fa-fw fa-caret-down"><span
+									class="badge" style="float: right;">${fn:length(objectsModifiedSinceLastVisit)}</span></i></a>
+							<ul id="demo" class="collapse">
+								<c:forEach var="update"
+									items="${userFavouriteCategoriesWithRecentUpdates}">
+									<ul>
+										<font color="grey">${update}</font>
+									</ul>
+								</c:forEach>
+								<c:if test="${fn:length(objectsModifiedSinceLastVisit) >0}">
+									<li><a
+										href="${pageContext.request.contextPath}/archives/history">Explore
+											Updates</a></li>
+
+								</c:if>
+							</ul></li>
 
 
-					</li>
+
+					</c:if>
 				</ul>
 			</div>
+
 		</nav>
 
 		<nav class="navbar navbar-inverse navbar-fixed-bottom">
@@ -196,7 +201,17 @@ $(document).ready(function() {
 						</h3>
 					</div>
 				</div>
-				<h3 class="page-header">${browseCategory}</h3>
+				<h4 class="page-header">Browsing by Category: ${browseCategory}</h4>
+				<c:if test="${browseCategory=='TITLE'}">
+					<div class="col-lg-12">
+
+						<c:forEach var="searchTag" items="${alphaTags}">
+							<a class="label label-default"
+								href="${pageContext.request.contextPath}/archives/browse?category=TITLE&TITLE=${searchTag}">${searchTag}</a>
+						</c:forEach>
+					</div>
+				</c:if>
+
 				<section id="portfolio">
 					<c:forEach var="subCategory"
 						items="${categoriesAndObjects[browseCategory]}">
@@ -206,7 +221,8 @@ $(document).ready(function() {
 								href="${pageContext.request.contextPath}/archives/browse?category=${browseCategory}&${browseCategory}=${subCategory.key}"
 								class="portfolio-link" data-target="#">
 								<div class="caption">
-									<div class="caption-content">Album: ${subCategory.key}<br> Items:	<span class="badge">${fn:length(subCategory.value)}</span>
+									<div class="caption-content">
+										Album: ${subCategory.key}<br> Items: <span class="badge">${fn:length(subCategory.value)}</span>
 
 									</div>
 									<!-- caption content -->
@@ -215,7 +231,8 @@ $(document).ready(function() {
 									<c:if test="${conditionVariable eq 'true'}">
 										<img class="img-responsive img-thumbnail"
 											src="${object.datastreams['IMG'].content}"
-											alt="album unavailable" style="height: 300px; width: 100%; display: block;">
+											alt="album unavailable"
+											style="height: 300px; width: 100%; display: block;">
 									</c:if>
 									<c:set var="conditionVariable" value="false" />
 								</c:forEach>

@@ -121,38 +121,33 @@ public class FedoraXMLResponseParser {
 			String tagName = "dc:" + dc.getDescription();
 			Node tag = element.getElementsByTagName(tagName).item(0);
 			if (tag != null) {
-				String textContent = element.getElementsByTagName(tagName).item(0).getTextContent().toUpperCase();
-				if (dc.equals(DublinCore.DESCRIPTION)) {
-					// we want to parse the elements of the description at this
-					// point already..we addiitonal fields called EVENT and
-					// COLLECTION
-					// the description is in the format
-					// <dc:description>Collection:xxxxx%Event:xxxxx%other
-					// desc%annotations</dc:description>
-					String[] description = textContent.split("%");
-					System.out.println("DESCRIPTION SIZE " + description.length);
-					switch (description.length) {
-					case 4:
-						dublinCoreMetadata.put("ANNOTATIONS", description[3]);// annotations
-					case 3:
-						dublinCoreMetadata.put(dc.name(), description[2].trim());// actual
-					case 2:
-						dublinCoreMetadata.put("EVENT", description[1].trim());// event
-					case 1:
-						dublinCoreMetadata.put("COLLECTION", description[0].trim());
-						break;
-					}
+				String textContent = element.getElementsByTagName(tagName).item(0).getTextContent();
+				if (!textContent.trim().isEmpty()) {
+					if (dc.equals(DublinCore.DESCRIPTION)) {
+						String[] description = textContent.split("%");
+						switch (description.length) {
+						case 4:
+							dublinCoreMetadata.put("ANNOTATIONS", description[3]);// annotations
+						case 3:
+							dublinCoreMetadata.put(dc.name(), description[2].trim());// actual
+						case 2:
+							dublinCoreMetadata.put("EVENT", description[1].trim());// event
+						case 1:
+							dublinCoreMetadata.put("COLLECTION", description[0].trim());
+							break;
+						}
 
-				} else if (dc.equals(DublinCore.COVERAGE)) {
-					// the first part of coverage is the location
-					// the second part can remain in co
-					// coverage structure:
-					// <dc:coverage>Location:%21,22,11</dc:coverage>
-					String[] coverage = textContent.split("%");
-					dublinCoreMetadata.put("LOCATION", coverage[0].trim());
-					dublinCoreMetadata.put(dc.name(), coverage[1].trim());
-				} else {
-					dublinCoreMetadata.put(dc.name(), textContent.trim());
+					} else if (dc.equals(DublinCore.COVERAGE)) {
+						// the first part of coverage is the location
+						// the second part can remain in co
+						// coverage structure:
+						// <dc:coverage>Location:%21,22,11</dc:coverage>
+						String[] coverage = textContent.split("%");
+						dublinCoreMetadata.put("LOCATION", coverage[0].trim());
+						dublinCoreMetadata.put(dc.name(), coverage[1].trim());
+					} else {
+						dublinCoreMetadata.put(dc.name(), textContent.trim());
+					}
 				}
 			}
 
@@ -239,4 +234,5 @@ public class FedoraXMLResponseParser {
 
 		return date;
 	}
+	
 }

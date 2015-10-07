@@ -3,6 +3,7 @@ package history;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -13,7 +14,6 @@ import javax.servlet.http.HttpSession;
 
 import common.controller.Controller;
 import common.fedora.FedoraDigitalObject;
-import search.Browse;
 
 public class HistoryController implements Controller {
 
@@ -51,13 +51,32 @@ public class HistoryController implements Controller {
 			}
 			displayUserSessioAtt(request);
 		}
-		
-		// for every request we make we must append to the wordle json sting
-		// within the request....and then here we persist it
+		if (pathInfo.contains("history")) {
+			filterFedoraDigitalObjects(request);
+		}
 		return "WEB-INF/frontend/historyandstatistics/history.jsp";
 	}
 
-	
+	private void filterFedoraDigitalObjects(HttpServletRequest request) {
+		String category = request.getParameter("category");
+		String value = request.getParameter(category);
+
+		System.out.println("FILTERING UPDATED FEDORA OBJECTS WITH " + category + " " + value);
+		if (category == null) {
+			return;
+		}
+		if (value == null && value.isEmpty()) {
+			request.setAttribute("message", "Something seems to have gone wrong. Your filter value is null");
+			return;
+		}
+		Set<FedoraDigitalObject> objectsToFilter = (Set<FedoraDigitalObject>) request.getSession()
+				.getAttribute("objectsModifiedSinceLastVisit");
+		Set<FedoraDigitalObject> filteredObjects = getHistory().filterFedoraDigitalObjects(objectsToFilter, category,
+				value);
+		request.setAttribute("objectsModifiedSinceLastVisit", filteredObjects);
+
+	}
+
 	private void displayUserSessioAtt(HttpServletRequest req) {
 		HttpSession session = req.getSession();
 		System.out.println(
@@ -115,13 +134,13 @@ public class HistoryController implements Controller {
 		}
 		if (session.getAttribute("objectsModifiedSinceLastVisit") == null) {
 			System.out.println("No value for objectsModifiedSinceLastVisit within the session");
-			ArrayList<FedoraDigitalObject> objs = getHistory()
-					.retrieveRecentlyUpdateItems((String) session.getAttribute("dateLastVisited"));
+			getHistory().retrieveRecentlyUpdateItems((String) session.getAttribute("dateLastVisited"));
+			Set<FedoraDigitalObject> objs = getHistory().getObjectsSinceLastVisit();
 			session.setAttribute("objectsModifiedSinceLastVisit", objs);
 		}
 		if (session.getAttribute("categoriesWithRecentUpdates") == null) {
 			System.out.println("No value for updated objects within the session");
-			ArrayList<FedoraDigitalObject> digitalObjects = (ArrayList<FedoraDigitalObject>) request.getSession()
+			HashSet<FedoraDigitalObject> digitalObjects = (HashSet<FedoraDigitalObject>) request.getSession()
 					.getAttribute("objectsModifiedSinceLastVisit");
 			HashMap<String, TreeSet<String>> updates = getHistory().categoriesRecentlyUpdated(digitalObjects);
 			System.out.println("SIZE OF THE UPDATED CATEGORIES " + updates.size());
@@ -194,8 +213,9 @@ public class HistoryController implements Controller {
 				}
 			}
 		}
-		
-		return initialiseNewCookie(request.getSession().getAttribute("ARCHIVE_CONCAT")+"Categories", "Collection:0##Creator:0##Event:0##Exhibition:0##Location:0##Subject:0##Contributor:0##Source:0");
+
+		return initialiseNewCookie(request.getSession().getAttribute("ARCHIVE_CONCAT") + "Categories",
+				"Collection:0##Creator:0##Event:0##Exhibition:0##Location:0##Subject:0##Contributor:0##Source:0");
 
 	}
 

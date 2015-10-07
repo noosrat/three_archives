@@ -74,14 +74,16 @@ h3 {
 
 	<!-- Navigation -->
 	<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-			<div class="container-fluid">
+		<div class="container-fluid">
 
 
-				<div class="navbar-header">
-					<a class="navbar-brand"
-						href="${pageContext.request.contextPath}/archives/${ARCHIVE_CONCAT}">${ARCHIVE}</a>
-				</div>
-				<div id="navbar" class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">>
+			<div class="navbar-header">
+				<a class="navbar-brand"
+					href="${pageContext.request.contextPath}/archives/${ARCHIVE_CONCAT}">${ARCHIVE}</a>
+			</div>
+			<div id="navbar" class="collapse navbar-collapse"
+				id="bs-example-navbar-collapse-1">
+				>
 				<ul class="nav navbar-nav">
 					<c:forEach var="service" items="${SERVICES}">
 						<c:if test="${service.value!='' && service.value!= ' '}">
@@ -92,7 +94,7 @@ h3 {
 					</c:forEach>
 
 				</ul>
-					<c:if test="${not empty SERVICES['Browse']}">
+				<c:if test="${not empty SERVICES['Browse']}">
 					<ul class="nav navbar-nav navbar-right top-nav">
 						<li class="dropdown"><a
 							href="${pageContext.request.contextPath}/archives/search_objects"
@@ -100,16 +102,20 @@ h3 {
 							aria-haspopup="true" aria-expalinded="false">${searchCategories[0]}<span
 								class="caret"></span></a>
 							<ul class="dropdown-menu">
+								<c:set var="first" value="true"/>
 								<c:forEach var="searchCategory" items="${searchCategories}">
+								<c:if test="${first ne 'true'}">
 									<li><a
 										href="${pageContext.request.contextPath}/archives/search_objects/category=${searchCategory}">${searchCategory}</a></li>
+										</c:if>
+								<c:set var="first" value="false"/>
 								</c:forEach>
 							</ul></li>
-							
-							
-					
+
+
+
 						<li>
-						
+	
 							<form class="navbar-form navbar-right"
 								action="${pageContext.request.contextPath}/archives/search_objects/category=${searchCategories[0]}"
 								method="post">
@@ -118,25 +124,19 @@ h3 {
 										<input
 											class="form-control typeahead tt-query tt-hint tt-dropdown-menu tt-suggestion"
 											data-provider="typeahead" type="text"
-											placeholder="Search Archive" value="${terms}" autocomplete="off"
-											spellcheck="false" name="terms">
+											placeholder="Search Archive" value="${terms}"
+											autocomplete="off" spellcheck="false" name="terms">
 									</div>
 								</div>
-								<button type="submit" class="btn">Search</button>
-								<div class="checkbox">
-									<label> <input type="checkbox" id="limitSearch"
-										name="limitSearch" value="limitSearch"><font
-										color="white"> Limit search to these results</font>
-									</label>
-								</div>
+								<button type="submit" class="btn btn-default"><i class="glyphicon glyphicon-search"></i></button>
+								
 							</form>
 						</li>
 					</ul>
 				</c:if>
-				</div>
 			</div>
+		</div>
 	</nav>
-
 
 	<div class="container">
 		<div class="row">

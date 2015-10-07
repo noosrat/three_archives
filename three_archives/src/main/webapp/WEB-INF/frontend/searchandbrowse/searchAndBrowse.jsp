@@ -41,7 +41,7 @@
 
 <script type="text/javascript">
 $(document).ready(function() {
-		var archive ='<%=session.getAttribute("ARCHIVE_CONCAT")%>';
+	var archive ='<%=session.getAttribute("ARCHIVE_CONCAT")%>';
 		var words = "/data/" + archive + ".json";
 		var countries = new Bloodhound({
 			datumTokenizer : Bloodhound.tokenizers.whitespace,
@@ -72,58 +72,60 @@ $(document).ready(function() {
 					<a class="navbar-brand"
 						href="${pageContext.request.contextPath}/archives/${ARCHIVE_CONCAT}">${ARCHIVE}</a>
 				</div>
-				<div id="navbar" class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">>
-				<ul class="nav navbar-nav">
-					<c:forEach var="service" items="${SERVICES}">
-						<c:if test="${service.value!='' && service.value!= ' '}">
-							<li><a
-								href="${pageContext.request.contextPath}/archives/${service.value}">${service.key}</a></li>
-							<li>
-						</c:if>
-					</c:forEach>
+				<div id="navbar" class="collapse navbar-collapse"
+					id="bs-example-navbar-collapse-1">
+					>
+					<ul class="nav navbar-nav">
+						<c:forEach var="service" items="${SERVICES}">
+							<c:if test="${service.value!='' && service.value!= ' '}">
+								<li><a
+									href="${pageContext.request.contextPath}/archives/${service.value}">${service.key}</a></li>
+								<li>
+							</c:if>
+						</c:forEach>
 
-				</ul>
-					<c:if test="${not empty SERVICES['Browse']}">
-					<ul class="nav navbar-nav navbar-right top-nav">
-						<li class="dropdown"><a
-							href="${pageContext.request.contextPath}/archives/search_objects"
-							class="dropdown-toggle" data-toggle="dropdown" role="button"
-							aria-haspopup="true" aria-expalinded="false">${searchCategories[0]}<span
-								class="caret"></span></a>
-							<ul class="dropdown-menu">
-								<c:forEach var="searchCategory" items="${searchCategories}">
-									<li><a
-										href="${pageContext.request.contextPath}/archives/search_objects/category=${searchCategory}">${searchCategory}</a></li>
-								</c:forEach>
-							</ul></li>
-							
-							
-					
-						<li>
-						
-							<form class="navbar-form navbar-right"
-								action="${pageContext.request.contextPath}/archives/search_objects/category=${searchCategories[0]}"
-								method="post">
-								<div class="form-group">
-									<div id="prefetch">
-										<input
-											class="form-control typeahead tt-query tt-hint tt-dropdown-menu tt-suggestion"
-											data-provider="typeahead" type="text"
-											placeholder="Search Archive" value="${terms}" autocomplete="off"
-											spellcheck="false" name="terms">
-									</div>
-								</div>
-								<button type="submit" class="btn">Search</button>
-								<div class="checkbox">
-									<label> <input type="checkbox" id="limitSearch"
-										name="limitSearch" value="limitSearch"><font
-										color="white"> Limit search to these results</font>
-									</label>
-								</div>
-							</form>
-						</li>
 					</ul>
-				</c:if>
+					<c:if test="${not empty SERVICES['Browse']}">
+						<ul class="nav navbar-nav navbar-right top-nav">
+							<li class="dropdown"><a
+								href="${pageContext.request.contextPath}/archives/search_objects"
+								class="dropdown-toggle" data-toggle="dropdown" role="button"
+								aria-haspopup="true" aria-expalinded="false">${searchCategories[0]}<span
+									class="caret"></span></a>
+								<ul class="dropdown-menu">
+									<c:set var="first" value="true" />
+									<c:forEach var="searchCategory" items="${searchCategories}">
+										<c:if test="${first ne 'true'}">
+											<li><a
+												href="${pageContext.request.contextPath}/archives/search_objects/category=${searchCategory}">${searchCategory}</a></li>
+										</c:if>
+										<c:set var="first" value="false" />
+									</c:forEach>
+								</ul></li>
+
+
+
+							<li>
+
+								<form class="navbar-form navbar-right"
+									action="${pageContext.request.contextPath}/archives/search_objects/category=${searchCategories[0]}"
+									method="post">
+									<div class="form-group">
+										<div id="prefetch">
+											<input
+												class="form-control typeahead tt-query tt-hint tt-dropdown-menu tt-suggestion"
+												data-provider="typeahead" type="text"
+												placeholder="Search Archive" value="${terms}"
+												autocomplete="off" spellcheck="false" name="terms">
+										</div>
+									</div>
+									<button type="submit" class="btn btn-default">
+										<i class="glyphicon glyphicon-search"></i>
+									</button>
+								</form>
+							</li>
+						</ul>
+					</c:if>
 				</div>
 			</div>
 			<!-- side bar -->
@@ -139,30 +141,37 @@ $(document).ready(function() {
 						data-target="${pageContext.request.contextPath}/archives/browse"><i
 							class="fa fa-fw fa-arrows-v"></i>BROWSE ALL <i
 							class="fa fa-fw fa-caret-down"></i> </a></li>
-
+					<hr>
 					<c:forEach var="category" items="${categoriesAndObjects}">
 						<li><a
 							href="${pageContext.request.contextPath}/archives/browse?category=${category.key}"
-							data-toggle="collapse" data-target="#demo${count}"> ${category.key} <span
-								class="badge">${fn:length(category.value)}</span></a></li>
+							data-toggle="collapse" data-target="#demo${count}">
+								${category.key} <span class="badge" style="float: right;">${fn:length(category.value)}</span>
+						</a></li>
 					</c:forEach>
-					
+					<p></p>
+					<p></p>
 					<c:if test="${not empty SERVICES['History']}">
-					<li>
 
-					<font color="white">
-					RECENT UPDATES:
-					${fn:length(objectsModifiedSinceLastVisit)} updated since your last visit
-					<br>
-					<c:forEach var="update" items="${userFavouriteCategoriesWithRecentUpdates}">
-						<li>
-						${update}
-						</li>
-					
-					</c:forEach>
-					have been updated.  <a href="${pageContext.request.contextPath}/archives/history" >Explore</a> more updates.
-					</font>
-					</li>
+						<li><a href="javascript:;" data-toggle="collapse"
+							data-target="#demo"><i class="fa fa-fw fa-arrows-v"></i>
+								RECENT UPDATES<i class="fa fa-fw fa-caret-down"><span
+									class="badge" style="float:right;">${fn:length(objectsModifiedSinceLastVisit)}</span></i></a>
+							<ul id="demo" class="collapse">
+								<c:forEach var="update"
+									items="${userFavouriteCategoriesWithRecentUpdates}">
+									<ul><font color="grey">${update}</font></ul>
+								</c:forEach>
+								<c:if test="${fn:length(objectsModifiedSinceLastVisit) >0}">
+									<li><a
+										href="${pageContext.request.contextPath}/archives/history">Explore
+											Updates</a></li>
+
+								</c:if>
+							</ul></li>
+
+
+
 					</c:if>
 				</ul>
 			</div>
@@ -191,53 +200,81 @@ $(document).ready(function() {
 						<h3 class="page-header">
 							<small>${message}</small>
 						</h3>
-						
+
 						<div>
-							<h4> <span
-								class="badge">${fn:length(objectsForArchive)}</span> results returned for
-								search : "${terms}"</h4>
-							<table style="width:100%">
-							<td align="right"><a class="btn btn-primary" href="${pageContext.request.contextPath}/archives/browse/ORDER_BY=TITLE">sort results by title</a> 
-							<a class="btn btn-primary" href="${pageContext.request.contextPath}/archives/browse/ORDER_BY=YEAR">sort results by year</a></td>
+							<c:if test="${not empty terms && terms!=' ' && terms!= ''}">
+								<h4>
+									<span class="badge">${fn:length(objectsForArchive)}</span>
+									results returned for search <a class="label label-default"
+										href="${pageContext.request.contextPath}/archives/search_objects/category=SEARCH_ALL?terms=${terms}">
+										${terms}</a>
+								</h4>
+							</c:if>
+
+
+							<table style="width: 100%">
+								<td align="left">
+									<div class="checkbox">
+										<label> <input type="checkbox" id="limitSearch"
+											name="limitSearch" value="limitSearch"
+											onchange="limitSearch()"> Limit search to these
+											results
+										</label>
+										<script>
+											function limitSearch() {
+										<%session.setAttribute("limitSearch", "true");%>
+											}
+										</script>
+									</div>
+								</td>
+								<td align="right">Sort (ASC): <a class="btn btn-default"
+									href="${pageContext.request.contextPath}/archives/browse/ORDER_BY=TITLE">TITLE</a>
+									<a class="btn btn-default"
+									href="${pageContext.request.contextPath}/archives/browse/ORDER_BY=YEAR">YEAR</a></td>
 							</table>
+
 						</div>
-						
-						<ol class="breadcrumb">
-							<li><i class="fa fa-dashboard"></i>${browseCategory}</li>
-							<li class="active"><i class="fa fa-wrench"></i>
-								${categoryValue}</li>
-						</ol>
+						<hr>
+						<c:if
+							test="${not empty browseCategory && browseCategory!='' && browseCategory!= ' '}">
+							<ol class="breadcrumb">
+								<li><i class="fa fa-dashboard"></i>${browseCategory}</li>
+								<li class="active"><i class="fa fa-wrench"></i>
+									${categoryValue}</li>
+							</ol>
+						</c:if>
 					</div>
 				</div>
 
 
-<div class="col-lg-12">
-				<c:forEach var="searchTag" items="${searchTags}">
-					<!-- <a class="btn btn-primary btn-xs" -->
-					<a class="label label-default"	href="${pageContext.request.contextPath}/archives/search_objects/category=SEARCH_ALL?terms=${searchTag}">${searchTag}</a>
-				</c:forEach>
+				<div class="col-lg-12">
+					<c:forEach var="searchTag" items="${searchTags}">
+						<!-- <a class="btn btn-primary btn-xs" -->
+						<a class="label label-default"
+							href="${pageContext.request.contextPath}/archives/search_objects/category=SEARCH_ALL?terms=${searchTag}">${searchTag}</a>
+					</c:forEach>
 				</div>
 				<br> <br>
 
 				<section id="portfolio">
-					<div class="container-fluid"> 
-					<c:set var="count" value="0" scope="page" />
-					<c:forEach var="digitalObject" items="${objectsForArchive}">
-						<div class="col-lg-3 col-sm-4 col-xs-6 portfolio-item">
-							<a href="#lightbox${count}"
-								data-toggle="modal" data-target="#lightbox${count}">
-
-								<!-- <div class="caption">
+					<div class="container-fluid">
+						<c:set var="count" value="0" scope="page" />
+						<c:forEach var="digitalObject" items="${objectsForArchive}">
+							<div class="col-lg-3 col-sm-4 col-xs-6 portfolio-item"
+								style="overflow: hidden">
+								<a href="#lightbox${count}" data-toggle="modal"
+									data-target="#lightbox${count}"> <!-- <div class="caption">
 									<div class="caption-content">[VIEW MORE DETAILS]</div>
 								</div> --> <!-- caption --> <img
-								src="${digitalObject.datastreams['IMG'].content}"
-								class="img-thumbnail img-responsive" alt="image unavailable" style="height: 300px; width: 100%; display: block;">
-<!--  								class="img-thumbnail img-responsive" alt="image unavailable" style="width: 300px; max-height: 500px"> -->
-							</a>
-						</div>
-						<c:set var="count" value="${count + 1}" scope="page" />
-					</c:forEach>
-					<!-- 			</div> -->
+									src="${digitalObject.datastreams['IMG'].content}"
+									class="img-thumbnail img-responsive" alt="image unavailable"
+									style="width: 100%; display: in-line; padding: 0 0 0 0">
+									<!--  								class="img-thumbnail img-responsive" alt="image unavailable" style="width: 300px; max-height: 500px"> -->
+								</a>
+							</div>
+							<c:set var="count" value="${count + 1}" scope="page" />
+						</c:forEach>
+						<!-- 			</div> -->
 				</section>
 				<c:set var="count" value="0" scope="page" />
 				<c:forEach var="digitalObject" items="${objectsForArchive}">
@@ -256,27 +293,33 @@ $(document).ready(function() {
 											class="img-thumbnail img-responsive" alt="image unavailable"></td>
 
 										<!-- can we not try just iterate through the dublinCoreDatastream's metadata -->
-									<td><c:forEach var="dcMetadata" items="${digitalObject.datastreams['DC'].dublinCoreMetadata}">
-									<c:if test="${dcMetadata.key!='IDENTIFIER' && dcMetadata.key!='TYPE' && dcMetadata.key!='FORMAT' && dcMetadata.key!='COVERAGE' && dcMetadata.key!='ANNOTATIONS'}">
-									${dcMetadata.key}: <a href="${pageContext.request.contextPath}/archives/search_objects/category=${dcMetadata.key}?terms=${dcMetadata.value}">${dcMetadata.value}</a><br>
+										<td><c:forEach var="dcMetadata"
+												items="${digitalObject.datastreams['DC'].dublinCoreMetadata}">
+												<c:if
+													test="${dcMetadata.key!='IDENTIFIER' && dcMetadata.key!='TYPE' && dcMetadata.key!='FORMAT' && dcMetadata.key!='COVERAGE' && dcMetadata.key!='ANNOTATIONS'}">
+									${dcMetadata.key}: <a
+														href="${pageContext.request.contextPath}/archives/search_objects/category=${dcMetadata.key}?terms=${dcMetadata.value}">${dcMetadata.value}</a>
+													<br>
 												</c:if>
 
 											</c:forEach></td>
 									</table>
 								</div>
 
-								<form name="map" method="post" action="${pageContext.request.contextPath}/archives/redirect_maps/place?image=${digitalObject.pid}">
+								<form name="map" method="post"
+									action="${pageContext.request.contextPath}/archives/redirect_maps/place?image=${digitalObject.pid}">
 									<!-- place word map in url-->
-   									<input type="submit" value="Place Me" />
+									<input type="submit" value="Place Me" />
 								</form>
 							</div>
 						</div>
 					</div>
 					<c:set var="count" value="${count + 1}" scope="page" />
 				</c:forEach>
-			</div></div>
-			<!-- container fluid -->
+			</div>
 		</div>
+		<!-- container fluid -->
+	</div>
 	</div>
 	<!-- wrapper -->
 	<script type="text/javascript"

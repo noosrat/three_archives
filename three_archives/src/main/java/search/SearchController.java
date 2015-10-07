@@ -52,6 +52,8 @@ public class SearchController implements Controller {
 				request.setAttribute("message", exception.getStackTrace());
 			}
 		}
+		request.getSession().setAttribute("browseCategory", null);
+		request.getSession().setAttribute("categoryValue", null);
 		similarSearchTags(request);
 		return result;
 
@@ -62,9 +64,10 @@ public class SearchController implements Controller {
 		System.out.println("SEARCHING FEDORA DIGITAL OBJECTS " + requestPath);
 
 		StringBuilder terms = new StringBuilder("");
-
-		String limit = request.getParameter("limitSearch");
-		if (limit != null && !limit.isEmpty() && limit.equalsIgnoreCase("limitSearch")) {
+		String limit = (String)request.getSession().getAttribute("limitSearch");
+		
+		if (limit != null && !limit.isEmpty() && Boolean.parseBoolean(limit)) {
+			System.out.println("WWWWWWWWWWWWWWWE ARE IN LIMIT SEARCH");
 			Set<FedoraDigitalObject> results = new HashSet<FedoraDigitalObject>();
 			// we essentially just need to filter the result we had with the new
 			// search term?
@@ -77,25 +80,19 @@ public class SearchController implements Controller {
 			for (FedoraDigitalObject digitalObject : exisitingObjects) {
 				terms.append("PID:\"").append(digitalObject.getPid()).append("\" OR ");
 			}
+			
 			terms.delete(terms.length() - 4, terms.length()).append(")");
 			// now we can add the rest of the actual query
 			terms.append(" AND ");
+			System.out.println("SEARCH QUERY FOR SOLR/FEDORA " + terms);
 		}
 
 		String s = request.getParameter("terms");
-		request.getSession().setAttribute("terms", s);
-		System.out.println("VALUE OF TERMS " + s);
-		// we want to add this to our word cloud..this is what has been typed
-		// into the search box
 		History.addTextToTagCloud(s, true);
-		// if (requestPath.contains("search_objects/category")) {
-		// then do all the specific searching
+		request.getSession().setAttribute("terms", s);
 		String[] splitPath = requestPath.split("=");
 		if (splitPath.length == 2) {
 			SearchAndBrowseCategory queryCategory = SearchAndBrowseCategory.valueOf(splitPath[1]);
-			// maybe here we just return to the page with re-organised/placed
-			// search items..etc with our one selected and then they can still
-			// put a value into the text box
 			ArrayList<String> categories = SearchController.retrieveSearchCategories();
 			categories.remove(categories.indexOf(queryCategory.name()));
 			categories.add(0, queryCategory.name());
@@ -121,6 +118,7 @@ public class SearchController implements Controller {
 
 		Set<FedoraDigitalObject> digitalObjects = new HashSet<FedoraDigitalObject>();
 		digitalObjects = getSearch().findFedoraDigitalObjects(new String(terms));
+		System.out.println("FINAL WUERY THAT WE SENT THROUGH ");
 		filterFedoraObjectsForSpecificArchive((String) request.getSession().getAttribute("MEDIA_PREFIX"),
 				digitalObjects);
 		// need to restrict these for this archive....
@@ -179,7 +177,6 @@ public class SearchController implements Controller {
 		try {
 			File dir = new File("../webapps/data/");
 			if (!dir.exists()) {
-				System.out.println("OH NO THE DIRECTORY DOES NOT EXIST....WE MUST CREATE IT");
 				dir.mkdir();
 			}
 
@@ -196,11 +193,11 @@ public class SearchController implements Controller {
 		for (String auto : autocomplete) {
 			for (String term : splitSearchTerm) {
 				if (auto.toLowerCase().contains(term.toLowerCase())) {
-					results.add(auto);
+					results.add(auto.toUpperCase());
 					break;
 				}
 			}
 		}
-		request.setAttribute("searchTags", results);
+		request.getSession().setAttribute("searchTags", results);
 	}
 }
