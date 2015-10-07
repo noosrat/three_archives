@@ -21,7 +21,7 @@ import common.fedora.UploadClient;
 
 public class MapController implements Controller {
 
-	UploadClient client=new UploadClient("http://localhost:8080/fedora", "fedoraAdmin","12345",null);
+	private UploadClient client=new UploadClient("http://localhost:8080/fedora", "fedoraAdmin","12345",null);
 	String title;
 	String creator;
 	String event;
@@ -39,12 +39,13 @@ public class MapController implements Controller {
 	String rights;
 	String collection;
 	String location;
+	String annotations;
 	
 	public String execute(HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
 		String archive = (String) request.getSession().getAttribute("ARCHIVE");
 		Map search = new Map();
-		request.setAttribute("digitalObject", search.place("ms:3"));
+		request.setAttribute("placeObject", search.place("ms:3"));//dummy fedora object
 		request.setAttribute("placement", 1);
 			
 			if (archive.equalsIgnoreCase("Harfield Village")){
@@ -66,82 +67,85 @@ public class MapController implements Controller {
 					//string maniulation send to database
 				}
 			
-			request.setAttribute("points", read());
+			request.setAttribute("points", read("points.txt"));
+			request.setAttribute("harfieldcollections", read("collections.txt"));
 			return "WEB-INF/frontend/maps/harfieldoverview.jsp";
 			
 			//setAttribute to points array for to be sent (points are from database)
 			}
-			else if (archive.equalsIgnoreCase("Movie Snaps")){
-			if (request.getPathInfo().substring(1).contains("place")) {
-				
-				String pid = request.getParameter("image");
-				FedoraDigitalObject image = search.place(pid);
-				request.setAttribute("digitalObject", image);	
-			}
-			
-			Set<FedoraDigitalObject> digitalObjects = new HashSet<FedoraDigitalObject>();
-			digitalObjects = search.findFedoraDigitalObjects("&query=coverage~*");	
-			request.setAttribute("objects", digitalObjects);
-			
-			return "WEB-INF/frontend/maps/mapoverview.jsp";}
-			
 			else{
 				if(request.getPathInfo().substring(1).contains("place")){
 					String pid = request.getParameter("image");
 					FedoraDigitalObject image = search.place(pid);
-					request.setAttribute("digitalObject", image);
+					request.setAttribute("placeObject", image);
 					request.setAttribute("placement", 0);
-					
-					Set<FedoraDigitalObject> digitalObjects = new HashSet<FedoraDigitalObject>();
-					digitalObjects = search.findFedoraDigitalObjects("&query=coverage~*");	
-					request.setAttribute("objects", digitalObjects);
-					
-					return "WEB-INF/frontend/maps/mapoverview.jsp";
 				}
 				else if(request.getPathInfo().substring(1).contains("done")){
-					
+					System.out.println("in if");
+					FedoraDigitalObject digi=(FedoraDigitalObject) request.getAttribute("placeObject");
+					System.out.println(digi.getPid());
 					String cover = request.getParameter("latlng");
-					//putrequest
-					Set<FedoraDigitalObject> digitalObjects = new HashSet<FedoraDigitalObject>();
-					digitalObjects = search.findFedoraDigitalObjects("&query=coverage~*");	
-					request.setAttribute("objects", digitalObjects);
+					System.out.println(cover);
+					title=makesure(((DublinCoreDatastream) digi.getDatastreams().get("DC")).getDublinCoreMetadata().get("TITLE"));
+					creator=makesure(((DublinCoreDatastream) digi.getDatastreams().get("DC")).getDublinCoreMetadata().get("CREATOR"));
+					event=makesure(((DublinCoreDatastream) digi.getDatastreams().get("DC")).getDublinCoreMetadata().get("EVENT"));
+					subject=makesure(((DublinCoreDatastream) digi.getDatastreams().get("DC")).getDublinCoreMetadata().get("SUBJECT"));
+					description=makesure(((DublinCoreDatastream) digi.getDatastreams().get("DC")).getDublinCoreMetadata().get("DESCRIPTION"));
+					publisher=makesure(((DublinCoreDatastream) digi.getDatastreams().get("DC")).getDublinCoreMetadata().get("PUBLISHER"));
+					contributor=makesure(((DublinCoreDatastream) digi.getDatastreams().get("DC")).getDublinCoreMetadata().get("CONTRIBUTOR"));
+					date=makesure(((DublinCoreDatastream) digi.getDatastreams().get("DC")).getDublinCoreMetadata().get("DATE"));
+					resourcetype=makesure(((DublinCoreDatastream) digi.getDatastreams().get("DC")).getDublinCoreMetadata().get("RESOURCETYPE"));
+					format=makesure(((DublinCoreDatastream) digi.getDatastreams().get("DC")).getDublinCoreMetadata().get("FORMAT"));
+					source=makesure(((DublinCoreDatastream) digi.getDatastreams().get("DC")).getDublinCoreMetadata().get("SOURCE"));
+					language=makesure(((DublinCoreDatastream) digi.getDatastreams().get("DC")).getDublinCoreMetadata().get("LANGUAGE"));
+					relation=makesure(((DublinCoreDatastream) digi.getDatastreams().get("DC")).getDublinCoreMetadata().get("RELATION"));
+					coverage=""+cover;//makesure(((DublinCoreDatastream) digi.getDatastreams().get("DC")).getDublinCoreMetadata().get("COVERAGE"));
+					rights=makesure(((DublinCoreDatastream) digi.getDatastreams().get("DC")).getDublinCoreMetadata().get("RIGHTS"));
+					collection=makesure(((DublinCoreDatastream) digi.getDatastreams().get("DC")).getDublinCoreMetadata().get("COLLECTION"));
+					location=makesure(((DublinCoreDatastream) digi.getDatastreams().get("DC")).getDublinCoreMetadata().get("LOCATION"));
+					annotations=makesure(((DublinCoreDatastream) digi.getDatastreams().get("DC")).getDublinCoreMetadata().get("ANNOTATIONS"));
 					
-					return "WEB-INF/frontend/maps/mapoverview.jsp";
+					System.out.println("recovered all metadata");
+					String xml = client.makeXML(title, creator, event, publisher, contributor, date, resourcetype, format, source, language, relation, location, rights, collection, coverage, subject, annotations, description);
+					System.out.println("made xml");
+					client.PUT("/objects/"+digi.getPid()+"/datastreams/DC?controlGroup=M&mimeType=text/xml", xml);
+					System.out.println("put");
 				}
-				else{request.setAttribute("view", search.place("ms:3"));
-				if (request.getParameter("annotations")!=null){
+				else if (request.getParameter("annotations")!=null){
 					//put annotations 
 					FedoraDigitalObject digi=(FedoraDigitalObject) request.getAttribute("view");
-					title=((DublinCoreDatastream) digi.getDatastreams().get("DC")).getDublinCoreMetadata().get("TITLE");
-					creator=((DublinCoreDatastream) digi.getDatastreams().get("DC")).getDublinCoreMetadata().get("CREATOR");
-					event=((DublinCoreDatastream) digi.getDatastreams().get("DC")).getDublinCoreMetadata().get("EVENT");
-					subject=((DublinCoreDatastream) digi.getDatastreams().get("DC")).getDublinCoreMetadata().get("SUBJECT");
-					description=((DublinCoreDatastream) digi.getDatastreams().get("DC")).getDublinCoreMetadata().get("DESCRIPTION");
-					publisher=((DublinCoreDatastream) digi.getDatastreams().get("DC")).getDublinCoreMetadata().get("PUBLISHER");
-					contributor=((DublinCoreDatastream) digi.getDatastreams().get("DC")).getDublinCoreMetadata().get("CONTRIBUTOR");
-					date=((DublinCoreDatastream) digi.getDatastreams().get("DC")).getDublinCoreMetadata().get("DATE");
-					resourcetype=((DublinCoreDatastream) digi.getDatastreams().get("DC")).getDublinCoreMetadata().get("RESOURCETYPE");
-					format=((DublinCoreDatastream) digi.getDatastreams().get("DC")).getDublinCoreMetadata().get("FORMAT");
-					source=((DublinCoreDatastream) digi.getDatastreams().get("DC")).getDublinCoreMetadata().get("SOURCE");
-					language=((DublinCoreDatastream) digi.getDatastreams().get("DC")).getDublinCoreMetadata().get("LANGUAGE");
-					relation=((DublinCoreDatastream) digi.getDatastreams().get("DC")).getDublinCoreMetadata().get("RELATION");
-					coverage=((DublinCoreDatastream) digi.getDatastreams().get("DC")).getDublinCoreMetadata().get("COVERAGE");
-					rights=((DublinCoreDatastream) digi.getDatastreams().get("DC")).getDublinCoreMetadata().get("RIGHTS");
-					collection=((DublinCoreDatastream) digi.getDatastreams().get("DC")).getDublinCoreMetadata().get("COLLECTION");
-					location=((DublinCoreDatastream) digi.getDatastreams().get("DC")).getDublinCoreMetadata().get("LOCATION");
-					
-					
+					title=makesure(((DublinCoreDatastream) digi.getDatastreams().get("DC")).getDublinCoreMetadata().get("TITLE"));
+					creator=makesure(((DublinCoreDatastream) digi.getDatastreams().get("DC")).getDublinCoreMetadata().get("CREATOR"));
+					event=makesure(((DublinCoreDatastream) digi.getDatastreams().get("DC")).getDublinCoreMetadata().get("EVENT"));
+					subject=makesure(((DublinCoreDatastream) digi.getDatastreams().get("DC")).getDublinCoreMetadata().get("SUBJECT"));
+					description=makesure(((DublinCoreDatastream) digi.getDatastreams().get("DC")).getDublinCoreMetadata().get("DESCRIPTION"));
+					publisher=makesure(((DublinCoreDatastream) digi.getDatastreams().get("DC")).getDublinCoreMetadata().get("PUBLISHER"));
+					contributor=makesure(((DublinCoreDatastream) digi.getDatastreams().get("DC")).getDublinCoreMetadata().get("CONTRIBUTOR"));
+					date=makesure(((DublinCoreDatastream) digi.getDatastreams().get("DC")).getDublinCoreMetadata().get("DATE"));
+					resourcetype=makesure(((DublinCoreDatastream) digi.getDatastreams().get("DC")).getDublinCoreMetadata().get("RESOURCETYPE"));
+					format=makesure(((DublinCoreDatastream) digi.getDatastreams().get("DC")).getDublinCoreMetadata().get("FORMAT"));
+					source=makesure(((DublinCoreDatastream) digi.getDatastreams().get("DC")).getDublinCoreMetadata().get("SOURCE"));
+					language=makesure(((DublinCoreDatastream) digi.getDatastreams().get("DC")).getDublinCoreMetadata().get("LANGUAGE"));
+					relation=makesure(((DublinCoreDatastream) digi.getDatastreams().get("DC")).getDublinCoreMetadata().get("RELATION"));
+					coverage=makesure(((DublinCoreDatastream) digi.getDatastreams().get("DC")).getDublinCoreMetadata().get("COVERAGE"));
+					rights=makesure(((DublinCoreDatastream) digi.getDatastreams().get("DC")).getDublinCoreMetadata().get("RIGHTS"));
+					collection=makesure(((DublinCoreDatastream) digi.getDatastreams().get("DC")).getDublinCoreMetadata().get("COLLECTION"));
+					location=makesure(((DublinCoreDatastream) digi.getDatastreams().get("DC")).getDublinCoreMetadata().get("LOCATION"));
 				}
-				return "WEB-INF/frontend/imageviewer.jsp";}
+				Set<FedoraDigitalObject> digitalObjects = new HashSet<FedoraDigitalObject>();
+				digitalObjects = search.findFedoraDigitalObjects("&query=coverage~*");	
+				request.setAttribute("mapObjects", digitalObjects);
+				return "WEB-INF/frontend/maps/mapoverview.jsp";
+				}
 				
 			}
-	}
+	
 	
 	
 
-	List<String> read()
+	List<String> read(String filepath)
 	{	
-		File file = new File("points.txt");
+		File file = new File(filepath);
 		Scanner sc;
 		List<String> result = new ArrayList();
 		try {
@@ -157,6 +161,14 @@ public class MapController implements Controller {
 		}
 		
 		return result;
+	}
+	
+	String makesure(String string)
+	{	
+		if (string == null)
+				return "";
+		else
+			return string;
 	}
 	
 	

@@ -270,12 +270,16 @@ public class UploadClient {
 	            return http_method;
 	        
 	    }
-	    public String makeXML(String title,String creator, String event, String publisher, String contributor, String date,String resourcetype, String format, String source, String language, String relation, String location, String rights, String collection, String cords,String subject )
+
+	    public String makeXML(String title,String creator, String event, String publisher, String contributor, String date,String resourcetype, String format, String source, String language, String relation, String location, String rights, String collection, String cords,String subject, String annotations, String description )
 	    {
+
 	    	title ="<dc:title>"+title.trim()+"</dc:title>";
-			creator ="<dc:creator>"+creator.trim()+"</dc:creator>";
+
+			//creator ="<dc:creator>"+creator.trim()+"</dc:creator>";
+	    	creator ="<dc:creator>"+""+"</dc:creator>";
 			event =event.trim();
-			
+
 			publisher ="<dc:publisher>"+publisher.trim()+"</dc:publisher>";
 			contributor ="<dc:contributor>"+contributor.trim()+"</dc:contributor>";
 			date ="<dc:date>"+date.trim()+"</dc:date>";
@@ -287,13 +291,14 @@ public class UploadClient {
 			location =location.trim();
 			rights ="<dc:rights>"+rights.trim()+"</dc:rights>";
 			collection =collection.trim();
-			cords =collection.trim();
-			String description ="<dc:description>"+" collection:"+collection+ "% event:"+event+"%"+event+"% annotation: %"+"</dc:description>";
-			String coverage ="<dc:coverage>"+"% "+location+" % " +cords+" %</dc:coverage>";
+			cords =cords.trim();
+			description ="<dc:description>"+collection+ "%"+event+"%"+description+"%"+annotations+"</dc:description>";
+			String coverage ="<dc:coverage>"+location+"%" +cords+"</dc:coverage>";
 			subject="<dc:subject>"+subject+"</dc:subject>";
-			
+
 			String meta=title+description+creator+publisher+contributor+date+resourcetype+format+source+language+relation+coverage+rights+subject;
-			
+
+
 			String qot="\"";
 			String startTag="<oai_dc:dc xmlns:oai_dc="+qot+"http://www.openarchives.org/OAI/2.0/oai_dc/"+qot+ " xmlns:dc="+qot+"http://purl.org/dc/elements/1.1/" +qot+" xmlns:xsi="+qot+"http://www.w3.org/2001/XMLSchema-instance"+qot+" xsi:schemaLocation="+qot+"http://www.openarchives.org/OAI/2.0/oai_dc/ http://www.openarchives.org/OAI/2.0/oai_dc.xsd"+qot+">";
 			String endTag="</oai_dc:dc>";

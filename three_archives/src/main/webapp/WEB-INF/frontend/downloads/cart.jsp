@@ -33,13 +33,13 @@ function change(animal)
 {
 if (animal.checked==false){
 	var thing = animal.getAttribute("data-pid");
-	alert(thing);
+	//alert(thing);
 	//console.log(('#ms:1').value);
 	remove.push(thing);}
 else
 	{
 	console.log($(this).value);
-	remove.splice(remove.indexOf($(this).attr("value")), 1)}
+	remove.splice(remove.indexOf($(this).attr("value")), 1);}
 
 document.getElementById("demo").innerHTML = remove;
 console.log(remove);
@@ -55,13 +55,13 @@ for(FedoraDigitalObject object: cart){
 	  System.out.println(object.getDatastreams().get("IMG").getContent());%>
 	 
 	 
-	 	<input id="<%=object.getPid()%>" type="checkbox" name="item" data-pid="<%=object.getPid()%>" onchange = "change(this)" checked ><img src="<%=object.getDatastreams().get("IMG").getContent()%>" height="42" width="42"></img><br>
+	 	<input id="<%=object.getPid()%>" type="checkbox" name="item" data-pid="<%=object.getPid()%>" onchange = "change(this)" checked ><img src="<%=object.getDatastreams().get("IMG").getContent()%>" height="300" width="300"></img><br>
 	
 	<%}%>
 	
 <!-- http://localhost:8080/fedora/objects/ms:1/datastreams/IMG/content?download=true&format=xml -->
 <form method="post" action="${pageContext.request.contextPath}/archives/downloads/checkout">
-		<textarea id="demo" name="deletions" readonly=readonly></textarea>
+		<textarea id="demo" name="deletions" readonly=readonly style="display:none;"></textarea>
 		<input type="submit" value="Checkout Items" name="checkout"/>
 		</form>
 		

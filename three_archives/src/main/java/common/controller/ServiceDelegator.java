@@ -9,12 +9,17 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import common.fedora.DublinCoreDatastream;
+import common.fedora.FedoraDigitalObject;
+import common.fedora.FedoraException;
+import common.fedora.UploadClient;
 import downloads.DownloadController;
 import common.fedora.FedoraDigitalObject;
 import exhibitions.ExhibitionController;
 import history.HistoryController;
 import maps.MapController;
 import search.BrowseController;
+import search.FedoraCommunicator;
 import search.SearchController;
 import uploads.UploadController;
 import User.UserController;
@@ -40,23 +45,18 @@ public class ServiceDelegator {
 		return controllers;
 	}
 
-	public String execute(HttpServletRequest request, HttpServletResponse response){
+	public String execute(HttpServletRequest request, HttpServletResponse response) throws FedoraException, Exception{
 		String url = "index.jsp";
-		System.out.println(request.getParameter("addedtocart"));
-		if(request.getParameter("addedtocart")!=null){
-			System.out.println("in add to car");
-			ArrayList<String> cart = (ArrayList<String>) request.getSession().getAttribute("MEDIA_CART");
-			String selected=request.getParameter("addedtocart");
-			String[] selectedList=selected.split(">");
+		/*System.out.println(request.getParameter("deletions"));
+			if (request.getParameter("deletions")!=null && !request.getParameter("deletions").equals(""))
+			{
+				System.out.println("in deletions");
+			String deletions=request.getParameter("deletions");
+			String delete[] = deletions.split(",");
 			
-			for (int k=0; k<selectedList.length; k++){
-				cart.add(selectedList[k]);
-			
-			request.getSession().setAttribute("MEDIA_CART", cart);	
-			}
-			
-			
-		}
+			for (int k=0; k<delete.length;k++){
+				download.removeFromCart(cart, delete[k]);
+			}*/
 		String pathInfo = request.getPathInfo().substring(1);
 		try {
 			if (pathInfo.contains("search")) {
@@ -94,6 +94,5 @@ public class ServiceDelegator {
 		HistoryController.persistNecessaryRequestInformation();
 
 	}
-	
 
 }

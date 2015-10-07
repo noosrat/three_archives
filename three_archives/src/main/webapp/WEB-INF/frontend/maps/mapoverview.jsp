@@ -81,6 +81,7 @@ function initialize() {
 	      '<body>'+
       
 	      '<form method="post" action="${pageContext.request.contextPath}/archives/maps/done">'+
+	      '<textarea id="demo" name="latlng" readonly=readonly> </textarea>'+
 		'<input type="submit" value="Submit"/>'+
 		'</form>'+
 
@@ -93,7 +94,7 @@ function initialize() {
 	
 	var clicked=0;
 	  
-	<%Set<FedoraDigitalObject> coord = (HashSet<FedoraDigitalObject>) request.getAttribute("objects");
+	<%Set<FedoraDigitalObject> coord = (HashSet<FedoraDigitalObject>) request.getAttribute("mapObjects");
 	 
 	for(FedoraDigitalObject object: coord){
 		System.out.println(object.getPid());
@@ -145,13 +146,14 @@ function initialize() {
   		
   		if (placed==0){
   		console.log(placed)
-  		var newimage = {url: '<%=((FedoraDigitalObject)request.getAttribute("digitalObject")).getDatastreams().get("IMG").getContent()%>', size: null, origin: null, anchor: null, scaledSize: new google.maps.Size(40, 40)}
+  		var newimage = {url: '<%=((FedoraDigitalObject)request.getAttribute("placeObject")).getDatastreams().get("IMG").getContent()%>', size: null, origin: null, anchor: null, scaledSize: new google.maps.Size(40, 40)}
   	  	var newmarker = new google.maps.Marker({
   	      	position:  e.latLng,
   	      	map: map,
   	      	draggable: true,
   	      	icon: newimage,
   	      	title: 'Hello World!'});
+  		infowindow.open(map,newmarker);
   		
   		google.maps.event.addListener(newmarker, "dragend", function(event) { 
   			infowindow.open(map,newmarker)
@@ -178,7 +180,6 @@ google.maps.event.addDomListener(window, 'load', initialize);
     </script>
 
 </head>
-<textarea id="demo" name="latlng" readonly=readonly> </textarea>
 <body>
 
 	<!-- Navigation -->

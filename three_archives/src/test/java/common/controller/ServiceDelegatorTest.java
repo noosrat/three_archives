@@ -13,6 +13,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
 
+import common.fedora.FedoraException;
+
 import search.SearchController;
 import exhibitions.ExhibitionController;
 
@@ -30,7 +32,7 @@ public class ServiceDelegatorTest {
 	}
 
 	@Test
-	public void testWhetherReturnToHomePageSincePathDoesNotMatchAnyController() {
+	public void testWhetherReturnToHomePageSincePathDoesNotMatchAnyController() throws FedoraException, Exception {
 		when(request.getPathInfo()).thenReturn("/hello");
 		String result = instance.execute(request, response);
 		assertTrue(result.equalsIgnoreCase("index.jsp"));

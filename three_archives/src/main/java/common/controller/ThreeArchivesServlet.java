@@ -8,6 +8,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import common.fedora.FedoraException;
+
+
 /**
  * Servlet implementation class ThreeArchivesServlet
  */
@@ -21,8 +24,8 @@ public class ThreeArchivesServlet extends HttpServlet {
 		super();
 	}
 
-	private void process(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
+	private void process(HttpServletRequest request, HttpServletResponse response) throws FedoraException, Exception
+			{
 		System.out.println("Entered Servlet");
 
 		//just wnat to quickly clear out the cookie values we have first
@@ -58,7 +61,13 @@ public class ThreeArchivesServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		process(request, response);
+		try {
+			process(request, response);
+		
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 	}
 
@@ -69,7 +78,13 @@ public class ThreeArchivesServlet extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		process(request, response);
+		try {
+			process(request, response);
+		
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 }

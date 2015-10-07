@@ -59,8 +59,10 @@
 <body>
 
 	<!-- Navigation -->
+
 	<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
 			<div class="container-fluid">
+
 
 
 				<div class="navbar-header">
@@ -126,13 +128,13 @@
 
 	<div class="container">
 		<div class="row">
-			<div class="col-lg-12 text-center">
-				<br> <br>
-				<div class="row">
-					
-				
-				</div>
-			</div>
+
+			<script type="text/javascript">
+			var l = document.getElementById('map');
+			for(var i=0; i<50; i++)
+			   l.click();
+			</script>
+
 		</div>
 		<!-- /.row -->
 	</div>

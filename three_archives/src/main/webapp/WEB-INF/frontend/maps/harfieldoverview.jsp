@@ -30,11 +30,29 @@ function initialize() {
   //loop though text file with polygon paths
   var contextPath='<%=request.getContextPath()%>';
   <%List<String> polygons =(List<String>) request.getAttribute("points");%>
+  <%List<String> collections =(List<String>) request.getAttribute("harfieldcollections");%>
+  
   console.log('<%=polygons%>');
   var markers = [];
   var polys = [];
   var polys1 = "";
- 
+var COLLECTION="";
+  var infowindow = new google.maps.InfoWindow({
+      content: '<!DOCTYPE html>'+
+    	  '<html>'+
+      '<body>'+
+  
+      '<form method="post" action="${pageContext.request.contextPath}/archives/browse">'+
+      '<textarea id="demo" name="category" readonly=readonly>COLLECTION</textarea>'+
+      '<textarea id="demo1" name="COLLECTION" readonly=readonly></textarea>'+
+	'<input type="submit" value="Explore"/>'+
+	'</form>'+
+
+      '</body>'+
+      '</html>'
+  });
+
+  
   //function deletePolygons()
   //{
 	//  for (var i = 0; i < polys.length; i++) {
@@ -81,15 +99,28 @@ function initialize() {
 
 	      har.setMap(map);
 
-	      google.maps.event.addListener(har, 'mouseover', function(e) {
+	      google.maps.event.addListener(har, 'mouseover', function() {
 	    		console.log('mouseover')  
 	    		this.setOptions({fillColor:'#00FF00'});
 	    	  });
 
-	    google.maps.event.addListener(har, 'mouseout', function(e) {
+	    google.maps.event.addListener(har, 'mouseout', function() {
 	    		console.log('mouseout')  
 	    		this.setOptions({fillColor:'#FFFFFF'});
 	    	  });
+	    
+	    google.maps.event.addListener(har, 'click', function(e) {
+      		console.log('clicked')
+      		this.setOptions({fillColor:'#FFCC00'});
+      		var marker = new google.maps.Marker({
+      		    position: {lat: e.latLng.lat(), lng:  e.latLng.lng()},
+      		    map: map,
+      		    //title: 'Uluru (Ayers Rock)'
+      		  });
+      		infowindow.open(map,marker);
+      		marker.setVisible(false);
+      		document.getElementById("demo1").innerHTML = "<%=collections.get(l)%>";
+      	  });
 	    
 	     
 <%}%>
@@ -137,6 +168,7 @@ function initialize() {
           		console.log('mouseout')  
           		this.setOptions({fillColor:'#FFFFFF'});
           	  });
+            
             console.log(points); 
 	    	polys.push(har);
 	    	polys1=polys1.concat(points, "\n");
