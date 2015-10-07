@@ -75,6 +75,7 @@
 		#toolBox{
 			height:40px;
 			width:240px;
+			text-align:center;
 		}
 </style>
 <style>
@@ -258,6 +259,7 @@
 					<textarea id="border" name="border" readonly=readonly style="display:none;"></textarea>
 					<textarea id="demo" name="user_action" readonly=readonly style="display:none;"></textarea>
 					<div id="toolBox">
+					<h1>Toolbox</h1>
 						<ul id="mainEx" style="list-style-type:none;margin:auto;padding:5px;text-align:center">
 							<li style="display:inline;">
 								<input type="button" style= "width:25px;height:25px;background: url('${pageContext.request.contextPath}/images/icons/coverIcon.jpg') no-repeat;" data-toggle="modal" data-target="#backgroundImage">
@@ -322,7 +324,7 @@
 									if(cartImages.get(i)!=null){
 										ob=null;
 										ob=fc.populateFedoraDigitalObject(cartImages.get(i));%>
-  										<img  class="img-thumbnail" src="<%=ob.getDatastreams().get("IMG").getContent() %>"  style="width:40%;" ondragstart="dragStart(event)" draggable="true" id="<%=cartImages.get(i)%>">
+  										<img src="<%=ob.getDatastreams().get("IMG").getContent() %>"  style="width:40%;" ondragstart="dragStart(event)" draggable="true" id="<%=cartImages.get(i)%>">
   							<%}} %>	
 				
 					</div>

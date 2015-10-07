@@ -44,11 +44,13 @@ public class UserController implements Controller {
 			String role=userManager.approveUser(username, password);
 			System.out.println("user role "+role);
 			session.setAttribute("USER", role);
+			System.out.println(role);
 			return "index.jsp";
 		}
 		else if(request.getParameter("logout")!=null)
 		{
 			session.setAttribute("USER", "false");
+			System.out.println("LOGOUT");
 			return "index.jsp";
 		}
 		

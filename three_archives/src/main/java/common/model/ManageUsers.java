@@ -17,7 +17,6 @@ public class ManageUsers {
 		      session.save(user); 
 		      session.getTransaction().commit();
 		      session.close(); 
-		      
 		   }
 	   public static java.util.List listAllUsers(){
 		   SessionFactory sessionFactory = new Configuration().configure().buildSessionFactory();
@@ -32,7 +31,7 @@ public class ManageUsers {
 	   
 	   public String approveUser(String username, String password)
 	   {
-		   String approve="false";
+		   String approve="";
 		   List users=listAllUsers();
 		   String name;
 		   String pass;
@@ -47,11 +46,12 @@ public class ManageUsers {
 				   {
 					   role=((User)users.get(i)).getRole();
 					   approve=role;
-					break;
+					   break;
 				   }
 				   else
 				   {
-					   approve="false";
+					   approve="incorrect";
+					   break;
 				   }
 			   }
 		   }

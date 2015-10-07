@@ -164,11 +164,11 @@
 				<form role="form" method="post" action="${pageContext.request.contextPath}/archives/add_user">
   					<div class="form-group">
     					<label for="email">Enter username</label>
-   						 <input type="email" class="form-control" id="email">
+   						 <input name="new_username" class="form-control" id="email" required>
   					</div>
   					<div class="form-group">
     					<label for="pwd">Enter password</label>
-    					<input type="password" class="form-control" id="pwd">
+    					<input name="new_pwd" type="password" class="form-control" id="pwd" required>
   					</div>
   					
   					<input type="submit" value="Add user" class="btn btn-primary btn-sm" name="add_user"/>

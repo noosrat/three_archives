@@ -25,10 +25,10 @@ public class GeneralController implements Controller {
 	public String execute(HttpServletRequest request,HttpServletResponse response) throws Exception {
 		String result = "";
 		ArrayList<String> cart = new ArrayList<String>();
-		cart.add("ms:1");
-		ManageUsers userManager= new ManageUsers();
-		userManager.addUser(new User("admin","admin","ADMINISTRATOR"));
-		
+		//cart.add("ms:1");
+		//ManageUsers userManager= new ManageUsers();
+		//userManager.addUser(new User("admin","admin","ADMINISTRATOR"));
+		//userManager.addUser(new User("student","student","privileged"));
 		HttpSession session = request.getSession();
 		request.setAttribute("searchCategories", SearchController.retrieveSearchCategories());
 		HistoryController historyController = new HistoryController();

@@ -120,7 +120,7 @@ public class ExhibitionController implements Controller {
 			try {	
 					ArrayList<String> cart= new ArrayList<String>();
 					FedoraCommunicator fc= new FedoraCommunicator();
-					cart.add("KEL:3");
+					/*cart.add("KEL:3");
 					cart.add("KEL:2");
 					cart.add("KEL:3");
 					cart.add("KEL:4");
@@ -133,7 +133,7 @@ public class ExhibitionController implements Controller {
 					cart.add("KEL:11");
 					cart.add("KEL:12");
 					cart.add("KEL:13");	
-					session.setAttribute("MEDIA_CART", cart);
+					session.setAttribute("MEDIA_CART", cart);*/
 					String selectedTemplate=request.getParameter("selectedTemplate");
 					if(selectedTemplate.equals("1")){
 						session.setAttribute("TEMPLATE_ID",selectedTemplate);

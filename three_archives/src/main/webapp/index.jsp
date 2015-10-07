@@ -125,9 +125,11 @@
                 <%if (session.getAttribute("USER")==null){%>
                 <a style="margin-left:600px;" data-toggle="modal" data-target="#login" class="navbar-brand" href="#login">Login</a>
                 <%}
-                
-                else if (session.getAttribute("USER").equals("false")){%>
+                else if (session.getAttribute("USER").equals("incorrect")){%>
                 <div style="margin-left:600px;" class="navbar-brand">Credentials incorrect</div>
+                <a style="margin-left:600px;" data-toggle="modal" data-target="#login" class="navbar-brand" href="#login">Login</a>
+                <%}
+                else if (session.getAttribute("USER").equals("false")){%>
                 <a style="margin-left:600px;" data-toggle="modal" data-target="#login" class="navbar-brand" href="#login">Login</a>
                 <%} 
                 else if (session.getAttribute("USER").equals("ADMINISTRATOR")){%>
