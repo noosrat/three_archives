@@ -193,14 +193,7 @@ public class Browse extends Service {
 
 		}
 	}
-
-	private static Set<FedoraDigitalObject> titleObjects = new HashSet<FedoraDigitalObject>();
-	private static Set<FedoraDigitalObject> yearObjects = new HashSet<FedoraDigitalObject>();
-	private static Set<FedoraDigitalObject> eventObjects = new HashSet<FedoraDigitalObject>();
-	private static Set<FedoraDigitalObject> exhibitionObjects = new HashSet<FedoraDigitalObject>();
-	private static Set<FedoraDigitalObject> collectionObjects = new HashSet<FedoraDigitalObject>();
-	private static Set<FedoraDigitalObject> mediaTypeObjects = new HashSet<FedoraDigitalObject>();
-
+	
 	public static void filterFedoraDigitalObjects(Set<FedoraDigitalObject> objectsToFilter, String filterCategory,
 			String filterValue) {
 		System.out.println("Filtering fedora digital objects");

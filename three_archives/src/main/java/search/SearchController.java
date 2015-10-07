@@ -154,6 +154,8 @@ public class SearchController implements Controller {
 		result.remove(SearchAndBrowseCategory.FORMAT.name());
 		result.remove(SearchAndBrowseCategory.SUBJECT.name());
 		result.remove(SearchAndBrowseCategory.YEAR.name());
+		result.remove(SearchAndBrowseCategory.EXHIBITION.name());
+		result.remove(SearchAndBrowseCategory.LOCATION.name());
 		return result;
 	}
 

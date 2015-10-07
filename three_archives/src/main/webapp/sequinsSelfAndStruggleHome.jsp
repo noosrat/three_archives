@@ -116,7 +116,7 @@ h3 {
 								<div class="form-group">
 									<div id="prefetch">
 										<input
-											class="typeahead tt-query tt-hint tt-dropdown-menu tt-suggestion"
+											class="form-control typeahead tt-query tt-hint tt-dropdown-menu tt-suggestion"
 											data-provider="typeahead" type="text"
 											placeholder="Search Archive" value="${terms}" autocomplete="off"
 											spellcheck="false" name="terms">
