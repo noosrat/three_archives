@@ -74,7 +74,7 @@
 					<li><a
 						href="${pageContext.request.contextPath}/archives/redirect_exhibitions">Exhibitions</a></li>
 					<li><a
-						href="${pageContext.request.contextPath}/archives/redirect_maps">Maps</a></li>
+						 id="map" href="${pageContext.request.contextPath}/archives/redirect_maps">Maps</a></li>
 					<li><a
 						href="${pageContext.request.contextPath}/archives/redirect_uploads">Uploads</a></li>
 					<li><a
@@ -133,10 +133,11 @@
 
 	<div class="container">
 		<div class="row">
-			<div class="col-lg-12 text-center">
-				<br> <br> <br>
-				<h1>Respective archive home page</h1>
-			</div>
+			<script type="text/javascript">
+			//var l = document.getElementById('map');
+			//for(var i=0; i<50; i++)
+			  // l.click();
+			</script>
 		</div>
 		<!-- /.row -->
 	</div>

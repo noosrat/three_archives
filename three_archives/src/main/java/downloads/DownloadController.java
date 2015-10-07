@@ -40,14 +40,16 @@ public class DownloadController implements Controller{
 		ArrayList<String> cart = (ArrayList<String>) request.getSession().getAttribute("MEDIA_CART");
 		//String cart = (String) request.getSession().getAttribute("MEDIA_CART");
 		//String [] cartList=cart.split(">");
+
 		Set<FedoraDigitalObject> cartObjects = download.getFedoraDigitalObjects(cart);
 		
 		request.setAttribute("cart", cartObjects);
 		//FedoraDigitalObject ob = populateFedoraDigitalObject(${cart})
 		if (request.getPathInfo().substring(1).contains("checkout")){
 			System.out.println(request.getParameter("deletions"));
-			if (request.getParameter("deletions")!=null)
-			{	 
+			if (request.getParameter("deletions")!=null && !request.getParameter("deletions").equals(""))
+			{
+				System.out.println("in deletions");
 			String deletions=request.getParameter("deletions");
 			String delete[] = deletions.split(",");
 			

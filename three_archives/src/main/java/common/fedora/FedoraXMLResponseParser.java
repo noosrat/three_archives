@@ -121,7 +121,10 @@ public class FedoraXMLResponseParser {
 			String tagName = "dc:" + dc.getDescription();
 			Node tag = element.getElementsByTagName(tagName).item(0);
 			if (tag != null) {
+				String otextContent = element.getElementsByTagName(tagName).item(0).getTextContent();
+				if (otextContent!=null && !otextContent.trim().isEmpty()){	
 				String textContent = element.getElementsByTagName(tagName).item(0).getTextContent().toUpperCase();
+				System.out.println(dc.name()+": "+textContent.trim());
 				if (dc.equals(DublinCore.DESCRIPTION)) {
 					// we want to parse the elements of the description at this
 					// point already..we addiitonal fields called EVENT and
@@ -130,24 +133,27 @@ public class FedoraXMLResponseParser {
 					// <dc:description>Collection:xxxxx%Event:xxxxx%other
 					// desc%annotations</dc:description>
 					String[] description = textContent.split("%");
+					if(description.length!=0);{
 
 					dublinCoreMetadata.put("COLLECTION", description[0].trim());// collection
 					dublinCoreMetadata.put("EVENT", description[1].trim());// event
 					dublinCoreMetadata.put(dc.name(), description[2].trim());// actual
 					dublinCoreMetadata.put("ANNOTATIONS", description[3]);//annotations
-
+					}
 
 				} else if (dc.equals(DublinCore.COVERAGE)) {
 					// the first part of coverage is the location
 					// the second part can remain in co
 					// coverage structure:
 					// <dc:coverage>Location:%21,22,11</dc:coverage>
+					
 					String[] coverage = textContent.split("%");
+					if(coverage.length!=0);{
 					dublinCoreMetadata.put("LOCATION", coverage[0].trim());
-					dublinCoreMetadata.put(dc.name(), coverage[1].trim());
+					dublinCoreMetadata.put(dc.name(), coverage[1].trim());}
 				} else {
 					dublinCoreMetadata.put(dc.name(), textContent.trim());
-				}
+				}}
 			}
 
 		}

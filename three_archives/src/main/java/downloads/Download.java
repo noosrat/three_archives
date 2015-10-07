@@ -35,4 +35,14 @@ public class Download extends Service{
 		
 		cart.remove(cart.indexOf(pid));
 	}
+	
+	public ArrayList<String> addToCart(String selected, ArrayList<String> cart){
+		String[] selectedList=selected.split(",");
+		
+		for (int k=0; k<selectedList.length; k++){
+			cart.add(selectedList[k]);
+			System.out.println(selectedList[k]);
+		}
+		return null;
+	}
 }

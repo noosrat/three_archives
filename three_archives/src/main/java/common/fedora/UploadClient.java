@@ -277,5 +277,39 @@ public class UploadClient {
 	            return http_method;
 	        
 	    }
+	    public String makeXML(String title,String creator, String event, String publisher, String contributor, String date,String resourcetype, String format, String source, String language, String relation, String location, String rights, String collection, String cords,String subject, String annotations, String description )
+	    {
+	    	System.out.println("making xml");
+	    	title ="<dc:title>"+title.trim()+"</dc:title>";
+	    	System.out.println("making xml");
+			//creator ="<dc:creator>"+creator.trim()+"</dc:creator>";
+	    	creator ="<dc:creator>"+""+"</dc:creator>";
+			event =event.trim();
+			System.out.println("making xml");
+			publisher ="<dc:publisher>"+publisher.trim()+"</dc:publisher>";
+			contributor ="<dc:contributor>"+contributor.trim()+"</dc:contributor>";
+			date ="<dc:date>"+date.trim()+"</dc:date>";
+			resourcetype ="<dc:type>"+resourcetype.trim()+"</dc:type>";
+			format ="<dc:format>"+format.trim()+"</dc:format>";
+			source ="<dc:source>"+source.trim()+"</dc:source>";
+			language ="<dc:language>"+language.trim()+"</dc:language>";
+			relation ="<dc:relation>"+relation.trim()+"</dc:relation>";
+			location =location.trim();
+			rights ="<dc:rights>"+rights.trim()+"</dc:rights>";
+			collection =collection.trim();
+			cords =cords.trim();
+			description ="<dc:description>"+collection+ "%"+event+"%"+description+"%"+annotations+"</dc:description>";
+			String coverage ="<dc:coverage>"+location+"%" +cords+"</dc:coverage>";
+			subject="<dc:subject>"+subject+"</dc:subject>";
+			System.out.println("making xml");
+			String meta=title+description+creator+publisher+contributor+date+resourcetype+format+source+language+relation+coverage+rights+subject;
+			System.out.println("making xml");
+			String qot="\"";
+			String startTag="<oai_dc:dc xmlns:oai_dc="+qot+"http://www.openarchives.org/OAI/2.0/oai_dc/"+qot+ " xmlns:dc="+qot+"http://purl.org/dc/elements/1.1/" +qot+" xmlns:xsi="+qot+"http://www.w3.org/2001/XMLSchema-instance"+qot+" xsi:schemaLocation="+qot+"http://www.openarchives.org/OAI/2.0/oai_dc/ http://www.openarchives.org/OAI/2.0/oai_dc.xsd"+qot+">";
+			String endTag="</oai_dc:dc>";
+			
+			return (startTag+meta+endTag);
+	    
+	    }
 
 }

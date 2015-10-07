@@ -30,15 +30,19 @@
 <link
 	href="${pageContext.request.contextPath}/css/bootstrap-lightbox.min.css"
 	rel="stylesheet">
-	<link
+<link
 	href="${pageContext.request.contextPath}/css/typeahead.css"
 	rel="stylesheet">
+<link 
+	type="text/css" rel="stylesheet" href="${pageContext.request.contextPath}/css/annotorious.css" />
 <script type="text/javascript"
 	src="${pageContext.request.contextPath}/js/jquery-1.11.3.js"></script>
 <script type="text/javascript"
 	src="${pageContext.request.contextPath}/bootstrap-3.3.5/js/bootstrap.js"></script>
 <script type="text/javascript"
 	src="${pageContext.request.contextPath}/js/typeahead.js"></script>
+	
+<script type="text/javascript" src="${pageContext.request.contextPath}/js/annotorious.min.js"></script>
 
 <script type="text/javascript">
 $(document).ready(function() {
@@ -58,6 +62,98 @@ $(document).ready(function() {
 			
 		});
 	});
+
+	var selected=[];
+	function change(box)
+	{
+	if (box.checked==true){
+		var thing = box.getAttribute("id");
+		alert(thing);
+		//console.log(('#ms:1').value);
+		selected.push(thing);}
+	else
+		{
+		console.log($(this).value);
+		selected.splice(selected.indexOf($(this).attr("value")), 1);}
+
+	document.getElementById("cartItems").innerHTML = selected;
+	console.log(selected);
+	}
+
+	function init(id) {
+		console.log("a");
+
+		anno.makeAnnotatable(id);
+		
+		if(id.getAttribute("data-annotations")!="")
+		{var annotations = id.getAttribute("data-annotations");
+		
+		var annolist=annotations.split(";");
+		for (var k=0; k<annolist.length-1; k++){
+			var annotation=annolist[k].split("/");
+			console.log(this.src+", "+annotation[0]+", "+annotation[1]+", "+annotation[2]+", "+annotation[3]+", "+annotation[4])
+			anno.addAnnotation(buildAnnotation(id.src,annotation[0],annotation[1],annotation[2],annotation[3],annotation[4] ));
+		}
+		}
+		
+		
+		
+		console.log("b");
+		//anno.activateSelector(id);
+
+				}
+	function simudbl(pid){
+	var l = document.getElementById(pid);
+	console.log(l);
+	//for(var i=0; i<50; i++)
+	   l.ondblclick();}
+	
+	function buildAnnotation(src,annotation, x, y, w, h){
+		
+		var thing = {src: src,
+				text: annotation,
+				editable: false,
+				shapes: [{
+					type: 'rect',
+					geometry: {
+						x: x,
+						y: y,
+						width: w,
+						height: h
+					}
+				}]
+		}
+		return thing;
+	}
+	
+	var annotations="";//move global
+	function see(pid){
+		
+		var src=pid.getAttribute("data-src");
+		var ann=anno.getAnnotations(src);//"//%=ob.getDatastreams().get("IMG").getContent()%>");
+		
+		
+		for (var k=0; k<ann.length; k++){
+			var text=ann[k]["text"];
+			var x=ann[k]["shapes"][0]["geometry"]["x"];
+			var y=ann[k]["shapes"][0]["geometry"]["y"];
+			var w=ann[k]["shapes"][0]["geometry"]["width"];
+			var h=ann[k]["shapes"][0]["geometry"]["height"];
+			annotations=annotations+text+"/"+x+"/"+y+"/"+w+"/"+h+";";
+			
+			console.log(ann[k]["text"]);
+			console.log(ann[k]["shapes"][0]["geometry"]);
+		}
+		
+		console.log(pid.getAttribute("data-pid"));
+		document.getElementById("anno:"+pid.getAttribute("data-pid")).innerHTML = annotations;
+		document.getElementById("id:"+pid.getAttribute("data-pid")).innerHTML = pid.getAttribute("data-pid");
+		
+			
+	}
+
+	
+
 </script>
 
 </head>
@@ -135,11 +231,17 @@ $(document).ready(function() {
 							<input type="submit" value="While you were away..." />
 
 						</form>
+						
+						<form action="${pageContext.request.contextPath}/archives/browse">
+								<textarea id="cartItems" name="addedtocart" readonly=readonly style="display:none;"></textarea>
+								<input type="submit" value="Send Selected Items To Cart"/>
+								<script type="text/javascript">console.log("${digitalObject.pid}");</script>
+						</form>
 					</li>
 				</ul>
 			</div>
 		</nav>
-
+<!-- style="display:none;" -->
 		<nav class="navbar navbar-inverse navbar-fixed-bottom">
 			<div class="container-fluid">
 				<div class="navbar-header">
@@ -182,6 +284,7 @@ $(document).ready(function() {
 						<c:set var="count" value="0" scope="page" />
 						<c:forEach var="digitalObject" items="${objectsForArchive}">
 							<div class="col-lg-3 col-sm-4 col-xs-6 portfolio-item">
+							<input id="${digitalObject.pid}" type="checkbox" onchange="change(this)"/>
 								<a href="#lightbox${count}" class="portfolio-link"
 									data-toggle="modal" data-target="#lightbox${count}">
 
@@ -189,6 +292,7 @@ $(document).ready(function() {
 										<div class="caption-content">
 											[VIEW MORE DETAILS]
 										</div>
+										
 										<!-- caption content -->
 									</div> <!-- caption --> <img
 									src="${digitalObject.datastreams['IMG'].content}"
@@ -212,8 +316,9 @@ $(document).ready(function() {
 								
 									<table> 
 									<td>
-									<img src="${digitalObject.datastreams['IMG'].content}"
-										class="img-thumbnail img-responsive" alt="image unavailable"></td>
+				<!--  -->					
+									<img id="${digitalObject.pid}" src="${digitalObject.datastreams['IMG'].content}"
+										class="img-thumbnail img-responsive" alt="image unavailable" readonly="true" data-pid="${digitalObject.pid}" data-annotations="${digitalObject.datastreams['DC'].dublinCoreMetadata['ANNOTATIONS']}" ondblclick="init(this);"/></td>
 									
 									<!-- can we not try just iterate through the dublinCoreDatastream's metadata -->
 									<td><c:forEach var="dcMetadata" items="${digitalObject.datastreams['DC'].dublinCoreMetadata}">
@@ -228,6 +333,11 @@ $(document).ready(function() {
 								<form name="map" method="post" action="${pageContext.request.contextPath}/archives/redirect_maps/place?image=${digitalObject.pid}">
 									<!-- place word map in url-->
    									<input type="submit" value="Place Me" />
+								</form>
+								<form action="${pageContext.request.contextPath}/archives/browse">
+									<textarea id="id:${digitalObject.pid}" name="pid" readonly=readonly style="display:none;">${digitalObject.pid}</textarea>
+									<textarea id="anno:${digitalObject.pid}" name="annotations" readonly=readonly style="display:none;"></textarea>
+									<input id="btn:${digitalObject.pid}" type="submit" data-pid="${digitalObject.pid}" data-src="${digitalObject.datastreams['IMG'].content}" onclick="see(this)" value="Save Comments"/>
 								</form>
 							</div>
 						</div>
