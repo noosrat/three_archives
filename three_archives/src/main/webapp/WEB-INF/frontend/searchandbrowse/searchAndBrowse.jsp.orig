@@ -28,8 +28,10 @@
 <link
 	href="${pageContext.request.contextPath}/css/bootstrap-lightbox.min.css"
 	rel="stylesheet">
+
 <link href="${pageContext.request.contextPath}/css/typeahead.css"
 	rel="stylesheet">
+
 <link rel="stylesheet" type="text/css"
 	href="${pageContext.request.contextPath}/css/search_and_browse.css"></link>
 
@@ -189,39 +191,40 @@ $(document).ready(function() {
 							aria-haspopup="true" aria-expalinded="false">${searchCategories[0]}<span
 								class="caret"></span></a>
 							<ul class="dropdown-menu">
-									<c:set var="first" value="true" />
-									<c:forEach var="searchCategory" items="${searchCategories}">
-										<c:if test="${first ne 'true'}">
-											<li><a
-												href="${pageContext.request.contextPath}/archives/search_objects/category=${searchCategory}">${searchCategory}</a></li>
-										</c:if>
-										<c:set var="first" value="false" />
-									</c:forEach>
-								</ul></li>
-
-
-
-							<li>
-
-								<form class="navbar-form navbar-right"
-									action="${pageContext.request.contextPath}/archives/search_objects/category=${searchCategories[0]}"
-									method="post">
-									<div class="form-group">
-										<div id="prefetch">
-											<input
-												class="form-control typeahead tt-query tt-hint tt-dropdown-menu tt-suggestion"
-												data-provider="typeahead" type="text"
-												placeholder="Search Archive" value="${terms}"
-												autocomplete="off" spellcheck="false" name="terms">
-										</div>
-									</div>
-									<button type="submit" class="btn btn-default">
-										<i class="glyphicon glyphicon-search"></i>
-									</button>
-								</form>
+								<c:forEach var="searchCategory" items="${searchCategories}">
+									<li><a
+										href="${pageContext.request.contextPath}/archives/search_objects/category=${searchCategory}">${searchCategory}</a></li>
+								</c:forEach>
 							</li>
-						</ul>
-					</c:if>
+							</ul>
+							
+							
+					
+						<li>
+						
+							<form class="navbar-form navbar-right"
+								action="${pageContext.request.contextPath}/archives/search_objects/category=${searchCategories[0]}"
+								method="post">
+								<div class="form-group">
+									<div id="prefetch">
+										<input
+											class="form-control typeahead tt-query tt-hint tt-dropdown-menu tt-suggestion"
+											data-provider="typeahead" type="text"
+											placeholder="Search Archive" value="${terms}" autocomplete="off"
+											spellcheck="false" name="terms">
+									</div>
+								</div>
+								<button type="submit" class="btn">Search</button>
+								<div class="checkbox">
+									<label> <input type="checkbox" id="limitSearch"
+										name="limitSearch" value="limitSearch"><font
+										color="white"> Limit search to these results</font>
+									</label>
+								</div>
+							</form>
+						</li>
+					</ul>
+				</c:if>
 				</div>
 			</div>
 			<!-- side bar -->
@@ -237,36 +240,31 @@ $(document).ready(function() {
 						data-target="${pageContext.request.contextPath}/archives/browse"><i
 							class="fa fa-fw fa-arrows-v"></i>BROWSE ALL <i
 							class="fa fa-fw fa-caret-down"></i> </a></li>
-					<hr>
+
 					<c:forEach var="category" items="${categoriesAndObjects}">
 						<li><a
 							href="${pageContext.request.contextPath}/archives/browse?category=${category.key}"
-							data-toggle="collapse" data-target="#demo${count}">
-								${category.key} <span class="badge" style="float: right;">${fn:length(category.value)}</span>
-						</a></li>
+							data-toggle="collapse" data-target="#demo${count}"> ${category.key} <span
+								class="badge">${fn:length(category.value)}</span></a></li>
 					</c:forEach>
-					<p></p>
-					<p></p>
+					
 					<c:if test="${not empty SERVICES['History']}">
+					<li>
 
-						<li><a href="javascript:;" data-toggle="collapse"
-							data-target="#demo"><i class="fa fa-fw fa-arrows-v"></i>
-								RECENT UPDATES<i class="fa fa-fw fa-caret-down"><span
-									class="badge" style="float:right;">${fn:length(objectsModifiedSinceLastVisit)}</span></i></a>
-							<ul id="demo" class="collapse">
-								<c:forEach var="update"
-									items="${userFavouriteCategoriesWithRecentUpdates}">
-									<ul><font color="grey">${update}</font></ul>
-								</c:forEach>
-								<c:if test="${fn:length(objectsModifiedSinceLastVisit) >0}">
-									<li><a
-										href="${pageContext.request.contextPath}/archives/history">Explore
-											Updates</a></li>
+		<font color="white">
+					RECENT UPDATES:
+					${fn:length(objectsModifiedSinceLastVisit)} updated since your last visit
+					<br>
+					<c:forEach var="update" items="${userFavouriteCategoriesWithRecentUpdates}">
+						<li>
+						${update}
+						</li>
+					
+					</c:forEach>
+					have been updated.  <a href="${pageContext.request.contextPath}/archives/history" >Explore</a> more updates.
+					</font>
 
-								</c:if>
-							</ul></li>
-
-
+						
 						<form action="${pageContext.request.contextPath}/archives/browse">
 								<textarea id="cartItems" name="addedtocart" readonly=readonly style="display:none;"></textarea>
 								<input type="submit" value="Send Selected Items To Cart"/>
@@ -304,64 +302,37 @@ $(document).ready(function() {
 						</h3>
 						
 						<div>
-							<c:if test="${not empty terms && terms!=' ' && terms!= ''}">
-								<h4>
-									<span class="badge">${fn:length(objectsForArchive)}</span>
-									results returned for search <a class="label label-default"
-										href="${pageContext.request.contextPath}/archives/search_objects/category=SEARCH_ALL?terms=${terms}">
-										${terms}</a>
-								</h4>
-							</c:if>
-
-
-							<table style="width: 100%">
-								<td align="left">
-									<div class="checkbox">
-										<label> <input type="checkbox" id="limitSearch"
-											name="limitSearch" value="limitSearch"
-											onchange="limitSearch()"> Limit search to these
-											results
-										</label>
-										<script>
-											function limitSearch() {
-										<%session.setAttribute("limitSearch", "true");%>
-											}
-										</script>
-									</div>
-								</td>
-								<td align="right">Sort (ASC): <a class="btn btn-default"
-									href="${pageContext.request.contextPath}/archives/browse/ORDER_BY=TITLE">TITLE</a>
-									<a class="btn btn-default"
-									href="${pageContext.request.contextPath}/archives/browse/ORDER_BY=YEAR">YEAR</a></td>
+							<h4> <span
+								class="badge">${fn:length(objectsForArchive)}</span> results returned for
+								search : "${terms}"</h4>
+							<table style="width:100%">
+							<td align="right"><a class="btn btn-primary" href="${pageContext.request.contextPath}/archives/browse/ORDER_BY=TITLE">sort results by title</a> 
+							<a class="btn btn-primary" href="${pageContext.request.contextPath}/archives/browse/ORDER_BY=YEAR">sort results by year</a></td>
 							</table>
-
 						</div>
-						<hr>
-						<c:if
-							test="${not empty browseCategory && browseCategory!='' && browseCategory!= ' '}">
-							<ol class="breadcrumb">
-								<li><i class="fa fa-dashboard"></i>${browseCategory}</li>
-								<li class="active"><i class="fa fa-wrench"></i>
-									${categoryValue}</li>
-							</ol>
-						</c:if>
+						
+						<ol class="breadcrumb">
+							<li><i class="fa fa-dashboard"></i>${browseCategory}</li>
+							<li class="active"><i class="fa fa-wrench"></i>
+								${categoryValue}</li>
+						</ol>
 					</div>
 				</div>
 
 
-				<div class="col-lg-12">
-					<c:forEach var="searchTag" items="${searchTags}">
-						<!-- <a class="btn btn-primary btn-xs" -->
-						<a class="label label-default"
-							href="${pageContext.request.contextPath}/archives/search_objects/category=SEARCH_ALL?terms=${searchTag}">${searchTag}</a>
-					</c:forEach>
+<div class="col-lg-12">
+				<c:forEach var="searchTag" items="${searchTags}">
+					<!-- <a class="btn btn-primary btn-xs" -->
+					<a class="label label-default"	href="${pageContext.request.contextPath}/archives/search_objects/category=SEARCH_ALL?terms=${searchTag}">${searchTag}</a>
+				</c:forEach>
 				</div>
 				<br> <br>
 
 				<section id="portfolio">
-					<div class="container-fluid">
-						<c:set var="count" value="0" scope="page" />
-						<c:forEach var="digitalObject" items="${objectsForArchive}">
+
+					<div class="container-fluid"> 
+					<c:set var="count" value="0" scope="page" />
+					<c:forEach var="digitalObject" items="${objectsForArchive}">
 						<div class="col-lg-3 col-sm-4 col-xs-6 portfolio-item">
 							<input id="${digitalObject.pid}" type="checkbox" onchange="change(this)"/>
 								<a href="#lightbox${count}" 

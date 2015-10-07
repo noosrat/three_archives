@@ -52,8 +52,8 @@
 			unit : 'pt'
 		},
 		color : {
-			start : '#660066',
-			end : '#33CCCC'
+			start : '#cde',
+			end : '#f52'
 		}
 	};
 
@@ -113,13 +113,9 @@
 							aria-haspopup="true" aria-expalinded="false">${searchCategories[0]}<span
 								class="caret"></span></a>
 							<ul class="dropdown-menu">
-								<c:set var="first" value="true" />
 								<c:forEach var="searchCategory" items="${searchCategories}">
-									<c:if test="${first ne 'true'}">
-										<li><a
-											href="${pageContext.request.contextPath}/archives/search_objects/category=${searchCategory}">${searchCategory}</a></li>
-									</c:if>
-									<c:set var="first" value="false" />
+									<li><a
+										href="${pageContext.request.contextPath}/archives/search_objects/category=${searchCategory}">${searchCategory}</a></li>
 								</c:forEach>
 							</ul></li>
 
@@ -133,15 +129,19 @@
 								<div class="form-group">
 									<div id="prefetch">
 										<input
-											class="form-control typeahead tt-query tt-hint tt-dropdown-menu tt-suggestion"
+											class="typeahead tt-query tt-hint tt-dropdown-menu tt-suggestion"
 											data-provider="typeahead" type="text"
 											placeholder="Search Archive" value="${terms}"
 											autocomplete="off" spellcheck="false" name="terms">
 									</div>
 								</div>
-								<button type="submit" class="btn btn-default">
-									<i class="glyphicon glyphicon-search"></i>
-								</button>
+								<button type="submit" class="btn">Search</button>
+								<div class="checkbox">
+									<label> <input type="checkbox" id="limitSearch"
+										name="limitSearch" value="limitSearch"><font
+										color="white"> Limit search to these results</font>
+									</label>
+								</div>
 							</form>
 						</li>
 					</ul>
@@ -150,56 +150,30 @@
 		</div>
 	</nav>
 
+
 	<div class="container-fluid">
 		<div class="row">
 			<div class="col-sm-3">
 				<!-- Left column -->
 				<a href="#"><strong><i
-						class="glyphicon glyphicon-wrench"></i> Tools</strong></a> <br>
-				<br><hr>
-					<ul class="nav nav-stacked" id="sidebar">
-						<strong><li><a
-								href="${pageContext.request.contextPath}/archives/history">Recently
-									Updated Categories</a></li>
-					</ul><hr>
-				<c:forEach var="updatedCategory"
-					items="${categoriesWithRecentUpdates}">
-					<c:if test="${not empty updatedCategory.value}">
-						<div class="well">
-							<ul class="nav nav-stacked" id="sidebar">
-								<c:set var="count" value="0" scope="page" />
-								<c:choose>
-									<c:when test="${updatedCategory.key =='DATE'}">
-										<li><a align="left" href="#">${updatedCategory.key} <span
-												class="badge pull-right">${fn:length(updatedCategory.value)}</span>
-										</a></li>
-										<p align="left">
-											<c:forEach var="value" items="${updatedCategory.value}">
-												<a class="label label-default"
-													href="${pageContext.request.contextPath}/archives/history?category=YEAR&YEAR=${value}">${value}</a>
-											</c:forEach>
+						class="glyphicon glyphicon-wrench"></i> Tools</strong></a>
 
-										</p>
-									</c:when>
-									<c:otherwise>
-										<li><a align="left" href="#">${updatedCategory.key} <span
-												class="badge pull-right">${fn:length(updatedCategory.value)}</span>
-										</a></li>
-										<p align="left">
-											<c:forEach var="value" items="${updatedCategory.value}">
-												<a class="label label-default"
-													href="${pageContext.request.contextPath}/archives/history?category=${updatedCategory.key}&${updatedCategory.key}=${value}">${value}</a>
-											</c:forEach>
-
-										</p>
-
-									</c:otherwise>
-								</c:choose>
-							</ul>
+				<hr>
+				<strong>Popular Searches</strong>
+				<hr>
+				<div class="panel panel-default">
+					<div class="panel-body">
+						<div id="demo">
+							<div id="tagcloud">
+								<c:forEach var="tag" items="${tagCloud}">
+									<a
+										href="${pageContext.request.contextPath}/archives/search_objects/category=SEARCH_ALL?terms=${tag.key}"
+										rel="${tag.value}">${tag.key}</a>
+								</c:forEach>
+							</div>
 						</div>
-					</c:if>
-				</c:forEach>
-
+					</div>
+				</div>
 
 			</div>
 			<!-- /col-3 -->
@@ -210,6 +184,9 @@
 				<!--/col-->
 				<div class="col-md-8">
 					<div class="panel panel-default">
+						<div class="panel-heading">
+							<h4>All updated items</h4>
+						</div>
 						<div class="panel-body">
 							<section id="portfolio">
 								<c:set var="count" value="0" scope="page" />
@@ -222,13 +199,15 @@
 
 											<div class="caption">
 												<div class="caption-content">
+													<br> Title:
 													${digitalObject.datastreams['DC'].dublinCoreMetadata['TITLE']}
+													<br> Type:
+													${digitalObject.datastreams['DC'].dublinCoreMetadata['FORMAT']}
 												</div>
 												<!-- caption content -->
 											</div> <!-- caption --> <img
 											src="${digitalObject.datastreams['IMG'].content}"
-											class="img-thumbnail img-responsive" alt="image unavailable"
-											style="height: 150px; width: 100%; display: block;">
+											class="img-thumbnail img-responsive" alt="image unavailable">
 										</a>
 									</div>
 									<c:set var="count" value="${count + 1}" scope="page" />
@@ -276,32 +255,33 @@
 						</div>
 					</div>
 					<!--/panel content-->
-
 				</div>
 				<!-- HERE -->
-
-
-
 
 				<div class="row">
 					<!-- center left-->
 					<div class="col-md-4">
-						<hr>
-						<strong>Popular Searches</strong>
-						<hr>
-						<div class="panel panel-default">
-							<div class="panel-body">
-								<div id="demo">
-									<div id="tagcloud">
-										<c:forEach var="tag" items="${tagCloud}">
-											<a
-												href="${pageContext.request.contextPath}/archives/search_objects/category=SEARCH_ALL?terms=${tag.key}"
-												rel="${tag.value}">${tag.key}</a>
+						<div class="well">
+							Recent Updates <span class="badge pull-right">3</span>
+						</div>
+
+						<c:forEach var="updatedCategory"
+							items="${categoriesWithRecentUpdates}">
+							<div class="panel panel-default">
+								<div class="panel-heading">
+									<h3 class="panel-title">${updatedCategory.key}</h3>
+								</div>
+								<div class="panel-body">
+									<!-- <div class="list-group list-inline pull-left"> -->
+										<c:forEach var="updatedValue"
+											items="${updatedCategory.value}">
+											<a href="${pageContext.request.contextPath}/archives/browse?category=${updatedCategory.key}&${updatedCategory.key}=${updatedValue}" class="list-group-item"><span class="badge">23
+													minutes ago</span> ${updatedValue}</a>
 										</c:forEach>
-									</div>
+									<!-- </div>-->
 								</div>
 							</div>
-						</div>
+						</c:forEach>
 					</div>
 
 					<!--/panel-->

@@ -9,7 +9,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql"%>
 <%@ taglib prefix="x" uri="http://java.sun.com/jsp/jstl/xml"%>
-<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <html>
 
 <head>
@@ -103,7 +103,7 @@
 					</c:forEach>
 
 				</ul>
-					<c:if test="${not empty SERVICES['Browse']}">
+				<c:if test="${not empty SERVICES['Browse']}">
 					<ul class="nav navbar-nav navbar-right top-nav">
 						<li class="dropdown"><a
 							href="${pageContext.request.contextPath}/archives/search_objects"
@@ -111,13 +111,20 @@
 							aria-haspopup="true" aria-expalinded="false">${searchCategories[0]}<span
 								class="caret"></span></a>
 							<ul class="dropdown-menu">
+								<c:set var="first" value="true"/>
 								<c:forEach var="searchCategory" items="${searchCategories}">
+								<c:if test="${first ne 'true'}">
 									<li><a
 										href="${pageContext.request.contextPath}/archives/search_objects/category=${searchCategory}">${searchCategory}</a></li>
-
+										</c:if>
+								<c:set var="first" value="false"/>
 								</c:forEach>
 							</ul></li>
+
+
+
 						<li>
+	
 							<form class="navbar-form navbar-right"
 								action="${pageContext.request.contextPath}/archives/search_objects/category=${searchCategories[0]}"
 								method="post">
@@ -126,32 +133,19 @@
 										<input
 											class="form-control typeahead tt-query tt-hint tt-dropdown-menu tt-suggestion"
 											data-provider="typeahead" type="text"
-											placeholder="Search Archive" value="${terms}" autocomplete="off"
-											spellcheck="false" name="terms">
+											placeholder="Search Archive" value="${terms}"
+											autocomplete="off" spellcheck="false" name="terms">
 									</div>
 								</div>
-
-								<button type="submit" class="btn">Search</button>
-
-								<div class="checkbox">
-									<label> <input type="checkbox" id="limitSearch"
-										name="limitSearch" value="limitSearch"><font
-										color="white"> Limit search to these results</font>
-									</label>
-								</div>
-
+								<button type="submit" class="btn btn-default"><i class="glyphicon glyphicon-search"></i></button>
+								
 							</form>
 						</li>
 					</ul>
 				</c:if>
-				</div>
 			</div>
-			<!-- end of search bar components -->
-
 		</div>
-
 	</nav>
-
 
 	<div class="container">
 	<p></p><br><br><br>

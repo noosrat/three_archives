@@ -12,10 +12,12 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 import java.util.TreeSet;
 
 import javax.servlet.http.Cookie;
@@ -26,18 +28,20 @@ import common.fedora.DublinCore;
 import common.fedora.DublinCoreDatastream;
 import common.fedora.FedoraDigitalObject;
 import search.Browse;
+import search.SearchAndBrowseCategory;
 
 public class History extends Service {
 
 	private static StringBuilder tagCloudText = new StringBuilder();
+	private static HashSet<FedoraDigitalObject> objectsSinceLastVisit = new HashSet<FedoraDigitalObject>();
 
 	public History() {
 		super();
 	}
 
-	public ArrayList<FedoraDigitalObject> retrieveDigitalObjectsAlteredSinceLastVisit(Date lastVisited) {
+	private void retrieveDigitalObjectsAlteredSinceLastVisit(Date lastVisited) {
 		System.out.println("IN RETRIEVE DIGITAL OJBECTS ALTERED SINCE LAST VISIT");
-		ArrayList<FedoraDigitalObject> recentlyAlteredFedoraDigitalObjects = new ArrayList<FedoraDigitalObject>(
+		HashSet<FedoraDigitalObject> recentlyAlteredFedoraDigitalObjects = new HashSet<FedoraDigitalObject>(
 				Browse.getFedoraDigitalObjectsForArchive());
 
 		for (Iterator<FedoraDigitalObject> it = recentlyAlteredFedoraDigitalObjects.iterator(); it.hasNext();) {
@@ -48,24 +52,48 @@ public class History extends Service {
 				it.remove();
 			}
 		}
+		setObjectsSinceLastVisit(recentlyAlteredFedoraDigitalObjects);
+	}
 
-		return recentlyAlteredFedoraDigitalObjects;
+	private static void setObjectsSinceLastVisit(HashSet<FedoraDigitalObject> fedoraDigitalObjects) {
+		objectsSinceLastVisit = fedoraDigitalObjects;
+
+	}
+
+	public HashSet<FedoraDigitalObject> getObjectsSinceLastVisit() {
+		return objectsSinceLastVisit;
 	}
 
 	public HashMap<String, TreeSet<String>> categoriesRecentlyUpdated(
-			ArrayList<FedoraDigitalObject> objectsRecentlyModified) {
+			HashSet<FedoraDigitalObject> objectsRecentlyModified) {
 		// we need to iterate through all the objects that have been updated and
 		// pick out all the specific categories that have been updated
 		// initialise hashmap
 		HashMap<String, TreeSet<String>> updates = new HashMap<String, TreeSet<String>>();
-		updates.put(DublinCore.CONTRIBUTOR.name(), new TreeSet<String>());
-		updates.put(DublinCore.CREATOR.name(), new TreeSet<String>());
-		updates.put(DublinCore.SUBJECT.name(), new TreeSet<String>());
-		updates.put(DublinCore.DATE.name(), new TreeSet<String>());
-		updates.put(DublinCore.SOURCE.name(), new TreeSet<String>());
-		updates.put("COLLECTION", new TreeSet<String>());
-		updates.put("EVENT", new TreeSet<String>());
-		updates.put("LOCATION", new TreeSet<String>());
+//		for (DublinCore dc: DublinCore.values()){
+//			switch(dc){
+//			case TITLE:
+//			case CREATOR:
+//			case PUBLISHER:
+//			case CONTRIBUTOR:
+//			case DATE:
+//			case TYPE:
+//			case FORMAT:
+//			case SOURCE:
+//			case COVERAGE:
+//			case SUBJECT:
+//				updates.put(dc.name(), new TreeSet<String>());
+//			}
+//		}
+		
+		updates.put(SearchAndBrowseCategory.COLLECTION.name(), new TreeSet<String>());
+		updates.put(SearchAndBrowseCategory.CREATOR.name(), new TreeSet<String>());
+		updates.put(SearchAndBrowseCategory.SUBJECT.name(), new TreeSet<String>());
+		updates.put(SearchAndBrowseCategory.EVENT.name(), new TreeSet<String>());
+		updates.put(SearchAndBrowseCategory.YEAR.name(), new TreeSet<String>());
+		updates.put(SearchAndBrowseCategory.LOCATION.name(), new TreeSet<String>());
+		updates.put(SearchAndBrowseCategory.FORMAT.name(), new TreeSet<String>());
+		updates.put(SearchAndBrowseCategory.TITLE.name(), new TreeSet<String>());
 
 		for (FedoraDigitalObject object : objectsRecentlyModified) {
 			DublinCoreDatastream dcDatastream = (DublinCoreDatastream) object.getDatastreams()
@@ -77,11 +105,12 @@ public class History extends Service {
 				}
 			}
 		}
+		
 		return updates;
 	}
 
 	/* this value has to remain throughout the session */
-	public ArrayList<FedoraDigitalObject> retrieveRecentlyUpdateItems(String date) throws Exception {
+	public void retrieveRecentlyUpdateItems(String date) throws Exception {
 		SimpleDateFormat formatter = new SimpleDateFormat("EEE MMM dd hh:mm:ss zzz yyyy");
 		Date dateLastVisited = new Date();
 		try {
@@ -93,10 +122,7 @@ public class History extends Service {
 		System.out.println("PARSED DATE " + dateLastVisited);
 
 		// now that we have parsed the date we can get the updated objects
-		ArrayList<FedoraDigitalObject> fedoraDigitalObjects = retrieveDigitalObjectsAlteredSinceLastVisit(
-				dateLastVisited);
-		return fedoraDigitalObjects;
-
+		retrieveDigitalObjectsAlteredSinceLastVisit(dateLastVisited);
 	}
 
 	/*
@@ -155,22 +181,22 @@ public class History extends Service {
 	}
 
 	/* this must be done with every single search and browse */
-	public static void addTextToTagCloud(String text,boolean tokenize) {
-		if (text==null){
+	public static void addTextToTagCloud(String text, boolean tokenize) {
+		if (text == null) {
 			return;
 		}
-		if (tokenize){
-		String[] splitText = text.split(" ");
-		// we want to eliminate any non-character text
-		for (String singleWord : splitText) {
-			String word = singleWord.replaceAll("[^a-zA-Z0-9\\s]", "");
-			tagCloudText.append(word).append(",");
+		if (tokenize) {
+			String[] splitText = text.split(" ");
+			// we want to eliminate any non-character text
+			for (String singleWord : splitText) {
+				String word = singleWord.replaceAll("[^a-zA-Z0-9\\s]", "");
+				tagCloudText.append(word).append(",");
 
-		}}
+			}
+		}
 		tagCloudText.append(text.replaceAll("[^a-zA-Z0-9\\s]", "")).append(",");
 
 	}
-
 
 	public void persistTagCloudText(String filename) {
 		/*
@@ -232,4 +258,138 @@ public class History extends Service {
 		System.out.println("Cloud constructed with " + words.size() + " words ");
 		return words;
 	}
+	
+	public static Set<FedoraDigitalObject> filterFedoraDigitalObjects(Set<FedoraDigitalObject> objectsToFilter, String filterCategory,
+			String filterValue) {
+		System.out.println("Filtering fedora digital objects");
+		Set<FedoraDigitalObject> filteredObjects = new HashSet<FedoraDigitalObject>(objectsToFilter);
+
+		System.out.println("FILTERING WITH " + filterCategory + " with value " + filterValue);
+		for (Iterator<FedoraDigitalObject> iterator = filteredObjects.iterator(); iterator.hasNext();) {
+
+			FedoraDigitalObject digitalObject = iterator.next();
+			DublinCoreDatastream dc = (DublinCoreDatastream) digitalObject.getDatastreams().get(DatastreamID.DC.name());
+			switch (SearchAndBrowseCategory.valueOf(filterCategory.toUpperCase())) {
+			case TITLE:
+				String title = dc.getDublinCoreMetadata().get(DublinCore.TITLE.name());
+				System.out.println("TITLE " + title);
+				if (title != null && !title.trim().isEmpty()) {
+					if (!title.startsWith(filterValue)) {
+						iterator.remove();
+					}
+				} else if (title == null) {
+					iterator.remove();
+				}
+				break;
+			case YEAR:
+				String date = dc.getDublinCoreMetadata().get(DublinCore.DATE.name());
+				System.out.println("DATE " + date);
+				if (!(date != null && date.contains(filterValue))) {
+					iterator.remove();
+				} else if (date == null) {
+					iterator.remove();
+				}
+				break;
+			case EVENT:
+				String dublinCoreEvent = dc.getDublinCoreMetadata().get("EVENT");
+				System.out.println("EVENT " + dublinCoreEvent);
+				if (dublinCoreEvent != null && !dublinCoreEvent.isEmpty()) {
+					if (!(dublinCoreEvent.contains(filterValue))) {
+						iterator.remove();
+					}
+				} else if (dublinCoreEvent == null) {
+					iterator.remove();
+				}
+				break;
+			case EXHIBITION: // should we look in the db for this...search
+								// by
+								// exhibition 1 then behave accordingly
+				System.out.println("removing object with PID " + digitalObject.getPid());
+				break;
+			case COLLECTION:
+				String dublinCoreCollection = dc.getDublinCoreMetadata().get("COLLECTION");
+				System.out.println("COLLECTION " + dublinCoreCollection);
+
+				if (dublinCoreCollection != null && !dublinCoreCollection.isEmpty()) {
+					if (!(dublinCoreCollection.contains(filterValue))) {
+						iterator.remove();
+					}
+				} else if (dublinCoreCollection == null) {
+					iterator.remove();
+				}
+				break;
+			case SUBJECT:
+				String dublinCoreSubject = dc.getDublinCoreMetadata().get(DublinCore.SUBJECT.name());
+				System.out.println("SUBJECT " + dublinCoreSubject);
+				if (dublinCoreSubject != null && !dublinCoreSubject.isEmpty()) {
+					if (!(dublinCoreSubject.contains(filterValue))) {
+						iterator.remove();
+					}
+				} else if (dublinCoreSubject == null) {
+					iterator.remove();
+				}
+				break;
+
+			case CREATOR:
+				String dublinCoreCreator = dc.getDublinCoreMetadata().get(DublinCore.CREATOR.name());
+				String dublinCoreContributor = dc.getDublinCoreMetadata().get(DublinCore.CONTRIBUTOR.name());
+				String dublinCoreSource = dc.getDublinCoreMetadata().get(DublinCore.SOURCE.name());
+				System.out.println("CREATOR  " + dublinCoreCreator + " CONTRIBUTOR " + dublinCoreContributor
+						+ " SOURCE " + dublinCoreSource);
+
+				if ((dublinCoreCreator != null && !dublinCoreCreator.isEmpty())
+						|| (dublinCoreContributor != null && !dublinCoreContributor.isEmpty())
+						|| (dublinCoreSource != null && !dublinCoreSource.isEmpty())) {
+					// if ((!(dublinCoreCreator.contains(filterValue)) ||
+					// (!(dublinCoreCreator.contains(filterValue)) ||
+					// (!(dublinCoreCreator.contains(filterValue))) {
+					// iterator.remove();
+					// }
+					if (!(dublinCoreCreator.contains(filterValue) || dublinCoreCreator.contains(filterValue)
+							|| dublinCoreCreator.contains(filterValue))) {
+						iterator.remove();
+					}
+				} else {
+					iterator.remove();
+				}
+				break;
+			case FORMAT: // should we look in the datastream type and
+							// then
+				// in the format of the actual Dc metadata
+				/*
+				 * for now just look in the dublin core record for the
+				 * datastream...and then get the format..i.e. image..video...
+				 */
+				String f = dc.getDublinCoreMetadata().get(DublinCore.FORMAT.name());
+				String t = dc.getDublinCoreMetadata().get(DublinCore.TYPE.name());
+
+				String format = "";
+				if (f != null && !f.isEmpty()) {
+					format += f.toLowerCase();
+				}
+
+				if (t != null && !t.isEmpty()) {
+					format += " " + t.toLowerCase();
+				}
+				String media = filterValue.toLowerCase();
+
+				// check for JPG, JPEG, GIF, PNG
+				if (format != null && !format.isEmpty()) {
+
+					if (DatastreamID.parseMediaType(format) != DatastreamID.parseDescription(media)) {
+						iterator.remove();
+
+					}
+				} else {
+					iterator.remove();
+				}
+				break;
+			}
+
+		}
+
+	
+		return filteredObjects;
+	}
+
 }
