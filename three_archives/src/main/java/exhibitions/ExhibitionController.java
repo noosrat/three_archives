@@ -120,20 +120,11 @@ public class ExhibitionController implements Controller {
 			try {	
 					ArrayList<String> cart= new ArrayList<String>();
 					FedoraCommunicator fc= new FedoraCommunicator();
-					/*cart.add("KEL:3");
-					cart.add("KEL:2");
-					cart.add("KEL:3");
-					cart.add("KEL:4");
-					cart.add("KEL:5");
-					cart.add("KEL:6");
-					cart.add("KEL:7");
-					cart.add("KEL:8");
-					cart.add("KEL:9");
-					cart.add("KEL:10");
-					cart.add("KEL:11");
-					cart.add("KEL:12");
-					cart.add("KEL:13");	
-					session.setAttribute("MEDIA_CART", cart);*/
+					cart.add("sq:sq3");
+					cart.add("sq:sq2");
+					cart.add("sq:sq1");
+					cart.add("sq:sq4");
+					session.setAttribute("MEDIA_CART", cart);
 					String selectedTemplate=request.getParameter("selectedTemplate");
 					if(selectedTemplate.equals("1")){
 						session.setAttribute("TEMPLATE_ID",selectedTemplate);

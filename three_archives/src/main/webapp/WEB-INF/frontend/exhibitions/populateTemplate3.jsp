@@ -274,7 +274,7 @@ function selectImage(event) {
 							</li>
 
 						</ul>
-			</div>
+			</div><br><br>
 				<div class="modal fade" id="backgroundImage" role="dialog" style="z-index:30000">
     			<div class="modal-dialog">
     				<div class="modal-content">

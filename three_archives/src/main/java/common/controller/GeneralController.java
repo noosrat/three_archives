@@ -4,23 +4,13 @@ package common.controller;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
-
-
-
-
-
-
-
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import common.model.Exhibition;
 import common.model.ManageUsers;
 import common.model.User;
-import exhibitions.ManageExhibition;
 import configuration.ArchivalService;
 import configuration.PropertiesHandler;
 import history.HistoryController;
@@ -37,10 +27,12 @@ public class GeneralController implements Controller {
 	public String execute(HttpServletRequest request,HttpServletResponse response) throws Exception {
 		String result = "";
 		ArrayList<String> cart = new ArrayList<String>();
-		//cart.add("ms:1");
-		//ManageUsers userManager= new ManageUsers();
-		//userManager.addUser(new User("admin","admin","ADMINISTRATOR"));
-		//userManager.addUser(new User("student","student","privileged"));
+		cart.add("sq:sq3");
+		cart.add("sq:sq2");
+		cart.add("sq:sq1");
+		ManageUsers userManager= new ManageUsers();
+		userManager.addUser(new User("admin","admin","ADMINISTRATOR"));
+		userManager.addUser(new User("student","student","privileged"));
 		HttpSession session = request.getSession();
 		clearArchiveSessionInformation(session);
 		request.getSession().setAttribute("searchCategories", SearchController.retrieveSearchCategories());
