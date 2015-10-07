@@ -31,7 +31,7 @@ public class ManageUsers {
 	   
 	   public String approveUser(String username, String password)
 	   {
-		   String approve="";
+		   String approve="incorrect";
 		   List users=listAllUsers();
 		   String name;
 		   String pass;

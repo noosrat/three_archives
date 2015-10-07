@@ -219,12 +219,12 @@
 					</div>
 					<p> </p><br><br><br>
 		</div>
-	<div class="col-lg-8" style="margin-left:10px; background-color:#FFFFFF">
+	<div class="col-lg-7" style="margin-left:10px; background-color:#FFFFFF">
 		
 			<div id="instruction" >
 				<h3>Select image to add metadata</h3>
 				
-  					<input class="button btn btn-primary btn-sm" type="submit" value="Next" name="upload_files">
+  					
 				<br><br>
 			</div>
 		 	
@@ -240,7 +240,7 @@
 						<tr><td>Creator:</td><td> <input class="inputs" id="creator" placeholder="An entity primarily responsible for making the resource."></td></tr>
 						<tr><td>Event:</td><td> <input class="inputs" id="event" placeholder="Event to which the object is related"></td></tr>
 						<tr><td>Description:</td><td> <input class="inputs" id="description" placeholder="An account of the resource."></td></tr>
-						<tr><td>Publisher:</td><td> <input class="inputs" id="publisher" placeholder=" 	An entity responsible for making the resource available."></td></tr>
+						<tr><td>Publisher:</td><td> <input class="inputs" id="publisher" placeholder="An entity responsible for making the resource available."></td></tr>
 						<tr><td>Contributor:</td><td> <input class="inputs" id="contributor" placeholder="An entity responsible for making contributions to the resource."></td></tr>
 						<tr><td>Date:</td><td> <input class="inputs" id="date" placeholder="A point or period of time associated with an event in the lifecycle of the resource."></td></tr>
 						<tr><td>Resource type:</td><td> <input class="inputs" id="resourcetype" placeholder="The nature or genre of the resource."></td></tr>
@@ -249,7 +249,7 @@
 						<tr><td>Relation:</td><td> <input class="inputs" id="relation" placeholder="A related resource."></td></tr>
 						<tr><td>Location:</td><td> <input class="inputs" id="location" placeholder="The spatial or temporal topic of the resource."></td></tr>
 						<tr><td>co-ordinates:</td><td> <input class="inputs" id="cords" placeholder="The spatial or temporal topic of the resource"></td></tr>
-						<tr><td>Rights:</td><td> <input class="inputs" id="rights" placeholder=" 	Information about rights held in and over the resource."></td></tr>
+						<tr><td>Rights:</td><td> <input class="inputs" id="rights" placeholder="Information about rights held in and over the resource."></td></tr>
 						<tr><td>Collection:</td><td> <input class="inputs" id="collections" placeholder="The topic of the resource."></td></tr>
 						<tr><td>Format:</td><td> <select id="format">
   									<option value="image/jpeg">Image</option>
@@ -264,6 +264,11 @@
 			</div> 
 		
 	</div>	
+	
+	<div class="col-lg-1">
+	<br><br>
+		<input class="button btn btn-primary btn-sm" type="submit" value="Next" name="upload_files">
+	</div>
 </form>	
 
 
