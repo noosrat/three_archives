@@ -107,7 +107,7 @@
 				</ul>
 				<c:if test="${not empty SERVICES['Browse']}">
 					<ul class="nav navbar-nav navbar-right top-nav">
-						<li class="dropdown"><a
+						<!-- <li class="dropdown"><a
 							href="${pageContext.request.contextPath}/archives/search_objects"
 							class="dropdown-toggle" data-toggle="dropdown" role="button"
 							aria-haspopup="true" aria-expalinded="false">${searchCategories[0]}<span
@@ -122,7 +122,7 @@
 									<c:set var="first" value="false" />
 								</c:forEach>
 							</ul></li>
-
+ -->
 
 
 						<li>

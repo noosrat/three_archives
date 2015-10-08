@@ -34,9 +34,12 @@
 	src="${pageContext.request.contextPath}/bootstrap-3.3.5/js/bootstrap.js"></script>
 <script type="text/javascript"
 	src="${pageContext.request.contextPath}/js/typeahead.js"></script>
-<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-  <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+<link rel="stylesheet"
+	href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script
+	src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 
 <script type="text/javascript">
 	$(document).ready(function() {
@@ -57,26 +60,23 @@
 	});
 </script>
 <style>
-	 
-  .carousel-inner > .item > img,
-  .carousel-inner > .item > a > img {
-      margin: auto;
-  }
+.carousel-inner>.item>img, .carousel-inner>.item>a>img {
+	margin: auto;
+}
 
-	
-		.Sequins{
-			width:150px;
-			height:100px;
-			background-color: #ffffff;
-    			border: 1px solid black;
-    			opacity: 0.8;	
+.Sequins {
+	width: 150px;
+	height: 100px;
+	background-color: #ffffff;
+	border: 1px solid black;
+	opacity: 0.8;
+}
 
-		}
-		h3{
-			margin: 5%;
-    			font-weight: bold;
-    			color: #000000;
-		}
+h3 {
+	margin: 5%;
+	font-weight: bold;
+	color: #000000;
+}
 </style>
 </head>
 
@@ -88,24 +88,42 @@
 		<div class="container-fluid">
 			<!-- Brand and toggle get grouped for better mobile display -->
 			<div class="navbar-header">
-					<a class="navbar-brand"
-						href="${pageContext.request.contextPath}/archives/${ARCHIVE_CONCAT}">${ARCHIVE}</a>
+				<a class="navbar-brand"
+					href="${pageContext.request.contextPath}/archives/${ARCHIVE_CONCAT}">${ARCHIVE}</a>
 			</div>
 			<div class="collapse navbar-collapse"
 				id="bs-example-navbar-collapse-1">
 				<ul class="nav navbar-nav">
 					<c:forEach var="service" items="${SERVICES}">
 						<c:if test="${service.value!='' && service.value!= ' '}">
-							<li><a
-								href="${pageContext.request.contextPath}/archives/${service.value}">${service.key}</a></li>
-							<li>
+
+						<c:choose>
+							<c:when test="${service.value eq 'Uploads'}">
+								<%if (session.getAttribute("USER").equals("ADMINISTRATOR")){%>
+							
+									<li><a href="${pageContext.request.contextPath}/archives/${service.value}">${service.key}</a></li>
+								<%}%>
+								<li>HELLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLO</li>
+							</c:when>
+							<c:otherwise>
+								<li><a
+									href="${pageContext.request.contextPath}/archives/${service.value}">${service.key}</a></li>
+								<li>
+							</c:otherwise>
+						</c:choose>
 						</c:if>
 					</c:forEach>
+					<%if (session.getAttribute("USER").equals("ADMINISTRATOR")){%>
+							
+								<li><a
+								href="${pageContext.request.contextPath}/archives/redirect_user">Users</a></li>
+					<%}%>
+
 
 				</ul>
 				<c:if test="${not empty SERVICES['Browse']}">
 					<ul class="nav navbar-nav navbar-right top-nav">
-						<li class="dropdown"><a
+						<!-- <li class="dropdown"><a
 							href="${pageContext.request.contextPath}/archives/search_objects"
 							class="dropdown-toggle" data-toggle="dropdown" role="button"
 							aria-haspopup="true" aria-expalinded="false">${searchCategories[0]}<span
@@ -120,11 +138,11 @@
 								<c:set var="first" value="false"/>
 								</c:forEach>
 							</ul></li>
-
+ -->
 
 
 						<li>
-	
+
 							<form class="navbar-form navbar-right"
 								action="${pageContext.request.contextPath}/archives/search_objects/category=${searchCategories[0]}"
 								method="post">
@@ -137,8 +155,10 @@
 											autocomplete="off" spellcheck="false" name="terms">
 									</div>
 								</div>
-								<button type="submit" class="btn btn-default"><i class="glyphicon glyphicon-search"></i></button>
-								
+								<button type="submit" class="btn btn-default">
+									<i class="glyphicon glyphicon-search"></i>
+								</button>
+
 							</form>
 						</li>
 					</ul>
@@ -148,78 +168,98 @@
 	</nav>
 
 	<div class="container">
-	<p></p><br><br><br>
+		<p></p>
+		<br>
+		<br>
+		<br>
 		<div class="row">
-			<div class="col-lg-12" style="text-align:center">
+			<div class="col-lg-12" style="text-align: center">
 				<h2>About Sequins, Self & Struggle</h2>
-				<div class="well well-lg" style="background-color:	#FFF0F0"> <p>This project is a collaboration among the Departments of Drama at Royal Holloway and Queen Mary, University of London (UK), The Centre for Curating the Archive and the Centre for African Studies at the University of Cape Town, Africana Studies at Brown University (US) and the District 6 Museum. The primary aims are to research, document and disseminate archives of the Spring Queen and Miss Gay Western Cape pageants performed by disparate 'coloured' communities in greater Cape Town.</p>
+				<div class="well well-lg" style="background-color: #FFF0F0">
+					<p>This project is a collaboration among the Departments of
+						Drama at Royal Holloway and Queen Mary, University of London (UK),
+						The Centre for Curating the Archive and the Centre for African
+						Studies at the University of Cape Town, Africana Studies at Brown
+						University (US) and the District 6 Museum. The primary aims are to
+						research, document and disseminate archives of the Spring Queen
+						and Miss Gay Western Cape pageants performed by disparate
+						'coloured' communities in greater Cape Town.</p>
 
 				</div>
 			</div>
 		</div>
 		<div class="row">
-			<div class="col-lg-12" style="text-align:center">
-				 <div id="myCarousel" class="carousel slide" data-ride="carousel">
-    <!-- Indicators -->
-    <ol class="carousel-indicators">
-      <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
-      <li data-target="#myCarousel" data-slide-to="1"></li>
-     
-    </ol>
+			<div class="col-lg-12" style="text-align: center">
+				<div id="myCarousel" class="carousel slide" data-ride="carousel">
+					<!-- Indicators -->
+					<ol class="carousel-indicators">
+						<li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+						<li data-target="#myCarousel" data-slide-to="1"></li>
 
-    <!-- Wrapper for slides -->
-    <div class="carousel-inner" role="listbox">
+					</ol>
 
-      <div class="item active">
-		<div class="row">
-			<div class="col-lg-3" style="text-align:center">
-        			<img src="${pageContext.request.contextPath}/images/10.jpg" width="200">
-			</div>
-			<div class="col-lg-3" style="text-align:center">
-        			<img src="${pageContext.request.contextPath}/images/15.jpg" width="200">
-			</div>
-			<div class="col-lg-3" style="text-align:center">
-        			<img src="${pageContext.request.contextPath}/images/2.jpg" width="200">
-			</div>
-			<div class="col-lg-3" style="text-align:center">
-        			<img src="${pageContext.request.contextPath}/images/3.jpg" width="200">
-			</div>
-		</div>
- 
-      </div>
+					<!-- Wrapper for slides -->
+					<div class="carousel-inner" role="listbox">
 
-      <div class="item">
-        <div class="row">
-			<div class="col-lg-3" style="text-align:center">
-        			<img src="${pageContext.request.contextPath}/images/5.jpg" width="200">
-			</div>
-			<div class="col-lg-3" style="text-align:center">
-        			<img src="${pageContext.request.contextPath}/images/6.jpg" width="200">
-			</div>
-			<div class="col-lg-3" style="text-align:center">
-        			<img src="${pageContext.request.contextPath}/images/7.jpg" width="200">
-			</div>
-			<div class="col-lg-3" style="text-align:center">
-        			<img src="${pageContext.request.contextPath}/images/8.jpg" width="200">
-			</div>
-		</div>
-  
-      </div>
-    
-     
-  
-    </div>
+						<div class="item active">
+							<div class="row">
+								<div class="col-lg-3" style="text-align: center">
+									<img src="${pageContext.request.contextPath}/images/10.jpg"
+										width="200">
+								</div>
+								<div class="col-lg-3" style="text-align: center">
+									<img src="${pageContext.request.contextPath}/images/15.jpg"
+										width="200">
+								</div>
+								<div class="col-lg-3" style="text-align: center">
+									<img src="${pageContext.request.contextPath}/images/2.jpg"
+										width="200">
+								</div>
+								<div class="col-lg-3" style="text-align: center">
+									<img src="${pageContext.request.contextPath}/images/3.jpg"
+										width="200">
+								</div>
+							</div>
 
-    <!-- Left and right controls -->
-    <a class="left carousel-control" href="#myCarousel" role="button" data-slide="prev">
-      <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
-      <span class="sr-only">Previous</span>
-    </a>
-    <a class="right carousel-control" href="#myCarousel" role="button" data-slide="next">
-      <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
-      <span class="sr-only">Next</span>
-    </a>
-  </div>
+						</div>
+
+						<div class="item">
+							<div class="row">
+								<div class="col-lg-3" style="text-align: center">
+									<img src="${pageContext.request.contextPath}/images/5.jpg"
+										width="200">
+								</div>
+								<div class="col-lg-3" style="text-align: center">
+									<img src="${pageContext.request.contextPath}/images/6.jpg"
+										width="200">
+								</div>
+								<div class="col-lg-3" style="text-align: center">
+									<img src="${pageContext.request.contextPath}/images/7.jpg"
+										width="200">
+								</div>
+								<div class="col-lg-3" style="text-align: center">
+									<img src="${pageContext.request.contextPath}/images/8.jpg"
+										width="200">
+								</div>
+							</div>
+
+						</div>
+
+
+
+					</div>
+
+					<!-- Left and right controls -->
+					<a class="left carousel-control" href="#myCarousel" role="button"
+						data-slide="prev"> <span
+						class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+						<span class="sr-only">Previous</span>
+					</a> <a class="right carousel-control" href="#myCarousel" role="button"
+						data-slide="next"> <span
+						class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+						<span class="sr-only">Next</span>
+					</a>
+				</div>
 			</div>
 		</div>
 		<!-- /.row -->

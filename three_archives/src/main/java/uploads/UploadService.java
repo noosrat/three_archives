@@ -15,7 +15,7 @@ public class UploadService {
 	
 	public void upload(String files_string, String storage_path,String archive)
 	{	
-		UploadClient client=new UploadClient("http://localhost:8080/fedora", "fedoraAdmin","12345",null);
+		UploadClient client=new UploadClient("http://localhost:8080/fedora", "fedoraAdmin","fedoraAdmin",null);
 		String filename;
 		String title;
 		String creator;

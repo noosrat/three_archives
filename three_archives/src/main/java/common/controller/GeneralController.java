@@ -28,15 +28,24 @@ public class GeneralController implements Controller {
 	public String execute(HttpServletRequest request,HttpServletResponse response) throws Exception {
 		String result = "";
 		ArrayList<String> cart = new ArrayList<String>();
-
+		cart.add("sq:sq3");
+		cart.add("sq:sq4");
+		cart.add("sq:sq5");
+		cart.add("sq:sq6");
+		cart.add("sq:sq7");
+		cart.add("sq:sq8");
+		cart.add("sq:sq9");
+		cart.add("sq:sq10");
+		cart.add("sq:sq11");
 		ManageUsers userManager= new ManageUsers();
-		userManager.addUser(new User("admin","admin","ADMINISTRATOR"));
-		userManager.addUser(new User("student","student","privileged"));
+	//userManager.addUser(new User("admin","admin","ADMINISTRATOR"));
+//		userManager.addUser(new User("student","student","privileged"));
 
 		HttpSession session = request.getSession();
 		clearArchiveSessionInformation(session);
 		request.getSession().setAttribute("searchCategories", SearchController.retrieveSearchCategories());
 		session.setAttribute("MEDIA_CART", cart);
+		
 		storeAllArchivePropertiesWithinSession(request);
 		HistoryController historyController = new HistoryController();
 		BrowseController browseController = new BrowseController();
