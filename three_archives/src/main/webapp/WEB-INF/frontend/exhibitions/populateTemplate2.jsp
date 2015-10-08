@@ -66,6 +66,7 @@
     		padding: 5px;
    		}
 		.droptargetTemplate {
+			overflow:hidden;
    			width: 210px; 
     			height: 210px;
     			border: 1px dotted #aaaaaa;

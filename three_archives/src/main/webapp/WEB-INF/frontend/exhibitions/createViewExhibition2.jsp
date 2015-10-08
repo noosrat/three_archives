@@ -76,6 +76,7 @@
 		}
 		
 		.droptargetTemplate {
+			overflow:hidden;
    			width: 210px; 
     			height: 210px;
     	}

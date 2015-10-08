@@ -87,6 +87,7 @@
    			width: 210px; 
     			height: 210px;
     			text-align:center;
+			overflow:hidden;
     	}
 		
 		.slide{
