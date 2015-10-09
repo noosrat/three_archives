@@ -70,29 +70,32 @@ public class History extends Service {
 		// pick out all the specific categories that have been updated
 		// initialise hashmap
 		HashMap<String, TreeSet<String>> updates = new HashMap<String, TreeSet<String>>();
-//		for (DublinCore dc: DublinCore.values()){
-//			switch(dc){
-//			case TITLE:
-//			case CREATOR:
-//			case PUBLISHER:
-//			case CONTRIBUTOR:
-//			case DATE:
-//			case TYPE:
-//			case FORMAT:
-//			case SOURCE:
-//			case COVERAGE:
-//			case SUBJECT:
-//				updates.put(dc.name(), new TreeSet<String>());
-//			}
-//		}
-		
+		// for (DublinCore dc: DublinCore.values()){
+		// switch(dc){
+		// case TITLE:
+		// case CREATOR:
+		// case PUBLISHER:
+		// case CONTRIBUTOR:
+		// case DATE:
+		// case TYPE:
+		// case FORMAT:
+		// case SOURCE:
+		// case COVERAGE:
+		// case SUBJECT:
+		// updates.put(dc.name(), new TreeSet<String>());
+		// }
+		// }
+
 		updates.put(SearchAndBrowseCategory.COLLECTION.name(), new TreeSet<String>());
 		updates.put(SearchAndBrowseCategory.CREATOR.name(), new TreeSet<String>());
+		updates.put(SearchAndBrowseCategory.CONTRIBUTOR.name(), new TreeSet<String>());
+		updates.put(SearchAndBrowseCategory.SOURCE.name(), new TreeSet<String>());
 		updates.put(SearchAndBrowseCategory.SUBJECT.name(), new TreeSet<String>());
 		updates.put(SearchAndBrowseCategory.EVENT.name(), new TreeSet<String>());
 		updates.put(SearchAndBrowseCategory.YEAR.name(), new TreeSet<String>());
 		updates.put(SearchAndBrowseCategory.LOCATION.name(), new TreeSet<String>());
 		updates.put(SearchAndBrowseCategory.FORMAT.name(), new TreeSet<String>());
+		updates.put(SearchAndBrowseCategory.TYPE.name(), new TreeSet<String>());
 		updates.put(SearchAndBrowseCategory.TITLE.name(), new TreeSet<String>());
 
 		for (FedoraDigitalObject object : objectsRecentlyModified) {
@@ -105,7 +108,7 @@ public class History extends Service {
 				}
 			}
 		}
-		
+
 		return updates;
 	}
 
@@ -258,9 +261,9 @@ public class History extends Service {
 		System.out.println("Cloud constructed with " + words.size() + " words ");
 		return words;
 	}
-	
-	public static Set<FedoraDigitalObject> filterFedoraDigitalObjects(Set<FedoraDigitalObject> objectsToFilter, String filterCategory,
-			String filterValue) {
+
+	public static Set<FedoraDigitalObject> filterFedoraDigitalObjects(Set<FedoraDigitalObject> objectsToFilter,
+			String filterCategory, String filterValue) {
 		System.out.println("Filtering fedora digital objects");
 		Set<FedoraDigitalObject> filteredObjects = new HashSet<FedoraDigitalObject>(objectsToFilter);
 
@@ -330,53 +333,66 @@ public class History extends Service {
 				}
 				break;
 
+			case CONTRIBUTOR:
+				String dublinCoreContributor = dc.getDublinCoreMetadata().get(DublinCore.CONTRIBUTOR.name());
+				System.out.println("Contributor " + dublinCoreContributor);
+				if (dublinCoreContributor != null && !dublinCoreContributor.isEmpty()) {
+					if (!(dublinCoreContributor.contains(filterValue))) {
+						iterator.remove();
+					}
+				} else if (dublinCoreContributor == null) {
+					iterator.remove();
+				}
+				break;
+
+			case SOURCE:
+				String dublinCoreSource = dc.getDublinCoreMetadata().get(DublinCore.SOURCE.name());
+				System.out.println("Source " + dublinCoreSource);
+				if (dublinCoreSource != null && !dublinCoreSource.isEmpty()) {
+					if (!(dublinCoreSource.contains(filterValue))) {
+						iterator.remove();
+					}
+				} else if (dublinCoreSource == null) {
+					iterator.remove();
+				}
+				break;
+
 			case CREATOR:
 				String dublinCoreCreator = dc.getDublinCoreMetadata().get(DublinCore.CREATOR.name());
-				String dublinCoreContributor = dc.getDublinCoreMetadata().get(DublinCore.CONTRIBUTOR.name());
-				String dublinCoreSource = dc.getDublinCoreMetadata().get(DublinCore.SOURCE.name());
-				System.out.println("CREATOR  " + dublinCoreCreator + " CONTRIBUTOR " + dublinCoreContributor
-						+ " SOURCE " + dublinCoreSource);
+				System.out.println("CREATOR  " + dublinCoreCreator);
 
-				if ((dublinCoreCreator != null && !dublinCoreCreator.isEmpty())
-						|| (dublinCoreContributor != null && !dublinCoreContributor.isEmpty())
-						|| (dublinCoreSource != null && !dublinCoreSource.isEmpty())) {
-					// if ((!(dublinCoreCreator.contains(filterValue)) ||
-					// (!(dublinCoreCreator.contains(filterValue)) ||
-					// (!(dublinCoreCreator.contains(filterValue))) {
-					// iterator.remove();
-					// }
-					if (!(dublinCoreCreator.contains(filterValue) || dublinCoreCreator.contains(filterValue)
-							|| dublinCoreCreator.contains(filterValue))) {
+				if (dublinCoreCreator != null && !dublinCoreCreator.isEmpty()) {
+					if (!(dublinCoreCreator.contains(filterValue))) {
 						iterator.remove();
+					}
+				} else if (dublinCoreCreator == null) {
+					iterator.remove();
+				}
+				break;
+			case FORMAT:
+				String f = dc.getDublinCoreMetadata().get(DublinCore.FORMAT.name());
+
+				String media = filterValue.toLowerCase();
+
+				// check for JPG, JPEG, GIF, PNG
+				if (f != null && !f.isEmpty()) {
+
+					if (DatastreamID.parseMediaType(f) != DatastreamID.parseDescription(media)) {
+						iterator.remove();
+
 					}
 				} else {
 					iterator.remove();
 				}
 				break;
-			case FORMAT: // should we look in the datastream type and
-							// then
-				// in the format of the actual Dc metadata
-				/*
-				 * for now just look in the dublin core record for the
-				 * datastream...and then get the format..i.e. image..video...
-				 */
-				String f = dc.getDublinCoreMetadata().get(DublinCore.FORMAT.name());
+			case TYPE:
 				String t = dc.getDublinCoreMetadata().get(DublinCore.TYPE.name());
-
-				String format = "";
-				if (f != null && !f.isEmpty()) {
-					format += f.toLowerCase();
-				}
-
-				if (t != null && !t.isEmpty()) {
-					format += " " + t.toLowerCase();
-				}
-				String media = filterValue.toLowerCase();
+				String m = filterValue.toLowerCase();
 
 				// check for JPG, JPEG, GIF, PNG
-				if (format != null && !format.isEmpty()) {
+				if (t != null && !t.isEmpty()) {
 
-					if (DatastreamID.parseMediaType(format) != DatastreamID.parseDescription(media)) {
+					if (DatastreamID.parseMediaType(t) != DatastreamID.parseDescription(m)) {
 						iterator.remove();
 
 					}
@@ -388,7 +404,6 @@ public class History extends Service {
 
 		}
 
-	
 		return filteredObjects;
 	}
 

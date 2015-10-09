@@ -145,28 +145,33 @@ public class Browse extends Service {
 					break; // this will be a database query
 				case FORMAT:
 					String f = dc.get(DublinCore.FORMAT.name());
-					String t = dc.get(DublinCore.TYPE.name());
-
-					String format = "";
-					if (f != null && !f.isEmpty()) {
-						format += f.toLowerCase();
-					}
-					if (t != null && !t.isEmpty()) {
-						format += " " + t.toLowerCase();
-					}
-					DatastreamID result = DatastreamID.parseMediaType(format);
+					DatastreamID result = DatastreamID.parseMediaType(f);
 
 					if (result != null) {
 						values.add(result.name());
 					}
 					break;
+				case TYPE:
+					String t = dc.get(DublinCore.TYPE.name());
+
+					DatastreamID dsID = DatastreamID.parseMediaType(t);
+
+					if (dsID != null) {
+						values.add(dsID.name());
+					}
+					break;
+
 				case LOCATION:
 					break; // search dublin core coverage
 				case CREATOR:
 					values.add(dc.get(DublinCore.CREATOR.name()));
+					break;
+				case SOURCE:
 					values.add(dc.get(DublinCore.SOURCE.name()));
+					break;
+				case CONTRIBUTOR:
 					values.add(dc.get(DublinCore.CONTRIBUTOR.name()));
-					break; // search DC
+					break;
 				case SUBJECT:
 					values.add(dc.get(DublinCore.SUBJECT.name()));
 					break;// search DC
@@ -193,13 +198,6 @@ public class Browse extends Service {
 
 		}
 	}
-
-	private static Set<FedoraDigitalObject> titleObjects = new HashSet<FedoraDigitalObject>();
-	private static Set<FedoraDigitalObject> yearObjects = new HashSet<FedoraDigitalObject>();
-	private static Set<FedoraDigitalObject> eventObjects = new HashSet<FedoraDigitalObject>();
-	private static Set<FedoraDigitalObject> exhibitionObjects = new HashSet<FedoraDigitalObject>();
-	private static Set<FedoraDigitalObject> collectionObjects = new HashSet<FedoraDigitalObject>();
-	private static Set<FedoraDigitalObject> mediaTypeObjects = new HashSet<FedoraDigitalObject>();
 
 	public static void filterFedoraDigitalObjects(Set<FedoraDigitalObject> objectsToFilter, String filterCategory,
 			String filterValue) {
@@ -271,54 +269,66 @@ public class Browse extends Service {
 					iterator.remove();
 				}
 				break;
+			case CONTRIBUTOR:
+				String dublinCorecontributor = dc.getDublinCoreMetadata().get(DublinCore.CONTRIBUTOR.name());
+				System.out.println("CONTRIBUTOR " + dublinCorecontributor);
+				if (dublinCorecontributor != null && !dublinCorecontributor.isEmpty()) {
+					if (!(dublinCorecontributor.contains(filterValue))) {
+						iterator.remove();
+					}
+				} else if (dublinCorecontributor == null) {
+					iterator.remove();
+				}
+				break;
+			case SOURCE:
+				String dublinCoreSource = dc.getDublinCoreMetadata().get(DublinCore.SOURCE.name());
+				System.out.println("SOURCE " + dublinCoreSource);
+				if (dublinCoreSource != null && !dublinCoreSource.isEmpty()) {
+					if (!(dublinCoreSource.contains(filterValue))) {
+						iterator.remove();
+					}
+				} else if (dublinCoreSource == null) {
+					iterator.remove();
+				}
+				break;
 
 			case CREATOR:
 				String dublinCoreCreator = dc.getDublinCoreMetadata().get(DublinCore.CREATOR.name());
-				String dublinCoreContributor = dc.getDublinCoreMetadata().get(DublinCore.CONTRIBUTOR.name());
-				String dublinCoreSource = dc.getDublinCoreMetadata().get(DublinCore.SOURCE.name());
-				System.out.println("CREATOR  " + dublinCoreCreator + " CONTRIBUTOR " + dublinCoreContributor
-						+ " SOURCE " + dublinCoreSource);
+				System.out.println("CREATOR  " + dublinCoreCreator);
 
-				if ((dublinCoreCreator != null && !dublinCoreCreator.isEmpty())
-						|| (dublinCoreContributor != null && !dublinCoreContributor.isEmpty())
-						|| (dublinCoreSource != null && !dublinCoreSource.isEmpty())) {
-					// if ((!(dublinCoreCreator.contains(filterValue)) ||
-					// (!(dublinCoreCreator.contains(filterValue)) ||
-					// (!(dublinCoreCreator.contains(filterValue))) {
-					// iterator.remove();
-					// }
-					if (!(dublinCoreCreator.contains(filterValue) || dublinCoreCreator.contains(filterValue)
-							|| dublinCoreCreator.contains(filterValue))) {
+				if (dublinCoreCreator != null && !dublinCoreCreator.isEmpty()) {
+					if (!(dublinCoreCreator.contains(filterValue))) {
 						iterator.remove();
+					}
+				} else if (dublinCoreCreator == null) {
+					iterator.remove();
+				}
+				break;
+			case FORMAT:
+				String f = dc.getDublinCoreMetadata().get(DublinCore.FORMAT.name());
+
+				String media = filterValue.toLowerCase();
+
+				// check for JPG, JPEG, GIF, PNG
+				if (f != null && !f.isEmpty()) {
+
+					if (DatastreamID.parseMediaType(f) != DatastreamID.parseDescription(media)) {
+						iterator.remove();
+
 					}
 				} else {
 					iterator.remove();
 				}
 				break;
-			case FORMAT: // should we look in the datastream type and
-							// then
-				// in the format of the actual Dc metadata
-				/*
-				 * for now just look in the dublin core record for the
-				 * datastream...and then get the format..i.e. image..video...
-				 */
-				String f = dc.getDublinCoreMetadata().get(DublinCore.FORMAT.name());
+			case TYPE:
 				String t = dc.getDublinCoreMetadata().get(DublinCore.TYPE.name());
 
-				String format = "";
-				if (f != null && !f.isEmpty()) {
-					format += f.toLowerCase();
-				}
-
-				if (t != null && !t.isEmpty()) {
-					format += " " + t.toLowerCase();
-				}
-				String media = filterValue.toLowerCase();
+				String m = filterValue.toLowerCase();
 
 				// check for JPG, JPEG, GIF, PNG
-				if (format != null && !format.isEmpty()) {
+				if (t != null && !t.isEmpty()) {
 
-					if (DatastreamID.parseMediaType(format) != DatastreamID.parseDescription(media)) {
+					if (DatastreamID.parseMediaType(t) != DatastreamID.parseDescription(m)) {
 						iterator.remove();
 
 					}

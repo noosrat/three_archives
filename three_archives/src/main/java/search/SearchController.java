@@ -15,6 +15,7 @@ import org.apache.solr.client.solrj.SolrServerException;
 import org.json.simple.JSONArray;
 import org.json.simple.parser.JSONParser;
 import org.noggit.JSONParser.ParseException;
+import org.omg.PortableServer.SERVANT_RETENTION_POLICY_ID;
 
 import common.controller.Controller;
 import common.fedora.FedoraDigitalObject;
@@ -152,6 +153,9 @@ public class SearchController implements Controller {
 		}
 		// remove unwanted categories
 		result.remove(SearchAndBrowseCategory.FORMAT.name());
+		result.remove(SearchAndBrowseCategory.TYPE.name());
+		result.remove(SearchAndBrowseCategory.SOURCE.name());
+		result.remove(SearchAndBrowseCategory.CONTRIBUTOR.name());
 		result.remove(SearchAndBrowseCategory.SUBJECT.name());
 		result.remove(SearchAndBrowseCategory.YEAR.name());
 		result.remove(SearchAndBrowseCategory.EXHIBITION.name());
