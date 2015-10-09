@@ -52,8 +52,8 @@
 			unit : 'pt'
 		},
 		color : {
-			start : '#660066',
-			end : '#33CCCC'
+			start : '#d0b4b4',
+			end : '#8f0000'
 		}
 	};
 
@@ -84,25 +84,42 @@
 <body>
 
 	<!-- Navigation -->
-	<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+<!-- Navigation -->
+	<nav class="navbar navbar-inverse navbar-fixed-top navbar-left"
+		role="navigation">
 		<div class="container-fluid">
-
-
+			<!-- Brand and toggle get grouped for better mobile display -->
 			<div class="navbar-header">
 				<a class="navbar-brand"
 					href="${pageContext.request.contextPath}/archives/${ARCHIVE_CONCAT}">${ARCHIVE}</a>
 			</div>
-			<div id="navbar" class="collapse navbar-collapse"
+			<div class="collapse navbar-collapse"
 				id="bs-example-navbar-collapse-1">
-				>
 				<ul class="nav navbar-nav">
 					<c:forEach var="service" items="${SERVICES}">
 						<c:if test="${service.value!='' && service.value!= ' '}">
-							<li><a
-								href="${pageContext.request.contextPath}/archives/${service.value}">${service.key}</a></li>
-							<li>
+
+							<c:choose>
+								<c:when test="${service.key eq 'Uploads'}">
+									<%--if (session.getAttribute("USER").equals("ADMINISTRATOR")){--%>
+									<li><a
+										href="${pageContext.request.contextPath}/archives/${service.value}">${service.key}</a></li>
+									<%--}--%>
+								</c:when>
+								<c:otherwise>
+									<li><a
+										href="${pageContext.request.contextPath}/archives/${service.value}">${service.key}</a></li>
+									<li>
+								</c:otherwise>
+							</c:choose>
 						</c:if>
 					</c:forEach>
+					<!--add user stuff here-->
+					<%--if (session.getAttribute("USER").equals("ADMINISTRATOR")){--%>
+
+					<li><a
+						href="${pageContext.request.contextPath}/archives/redirect_user">Users</a></li>
+					<%--}--%>
 
 				</ul>
 				<c:if test="${not empty SERVICES['Browse']}">
@@ -113,13 +130,13 @@
 							aria-haspopup="true" aria-expalinded="false">${searchCategories[0]}<span
 								class="caret"></span></a>
 							<ul class="dropdown-menu">
-								<c:set var="first" value="true" />
+								<c:set var="first" value="true"/>
 								<c:forEach var="searchCategory" items="${searchCategories}">
-									<c:if test="${first ne 'true'}">
-										<li><a
-											href="${pageContext.request.contextPath}/archives/search_objects/category=${searchCategory}">${searchCategory}</a></li>
-									</c:if>
-									<c:set var="first" value="false" />
+								<c:if test="${first ne 'true'}">
+									<li><a
+										href="${pageContext.request.contextPath}/archives/search_objects/category=${searchCategory}">${searchCategory}</a></li>
+										</c:if>
+								<c:set var="first" value="false"/>
 								</c:forEach>
 							</ul></li>
  -->
@@ -135,13 +152,14 @@
 										<input
 											class="form-control typeahead tt-query tt-hint tt-dropdown-menu tt-suggestion"
 											data-provider="typeahead" type="text"
-											placeholder="Search Archive" value="${terms}"
+											placeholder="Search Archive"
 											autocomplete="off" spellcheck="false" name="terms">
 									</div>
 								</div>
 								<button type="submit" class="btn btn-default">
 									<i class="glyphicon glyphicon-search"></i>
 								</button>
+
 							</form>
 						</li>
 					</ul>
@@ -210,25 +228,25 @@
 				<!--/col-->
 				<div class="col-md-8">
 					<div class="panel panel-default">
-						<div class="panel-body">
+						<div class="panel-body" align="center">
 							<section id="portfolio">
 								<c:set var="count" value="0" scope="page" />
 								<c:forEach var="digitalObject"
 									items="${objectsModifiedSinceLastVisit}">
-									<div
-										class="col-lg-3 col-md-4 col-xs-6 portfolio-item thumbnail">
+									<div 
+										class="col-lg-3 col-md-4 col-xs-6 portfolio-item thumbnail" style="overflow:hidden; width:285px; height:235px">
 										<a href="#lightbox${count}" class="portfolio-link"
 											data-toggle="modal" data-target="#lightbox${count}">
 
-											<div class="caption">
+											<!-- <div class="caption">
 												<div class="caption-content">
 													${digitalObject.datastreams['DC'].dublinCoreMetadata['TITLE']}
 												</div>
-												<!-- caption content -->
-											</div> <!-- caption --> <img
+											</div>  -->
+											 <img
 											src="${digitalObject.datastreams['IMG'].content}"
 											class="img-thumbnail img-responsive" alt="image unavailable"
-											style="height: 150px; width: 100%; display: block;">
+											>
 										</a>
 									</div>
 									<c:set var="count" value="${count + 1}" scope="page" />

@@ -114,7 +114,7 @@ $(document).ready(function() {
 											<input
 												class="form-control typeahead tt-query tt-hint tt-dropdown-menu tt-suggestion"
 												data-provider="typeahead" type="text"
-												placeholder="Search Archive" value="${terms}"
+												placeholder="Search Archive" 
 												autocomplete="off" spellcheck="false" name="terms">
 										</div>
 									</div>
@@ -217,23 +217,21 @@ $(document).ready(function() {
 					<c:forEach var="subCategory"
 						items="${categoriesAndObjects[browseCategory]}">
 
-						<div class="col-lg-3 col-md-4 col-xs-6 portfolio-item thumbnail">
+						<div class="col-lg-3 col-md-4 col-xs-6 portfolio-item thumbnail" style="overflow:hidden; width:300px; height:250px; background-color:#D4CB90">
+						
+						<p align="center">${subCategory.key}<br> Items: <span class="badge">${fn:length(subCategory.value)}</span><p>
 							<a
 								href="${pageContext.request.contextPath}/archives/browse?category=${browseCategory}&${browseCategory}=${subCategory.key}"
 								class="portfolio-link" data-target="#">
-								<div class="caption">
-									<div class="caption-content">
-										Album: ${subCategory.key}<br> Items: <span class="badge">${fn:length(subCategory.value)}</span>
+										
 
-									</div>
-									<!-- caption content -->
-								</div> <!-- caption --> <c:set var="conditionVariable" value="true" />
+								 <c:set var="conditionVariable" value="true" />
 								<c:forEach var="object" items="${subCategory.value}">
 									<c:if test="${conditionVariable eq 'true'}">
 										<img class="img-responsive img-thumbnail"
 											src="${object.datastreams['IMG'].content}"
 											alt="album unavailable"
-											style="height: 300px; width: 100%; display: block;">
+											style="width: 90%;">
 									</c:if>
 									<c:set var="conditionVariable" value="false" />
 								</c:forEach>

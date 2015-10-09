@@ -34,7 +34,8 @@
 
 <script type="text/javascript">
 	$(document).ready(function() {
-		var words = "/data/sequins.json";
+		var archive ='<%=session.getAttribute("ARCHIVE_CONCAT")%>';
+		var words = "/data/" + archive + ".json";
 		var countries = new Bloodhound({
 			datumTokenizer : Bloodhound.tokenizers.whitespace,
 			queryTokenizer : Bloodhound.tokenizers.whitespace,
@@ -70,43 +71,66 @@
 <body>
 
 	<!-- Navigation -->
+<!-- Navigation -->
 	<nav class="navbar navbar-inverse navbar-fixed-top navbar-left"
 		role="navigation">
 		<div class="container-fluid">
 			<!-- Brand and toggle get grouped for better mobile display -->
 			<div class="navbar-header">
-				<a class="navbar-brand" href="#">Sequins, Self and Struggle</a>
+				<a class="navbar-brand"
+					href="${pageContext.request.contextPath}/archives/${ARCHIVE_CONCAT}">${ARCHIVE}</a>
 			</div>
 			<div class="collapse navbar-collapse"
 				id="bs-example-navbar-collapse-1">
 				<ul class="nav navbar-nav">
-					<li><a
-						href="${pageContext.request.contextPath}/archives/browse">Browse</a></li>
-					<li><a
-						href="${pageContext.request.contextPath}/archives/redirect_exhibitions">Exhibitions</a></li>
-					<li><a
-						href="${pageContext.request.contextPath}/archives/redirect_maps">Maps</a></li>
-					<li><a
-						href="${pageContext.request.contextPath}/archives/redirect_uploads">Uploads</a></li>
-				</ul>
-				<!-- search components-->
-				<div id="bs-example-navbar-collapse-1"
-					class="collapse navbar-collapse">
+					<c:forEach var="service" items="${SERVICES}">
+						<c:if test="${service.value!='' && service.value!= ' '}">
 
-					<ul class="nav navbar-nav navbar-right">
-						<li class="dropdown"><a
+							<c:choose>
+								<c:when test="${service.key eq 'Uploads'}">
+									<%--if (session.getAttribute("USER").equals("ADMINISTRATOR")){--%>
+									<li><a
+										href="${pageContext.request.contextPath}/archives/${service.value}">${service.key}</a></li>
+									<%--}--%>
+								</c:when>
+								<c:otherwise>
+									<li><a
+										href="${pageContext.request.contextPath}/archives/${service.value}">${service.key}</a></li>
+									<li>
+								</c:otherwise>
+							</c:choose>
+						</c:if>
+					</c:forEach>
+					<!--add user stuff here-->
+					<%--if (session.getAttribute("USER").equals("ADMINISTRATOR")){--%>
+
+					<li><a
+						href="${pageContext.request.contextPath}/archives/redirect_user">Users</a></li>
+					<%--}--%>
+
+				</ul>
+				<c:if test="${not empty SERVICES['Browse']}">
+					<ul class="nav navbar-nav navbar-right top-nav">
+						<!-- <li class="dropdown"><a
 							href="${pageContext.request.contextPath}/archives/search_objects"
 							class="dropdown-toggle" data-toggle="dropdown" role="button"
 							aria-haspopup="true" aria-expalinded="false">${searchCategories[0]}<span
 								class="caret"></span></a>
 							<ul class="dropdown-menu">
+								<c:set var="first" value="true"/>
 								<c:forEach var="searchCategory" items="${searchCategories}">
+								<c:if test="${first ne 'true'}">
 									<li><a
 										href="${pageContext.request.contextPath}/archives/search_objects/category=${searchCategory}">${searchCategory}</a></li>
-
+										</c:if>
+								<c:set var="first" value="false"/>
 								</c:forEach>
 							</ul></li>
+ -->
+
+
 						<li>
+
 							<form class="navbar-form navbar-right"
 								action="${pageContext.request.contextPath}/archives/search_objects/category=${searchCategories[0]}"
 								method="post">
@@ -115,31 +139,20 @@
 										<input
 											class="form-control typeahead tt-query tt-hint tt-dropdown-menu tt-suggestion"
 											data-provider="typeahead" type="text"
-											placeholder="Search Archive" autocomplete="off"
-											spellcheck="false" name="terms">
+											placeholder="Search Archive"
+											autocomplete="off" spellcheck="false" name="terms">
 									</div>
 								</div>
-
-								<button type="submit" class="btn">Search</button>
-
-								<div class="checkbox">
-									<label> <input type="checkbox" id="limitSearch"
-										name="limitSearch" value="limitSearch"><font
-										color="white"> Limit search to these results</font>
-									</label>
-								</div>
+								<button type="submit" class="btn btn-default">
+									<i class="glyphicon glyphicon-search"></i>
+								</button>
 
 							</form>
 						</li>
 					</ul>
-
-
-				</div>
+				</c:if>
 			</div>
-			<!-- end of search bar components -->
-
 		</div>
-
 	</nav>
 
 	<div class="container">

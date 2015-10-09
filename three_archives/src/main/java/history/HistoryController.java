@@ -124,7 +124,7 @@ public class HistoryController implements Controller {
 		// initiliase this using the cookies
 		if (session.getAttribute("dateLastVisited") == null) {
 			System.out.println("No value for dateLastVisited within the session");
-			extractAndProcessDateLastModified(request, response);
+			request.getSession().setAttribute("dateLastVisited", extractAndProcessDateLastModified(request, response));
 		}
 		if (session.getAttribute("browseCategoryCookie") == null) {
 			System.out.println("No value for browseCategoryCookie");
@@ -161,10 +161,7 @@ public class HistoryController implements Controller {
 			String filename = "../webapps/data/" + archive + "TagCloud.txt";
 			session.setAttribute("tagCloud", getHistory().constructTagCloud(filename));
 		}
-		// if(session.) this last one is for what is generally browsed but this
-		// will be stored in a file anyway
-		// now we can continually modifiy the cookies and not worry about them
-		// being affected for this current session...
+		
 	}
 
 	private Cookie initialiseNewCookie(String name, String value) {
@@ -174,18 +171,18 @@ public class HistoryController implements Controller {
 		return cookie;
 	}
 
-	private void extractAndProcessDateLastModified(HttpServletRequest request, HttpServletResponse response)
+	private String extractAndProcessDateLastModified(HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
 		Cookie[] cookies = request.getCookies();
 		String date = null;
+
 		for (Cookie cookie : cookies) {
 			if (cookie.getName().equals("dateLastVisited")) {
 				date = cookie.getValue();
-				// cookie.setValue(null);
-				// cookie.setPath("/");
-				// cookie.setMaxAge(0); don't do this yet otherwise will have to
-				// response.addCookie(cookie);
-				// change data
+				 cookie.setValue(null);  
+				 cookie.setPath("/");    
+				 cookie.setMaxAge(0); 
+				 response.addCookie(cookie);
 				System.out.println("Found date last visited cookie " + date);
 				break;
 			}
@@ -196,10 +193,10 @@ public class HistoryController implements Controller {
 		}
 		// regardless of whether it is their first visit or not, we need to add
 		// a new cookie of current date to the response..but also make sure
-		// we have added our entry date cookie into the session
-		// response.addCookie(initialiseNewCookie("dateLastVisited", new
-		// Date().toString()));
-		request.getSession().setAttribute("dateLastVisited", date);
+		// we have added our entry date cookie into the session  // the one for testing is Mon Sep 28 14:49:16 SAST 2015
+//		response.addCookie(initialiseNewCookie("dateLastVisited","Mon Sep 28 14:49:16 SAST 2015"));
+		response.addCookie(initialiseNewCookie("dateLastVisited", new Date().toString()));
+		return date;
 	}
 
 	private Cookie getBrowseCategoryCookie(HttpServletRequest request, HttpServletResponse response) {

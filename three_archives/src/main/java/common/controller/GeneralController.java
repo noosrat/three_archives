@@ -8,11 +8,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-
 import common.model.ManageUsers;
-import common.model.User;
 import configuration.ArchivalService;
-
 import configuration.PropertiesHandler;
 import history.HistoryController;
 import search.BrowseController;
@@ -42,7 +39,7 @@ public class GeneralController implements Controller {
 //		userManager.addUser(new User("student","student","privileged"));
 
 		HttpSession session = request.getSession();
-		clearArchiveSessionInformation(session);
+		clearArchiveSpecificSessionInformation(session);
 		request.getSession().setAttribute("searchCategories", SearchController.retrieveSearchCategories());
 		session.setAttribute("MEDIA_CART", cart);
 		
@@ -120,7 +117,7 @@ public class GeneralController implements Controller {
 	}
 
 	// the following all differ per archive
-	private void clearArchiveSessionInformation(HttpSession session) {
+	private void clearArchiveSpecificSessionInformation(HttpSession session) {
 		System.out.println("Clearing session information");
 		session.setAttribute("browseCategoryCookie", null);
 		session.setAttribute("objectsModifiedSinceLastVisit", null);

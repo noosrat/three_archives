@@ -28,18 +28,18 @@
 	rel="stylesheet">
 <link href="${pageContext.request.contextPath}/css/typeahead.css"
 	rel="stylesheet">
+<link rel="stylesheet"
+	href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
 <script type="text/javascript"
 	src="${pageContext.request.contextPath}/js/jquery-1.11.3.js"></script>
 <script type="text/javascript"
 	src="${pageContext.request.contextPath}/bootstrap-3.3.5/js/bootstrap.js"></script>
-<script type="text/javascript"
-	src="${pageContext.request.contextPath}/js/typeahead.js"></script>
-<link rel="stylesheet"
-	href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
 <script
 	src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 <script
 	src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+<script type="text/javascript"
+	src="${pageContext.request.contextPath}/js/typeahead.js"></script>
 
 <script type="text/javascript">
 	$(document).ready(function() {
@@ -97,28 +97,27 @@ h3 {
 					<c:forEach var="service" items="${SERVICES}">
 						<c:if test="${service.value!='' && service.value!= ' '}">
 
-						<c:choose>
-							<c:when test="${service.value eq 'Uploads'}">
-								<%if (session.getAttribute("USER").equals("ADMINISTRATOR")){%>
-							
-									<li><a href="${pageContext.request.contextPath}/archives/${service.value}">${service.key}</a></li>
-								<%}%>
-								<li>HELLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLO</li>
-							</c:when>
-							<c:otherwise>
-								<li><a
-									href="${pageContext.request.contextPath}/archives/${service.value}">${service.key}</a></li>
-								<li>
-							</c:otherwise>
-						</c:choose>
+							<c:choose>
+								<c:when test="${service.key eq 'Uploads'}">
+									<%--if (session.getAttribute("USER").equals("ADMINISTRATOR")){--%>
+									<li><a
+										href="${pageContext.request.contextPath}/archives/${service.value}">${service.key}</a></li>
+									<%--}--%>
+								</c:when>
+								<c:otherwise>
+									<li><a
+										href="${pageContext.request.contextPath}/archives/${service.value}">${service.key}</a></li>
+									<li>
+								</c:otherwise>
+							</c:choose>
 						</c:if>
 					</c:forEach>
-					<%if (session.getAttribute("USER").equals("ADMINISTRATOR")){%>
-							
-								<li><a
-								href="${pageContext.request.contextPath}/archives/redirect_user">Users</a></li>
-					<%}%>
+					<!--add user stuff here-->
+					<%--if (session.getAttribute("USER").equals("ADMINISTRATOR")){--%>
 
+					<li><a
+						href="${pageContext.request.contextPath}/archives/redirect_user">Users</a></li>
+					<%--}--%>
 
 				</ul>
 				<c:if test="${not empty SERVICES['Browse']}">
@@ -151,7 +150,7 @@ h3 {
 										<input
 											class="form-control typeahead tt-query tt-hint tt-dropdown-menu tt-suggestion"
 											data-provider="typeahead" type="text"
-											placeholder="Search Archive" value="${terms}"
+											placeholder="Search Archive" 
 											autocomplete="off" spellcheck="false" name="terms">
 									</div>
 								</div>
@@ -169,9 +168,7 @@ h3 {
 
 	<div class="container">
 		<p></p>
-		<br>
-		<br>
-		<br>
+		<br> <br> <br>
 		<div class="row">
 			<div class="col-lg-12" style="text-align: center">
 				<h2>About Sequins, Self & Struggle</h2>

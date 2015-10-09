@@ -211,7 +211,7 @@ $(document).ready(function() {
 											<input
 												class="form-control typeahead tt-query tt-hint tt-dropdown-menu tt-suggestion"
 												data-provider="typeahead" type="text"
-												placeholder="Search Archive" value="${terms}"
+												placeholder="Search Archive" 
 												autocomplete="off" spellcheck="false" name="terms">
 										</div>
 									</div>
@@ -237,7 +237,6 @@ $(document).ready(function() {
 						data-target="${pageContext.request.contextPath}/archives/browse"><i
 							class="fa fa-fw fa-arrows-v"></i>BROWSE ALL <i
 							class="fa fa-fw fa-caret-down"></i> </a></li>
-					<hr>
 					<c:forEach var="category" items="${categoriesAndObjects}">
 						<li><a
 							href="${pageContext.request.contextPath}/archives/browse?category=${category.key}"
@@ -245,8 +244,6 @@ $(document).ready(function() {
 								${category.key} <span class="badge" style="float: right;">${fn:length(category.value)}</span>
 						</a></li>
 					</c:forEach>
-					<p></p>
-					<p></p>
 					<c:if test="${not empty SERVICES['History']}">
 
 						<li><a href="javascript:;" data-toggle="collapse"
@@ -266,13 +263,13 @@ $(document).ready(function() {
 								</c:if>
 							</ul></li>
 
-
+						<div style="position: absolute; bottom: 50px; left:10px">
 						<form action="${pageContext.request.contextPath}/archives/browse">
 								<textarea id="cartItems" name="addedtocart" readonly=readonly style="display:none;"></textarea>
-								<input type="submit" value="Send Selected Items To Cart"/>
+								<input type="submit" class="btn btn-default" value="Download Selected Items"/>
 								<script type="text/javascript">console.log("${digitalObject.pid}");</script>
 						</form>
-
+</div>
 					</li>
 					</c:if>
 				</ul>
@@ -363,20 +360,29 @@ $(document).ready(function() {
 						<c:set var="count" value="0" scope="page" />
 						<c:forEach var="digitalObject" items="${objectsForArchive}">
 						<div class="col-lg-3 col-sm-4 col-xs-6 portfolio-item">
-							<input id="${digitalObject.pid}" type="checkbox" onchange="change(this)"/>
+							
+							<div class="thumbnail">
+							
+							
+								<div style="overflow:hidden; width:300px; height:250px" >
 								<a href="#lightbox${count}" 
 									data-toggle="modal" data-target="#lightbox${count}">
-
-
-]
-								<!-- <div class="caption">
-									<div class="caption-content">[VIEW MORE DETAILS]</div>
-								</div> --> <!-- caption --> <img
+								
+								<img 
 								src="${digitalObject.datastreams['IMG'].content}"
-								class="img-thumbnail img-responsive" alt="image unavailable" style="height: 300px; width: 100%; display: block;">
-<!--  								class="img-thumbnail img-responsive" alt="image unavailable" style="width: 300px; max-height: 500px"> -->
+								class="img-responsive" alt="image unavailable">
+<!--  								class="img-thumbnail img-responsive" alt="image unavailable" style="style="height: 300px; width: 100%; display: block"> -->
+
 							</a>
-						</div>
+</div>	
+
+ 
+													
+							<input align="right" id="${digitalObject.pid}" type="checkbox" onchange="change(this)"/>
+							
+					</div>
+
+</div>
 						<c:set var="count" value="${count + 1}" scope="page" />
 					</c:forEach>
 					<!-- 			</div> -->
@@ -425,10 +431,9 @@ $(document).ready(function() {
 					</div>
 					<c:set var="count" value="${count + 1}" scope="page" />
 				</c:forEach>
-			</div></div>
-			<!-- container fluid -->
-		</div>
-	</div>
+</div>			</div></div>
+			
+	
 	<!-- wrapper -->
 	<script type="text/javascript"
 		src="${pageContext.request.contextPath}/js/lightbox.js"></script>

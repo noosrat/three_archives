@@ -28,9 +28,7 @@ public class ThreeArchivesServlet extends HttpServlet {
 			{
 		System.out.println("Entered Servlet");
 
-		//just wnat to quickly clear out the cookie values we have first
 		System.out.println("PathInfo : " + request.getPathInfo());
-//		clearAllOtherCookies(request,response);
 		// clearAllOtherCookies(request,response);
 		ServiceDelegator serviceDelegator = new ServiceDelegator();
 		String result = serviceDelegator.execute(request, response);
