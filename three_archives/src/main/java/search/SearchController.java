@@ -67,7 +67,7 @@ public class SearchController implements Controller {
 		String limit = (String) request.getSession().getAttribute("limitSearch");
 
 		if (limit != null && !limit.isEmpty() && Boolean.parseBoolean(limit)) {
-			System.out.println("WWWWWWWWWWWWWWWE ARE IN LIMIT SEARCH");
+			System.out.println("WE ARE IN LIMIT SEARCH");
 			Set<FedoraDigitalObject> results = new HashSet<FedoraDigitalObject>();
 			// we essentially just need to filter the result we had with the new
 			// search term?
@@ -127,6 +127,7 @@ public class SearchController implements Controller {
 		if ((digitalObjects == null || digitalObjects.isEmpty())) {
 			request.setAttribute("message", "No results to return");
 		}
+		
 		request.getSession().setAttribute("objectsForArchive", digitalObjects);
 		similarSearchTags(request);
 	}

@@ -52,6 +52,7 @@ public class GeneralController implements Controller {
 		if (session.getAttribute("objects") == null) {
 			session.setAttribute("objects", SearchController.getSearch().findFedoraDigitalObjects("*"));//this is getting all of the archive documents...
 			
+			System.out.println(session.getAttribute("objects").toString());
 		}
 		browseController.execute(request, response);
 		historyController.execute(request, response);

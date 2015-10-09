@@ -342,7 +342,6 @@ public class Browse extends Service {
 
 	private static void groupFedoraObjectsInCategoriesAndSubCategories() {
 		// Map<Catgory, Map<SubCategory,FedoraObjects>>
-		System.out.println("BEGAN GROUPING OUR OBJECTS INTO THEIR SUBCATEGORIES");
 		TreeMap<String, TreeMap<String, Set<FedoraDigitalObject>>> groupedObjects = new TreeMap<String, TreeMap<String, Set<FedoraDigitalObject>>>();
 
 		for (String category : getBrowsingCategories().keySet()) {
@@ -393,7 +392,6 @@ public class Browse extends Service {
 					}
 				}
 			}
-			System.out.println("COMPLETED GROUPING OUR OBJECTS INTO THEIR SUBCATEGORIES");
 		}
 		setCategorisedFedoraDigitalObjects(groupedObjects);
 

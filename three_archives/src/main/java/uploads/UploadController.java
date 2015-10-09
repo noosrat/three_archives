@@ -1,11 +1,16 @@
 package uploads;
 
+import java.io.File;
+import java.net.URL;
 import java.util.HashMap;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.io.FileUtils;
+
 import common.controller.Controller;
+import common.fedora.DublinCoreDatastream;
 import common.fedora.FedoraClient;
 import common.fedora.FedoraException;
 import common.fedora.FedoraGetRequest;
@@ -47,6 +52,8 @@ public class UploadController implements Controller{
 			archives.put((String)request.getSession().getAttribute("ARCHIVE"), (String)request.getSession().getAttribute("MEDIA_PREFIX"));
 			AutoCompleteUtility.refreshAutocompleFile(archives);
 			result = "WEB-INF/frontend/Uploads/uploadItems.jsp";
+			
+			
 			
 		}
 		

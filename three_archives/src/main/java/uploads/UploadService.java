@@ -8,6 +8,7 @@ import java.io.StringReader;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import org.apache.commons.httpclient.HttpMethod;
+import org.apache.commons.io.FileUtils;
 import org.xml.sax.InputSource;
 import common.fedora.UploadClient;
 
@@ -77,7 +78,7 @@ public class UploadService {
 			try {
 				//create new object
 				file_path=storage_path+filename;
-				file2= new File(file_path);//
+				//file2= new File(file_path);//
 				//get next PID
 				
 				
@@ -95,19 +96,28 @@ public class UploadService {
 				String newPID=getPID(archive, changeme_pid);
 				System.out.println(newPID);
 				
+				File url = new File (file_path);
+			
+				File dest= new File("/home/nox/Applications/apache/apache-tomcat-8.0.24/webapps/content/data/test");
+				FileUtils.copyFileToDirectory(url, dest);
+				
+				//File useThis=new File("/home/nox/Applications/apache/apache-tomcat-8.0.24/webapps/content/data/test/"+filename);
+				
+				File useThis=new File("/home/nox/Applications/apache/apache-tomcat-8.0.24/webapps/data/content/"+archive+"/"+filename);
+				
 				client.POST("/objects/"+newPID+"/");//
 				//add the image to the object
 				if(noXMLformat.equals("image/jpeg"))
 				{
-					client.POST("/objects/"+newPID+"/datastreams/IMG?controlGroup=M&mimeType="+noXMLformat,file2,false);
+					client.POST("/objects/"+newPID+"/datastreams/IMG?controlGroup=M&mimeType="+noXMLformat,useThis,false);
 				}
 				else if (noXMLformat.equals("video/mp4"))
 				{
-					client.POST("/objects/"+newPID+"/datastreams/VID?controlGroup=M&mimeType="+noXMLformat,file2,false);
+					client.POST("/objects/"+newPID+"/datastreams/VID?controlGroup=M&mimeType="+noXMLformat,useThis,false);
 				}
 				else if (noXMLformat.equals("audio/mp3"))
 				{
-					client.POST("/objects/"+newPID+"/datastreams/AUD?controlGroup=M&mimeType="+noXMLformat,file2,false);
+					client.POST("/objects/"+newPID+"/datastreams/AUD?controlGroup=M&mimeType="+noXMLformat,useThis,false);
 				}
 				
 				//add the metadata to the object

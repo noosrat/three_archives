@@ -110,10 +110,12 @@
 
 							<c:choose>
 								<c:when test="${service.key eq 'Uploads'}">
-									<%--if (session.getAttribute("USER").equals("ADMINISTRATOR")){--%>
+									<% if (session.getAttribute("USER")!=null){
+										if (session.getAttribute("USER").equals("ADMINISTRATOR")){%>
+									
 									<li><a
 										href="${pageContext.request.contextPath}/archives/${service.value}">${service.key}</a></li>
-									<%--}--%>
+									<%}}%>
 								</c:when>
 								<c:otherwise>
 									<li><a
@@ -123,13 +125,13 @@
 							</c:choose>
 						</c:if>
 					</c:forEach>
-					<!--add user stuff here-->
-					<%--if (session.getAttribute("USER").equals("ADMINISTRATOR")){--%>
+					<%if (session.getAttribute("USER")!=null){
+						if (session.getAttribute("USER").equals("ADMINISTRATOR")){%>
+					
 
 					<li><a
 						href="${pageContext.request.contextPath}/archives/redirect_user">Users</a></li>
-					<%--}--%>
-
+					<%}}%>
 				</ul>
 				<c:if test="${not empty SERVICES['Browse']}">
 					<ul class="nav navbar-nav navbar-right top-nav">
@@ -200,10 +202,10 @@
 
 					<h3>Select Archive</h3>
 					<div>
-						<input type="radio" name="archive" value="Harfield" required>Harfield Village
-						<input type="radio" name="archive" value="Snaps" required>Movie Snaps<br>	
-						<input type="radio" name="archive" value="MissGay" required>Miss Gay WC
-						<input type="radio" name="archive" value="SpringQueen" required>Spring Queen<br>
+						<input type="radio" name="archive" value="harfield_village" required>Harfield Village
+						<input type="radio" name="archive" value="snaps" required>Movie Snaps<br>	
+						<input type="radio" name="archive" value="miss_gay" required>Miss Gay WC
+						<input type="radio" name="archive" value="spring_queen" required>Spring Queen<br>
 					</div>
 					<div>
 					<h3>Enter path of files:</h3>

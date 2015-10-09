@@ -97,10 +97,12 @@
 
 							<c:choose>
 								<c:when test="${service.key eq 'Uploads'}">
-									<%--if (session.getAttribute("USER").equals("ADMINISTRATOR")){--%>
+									<%if(session.getAttribute("USER")!=null){
+										if (session.getAttribute("USER").equals("ADMINISTRATOR")){%>
+									
 									<li><a
 										href="${pageContext.request.contextPath}/archives/${service.value}">${service.key}</a></li>
-									<%--}--%>
+									<%}}%>
 								</c:when>
 								<c:otherwise>
 									<li><a
@@ -110,8 +112,13 @@
 							</c:choose>
 						</c:if>
 					</c:forEach>
-					<!--add user stuff here-->
-					<%--if (session.getAttribute("USER").equals("ADMINISTRATOR")){--%>
+					<%if (session.getAttribute("USER")!=null){
+						if (session.getAttribute("USER").equals("ADMINISTRATOR")){%>
+					
+
+					<li><a
+						href="${pageContext.request.contextPath}/archives/redirect_user">Users</a></li>
+					<%}}%>
 
 					<li><a
 						href="${pageContext.request.contextPath}/archives/redirect_user">Users</a></li>
