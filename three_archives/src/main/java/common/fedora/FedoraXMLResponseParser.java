@@ -122,7 +122,7 @@ public class FedoraXMLResponseParser {
 			Node tag = element.getElementsByTagName(tagName).item(0);
 			if (tag != null) {
 				String textContent = element.getElementsByTagName(tagName).item(0).getTextContent();
-				if (!textContent.trim().isEmpty()) {
+				if (textContent!=null && !textContent.trim().isEmpty()) {
 					if (dc.equals(DublinCore.DESCRIPTION)) {
 						String[] description = textContent.split("%");
 						switch (description.length) {
@@ -143,7 +143,7 @@ public class FedoraXMLResponseParser {
 					// coverage structure:
 					// <dc:coverage>Location:%21,22,11</dc:coverage>
 						String[] coverage = textContent.split("%");
-					if(coverage.length!=0);{
+					if(coverage.length!=0){
 					dublinCoreMetadata.put("LOCATION", coverage[0].trim());
 					dublinCoreMetadata.put(dc.name(), coverage[1].trim());}
 				} else {

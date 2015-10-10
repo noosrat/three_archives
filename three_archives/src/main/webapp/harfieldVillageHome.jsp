@@ -200,7 +200,17 @@ email: jm.higgins@uct.ac.za</td>
       		</div> 
   	</div>
 </div>
-        
+        <nav class="navbar navbar-inverse navbar-fixed-bottom navbar-fluid"
+		role="navigation">
+		<div class="container">
+			<!-- Brand and toggle get grouped for better mobile display -->
+			<div class="navbar-header">
+				<a class="navbar-brand" href="${pageContext.request.contextPath}">Personal
+					Histories</a>
+			</div>
+		</div>
+		<!-- /.container -->
+	</nav>
   <style>
             .ad {
               position: absolute;
