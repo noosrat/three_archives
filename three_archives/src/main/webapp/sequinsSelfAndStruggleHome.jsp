@@ -264,7 +264,7 @@ h3 {
 		</div>
 		<!-- /.row -->
 	</div>
-	class="navbar navbar-inverse navbar-fixed-bottom navbar-fluid" role="navigation">
+	<div class="navbar navbar-inverse navbar-fixed-bottom navbar-fluid" role="navigation">
         <div class="container">
             <!-- Brand and toggle get grouped for better mobile display -->
             <div class="navbar-header">
