@@ -271,7 +271,7 @@ h3 {
 
 			<div class="row" >
 				<div class="navbar-header col-sm-8">
-					<a class="navbar-brand" href="${pageContext.request.contextPath}">Personal Histories</a>
+					<a class="navbar-brand" href="${pageContext.request.contextPath}"><span class="glyphicon glyphicon-home"></span> Personal Histories</a>
 				</div>
 			<%if (session.getAttribute("USER")==null){%>
 				<div class="col-sm-3">

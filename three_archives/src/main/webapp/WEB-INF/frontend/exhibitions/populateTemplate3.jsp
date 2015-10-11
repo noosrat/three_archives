@@ -41,6 +41,7 @@
 	<script src="${pageContext.request.contextPath}/jquery.bxslider/jquery.bxslider.min.js"></script>
 <script>
 	$(document).ready(function(){
+		$('[data-toggle="tooltip"]').tooltip(); 
  		 $('.slider4').bxSlider({
    		 slideWidth: 210,
    		 minSlides: 2,
@@ -108,15 +109,23 @@
     		padding:10px;
     	}
 		#toolBox{
-			height:40px;
-			width:240px;
+			height:auto;
+			width:220px;
 			text-align:center;
+			padding:8px;
+			border-radius:8px;
+			background-color:#E0EBEB;
 		}
 		.thumb {
     			height: 100px;
     			border: 1px solid #000;
     			margin: 10px 5px 0 0;
   		}
+		textarea{
+			text-align:center;
+			font-family:"Times New Roman", Times, serif;  
+   			font-size: 14px; 
+		}
 	</style>
 <script>
 function selectBorder(event){
@@ -273,18 +282,31 @@ function selectImage(event) {
 			<textarea id="demo" name="user_action" readonly=readonly style="display:none;"></textarea>
 			<input type="submit" value="Back" class="btn btn-primary btn-sm" name="exhibition_det"/>
 			<div id="toolBox">
-			<h1>Toolbox</h1>
+					<h3>Toolbox</h3>
 						<ul id="mainEx" style="list-style-type:none;margin:auto;padding:5px;text-align:center">
 							<li style="display:inline;">
-								<input type="button" style= "width:25px;height:25px;background: url('${pageContext.request.contextPath}/images/icons/coverIcon.jpg') no-repeat;" data-toggle="modal" data-target="#backgroundImage">
+								
+								<input  type="button" style= "width:25px;height:25px;background: url('${pageContext.request.contextPath}/images/icons/coverIcon.jpg') no-repeat;" data-toggle="modal" data-target="#backgroundImage">
 							</li>
 					
 							<li style="display:inline; ">
-								<input type="button" style= "width:25px;height:25px;background: url('${pageContext.request.contextPath}/images/icons/borderIcon.jpg') no-repeat;" data-toggle="modal" data-target="#imageBorders">
+								<span data-toggle="tooltip" title="Add a cover image to exhibition" class="glyphicon glyphicon-question-sign"></span>
+							
 							</li>
 
 						</ul>
-			</div><br><br>
+						<ul id="mainEx" style="list-style-type:none;margin:auto;padding:5px;text-align:center">
+							<li style="display:inline;">
+								<input type="button" style= "width:25px;height:25px;background: url('${pageContext.request.contextPath}/images/icons/borderIcon.jpg') no-repeat;" data-toggle="modal" data-target="#imageBorders">
+							</li>
+					
+							<li style="display:inline; ">
+								
+								<span data-toggle="tooltip" title="Add borders to images" class="glyphicon glyphicon-question-sign"></span>
+							</li>
+
+						</ul>
+						</div><br><br>
 				<div class="modal fade" id="backgroundImage" role="dialog" style="z-index:30000">
     			<div class="modal-dialog">
     				<div class="modal-content">

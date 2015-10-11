@@ -36,10 +36,11 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
   <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 
-<link type="text/css" href="${pageContext.request.contextPath}/jquery.bxslider/jquery.bxslider.css" rel="stylesheet" />
-<script src="${pageContext.request.contextPath}/jquery.bxslider/jquery.bxslider.min.js"></script>
+<link type="text/css" href="jquery.bxslider/jquery.bxslider.css" rel="stylesheet" />
+<script src="jquery.bxslider/jquery.bxslider.min.js"></script>
 <script>
 	$(document).ready(function(){
+		$('[data-toggle="tooltip"]').tooltip(); 
  		 $('.slider4').bxSlider({
    		 slideWidth: 210,
    		 minSlides: 2,
@@ -73,9 +74,17 @@
     			color: #000000;
 		}
 		#toolBox{
-			height:40px;
-			width:240px;
+			height:auto;
+			width:220px;
 			text-align:center;
+			padding:8px;
+			border-radius:8px;
+			background-color:#E0EBEB;
+		}
+		textarea{
+			text-align:center;
+			font-family:"Times New Roman", Times, serif;  
+   			font-size: 14px; 
 		}
 </style>
 <style>
@@ -267,14 +276,27 @@
 					<textarea id="border" name="border" readonly=readonly style="display:none;"></textarea>
 					<textarea id="demo" name="user_action" readonly=readonly style="display:none;"></textarea>
 					<div id="toolBox">
-					<h1>Toolbox</h1>
+					<h3>Toolbox</h3>
 						<ul id="mainEx" style="list-style-type:none;margin:auto;padding:5px;text-align:center">
 							<li style="display:inline;">
-								<input type="button" style= "width:25px;height:25px;background: url('${pageContext.request.contextPath}/images/icons/coverIcon.jpg') no-repeat;" data-toggle="modal" data-target="#backgroundImage">
+								
+								<input  type="button" style= "width:25px;height:25px;background: url('${pageContext.request.contextPath}/images/icons/coverIcon.jpg') no-repeat;" data-toggle="modal" data-target="#backgroundImage">
 							</li>
 					
 							<li style="display:inline; ">
+								<span data-toggle="tooltip" title="Add a cover image to exhibition" class="glyphicon glyphicon-question-sign"></span>
+							
+							</li>
+
+						</ul>
+						<ul id="mainEx" style="list-style-type:none;margin:auto;padding:5px;text-align:center">
+							<li style="display:inline;">
 								<input type="button" style= "width:25px;height:25px;background: url('${pageContext.request.contextPath}/images/icons/borderIcon.jpg') no-repeat;" data-toggle="modal" data-target="#imageBorders">
+							</li>
+					
+							<li style="display:inline; ">
+								
+								<span data-toggle="tooltip" title="Add borders to images" class="glyphicon glyphicon-question-sign"></span>
 							</li>
 
 						</ul>
@@ -460,13 +482,23 @@
 	</div>
 		
 	
-	
-	<nav class="navbar navbar-inverse navbar-fixed-bottom navbar-fluid"
-		role="navigation">
+
+	<nav class="navbar navbar-inverse navbar-fixed-bottom navbar-fluid" role="navigation">
 		<div class="container">
 			<!-- Brand and toggle get grouped for better mobile display -->
-			<div class="navbar-header">
-				<a class="navbar-brand" href="${pageContext.request.contextPath}">Personal Histories</a>
+			
+			<div class="row" >
+				<div class="navbar-header col-sm-8">
+					<a class="navbar-brand" href="${pageContext.request.contextPath}"><span class="glyphicon glyphicon-home"></span> Personal Historierrs</a>
+				</div>
+				<div class="col-sm-3">
+					<div class="navbar-brand">Logged on as a privileged user</div>
+				</div>
+				<div class="col-sm-1">
+					<form role="form" method="post" action="${pageContext.request.contextPath}/archives/logout_user">
+                				<input style="margin:15px" type="submit" value="logout" class="btn btn-primary btn-xs " name="logout"/>
+                			</form>
+				</div>
 			</div>
 		</div>
 		<!-- /.container -->
