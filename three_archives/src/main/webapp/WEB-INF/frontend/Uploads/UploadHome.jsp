@@ -38,6 +38,7 @@
 
 <script type="text/javascript">
 	$(document).ready(function() {
+		$('[data-toggle="tooltip"]').tooltip(); 
 		var archive ='<%=session.getAttribute("ARCHIVE_CONCAT")%>';
 		var words = "/data/" + archive + ".json";
 		var countries = new Bloodhound({
@@ -52,6 +53,7 @@
 			name : 'countries',
 			source : countries
 		});
+		
 	});
 </script>
 <style>
@@ -61,15 +63,14 @@
     			margin: 10px 5px 0 0;
   		}
 		#instruction{
-			border-radius:5px;
-			border: 2px solid gray;
-			box-shadow: 5px 5px 5px -4px #888;
+			
 			background-color:#ffffff;
 			display:none;
 			width:300px;
-			text-align:center;
-			margin:auto;
-			margin-top:200px;
+			
+			
+			margin-top:345px;
+			opacity:0.9;
 			
 		}
 
@@ -191,16 +192,16 @@
 					<br><br>
   					<div class="panel-group">
     						<div class="panel panel-default">
-      							<div class="panel-heading">
+      							<a data-toggle="collapse" href="#collapse1"><div class="panel-heading">
         							<h4 class="panel-title">
-          								<a data-toggle="collapse" href="#collapse1">Get started</a>
-        							</h4>
+          								Get started
+        							</h4></a>
       							</div>
      							 <div id="collapse1" class="panel-collapse collapse">
         							<div class="panel-body">
 									<div id="select_files" >
 
-					<h3>Select Archive</h3>
+					<h4>Select Archive</h4>
 					<div>
 						<input type="radio" name="archive" value="harfield_village" required>Harfield Village
 						<input type="radio" name="archive" value="snaps" required>Movie Snaps<br>	
@@ -208,12 +209,15 @@
 						<input type="radio" name="archive" value="spring_queen" required>Spring Queen<br>
 					</div>
 					<div>
-					<h3>Enter path of files:</h3>
-					<input type="text" name="storage_path" id="storage_path" required placeholder="eg. C:/images/"><br><br>
-					<output id="list"></output> 
-					<input type="file" id="files" name="files[]" multiple/>
+					<h4>Enter image folder location</h4>
+					<input type="text" name="storage_path" id="storage_path" required placeholder="eg. C:/images/"> <span data-toggle="tooltip" title="This is the loaction in your computer where all the images you are about to select are stored" class="glyphicon glyphicon-question-sign"></span><br><br>
+					<div id="file_input">
+						<output id="list"></output> 
+						<input type="file" id="files" name="files[]" multiple/><br>
+					</div>
+					<button class="btn btn-primary btn-sm" style="float:center;margin-left:150px" id="nextButton" type="button" onClick="makeClickable()">Add metadata</button>
 
-					<button class="btn btn-primary btn-sm" style="float:center;margin-left:200px" id="nextButton" type="button" onClick="makeClickable()">Next</button>
+					
 					<br>
 					</div>
 					
@@ -234,12 +238,10 @@
 					</div>
 					<p> </p><br><br><br>
 		</div>
-	<div class="col-lg-7" style="margin-left:10px; background-color:#FFFFFF">
+	<div class="col-lg-7" style="margin-left:10px; background-color:#FFFFFF;">
 		
 			<div id="instruction" >
-				<h3>Select image to add metadata</h3>
-				
-  					
+				<h3><span class="glyphicon glyphicon-hand-left"></span> Select image to add metadata</h3>
 				<br><br>
 			</div>
 		 	
@@ -282,7 +284,7 @@
 	
 	<div class="col-lg-1">
 	<br><br>
-		<input class="button btn btn-primary btn-sm" type="submit" value="Next" name="upload_files">
+		<input class="button btn btn-primary btn-sm" type="submit" value="Done" name="upload_files">
 	</div>
 </form>	
 
@@ -298,7 +300,7 @@
 		<div class="container">
 			<!-- Brand and toggle get grouped for better mobile display -->
 			<div class="navbar-header">
-				<a class="navbar-brand" href="${pageContext.request.contextPath}">Personal
+				<a class="navbar-brand" href="${pageContext.request.contextPath}"><span class="glyphicon glyphicon-home"></span> Personal
 					Histories</a>
 			</div>
 		</div>
@@ -389,7 +391,7 @@ function selectImage(event) {
 	
 	if(document.getElementById("able_selected_image").value=="false")
 	{
-		alert("First Complete current image");
+		alert("Please complete current action before proceeding");
 		
 	}
 	else if(document.getElementById(event).style.border=='5px solid green')
@@ -458,7 +460,9 @@ function cancelSelection(){
 
 function makeClickable()
 {
-	//document.getElementById("select_files").style.diplay="none";
+	//document.getElementById("list").style.diplay="none";
+	//document.getElementById("files").style.diplay="none";
+	//document.getElementById("file_input").style.diplay="none";
 	document.getElementById("nextButton").style.display="none";
 	document.getElementById("able_selected_image").value="true"
 	document.getElementById("instruction").style.display="block";

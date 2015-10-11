@@ -192,7 +192,7 @@
 		<div class="container">
 			<!-- Brand and toggle get grouped for better mobile display -->
 			<div class="navbar-header">
-				<a class="navbar-brand" href="${pageContext.request.contextPath}">Personal
+				<a class="navbar-brand" href="${pageContext.request.contextPath}"><span class="glyphicon glyphicon-home"></span> Personal
 					Histories</a>
 			</div>
 		</div>
