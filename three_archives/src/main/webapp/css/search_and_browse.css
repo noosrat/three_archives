@@ -52,7 +52,7 @@
 #portfolio .portfolio-item .portfolio-link .caption .caption-content h3,
 	#portfolio .portfolio-item .portfolio-link .caption .caption-content h4
 	{
-	margin: 0;
+	margin: 0.1;
 }
 
 #portfolio * {
@@ -61,10 +61,10 @@
 /*end image portfolio*/
 /* proftolio modal*/
 .portfolio-modal .modal-content {
-	padding: 100px 0;
+	padding: 10px 0;
 	min-height: 100%;
 	min-width: 100%;
-	border: 10px;
+	border: 5px;
 	border-radius: 0;
 	text-align: center;
 	background-color: rgba(22, 22, 22, .8);

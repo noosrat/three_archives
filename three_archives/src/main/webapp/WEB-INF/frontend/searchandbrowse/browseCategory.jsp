@@ -176,19 +176,12 @@ $(document).ready(function() {
 			</div>
 
 		</nav>
-
-		<nav class="navbar navbar-inverse navbar-fixed-bottom">
-			<div class="container-fluid">
-				<div class="navbar-header">
-					<button type="button" class="navbar-toggle collapsed"
-						data-toggle="collapse" data-target="#navbar" aria-expanded="false"
-						aria-controls="navbar">
-						<span class="sr-only">Toggle navigation</span> <span
-							class="icon-bar"></span> <span class="icon-bar"></span> <span
-							class="icon-bar"></span>
-					</button>
-					<a class="navbar-brand" href="#">Three Archives</a>
-
+	<nav class="navbar navbar-inverse navbar-fixed-bottom navbar-fluid" role="navigation">
+        <div class="container-fluid">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+<a class="navbar-brand" href="${pageContext.request.contextPath}"><span
+							class="glyphicon glyphicon-home"></span> Personal Histories</a>
 				</div>
 			</div>
 		</nav>
@@ -230,7 +223,7 @@ $(document).ready(function() {
 									<c:if test="${conditionVariable eq 'true'}">
 										<img class="img-responsive img-thumbnail"
 											src="${object.datastreams['IMG'].content}"
-											alt="album unavailable"
+											alt="album cover unavailable"
 											style="width: 90%;">
 									</c:if>
 									<c:set var="conditionVariable" value="false" />

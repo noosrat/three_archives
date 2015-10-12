@@ -59,7 +59,7 @@
 <body>
 
 	<!-- Navigation -->
-<!-- Navigation -->
+	<!-- Navigation -->
 	<nav class="navbar navbar-inverse navbar-fixed-top navbar-left"
 		role="navigation">
 		<div class="container-fluid">
@@ -76,12 +76,17 @@
 
 							<c:choose>
 								<c:when test="${service.key eq 'Uploads'}">
-									<%if (session.getAttribute("USER")!=null){
-										if (session.getAttribute("USER").equals("ADMINISTRATOR")){%>
-								
+									<%
+										if (session.getAttribute("USER") != null) {
+															if (session.getAttribute("USER").equals("ADMINISTRATOR")) {
+									%>
+
 									<li><a
 										href="${pageContext.request.contextPath}/archives/${service.value}">${service.key}</a></li>
-									<%}}%>
+									<%
+										}
+														}
+									%>
 								</c:when>
 								<c:otherwise>
 									<li><a
@@ -91,13 +96,18 @@
 							</c:choose>
 						</c:if>
 					</c:forEach>
-					<%if (session.getAttribute("USER")!=null){
-						if (session.getAttribute("USER").equals("ADMINISTRATOR")){%>
-					
+					<%
+						if (session.getAttribute("USER") != null) {
+							if (session.getAttribute("USER").equals("ADMINISTRATOR")) {
+					%>
+
 
 					<li><a
 						href="${pageContext.request.contextPath}/archives/redirect_user">Users</a></li>
-					<%}}%>
+					<%
+						}
+						}
+					%>
 
 				</ul>
 				<c:if test="${not empty SERVICES['Browse']}">
@@ -130,8 +140,8 @@
 										<input
 											class="form-control typeahead tt-query tt-hint tt-dropdown-menu tt-suggestion"
 											data-provider="typeahead" type="text"
-											placeholder="Search Archive" 
-											autocomplete="off" spellcheck="false" name="terms">
+											placeholder="Search Archive" autocomplete="off"
+											spellcheck="false" name="terms">
 									</div>
 								</div>
 								<button type="submit" class="btn btn-default">
@@ -150,72 +160,89 @@
 		<div class="row">
 
 			<script type="text/javascript">
-			var l = document.getElementById('map');
-			for(var i=0; i<50; i++)
-			   l.click();
+				var l = document.getElementById('map');
+				for (var i = 0; i < 50; i++)
+					l.click();
 			</script>
 
 		</div>
 		<!-- /.row -->
 	</div>
-	<div class="navbar navbar-inverse navbar-fixed-bottom navbar-fluid" role="navigation">
-        <div class="container">
-            <!-- Brand and toggle get grouped for better mobile display -->
-            <div class="navbar-header">
+	<nav class="navbar navbar-inverse navbar-fixed-bottom navbar-fluid"
+		role="navigation">
+		<div class="container-fluid">
+			<!-- Brand and toggle get grouped for better mobile display -->
+			<div class="navbar-header">
 
-			<div class="row" >
-				<div class="navbar-header col-sm-8">
-					<a class="navbar-brand" href="${pageContext.request.contextPath}"><span class="glyphicon glyphicon-home"></span> Personal Histories</a>
-				</div>
-			<%if (session.getAttribute("USER")==null){%>
-				<div class="col-sm-3">
-				</div>
-				<div class="col-sm-1">
-                			<a style="margin:15px" data-toggle="modal" data-target="#login" class="navbar-brand" href="#login">Login</a>
-				</div>
-			<%}
-			 else if (session.getAttribute("USER").equals("incorrect")){%>
-				<div class="col-sm-3">
-					<div class="navbar-brand">Credentials incorrect</div>
-				</div>
-				<div class="col-sm-1">
-					<a style="margin:15px" data-toggle="modal" data-target="#login" class="navbar-brand" href="#login">Login</a>
-				</div>
-                	<%}
-			else if (session.getAttribute("USER").equals("false")){%>
-				<div class="col-sm-3">
-				</div>
-				<div class="col-sm-1">
-					<a style="margin:15px" data-toggle="modal" data-target="#login" class="navbar-brand" href="#login">Login</a>
-				</div>
-			<%} 
-			 else if (session.getAttribute("USER").equals("ADMINISTRATOR")){%>
-				<div class="col-sm-3">
-					<div class="navbar-brand">Logged on as Administrator</div>
-				</div>
-				<div class="col-sm-1">
-					<form role="form" method="post" action="${pageContext.request.contextPath}/archives/logout_user">
-                				<input style="margin:15px" type="submit" value="logout" class="btn btn-primary btn-xs" name="logout"/>
-                			</form>
-				</div>
-			<%}
-			else if(session.getAttribute("USER").equals("privileged")){%>
-				<div class="col-sm-3">
-					<div style="margin-left:600px;" class="navbar-brand">Logged on as a privileged user</div>
-				</div>
-				<div class="col-sm-1">
-					<form role="form" method="post" action="${pageContext.request.contextPath}/archives/logout_user">
-                				<input style="margin:15px" type="submit" value="logout" class="btn btn-primary btn-xs" name="logout"/>
-                			</form>
+
+				<div class="row">
+					<div class="navbar-header col-sm-8">
+						<a class="navbar-brand" href="${pageContext.request.contextPath}"><span
+							class="glyphicon glyphicon-home"></span> Personal Histories</a>
+					</div>
+					<%
+						if (session.getAttribute("USER") == null) {
+					%>
+					<div class="col-sm-3"></div>
+					<div class="col-sm-1">
+						<a style="margin: 15px" data-toggle="modal" data-target="#login"
+							class="navbar-brand" href="#login">Login</a>
+					</div>
+					<%
+						} else if (session.getAttribute("USER").equals("incorrect")) {
+					%>
+					<div class="col-sm-3">
+						<div class="navbar-brand">Credentials incorrect</div>
+					</div>
+					<div class="col-sm-1">
+						<a style="margin: 15px" data-toggle="modal" data-target="#login"
+							class="navbar-brand" href="#login">Login</a>
+					</div>
+					<%
+						} else if (session.getAttribute("USER").equals("false")) {
+					%>
+					<div class="col-sm-3"></div>
+					<div class="col-sm-1">
+						<a style="margin: 15px" data-toggle="modal" data-target="#login"
+							class="navbar-brand" href="#login">Login</a>
+					</div>
+					<%
+						} else if (session.getAttribute("USER").equals("ADMINISTRATOR")) {
+					%>
+					<div class="col-sm-3">
+						<div class="navbar-brand">Logged on as Administrator</div>
+					</div>
+					<div class="col-sm-1">
+						<form role="form" method="post"
+							action="${pageContext.request.contextPath}/archives/logout_user">
+							<input style="margin: 15px" type="submit" value="logout"
+								class="btn btn-primary btn-xs" name="logout" />
+						</form>
+					</div>
+					<%
+						} else if (session.getAttribute("USER").equals("privileged")) {
+					%>
+					<div class="col-sm-3">
+						<div style="margin-left: 600px;" class="navbar-brand">Logged
+							on as a privileged user</div>
+					</div>
+					<div class="col-sm-1">
+						<form role="form" method="post"
+							action="${pageContext.request.contextPath}/archives/logout_user">
+							<input style="margin: 15px" type="submit" value="logout"
+								class="btn btn-primary btn-xs" name="logout" />
+						</form>
+					</div>
+
+					<%
+						}
+					%>
 				</div>
 
-			<%} %>
-			</div>       	
-                
-            </div>
-        </div>
-        <!-- /.container -->
-    </nav>
+			</div>
+		</div>
+		<!-- /.container -->
+	</nav>
 	<!-- /.container -->
 
 

@@ -37,7 +37,7 @@ public class FedoraDigitalObjectTitleComparator implements Comparator<FedoraDigi
 			return 0;
 		}
 		
-		return title1.compareTo(title2);
+		return title1.toLowerCase().compareTo(title2.toLowerCase());
 	}
 
 }

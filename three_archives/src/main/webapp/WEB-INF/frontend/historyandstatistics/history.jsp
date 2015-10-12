@@ -203,180 +203,180 @@
 							<!-- <div class="well"> -->
 							<ul class="nav nav-stacked" id="sidebar">
 								<div class="panel-body">
-								<c:set var="count" value="0" scope="page" />
-								<c:choose>
-									<c:when test="${updatedCategory.key =='DATE'}">
-										<li><a align="left" href="#">${updatedCategory.key} <span
-												class="badge pull-right">${fn:length(updatedCategory.value)}</span>
-										</a></li>
-										<p align="left">
-											<c:forEach var="value" items="${updatedCategory.value}">
-												<a class="label label-default"
-													href="${pageContext.request.contextPath}/archives/history?category=YEAR&YEAR=${value}">${value}</a>
-											</c:forEach>
+									<c:set var="count" value="0" scope="page" />
+									<c:choose>
+										<c:when test="${updatedCategory.key =='DATE'}">
+											<li><a align="left" href="#">${updatedCategory.key}
+													<span class="badge pull-right">${fn:length(updatedCategory.value)}</span>
+											</a></li>
+											<p align="left">
+												<c:forEach var="value" items="${updatedCategory.value}">
+													<a class="label label-default"
+														href="${pageContext.request.contextPath}/archives/history?category=YEAR&YEAR=${value}">${value}</a>
+												</c:forEach>
 
-										</p>
-									</c:when>
-									<c:otherwise>
-										<li><a align="left" href="#">${updatedCategory.key} <span
-												class="badge pull-right">${fn:length(updatedCategory.value)}</span>
-										</a></li>
-										<p align="left">
-											<c:forEach var="value" items="${updatedCategory.value}">
-												<a class="label label-default"
-													href="${pageContext.request.contextPath}/archives/history?category=${updatedCategory.key}&${updatedCategory.key}=${value}">${value}</a>
-											</c:forEach>
+											</p>
+										</c:when>
+										<c:otherwise>
+											<li><a align="left" href="#">${updatedCategory.key}
+													<span class="badge pull-right">${fn:length(updatedCategory.value)}</span>
+											</a></li>
+											<p align="left">
+												<c:forEach var="value" items="${updatedCategory.value}">
+													<a class="label label-default"
+														href="${pageContext.request.contextPath}/archives/history?category=${updatedCategory.key}&${updatedCategory.key}=${value}">${value}</a>
+												</c:forEach>
 
-										</p>
+											</p>
 
-									</c:otherwise>
-								</c:choose>
-						</div>
+										</c:otherwise>
+									</c:choose>
+								</div>
 							</ul>
+						</div>
+						<!-- </div>-->
+					</c:if>
+				</c:forEach>
+
+
 			</div>
-			<!-- </div>-->
-			</c:if>
-			</c:forEach>
+			<!-- /col-3 -->
+			<div class="col-sm-9">
 
-
-		</div>
-		<!-- /col-3 -->
-		<div class="col-sm-9">
-
-			<!-- column 2 -->
-			<hr>
-			<!--/col-->
-			<div class="col-md-8">
-				<div class="panel panel-default">
-					<div class="panel-body" align="center">
-						<section id="portfolio">
-							<c:set var="count" value="0" scope="page" />
-							<c:forEach var="digitalObject"
-								items="${objectsModifiedSinceLastVisit}">
-								<div class="col-lg-3 col-md-4 col-xs-6 portfolio-item thumbnail"
-									style="overflow: hidden; width: 285px; height: 235px">
-									<a href="#lightbox${count}" class="portfolio-link"
-										data-toggle="modal" data-target="#lightbox${count}"> <!-- <div class="caption">
+				<!-- column 2 -->
+				<hr>
+				<!--/col-->
+				<div class="col-md-8">
+					<div class="panel panel-default">
+						<div class="panel-body" align="center">
+							<section id="portfolio">
+								<c:set var="count" value="0" scope="page" />
+								<c:forEach var="digitalObject"
+									items="${objectsModifiedSinceLastVisit}">
+									<div
+										class="col-lg-3 col-md-4 col-xs-6 portfolio-item thumbnail"
+										style="overflow: hidden; width: 285px; height: 235px">
+										<a href="#lightbox${count}" class="portfolio-link"
+											data-toggle="modal" data-target="#lightbox${count}"> <!-- <div class="caption">
 												<div class="caption-content">
 													${digitalObject.datastreams['DC'].dublinCoreMetadata['TITLE']}
 												</div>
 											</div>  --> <img
-										src="${digitalObject.datastreams['IMG'].content}"
-										class="img-thumbnail img-responsive" alt="image unavailable">
-									</a>
+											src="${digitalObject.datastreams['IMG'].content}"
+											class="img-thumbnail img-responsive" alt="image unavailable">
+										</a>
+									</div>
+									<c:set var="count" value="${count + 1}" scope="page" />
+								</c:forEach>
+							</section>
+							<c:set var="count" value="0" scope="page" />
+							<c:forEach var="digitalObject"
+								items="${objectsModifiedSinceLastVisit}">
+								<div id="lightbox${count}" class="modal fade" tabindex="-1"
+									role="dialog" aria-labelledby="myLargeModalLabel"
+									aria-hidden="true">
+									<div class="modal-dialog">
+										<div class="modal-content">
+											<div class="modal-body">
+												<h3>${digitalObject.datastreams['DC'].dublinCoreMetadata['TITLE']}</h3>
+												<br>
+
+												<table>
+													<td><img
+														src="${digitalObject.datastreams['IMG'].content}"
+														class="img-thumbnail img-responsive"
+														alt="image unavailable"></td>
+
+													<!-- can we not try just iterate through the dublinCoreDatastream's metadata -->
+													<td><c:forEach var="dcMetadata"
+															items="${digitalObject.datastreams['DC'].dublinCoreMetadata}">
+															<c:if
+																test="${dcMetadata.key!='IDENTIFIER' && dcMetadata.key!='TYPE' && dcMetadata.key!='FORMAT'}">
+									${dcMetadata.key}: <a
+																	href="${pageContext.request.contextPath}/archives/search_objects/category=${dcMetadata.key}?terms=${dcMetadata.value}">${dcMetadata.value}</a>
+																<br>
+															</c:if>
+
+														</c:forEach></td>
+												</table>
+											</div>
+
+											<button type="button">Place me</button>
+										</div>
+									</div>
 								</div>
 								<c:set var="count" value="${count + 1}" scope="page" />
 							</c:forEach>
-						</section>
-						<c:set var="count" value="0" scope="page" />
-						<c:forEach var="digitalObject"
-							items="${objectsModifiedSinceLastVisit}">
-							<div id="lightbox${count}" class="modal fade" tabindex="-1"
-								role="dialog" aria-labelledby="myLargeModalLabel"
-								aria-hidden="true">
-								<div class="modal-dialog">
-									<div class="modal-content">
-										<div class="modal-body">
-											<h3>${digitalObject.datastreams['DC'].dublinCoreMetadata['TITLE']}</h3>
-											<br>
-
-											<table>
-												<td><img
-													src="${digitalObject.datastreams['IMG'].content}"
-													class="img-thumbnail img-responsive"
-													alt="image unavailable"></td>
-
-												<!-- can we not try just iterate through the dublinCoreDatastream's metadata -->
-												<td><c:forEach var="dcMetadata"
-														items="${digitalObject.datastreams['DC'].dublinCoreMetadata}">
-														<c:if
-															test="${dcMetadata.key!='IDENTIFIER' && dcMetadata.key!='TYPE' && dcMetadata.key!='FORMAT'}">
-									${dcMetadata.key}: <a
-																href="${pageContext.request.contextPath}/archives/search_objects/category=${dcMetadata.key}?terms=${dcMetadata.value}">${dcMetadata.value}</a>
-															<br>
-														</c:if>
-
-													</c:forEach></td>
-											</table>
-										</div>
-
-										<button type="button">Place me</button>
-									</div>
-								</div>
-							</div>
-							<c:set var="count" value="${count + 1}" scope="page" />
-						</c:forEach>
-						</section>
+							</section>
+						</div>
 					</div>
+					<!--/panel content-->
+
 				</div>
-				<!--/panel content-->
-
-			</div>
-			<!-- HERE -->
+				<!-- HERE -->
 
 
 
 
-			<div class="row">
-				<!-- center left-->
-				<div class="col-md-4">
-					<hr>
-					<strong>Popular Searches</strong>
-					<hr>
-					<div class="panel panel-default">
-						<div class="panel-body">
-							<div id="demo">
-								<div id="tagcloud">
-									<c:forEach var="tag" items="${tagCloud}">
-										<c:set var="isCategory" value="false" />
-										<c:forEach var="category" items="${categoriesAndObjects}">
-											<c:if test="${!isCategory}">
+				<div class="row">
+					<!-- center left-->
+					<div class="col-md-4">
+						<hr>
+						<strong>Popular Searches</strong>
+						<hr>
+						<div class="panel panel-default">
+							<div class="panel-body">
+								<div id="demo">
+									<div id="tagcloud">
+										<c:forEach var="tag" items="${tagCloud}">
+											<c:set var="isCategory" value="false" />
+											<c:forEach var="category" items="${categoriesAndObjects}">
+												<c:if test="${!isCategory}">
 
-												<c:if
-													test="${fn:toLowerCase(category.key) eq fn:toLowerCase(tag.key)}">
+													<c:if
+														test="${fn:toLowerCase(category.key) eq fn:toLowerCase(tag.key)}">
 
-													<a
-														href="${pageContext.request.contextPath}/archives/browse?category=${category.key}"
-														rel="${tag.value}">${tag.key}</a>
-													<c:set var="isCategory" value="true" />
+														<a
+															href="${pageContext.request.contextPath}/archives/browse?category=${category.key}"
+															rel="${tag.value}">${tag.key}</a>
+														<c:set var="isCategory" value="true" />
+													</c:if>
 												</c:if>
+											</c:forEach>
+
+											<c:if test="${!isCategory}">
+												<a
+													href="${pageContext.request.contextPath}/archives/search_objects/category=SEARCH_ALL?terms=${tag.key}"
+													rel="${tag.value}">${tag.key}</a>
 											</c:if>
 										</c:forEach>
-
-										<c:if test="${!isCategory}">
-											<a
-												href="${pageContext.request.contextPath}/archives/search_objects/category=SEARCH_ALL?terms=${tag.key}"
-												rel="${tag.value}">${tag.key}</a>
-										</c:if>
-									</c:forEach>
+									</div>
 								</div>
 							</div>
 						</div>
 					</div>
+
+					<!--/panel-->
+
+
+					<!--/panel-->
+
 				</div>
-
-				<!--/panel-->
-
-
-				<!--/panel-->
+				<!--/col-span-6-->
 
 			</div>
-			<!--/col-span-6-->
-
+			<!--/row-->
 		</div>
-		<!--/row-->
-	</div>
-	<!--/col-span-9-->
+		<!--/col-span-9-->
 	</div>
 	</div>
-
 	<nav class="navbar navbar-inverse navbar-fixed-bottom navbar-fluid"
 		role="navigation">
-		<div class="container">
+		<div class="container-fluid">
 			<!-- Brand and toggle get grouped for better mobile display -->
 			<div class="navbar-header">
-				<a class="navbar-brand" href="${pageContext.request.contextPath}">Personal
-					Histories</a>
+<a class="navbar-brand" href="${pageContext.request.contextPath}"><span
+							class="glyphicon glyphicon-home"></span> Personal Histories</a>
 			</div>
 		</div>
 		<!-- /.container -->

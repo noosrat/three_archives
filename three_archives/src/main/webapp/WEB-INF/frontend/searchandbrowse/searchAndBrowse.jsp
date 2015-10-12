@@ -293,15 +293,7 @@ $(document).ready(function() {
 		<nav class="navbar navbar-inverse navbar-fixed-bottom">
 			<div class="container-fluid">
 				<div class="navbar-header">
-					<button type="button" class="navbar-toggle collapsed"
-						data-toggle="collapse" data-target="#navbar" aria-expanded="false"
-						aria-controls="navbar">
-						<span class="sr-only">Toggle navigation</span> <span
-							class="icon-bar"></span> <span class="icon-bar"></span> <span
-							class="icon-bar"></span>
-					</button>
-					<a class="navbar-brand" href="#">Three Archives</a>
-
+				<a class="navbar-brand" href="${pageContext.request.contextPath}"><span class="glyphicon glyphicon-home"></span> Personal Histories</a>
 				</div>
 			</div>
 		</nav>
@@ -334,7 +326,7 @@ $(document).ready(function() {
 										</label>
 									</div>
 								</td>
-								<td align="right">Sort (ASC): <a class="btn btn-default"
+								<td align="right">Sort: <a class="btn btn-default"
 									href="${pageContext.request.contextPath}/archives/browse/ORDER_BY=TITLE">TITLE</a>
 									<a class="btn btn-default"
 									href="${pageContext.request.contextPath}/archives/browse/ORDER_BY=YEAR">YEAR</a></td>
@@ -370,21 +362,21 @@ $(document).ready(function() {
 							<div class="col-lg-3 col-sm-4 col-xs-6 portfolio-item">
 
 								<div class="thumbnail">
-
-
-									<div style="overflow: hidden; width: 300px; height: 250px">
+									<div align="center" style="overflow: hidden; width: 300px; height: 250px">
 										<a href="#lightbox${count}" data-toggle="modal"
-											data-target="#lightbox${count}"> <img
+											data-target="#lightbox${count}"> 
+											<img
 											src="${digitalObject.datastreams['IMG'].content}"
-											class="img-responsive" alt="image unavailable"> <!--  								class="img-thumbnail img-responsive" alt="image unavailable" style="style="height: 300px; width: 100%; display: block"> -->
+											class="img-responsive img-thumbnail" alt="image unavailable" style="width:98%"> 
 
 										</a>
 									</div>
 
 
 
-							<input align="right" id="${digitalObject.pid}" type="checkbox" onchange="change(this)"/>
-							
+							<table style="width:100%"><td align="center">${digitalObject.datastreams['DC'].dublinCoreMetadata['TITLE']}</td>
+							<td align="right"><input align="right" id="${digitalObject.pid}" type="checkbox" onchange="change(this)"/></td>
+								</table>
 					</div>
 
 </div>
@@ -394,6 +386,7 @@ $(document).ready(function() {
 
 				</section>
 				<c:set var="count" value="0" scope="page" />
+		
 				<c:forEach var="digitalObject" items="${objectsForArchive}">
 					<div id="lightbox${count}" class="modal fade" tabindex="-1"
 						role="dialog" aria-labelledby="myLargeModalLabel"
@@ -401,42 +394,56 @@ $(document).ready(function() {
 						<div class="modal-dialog">
 							<div class="modal-content">
 								<div class="modal-body">
-
-								<h3>${digitalObject.datastreams['DC'].dublinCoreMetadata['TITLE']}</h3>
-								<br>
+									<table style="width:100%; cellpadding:10px ">
+<tr><td align="center"><h2><span class="label label-default">${digitalObject.datastreams['DC'].dublinCoreMetadata['TITLE']}</span></h2></td></tr>
 								
-									<table style="width: 100%">
-										<td>
+										<tr><td align="center">
 				<!--  -->					
 									<img id="${digitalObject.pid}" src="${digitalObject.datastreams['IMG'].content}"
 										class="img-thumbnail img-responsive" alt="image unavailable" readonly="true" data-pid="${digitalObject.pid}" data-annotations="${digitalObject.datastreams['DC'].dublinCoreMetadata['ANNOTATIONS']}" ondblclick="init(this);"/></td>
 
 										<!-- can we not try just iterate through the dublinCoreDatastream's metadata -->
-
-									<td><c:forEach var="dcMetadata" items="${digitalObject.datastreams['DC'].dublinCoreMetadata}">
+</tr><tr>
+									<td style="vertical-align:bottom"><c:forEach var="dcMetadata" items="${digitalObject.datastreams['DC'].dublinCoreMetadata}">
+									
+									<table>
 									<c:if test="${dcMetadata.key!='IDENTIFIER' && dcMetadata.key!='TYPE' && dcMetadata.key!='FORMAT' && dcMetadata.key!='COVERAGE' && dcMetadata.key!='ANNOTATIONS'}">
-									${dcMetadata.key}: <a href="${pageContext.request.contextPath}/archives/search_objects/category=${dcMetadata.key}?terms=${dcMetadata.value}">${dcMetadata.value}</a><br>
+									
+									
+									<tr><span class="label label-default">${dcMetadata.key}:</span> 
+									<!-- <tr><font style="size:10px">${dcMetadata.key}:</font></tr> --> 
+								 
+									
+									
+									
+								<tr>	<a href="${pageContext.request.contextPath}/archives/search_objects/category=${dcMetadata.key}?terms=${dcMetadata.value}">${dcMetadata.value}</a>
+								</tr><br>
 												</c:if>
-
-											</c:forEach></td>
+</table>
+											</c:forEach></td></tr>
 									</table>
 								</div>
-
+								<table style="width:100%">
+								<tr align="left">
 								<form name="map" method="post" action="${pageContext.request.contextPath}/archives/redirect_maps/place?image=${digitalObject.pid}">
 									<!-- place word map in url-->
-   									<input type="submit" value="Place Me" />
+   									<input type="submit" class="btn btn-default" value="Place Me" />
 								</form>
 								<form action="${pageContext.request.contextPath}/archives/browse">
 									<textarea id="id:${digitalObject.pid}" name="pid" readonly=readonly style="display:none;">${digitalObject.pid}</textarea>
 									<textarea id="anno:${digitalObject.pid}" name="annotations" readonly=readonly style="display:none;"></textarea>
-									<input id="btn:${digitalObject.pid}" type="submit" data-pid="${digitalObject.pid}" data-src="${digitalObject.datastreams['IMG'].content}" onclick="see(this)" value="Save Comments"/>
-								</form>
+									<input id="btn:${digitalObject.pid}" type="submit" class="btn btn-default" data-pid="${digitalObject.pid}" data-src="${digitalObject.datastreams['IMG'].content}" onclick="see(this)" value="Save Comments"/>
+								</form><tr>
+								</table>
+								</div>
 							</div>
 						</div>
 					</div>
 					<c:set var="count" value="${count + 1}" scope="page" />
 				</c:forEach>
-</div>			</div></div>
+				
+				<br><br><br>
+</div>			</div>
 			
 	
 	<!-- wrapper -->

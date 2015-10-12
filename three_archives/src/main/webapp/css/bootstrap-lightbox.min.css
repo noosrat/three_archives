@@ -1,10 +1,12 @@
 #lightbox{
+	width:1000px;
 	  position: absolute;
       background-color: black; 
       opacity:1;	
 }
 
 #lightbox .modal-body {
+	width:1000px;
     display: block;
     text-align: center;  
     opacity:1;
@@ -31,6 +33,5 @@
     position: absolute;
     top: -15px;
     right: -55px;
-    
     z-index:1032;
 }
