@@ -43,6 +43,7 @@ public class UploadController implements Controller{
 			String archive=request.getParameter("archive");
 			UploadService uploadService=new UploadService();
 			uploadService.upload(action,file_path,archive);
+			System.out.println("* uploads completed");
 			//call method from upload services to add the files to fedora
 			//fedora stuff to update index
 			SolrCommunicator.updateSolrIndex();

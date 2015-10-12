@@ -113,8 +113,9 @@ public class UploadService {
 
 				// File useThis=new
 				// File("/home/nox/Applications/apache/apache-tomcat-8.0.24/webapps/data/content/"+archive+"/"+filename);
-
+				System.out.println("Started adding a new object");
 				client.POST("/objects/" + newPID + "/");//
+				System.out.println("added a new object");
 				// add the image to the object
 				if (noXMLformat.equals("image/jpeg")) {
 					client.POST("/objects/" + newPID + "/datastreams/IMG?controlGroup=M&mimeType=" + noXMLformat, file2,
