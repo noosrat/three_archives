@@ -16,7 +16,7 @@ import common.fedora.UploadClient;
 public class UploadService {
 
 	public void upload(String files_string, String storage_path, String archive) {
-		UploadClient client = new UploadClient("http://localhost:8080/fedora", "fedoraAdmin", "fedoraAdmin", null);
+		UploadClient client = new UploadClient("http://personalhistories/fedora", "fedoraAdmin", "3Arch", null);
 		String filename;
 		String title;
 		String creator;
