@@ -74,7 +74,7 @@ public class ExhibitionController implements Controller {
 				if (images[j].equals("")) {
 					images[j] = null;
 				} else {
-					images[j] = "http://localhost:8080/fedora/objects/" + images[j] + "/datastreams/IMG/content";
+					images[j] = "http://personalhistories.cs.uct.ac.za:8089/fedora/objects/" + images[j] + "/datastreams/IMG/content";
 				}
 			}
 
@@ -242,7 +242,7 @@ public class ExhibitionController implements Controller {
 						if (images[j].equals("")) {
 							images[j] = null;
 						} else {
-							images[j] = "http://localhost:8080/fedora/objects/" + images[j]
+							images[j] = "http://personalhistories.cs.uct.ac.za:8089/fedora/objects/" + images[j]
 									+ "/datastreams/IMG/content";
 						}
 					}
@@ -274,7 +274,7 @@ public class ExhibitionController implements Controller {
 						if (images[j].equals("")) {
 							images[j] = null;
 						} else {
-							images[j] = "http://localhost:8080/fedora/objects/" + images[j]
+							images[j] = "http://personalhistories.cs.uct.ac.za:8089/fedora/objects/" + images[j]
 									+ "/datastreams/IMG/content";
 						}
 					}
@@ -305,7 +305,7 @@ public class ExhibitionController implements Controller {
 						if (images[j].equals("")) {
 							images[j] = null;
 						} else {
-							images[j] = "http://localhost:8080/fedora/objects/" + images[j]
+							images[j] = "http://personalhistories.cs.uct.ac.za:8089/fedora/objects/" + images[j]
 									+ "/datastreams/IMG/content";
 						}
 					}

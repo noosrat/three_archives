@@ -21,7 +21,7 @@ import common.fedora.UploadClient;
 
 public class MapController implements Controller {
 
-	private UploadClient client=new UploadClient("http://localhost:8080/fedora", "fedoraAdmin","12345",null);
+	private UploadClient client=new UploadClient("http://personalhistories.cs.uct.ac.za:8089/fedora", "fedoraAdmin","3Arch",null);
 	String title;
 	String creator;
 	String event;

@@ -2,6 +2,7 @@ package search;
 
 import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -183,17 +184,36 @@ public class SearchController implements Controller {
 				dir.mkdir();
 			}
 
+			File actualFile = new File(file.toString());
+			if (!actualFile.exists()) {
+				FileWriter newFile = new FileWriter(file.toString());
+				newFile.write("[]");
+				newFile.flush();
+				newFile.close();
+			}
+
+			// we need to then create the actual file here as well and close
+			// everything and then read it in again
+
 			Object obj = parser.parse(new FileReader(new String(file)));
 			JSONArray array = (JSONArray) obj;
 			autocomplete = new TreeSet<String>(array);
-		} catch (ParseException parseException) {
+		} catch (
+
+		ParseException parseException)
+
+		{
 			System.out.println(parseException);
 			throw new Exception(parseException);
 		}
 
 		// now we go trough out array and we select items to have as tags
 
-		for (String auto : autocomplete) {
+		for (
+
+		String auto : autocomplete)
+
+		{
 			for (String term : splitSearchTerm) {
 				if (auto.toLowerCase().contains(term.toLowerCase())) {
 					results.add(auto.toUpperCase());

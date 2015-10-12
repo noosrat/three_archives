@@ -18,7 +18,7 @@ public class Annotations extends Service{
 	public Set<FedoraDigitalObject> addAnnotation(String pid, String annotations, Set<FedoraDigitalObject> current) throws FedoraException, Exception{
 		
 		System.out.println("madeit");
-		UploadClient client=new UploadClient("http://localhost:8080/fedora", "fedoraAdmin","12345",null);
+		UploadClient client=new UploadClient("http://localhost:8089/fedora", "fedoraAdmin","3Arch",null);
 		
 		System.out.println("in check annotations");
 		//System.out.println(request.getParameter("pid"));

@@ -11,7 +11,7 @@ import org.apache.solr.common.SolrDocumentList;
 
 public class SolrCommunicator {
 
-	private static String url="http://localhost:8080/solr/collection1";
+	private static String url="http://localhost:8089/solr/collection1";
 	private static final SolrServer solr;
 //	private static final String[] queryFields = new String[]{"PID","fgs.label","fgs.createdDate","fgs.lastModifiedDate","dc.date","dc.description","dc.format","dc.identifier","dc.publisher","dc.relation","dc.rights","dc.subject","dc.title"};
 	

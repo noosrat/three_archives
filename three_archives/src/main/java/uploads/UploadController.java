@@ -71,7 +71,7 @@ public class UploadController implements Controller{
 	private void updateSolrIndexWithNewFedoraObjects() throws Exception {
 		System.out.println("about to updat solr index");
 		FedoraGetRequest fedoraGetRequest = new FedoraGetRequest();
-		StringBuilder query = new StringBuilder("http://localhost:8080/fedoragsearch/rest?operation=updateIndex&action=fromFoxmlFiles&value=");
+		StringBuilder query = new StringBuilder("http://localhost:8089/fedoragsearch/rest?operation=updateIndex&action=fromFoxmlFiles&value=");
 		fedoraGetRequest.setRequest(query);
 		try {
 			FedoraClient.executeWithoutParsingResponse(fedoraGetRequest);
