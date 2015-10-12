@@ -64,7 +64,8 @@ public class SearchController implements Controller {
 		System.out.println("SEARCHING FEDORA DIGITAL OBJECTS " + requestPath);
 
 		StringBuilder terms = new StringBuilder("");
-		String limit = (String) request.getSession().getAttribute("limitSearch");
+		String limit = (String) request.getParameter("limitSearch");
+		System.out.println("LIMIT SEARCH VALUE " + limit);
 
 		if (limit != null && !limit.isEmpty() && Boolean.parseBoolean(limit)) {
 			System.out.println("WE ARE IN LIMIT SEARCH");
@@ -120,9 +121,9 @@ public class SearchController implements Controller {
 
 		if ((digitalObjects == null || digitalObjects.isEmpty())) {
 			request.setAttribute("message", "No results to return");
-		}
-		else{
-			//we must add the search terms to the wordcloud here..since the results actually returned something meaningful
+		} else {
+			// we must add the search terms to the wordcloud here..since the
+			// results actually returned something meaningful
 			History.addTextToTagCloud(s, true);
 		}
 		request.getSession().setAttribute("objectsForArchive", digitalObjects);
