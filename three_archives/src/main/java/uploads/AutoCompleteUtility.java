@@ -17,20 +17,70 @@ import common.fedora.DatastreamID;
 import common.fedora.DublinCoreDatastream;
 import common.fedora.FedoraDigitalObject;
 import common.fedora.FedoraException;
+import configuration.PropertiesHandler;
 import search.SearchController;
 
 public class AutoCompleteUtility {
 	private HashMap<String, String> archives;
 	private Set<FedoraDigitalObject> fedoraDigitalObjects;
+	private HashMap<String, PropertiesHandler> archiveProperties;
 
-	public static void refreshAutocompleFile(HashMap<String, String> archives) throws Exception {
+	public AutoCompleteUtility() {
+		archives = new HashMap<String, String>();
+	}
+
+	public void refreshAllAutocompleteFiles() {
+		// need to find all the files and their archive properties...
+		retrieveArchives();
+		try {
+			refreshFiles(archives);
+		} catch (Exception ex) {
+			System.out.println("Issue with generating files for autcomplete");
+			System.out.println(ex);
+		}
+	}
+
+	private void loadArchiveProperties() {
+		System.out.println("IN LOAD ARCHIVE PROPERTIES");
+		archiveProperties = new HashMap<String, PropertiesHandler>();
+		ClassLoader classLoader = AutoCompleteUtility.class.getClassLoader();
+		File directory = new File(classLoader.getResource("configuration").getFile());
+		if (directory != null) {
+			for (File file : directory.listFiles()) {
+				if (file.getName().contains(".properties") && !file.getName().contains("general")) {
+					archiveProperties.put(file.getName(), new PropertiesHandler(file.getAbsolutePath()));
+				}
+			}
+		}
+	}
+
+	private void retrieveArchives() {
+		if (archiveProperties == null) {
+			loadArchiveProperties();
+		}
+		System.out.println("PROCESSING ARCHIVE PROPERTIES");
+
+		for (String archive : archiveProperties.keySet()) {
+			System.out.println("Properties file : " + archive);
+			String name = archiveProperties.get(archive).getProperty("archive.name").replaceAll("[^a-zA-Z0-9\\s]", "")
+					.replaceAll("\\s+", "");
+			System.out.println("Archive name : " + name);
+			archives.put(archiveProperties.get(archive).getProperty("archive.name"),
+					archiveProperties.get(archive).getProperty("archive.multimedia.prefix"));
+		}
+		System.out.println("WE FOUND "+ archiveProperties.size() + " archives");
+		System.out.println(archiveProperties.toString());
+
+	}
+
+	private static void refreshFiles(HashMap<String, String> archives) throws Exception {
 		AutoCompleteUtility utility = new AutoCompleteUtility(archives);
 		try {
 			utility.retrieveAllFedoraDigitalObjects();
 			utility.buildAllAutocompleteJSONFiles();
 		} catch (Exception ex) {
 			System.out.println(ex);
-			throw new Exception("An error seems to have occurred, please report to IT",ex);
+			throw new Exception("An error seems to have occurred, please report to IT", ex);
 
 		}
 	}
@@ -100,12 +150,9 @@ public class AutoCompleteUtility {
 
 			String fileName = "../webapps/data/" + archive + ".json";
 			System.out.println("We are making the autocomplere file for " + fileName);
-			File dir = new File(fileName);
-			if (!dir.exists()) {
-				System.out.println("OH NO THE DIRECTORY DOES NOT EXIST....WE MUST CREATE IT");
-				dir.mkdir();
-			}
-			FileWriter file = new FileWriter(fileName);
+			File fileExisting = new File(fileName);
+			
+			FileWriter file = new FileWriter(fileExisting);
 			file.write(list.toJSONString());
 			file.flush();
 			file.close();
@@ -137,6 +184,5 @@ public class AutoCompleteUtility {
 		return values;
 
 	}
-
 
 }

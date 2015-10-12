@@ -32,6 +32,7 @@ public class ThreeArchivesServlet extends HttpServlet {
 		// clearAllOtherCookies(request,response);
 		ServiceDelegator serviceDelegator = new ServiceDelegator();
 		String result = serviceDelegator.execute(request, response);
+//		new AutoCompleteUtility().refreshAllAutocompleteFiles();
 		request.getServletContext().getRequestDispatcher("/" + result).forward(request, response);
 	}
 	
@@ -48,6 +49,7 @@ public class ThreeArchivesServlet extends HttpServlet {
 				response.addCookie(c);
 			}
 		}
+		
 		System.out.println("We now have " + request.getCookies().length + " cookies");
 		request.getServletContext().getRequestDispatcher("/index.jsp");
 		

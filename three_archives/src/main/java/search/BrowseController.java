@@ -32,6 +32,12 @@ public class BrowseController implements Controller {
 			annotation.addAnnotation(pid, annotations, temp);
 
 			request.setAttribute("objects", temp);
+			
+//			SolrCommunicator.updateSolrIndex();
+////			//we do the below to refresh the images in the application
+//			request.getSession().setAttribute("objects", SearchController.getSearch().findFedoraDigitalObjects("*"));
+////			//we need to refresh autocomplete
+//			new AutoCompleteUtility().refreshAllAutocompleteFiles();
 		}
 
 		if (request.getPathInfo().contains("ORDER_BY")) {
@@ -39,7 +45,6 @@ public class BrowseController implements Controller {
 			// results we already have
 			sortFedoraDigitalObjects(request);
 		} else {
-
 			Browse.setFedoraDigitalObjects((Set<FedoraDigitalObject>) (request.getSession().getAttribute("objects")));
 			Browse.initialise((String) request.getSession().getAttribute("MEDIA_PREFIX"));
 			result = browseFedoraObjects(request, response);
@@ -54,6 +59,7 @@ public class BrowseController implements Controller {
 		return result;
 	}
 
+	
 	private void sortFedoraDigitalObjects(HttpServletRequest request) {
 		String pathInfo = request.getPathInfo().substring(1);
 		String[] values = pathInfo.split("=");

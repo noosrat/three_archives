@@ -14,7 +14,6 @@ import configuration.PropertiesHandler;
 import history.HistoryController;
 import search.BrowseController;
 import search.SearchController;
-import uploads.AutoCompleteUtility;
 
 public class GeneralController implements Controller {
 	private static HashMap<String, PropertiesHandler> ARCHIVES;
@@ -59,7 +58,6 @@ public class GeneralController implements Controller {
 		String first = archive.substring(0, 1);
 		result = first.toLowerCase() + archive.substring(1) + "Home.jsp";
 		return result;
-		// "home.jsp";
 
 	}
 
@@ -107,14 +105,14 @@ public class GeneralController implements Controller {
 		}
 	}
 
-	private void testingAutoComplete() throws Exception {
-		HashMap<String, String> archives = new HashMap<String, String>();
-		// this needs to be thought out for the config layer.
-		archives.put("Sequins,Self and Struggle", "sq");
-		archives.put("Harfield Village", "hv");
-		archives.put("Movie Snaps", "ms");
-		AutoCompleteUtility.refreshAutocompleFile(archives);
-	}
+//	private void testingAutoComplete() throws Exception {
+//		HashMap<String, String> archives = new HashMap<String, String>();
+//		// this needs to be thought out for the config layer.
+//		archives.put("Sequins,Self and Struggle", "sq");
+//		archives.put("Harfield Village", "hv");
+//		archives.put("Movie Snaps", "ms");
+//		AutoCompleteUtility.refreshAutocompleFile(archives);
+//	}
 
 	// the following all differ per archive
 	private void clearArchiveSpecificSessionInformation(HttpSession session) {

@@ -15,6 +15,7 @@ import common.fedora.FedoraClient;
 import common.fedora.FedoraException;
 import common.fedora.FedoraGetRequest;
 import search.SearchController;
+import search.SolrCommunicator;
 
 
 
@@ -44,16 +45,12 @@ public class UploadController implements Controller{
 			uploadService.upload(action,file_path,archive);
 			//call method from upload services to add the files to fedora
 			//fedora stuff to update index
-			updateSolrIndexWithNewFedoraObjects();
-			//we do the below to refresh the images in the application
+			SolrCommunicator.updateSolrIndex();
+//			//we do the below to refresh the images in the application
 			request.getSession().setAttribute("objects", SearchController.getSearch().findFedoraDigitalObjects("*"));
-			//we need to refresh autocomplete
-			HashMap<String,String> archives = new HashMap<String,String>();
-			archives.put((String)request.getSession().getAttribute("ARCHIVE"), (String)request.getSession().getAttribute("MEDIA_PREFIX"));
-			AutoCompleteUtility.refreshAutocompleFile(archives);
+//			//we need to refresh autocomplete
+			new AutoCompleteUtility().refreshAllAutocompleteFiles();
 			result = "WEB-INF/frontend/Uploads/uploadItems.jsp";
-			
-			
 			
 		}
 		
@@ -66,21 +63,5 @@ public class UploadController implements Controller{
 		return result;
 		
 	}
-
-	
-	private void updateSolrIndexWithNewFedoraObjects() throws Exception {
-		System.out.println("about to updat solr index");
-		FedoraGetRequest fedoraGetRequest = new FedoraGetRequest();
-		StringBuilder query = new StringBuilder("http://localhost:8089/fedoragsearch/rest?operation=updateIndex&action=fromFoxmlFiles&value=");
-		fedoraGetRequest.setRequest(query);
-		try {
-			FedoraClient.executeWithoutParsingResponse(fedoraGetRequest);
-		} catch (FedoraException e) {
-			System.out.println(e);
-			throw new Exception("Unable to update the index after uploading new items.  Please report to IT",e);
-		}
-		System.out.println("Successfully updated index with new objects");
-	}
-	
 
 }

@@ -9,6 +9,10 @@ import org.apache.solr.client.solrj.impl.HttpSolrServer;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.common.SolrDocumentList;
 
+import common.fedora.FedoraClient;
+import common.fedora.FedoraException;
+import common.fedora.FedoraGetRequest;
+
 public class SolrCommunicator {
 
 	private static String url="http://localhost:8089/solr/collection1";
@@ -35,18 +39,6 @@ public class SolrCommunicator {
 		return solrQuery;
 	}
 
-//	
-//	private static String[] buildQuery(String query){
-//		System.out.println("Building SOLR Query");
-//		String[] queryResult = new String[queryFields.length];
-//		for (int index=0; index<queryFields.length; index++ ){
-//			queryResult[index] = queryFields[index] + ":\"" + query + "\"";
-//			System.out.println("building query for each field: " + queryResult[index]);
-//		}
-//		
-//		return queryResult;
-//	}
-//	
 	private static ArrayList<String> solrResponse(SolrQuery solrQuery) throws SolrServerException{
 		System.out.println("in SOLR response");
 		QueryResponse queryResponse = solr.query(solrQuery);
@@ -68,5 +60,21 @@ public class SolrCommunicator {
 		return solrResponse(solrQuery(query));
 	}
 	
+	public static void updateSolrIndex() throws Exception{
+			System.out.println("about to updat solr index");
+			FedoraGetRequest fedoraGetRequest = new FedoraGetRequest();
+			StringBuilder query = new StringBuilder("http://localhost:8089/fedoragsearch/rest?operation=updateIndex&action=fromFoxmlFiles&value=");
+			fedoraGetRequest.setRequest(query);
+			try {
+				System.out.println("UPDATING SOLR INDEX");
+				FedoraClient.executeWithoutParsingResponse(fedoraGetRequest);
+			} catch (FedoraException e) {
+				System.out.println(e);
+				throw new Exception("Unable to update the index after uploading new items.  Please report to IT",e);
+			}
+			System.out.println("Successfully updated index with new objects");
+		}
+		
+	}
 
-}
+
