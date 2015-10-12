@@ -33,8 +33,8 @@
 <link rel="stylesheet" type="text/css"
 	href="${pageContext.request.contextPath}/css/search_and_browse.css"></link>
 
-<link 
-	type="text/css" rel="stylesheet" href="${pageContext.request.contextPath}/css/annotorious.css" />
+<link type="text/css" rel="stylesheet"
+	href="${pageContext.request.contextPath}/css/annotorious.css" />
 
 <script type="text/javascript"
 	src="${pageContext.request.contextPath}/js/jquery-1.11.3.js"></script>
@@ -64,7 +64,17 @@ $(document).ready(function() {
 		});
 	});
 
-	var selected=[];
+	function limitSearch() {
+		var checked = document.getElementById('limitSearchCheckbox').checked;
+		if (checked){
+			document.getElementById('limitSearch').innerHTML = "true";
+		}else{
+			document.getElementById('limitSearch').innerHTML = "false";
+		}
+		console.log(document.getElementById('limitSearch'));
+	}
+
+	var selected = [];
 	function change(box)
 	{
 	if (box.checked==true){
@@ -215,6 +225,8 @@ $(document).ready(function() {
 												autocomplete="off" spellcheck="false" name="terms">
 										</div>
 									</div>
+									<textarea id="limitSearch" name="limitSearch" readonly=readonly
+									style="display: none;">false</textarea>
 									<button type="submit" class="btn btn-default">
 										<i class="glyphicon glyphicon-search"></i>
 									</button>
@@ -234,9 +246,9 @@ $(document).ready(function() {
 					<li><a
 						href="${pageContext.request.contextPath}/archives/browse"
 						data-toggle="collapse"
-						data-target="${pageContext.request.contextPath}/archives/browse"><i
-							class="fa fa-fw fa-arrows-v"></i>BROWSE ALL <i
-							class="fa fa-fw fa-caret-down"></i> </a></li>
+						data-target="${pageContext.request.contextPath}/archives/browse">BROWSE
+							ALL <span class="badge" style="float: right;">${fn:length(objectsForArchive)}</span>
+					</a></li>
 					<c:forEach var="category" items="${categoriesAndObjects}">
 						<li><a
 							href="${pageContext.request.contextPath}/archives/browse?category=${category.key}"
@@ -249,11 +261,13 @@ $(document).ready(function() {
 						<li><a href="javascript:;" data-toggle="collapse"
 							data-target="#demo"><i class="fa fa-fw fa-arrows-v"></i>
 								RECENT UPDATES<i class="fa fa-fw fa-caret-down"><span
-									class="badge" style="float:right;">${fn:length(objectsModifiedSinceLastVisit)}</span></i></a>
+									class="badge" style="float: right;">${fn:length(objectsModifiedSinceLastVisit)}</span></i></a>
 							<ul id="demo" class="collapse">
 								<c:forEach var="update"
 									items="${userFavouriteCategoriesWithRecentUpdates}">
-									<ul><font color="grey">${update}</font></ul>
+									<ul>
+										<font color="grey">${update}</font>
+									</ul>
 								</c:forEach>
 								<c:if test="${fn:length(objectsModifiedSinceLastVisit) >0}">
 									<li><a
@@ -306,24 +320,18 @@ $(document).ready(function() {
 									<span class="badge">${fn:length(objectsForArchive)}</span>
 									results returned for search <a class="label label-default"
 										href="${pageContext.request.contextPath}/archives/search_objects/category=SEARCH_ALL?terms=${terms}">
-										${terms}</a>
+										${fn:toUpperCase(terms)}</a>
 								</h4>
 							</c:if>
-
 
 							<table style="width: 100%">
 								<td align="left">
 									<div class="checkbox">
-										<label> <input type="checkbox" id="limitSearch"
-											name="limitSearch" value="limitSearch"
+										<label> <input type="checkbox" id="limitSearchCheckbox"
+											name="limitSearchCheckbox"
 											onchange="limitSearch()"> Limit search to these
 											results
 										</label>
-										<script>
-											function limitSearch() {
-										<%session.setAttribute("limitSearch", "true");%>
-											}
-										</script>
 									</div>
 								</td>
 								<td align="right">Sort (ASC): <a class="btn btn-default"
@@ -359,25 +367,22 @@ $(document).ready(function() {
 					<div class="container-fluid">
 						<c:set var="count" value="0" scope="page" />
 						<c:forEach var="digitalObject" items="${objectsForArchive}">
-						<div class="col-lg-3 col-sm-4 col-xs-6 portfolio-item">
-							
-							<div class="thumbnail">
-							
-							
-								<div style="overflow:hidden; width:300px; height:250px" >
-								<a href="#lightbox${count}" 
-									data-toggle="modal" data-target="#lightbox${count}">
-								
-								<img 
-								src="${digitalObject.datastreams['IMG'].content}"
-								class="img-responsive" alt="image unavailable">
-<!--  								class="img-thumbnail img-responsive" alt="image unavailable" style="style="height: 300px; width: 100%; display: block"> -->
+							<div class="col-lg-3 col-sm-4 col-xs-6 portfolio-item">
 
-							</a>
-</div>	
+								<div class="thumbnail">
 
- 
-													
+
+									<div style="overflow: hidden; width: 300px; height: 250px">
+										<a href="#lightbox${count}" data-toggle="modal"
+											data-target="#lightbox${count}"> <img
+											src="${digitalObject.datastreams['IMG'].content}"
+											class="img-responsive" alt="image unavailable"> <!--  								class="img-thumbnail img-responsive" alt="image unavailable" style="style="height: 300px; width: 100%; display: block"> -->
+
+										</a>
+									</div>
+
+
+
 							<input align="right" id="${digitalObject.pid}" type="checkbox" onchange="change(this)"/>
 							
 					</div>
@@ -400,13 +405,13 @@ $(document).ready(function() {
 								<h3>${digitalObject.datastreams['DC'].dublinCoreMetadata['TITLE']}</h3>
 								<br>
 								
-									<table> 
-									<td>
+									<table style="width: 100%">
+										<td>
 				<!--  -->					
 									<img id="${digitalObject.pid}" src="${digitalObject.datastreams['IMG'].content}"
 										class="img-thumbnail img-responsive" alt="image unavailable" readonly="true" data-pid="${digitalObject.pid}" data-annotations="${digitalObject.datastreams['DC'].dublinCoreMetadata['ANNOTATIONS']}" ondblclick="init(this);"/></td>
-									
-									<!-- can we not try just iterate through the dublinCoreDatastream's metadata -->
+
+										<!-- can we not try just iterate through the dublinCoreDatastream's metadata -->
 
 									<td><c:forEach var="dcMetadata" items="${digitalObject.datastreams['DC'].dublinCoreMetadata}">
 									<c:if test="${dcMetadata.key!='IDENTIFIER' && dcMetadata.key!='TYPE' && dcMetadata.key!='FORMAT' && dcMetadata.key!='COVERAGE' && dcMetadata.key!='ANNOTATIONS'}">

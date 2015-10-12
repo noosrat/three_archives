@@ -20,20 +20,19 @@ public class BrowseController implements Controller {
 	public String execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
 
 		String result = "WEB-INF/frontend/searchandbrowse/searchAndBrowse.jsp";
-		
+
 		System.out.println(request.getParameter("annotations"));
-		if(request.getParameter("annotations")!=null && !request.getParameter("annotations").isEmpty()){
-			String pid=request.getParameter("pid");
-			String annotations=request.getParameter("annotations");
-	
-			Set<FedoraDigitalObject> temp =(Set<FedoraDigitalObject>) request.getSession().getAttribute("objects");
-			
-			
-			Annotations annotation=new Annotations();
+		if (request.getParameter("annotations") != null && !request.getParameter("annotations").isEmpty()) {
+			String pid = request.getParameter("pid");
+			String annotations = request.getParameter("annotations");
+
+			Set<FedoraDigitalObject> temp = (Set<FedoraDigitalObject>) request.getSession().getAttribute("objects");
+
+			Annotations annotation = new Annotations();
 			annotation.addAnnotation(pid, annotations, temp);
-			
+
 			request.setAttribute("objects", temp);
-			}
+		}
 
 		if (request.getPathInfo().contains("ORDER_BY")) {
 			// we do not need to process anything we just need to sort the
@@ -44,12 +43,13 @@ public class BrowseController implements Controller {
 			Browse.setFedoraDigitalObjects((Set<FedoraDigitalObject>) (request.getSession().getAttribute("objects")));
 			Browse.initialise((String) request.getSession().getAttribute("MEDIA_PREFIX"));
 			result = browseFedoraObjects(request, response);
-			browseFedoraObjects(request, response);
 			request.setAttribute("searchCategories", SearchController.retrieveSearchCategories());
 			(new HistoryController()).execute(request, response);
 			// return result;
 			request.getSession().setAttribute("categoriesAndObjects", Browse.getCategorisedFedoraDigitalObjects());
 		}
+		request.getSession().setAttribute("searchTags", null);
+		request.getSession().setAttribute("terms", null);
 
 		return result;
 	}
@@ -79,19 +79,19 @@ public class BrowseController implements Controller {
 	}
 
 	private String browseFedoraObjects(HttpServletRequest request, HttpServletResponse response) throws Exception {
-		
-		//adding items from browse to car then redirecting to browse
-				System.out.println(request.getParameter("addedtocart"));
-				if(request.getParameter("addedtocart")!=null && !request.getParameter("addedtocart").isEmpty()){
-					System.out.println("in add to car");
-					ArrayList<String> cart = (ArrayList<String>) request.getSession().getAttribute("MEDIA_CART");
-					String selected=request.getParameter("addedtocart");
-					System.out.println(selected);
-					
-					request.getSession().setAttribute("MEDIA_CART", cart);	
-					
-				}
-		
+
+		// adding items from browse to car then redirecting to browse
+		System.out.println(request.getParameter("addedtocart"));
+		if (request.getParameter("addedtocart") != null && !request.getParameter("addedtocart").isEmpty()) {
+			System.out.println("in add to car");
+			ArrayList<String> cart = (ArrayList<String>) request.getSession().getAttribute("MEDIA_CART");
+			String selected = request.getParameter("addedtocart");
+			System.out.println(selected);
+
+			request.getSession().setAttribute("MEDIA_CART", cart);
+
+		}
+
 		String category = request.getParameter("category");
 		String value = request.getParameter(category);
 

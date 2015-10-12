@@ -200,10 +200,11 @@ email: jm.higgins@uct.ac.za</td>
       		</div> 
   	</div>
 </div>
-        <div class="navbar navbar-inverse navbar-fixed-bottom navbar-fluid" role="navigation">
-        <div class="container">
-            <!-- Brand and toggle get grouped for better mobile display -->
-            <div class="navbar-header">
+        <nav class="navbar navbar-inverse navbar-fixed-bottom navbar-fluid"
+		role="navigation">
+		<div class="container">
+			<!-- Brand and toggle get grouped for better mobile display -->
+			<div class="navbar-header">
 
 			<div class="row" >
 				<div class="navbar-header col-sm-8">

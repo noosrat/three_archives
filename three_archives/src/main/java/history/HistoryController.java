@@ -12,8 +12,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.springframework.web.client.HttpServerErrorException;
+
 import common.controller.Controller;
 import common.fedora.FedoraDigitalObject;
+import search.Browse;
 
 public class HistoryController implements Controller {
 
@@ -38,8 +41,7 @@ public class HistoryController implements Controller {
 	public String execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		String pathInfo = request.getPathInfo().substring(1);
 		archive = (String) request.getSession().getAttribute("ARCHIVE_CONCAT");
-
-		System.out.println("PATH INFO" + pathInfo);
+		System.out.println("PATH INFO iNSIDE HISTORY" + pathInfo);
 		if (pathInfo.contains(archive)) {
 			initialiseUserCookies(request, response);
 			return null;
