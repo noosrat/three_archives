@@ -79,7 +79,7 @@ $(document).ready(function() {
 	{
 	if (box.checked==true){
 		var thing = box.getAttribute("id");
-		alert(thing);
+		//alert(thing);
 		//console.log(('#ms:1').value);
 		selected.push(thing);}
 	else
