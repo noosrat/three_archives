@@ -66,38 +66,14 @@ public class History extends Service {
 
 	public HashMap<String, TreeSet<String>> categoriesRecentlyUpdated(
 			HashSet<FedoraDigitalObject> objectsRecentlyModified) {
-		// we need to iterate through all the objects that have been updated and
-		// pick out all the specific categories that have been updated
-		// initialise hashmap
 		HashMap<String, TreeSet<String>> updates = new HashMap<String, TreeSet<String>>();
-		// for (DublinCore dc: DublinCore.values()){
-		// switch(dc){
-		// case TITLE:
-		// case CREATOR:
-		// case PUBLISHER:
-		// case CONTRIBUTOR:
-		// case DATE:
-		// case TYPE:
-		// case FORMAT:
-		// case SOURCE:
-		// case COVERAGE:
-		// case SUBJECT:
-		// updates.put(dc.name(), new TreeSet<String>());
-		// }
-		// }
-
-		updates.put(SearchAndBrowseCategory.COLLECTION.name(), new TreeSet<String>());
-		updates.put(SearchAndBrowseCategory.CREATOR.name(), new TreeSet<String>());
-		updates.put(SearchAndBrowseCategory.CONTRIBUTOR.name(), new TreeSet<String>());
-		updates.put(SearchAndBrowseCategory.SOURCE.name(), new TreeSet<String>());
-		updates.put(SearchAndBrowseCategory.SUBJECT.name(), new TreeSet<String>());
-		updates.put(SearchAndBrowseCategory.EVENT.name(), new TreeSet<String>());
-		updates.put(SearchAndBrowseCategory.YEAR.name(), new TreeSet<String>());
-		updates.put(SearchAndBrowseCategory.LOCATION.name(), new TreeSet<String>());
-		updates.put(SearchAndBrowseCategory.FORMAT.name(), new TreeSet<String>());
-		updates.put(SearchAndBrowseCategory.TYPE.name(), new TreeSet<String>());
-		updates.put(SearchAndBrowseCategory.TITLE.name(), new TreeSet<String>());
-
+		
+		for (SearchAndBrowseCategory category: SearchAndBrowseCategory.values()){
+			updates.put(category.name(), new TreeSet<String>());
+		}
+		updates.remove(SearchAndBrowseCategory.SEARCH_ALL);
+		updates.remove(SearchAndBrowseCategory.DESCRIPTION); //check this?
+		
 		for (FedoraDigitalObject object : objectsRecentlyModified) {
 			DublinCoreDatastream dcDatastream = (DublinCoreDatastream) object.getDatastreams()
 					.get(DatastreamID.DC.name());
@@ -273,9 +249,9 @@ public class History extends Service {
 			FedoraDigitalObject digitalObject = iterator.next();
 			DublinCoreDatastream dc = (DublinCoreDatastream) digitalObject.getDatastreams().get(DatastreamID.DC.name());
 			switch (SearchAndBrowseCategory.valueOf(filterCategory.toUpperCase())) {
+			// omit description and search all
 			case TITLE:
 				String title = dc.getDublinCoreMetadata().get(DublinCore.TITLE.name());
-				System.out.println("TITLE " + title);
 				if (title != null && !title.trim().isEmpty()) {
 					if (!title.startsWith(filterValue)) {
 						iterator.remove();
@@ -286,8 +262,7 @@ public class History extends Service {
 				break;
 			case YEAR:
 				String date = dc.getDublinCoreMetadata().get(DublinCore.DATE.name());
-				System.out.println("DATE " + date);
-				if (!(date != null && date.contains(filterValue))) {
+				if (date != null && !date.contains(filterValue)) {
 					iterator.remove();
 				} else if (date == null) {
 					iterator.remove();
@@ -295,7 +270,6 @@ public class History extends Service {
 				break;
 			case EVENT:
 				String dublinCoreEvent = dc.getDublinCoreMetadata().get("EVENT");
-				System.out.println("EVENT " + dublinCoreEvent);
 				if (dublinCoreEvent != null && !dublinCoreEvent.isEmpty()) {
 					if (!(dublinCoreEvent.contains(filterValue))) {
 						iterator.remove();
@@ -303,11 +277,6 @@ public class History extends Service {
 				} else if (dublinCoreEvent == null) {
 					iterator.remove();
 				}
-				break;
-			case EXHIBITION: // should we look in the db for this...search
-								// by
-								// exhibition 1 then behave accordingly
-				System.out.println("removing object with PID " + digitalObject.getPid());
 				break;
 			case COLLECTION:
 				String dublinCoreCollection = dc.getDublinCoreMetadata().get("COLLECTION");
@@ -332,22 +301,20 @@ public class History extends Service {
 					iterator.remove();
 				}
 				break;
-
 			case CONTRIBUTOR:
-				String dublinCoreContributor = dc.getDublinCoreMetadata().get(DublinCore.CONTRIBUTOR.name());
-				System.out.println("Contributor " + dublinCoreContributor);
-				if (dublinCoreContributor != null && !dublinCoreContributor.isEmpty()) {
-					if (!(dublinCoreContributor.contains(filterValue))) {
+				String dublinCorecontributor = dc.getDublinCoreMetadata().get(DublinCore.CONTRIBUTOR.name());
+				System.out.println("CONTRIBUTOR " + dublinCorecontributor);
+				if (dublinCorecontributor != null && !dublinCorecontributor.isEmpty()) {
+					if (!(dublinCorecontributor.contains(filterValue))) {
 						iterator.remove();
 					}
-				} else if (dublinCoreContributor == null) {
+				} else if (dublinCorecontributor == null) {
 					iterator.remove();
 				}
 				break;
-
 			case SOURCE:
 				String dublinCoreSource = dc.getDublinCoreMetadata().get(DublinCore.SOURCE.name());
-				System.out.println("Source " + dublinCoreSource);
+				System.out.println("SOURCE " + dublinCoreSource);
 				if (dublinCoreSource != null && !dublinCoreSource.isEmpty()) {
 					if (!(dublinCoreSource.contains(filterValue))) {
 						iterator.remove();
@@ -371,32 +338,23 @@ public class History extends Service {
 				break;
 			case FORMAT:
 				String f = dc.getDublinCoreMetadata().get(DublinCore.FORMAT.name());
-
-				String media = filterValue.toLowerCase();
-
-				// check for JPG, JPEG, GIF, PNG
 				if (f != null && !f.isEmpty()) {
-
-					if (DatastreamID.parseMediaType(f) != DatastreamID.parseDescription(media)) {
+					if (DatastreamID.parseMediaType(f) != DatastreamID.parseDescription(filterValue.toLowerCase())) {
 						iterator.remove();
 
 					}
-				} else {
+				} else if (f == null) {
 					iterator.remove();
 				}
 				break;
 			case TYPE:
-				String t = dc.getDublinCoreMetadata().get(DublinCore.TYPE.name());
-				String m = filterValue.toLowerCase();
-
-				// check for JPG, JPEG, GIF, PNG
-				if (t != null && !t.isEmpty()) {
-
-					if (DatastreamID.parseMediaType(t) != DatastreamID.parseDescription(m)) {
+				String dublinCoreType = dc.getDublinCoreMetadata().get(DublinCore.TYPE.name());
+				if (dublinCoreType != null && !dublinCoreType.isEmpty()) {
+					if (!dublinCoreType.toLowerCase().contains(filterValue.toLowerCase())) {
 						iterator.remove();
 
 					}
-				} else {
+				} else if (dublinCoreType == null) {
 					iterator.remove();
 				}
 				break;

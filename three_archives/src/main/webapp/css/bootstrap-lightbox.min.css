@@ -1,17 +1,19 @@
 #lightbox{
 	  position: absolute;
-      background-color: black; 
+      color: black; 
       opacity:1;	
 }
 
 #lightbox .modal-body {
     display: block;
+     color: black; 
     text-align: center;  
     opacity:1;
 }
 
 #lightbox .modal-content {
     display: block;
+     color: black; 
     text-align: center;  
     opacity:1;
     -webkit-border-radius: 3px;

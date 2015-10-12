@@ -14,9 +14,14 @@ public enum DublinCore {
 	private DublinCore(String description) {
 		this.description = description;
 	}
+	
 
 	public String getDescription() {
 		return description;
+	}
+	
+	public String getSolrSearchField(){
+		return "dc." + description;
 	}
 
 	public static DublinCore parseDescription(String type){

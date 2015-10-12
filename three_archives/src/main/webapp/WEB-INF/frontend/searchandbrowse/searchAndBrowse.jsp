@@ -234,9 +234,7 @@ $(document).ready(function() {
 					<li><a
 						href="${pageContext.request.contextPath}/archives/browse"
 						data-toggle="collapse"
-						data-target="${pageContext.request.contextPath}/archives/browse"><i
-							class="fa fa-fw fa-arrows-v"></i>BROWSE ALL <i
-							class="fa fa-fw fa-caret-down"></i> </a></li>
+						data-target="${pageContext.request.contextPath}/archives/browse">BROWSE ALL <span class="badge" style="float: right;">${fn:length(objectsForArchive)}</span></a></li>
 					<c:forEach var="category" items="${categoriesAndObjects}">
 						<li><a
 							href="${pageContext.request.contextPath}/archives/browse?category=${category.key}"
@@ -306,7 +304,7 @@ $(document).ready(function() {
 									<span class="badge">${fn:length(objectsForArchive)}</span>
 									results returned for search <a class="label label-default"
 										href="${pageContext.request.contextPath}/archives/search_objects/category=SEARCH_ALL?terms=${terms}">
-										${terms}</a>
+										${fn:toUpperCase(terms)}</a>
 								</h4>
 							</c:if>
 
@@ -400,15 +398,16 @@ $(document).ready(function() {
 								<h3>${digitalObject.datastreams['DC'].dublinCoreMetadata['TITLE']}</h3>
 								<br>
 								
-									<table> 
+									<table style="width:100%"> 
 									<td>
 				<!--  -->					
 									<img id="${digitalObject.pid}" src="${digitalObject.datastreams['IMG'].content}"
-										class="img-thumbnail img-responsive" alt="image unavailable" readonly="true" data-pid="${digitalObject.pid}" data-annotations="${digitalObject.datastreams['DC'].dublinCoreMetadata['ANNOTATIONS']}" ondblclick="init(this);"/></td>
+										class="img-thumbnail img-responsive" alt="image unavailable" readonly="true" data-pid="${digitalObject.pid}" data-annotations="${digitalObject.datastreams['DC'].dublinCoreMetadata['ANNOTATIONS']}" ondblclick="init(this);"/>
+									</td>
 									
 									<!-- can we not try just iterate through the dublinCoreDatastream's metadata -->
 
-									<td><c:forEach var="dcMetadata" items="${digitalObject.datastreams['DC'].dublinCoreMetadata}">
+									<td align="right"><c:forEach var="dcMetadata" items="${digitalObject.datastreams['DC'].dublinCoreMetadata}">
 									<c:if test="${dcMetadata.key!='IDENTIFIER' && dcMetadata.key!='TYPE' && dcMetadata.key!='FORMAT' && dcMetadata.key!='COVERAGE' && dcMetadata.key!='ANNOTATIONS'}">
 									${dcMetadata.key}: <a href="${pageContext.request.contextPath}/archives/search_objects/category=${dcMetadata.key}?terms=${dcMetadata.value}">${dcMetadata.value}</a><br>
 												</c:if>

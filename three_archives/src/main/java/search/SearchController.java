@@ -15,7 +15,6 @@ import org.apache.solr.client.solrj.SolrServerException;
 import org.json.simple.JSONArray;
 import org.json.simple.parser.JSONParser;
 import org.noggit.JSONParser.ParseException;
-import org.omg.PortableServer.SERVANT_RETENTION_POLICY_ID;
 
 import common.controller.Controller;
 import common.fedora.FedoraDigitalObject;
@@ -70,27 +69,21 @@ public class SearchController implements Controller {
 		if (limit != null && !limit.isEmpty() && Boolean.parseBoolean(limit)) {
 			System.out.println("WE ARE IN LIMIT SEARCH");
 			Set<FedoraDigitalObject> results = new HashSet<FedoraDigitalObject>();
-			// we essentially just need to filter the result we had with the new
-			// search term?
-			// what we need to do here is construct a dolr search with all the
-			// existing items and the new condition..
 			Set<FedoraDigitalObject> exisitingObjects = (Set<FedoraDigitalObject>) request.getSession()
 					.getAttribute("objectsForArchive");
-			// we need to build the query for fedora
 			terms.append("(");
 			for (FedoraDigitalObject digitalObject : exisitingObjects) {
 				terms.append("PID:\"").append(digitalObject.getPid()).append("\" OR ");
 			}
 
 			terms.delete(terms.length() - 4, terms.length()).append(")");
-			// now we can add the rest of the actual query
 			terms.append(" AND ");
 		}
 
 		String s = request.getParameter("terms");
-		History.addTextToTagCloud(s, true);
 		request.getSession().setAttribute("terms", s);
 		String[] splitPath = requestPath.split("=");
+		System.out.println("SIZE OF OUR SPLIT PATH " + splitPath.length);
 		if (splitPath.length == 2) {
 			SearchAndBrowseCategory queryCategory = SearchAndBrowseCategory.valueOf(splitPath[1]);
 			// maybe here we just return to the page with re-organised/placed
@@ -128,7 +121,10 @@ public class SearchController implements Controller {
 		if ((digitalObjects == null || digitalObjects.isEmpty())) {
 			request.setAttribute("message", "No results to return");
 		}
-		
+		else{
+			//we must add the search terms to the wordcloud here..since the results actually returned something meaningful
+			History.addTextToTagCloud(s, true);
+		}
 		request.getSession().setAttribute("objectsForArchive", digitalObjects);
 		similarSearchTags(request);
 	}
@@ -158,7 +154,6 @@ public class SearchController implements Controller {
 		result.remove(SearchAndBrowseCategory.CONTRIBUTOR.name());
 		result.remove(SearchAndBrowseCategory.SUBJECT.name());
 		result.remove(SearchAndBrowseCategory.YEAR.name());
-		result.remove(SearchAndBrowseCategory.EXHIBITION.name());
 		result.remove(SearchAndBrowseCategory.LOCATION.name());
 		return result;
 	}

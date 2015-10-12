@@ -12,8 +12,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.springframework.web.client.HttpServerErrorException;
+
 import common.controller.Controller;
 import common.fedora.FedoraDigitalObject;
+import search.Browse;
 
 public class HistoryController implements Controller {
 
@@ -38,8 +41,7 @@ public class HistoryController implements Controller {
 	public String execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		String pathInfo = request.getPathInfo().substring(1);
 		archive = (String) request.getSession().getAttribute("ARCHIVE_CONCAT");
-
-		System.out.println("PATH INFO" + pathInfo);
+		System.out.println("PATH INFO iNSIDE HISTORY" + pathInfo);
 		if (pathInfo.contains(archive)) {
 			initialiseUserCookies(request, response);
 			return null;
@@ -54,6 +56,8 @@ public class HistoryController implements Controller {
 		if (pathInfo.contains("history")) {
 			filterFedoraDigitalObjects(request);
 		}
+		// we must send all of our requests here...and then redirect to either
+		// search or browse dependent..for the cloud
 		return "WEB-INF/frontend/historyandstatistics/history.jsp";
 	}
 
@@ -161,7 +165,7 @@ public class HistoryController implements Controller {
 			String filename = "../webapps/data/" + archive + "TagCloud.txt";
 			session.setAttribute("tagCloud", getHistory().constructTagCloud(filename));
 		}
-		
+
 	}
 
 	private Cookie initialiseNewCookie(String name, String value) {
@@ -179,10 +183,10 @@ public class HistoryController implements Controller {
 		for (Cookie cookie : cookies) {
 			if (cookie.getName().equals("dateLastVisited")) {
 				date = cookie.getValue();
-				 cookie.setValue(null);  
-				 cookie.setPath("/");    
-				 cookie.setMaxAge(0); 
-				 response.addCookie(cookie);
+				cookie.setValue(null);
+				cookie.setPath("/");
+				cookie.setMaxAge(0);
+				response.addCookie(cookie);
 				System.out.println("Found date last visited cookie " + date);
 				break;
 			}
@@ -193,9 +197,11 @@ public class HistoryController implements Controller {
 		}
 		// regardless of whether it is their first visit or not, we need to add
 		// a new cookie of current date to the response..but also make sure
-		// we have added our entry date cookie into the session  // the one for testing is Mon Sep 28 14:49:16 SAST 2015
-//		response.addCookie(initialiseNewCookie("dateLastVisited","Mon Sep 28 14:49:16 SAST 2015"));
-		response.addCookie(initialiseNewCookie("dateLastVisited", new Date().toString()));
+		// we have added our entry date cookie into the session // the one for
+		// testing is Mon Sep 28 14:49:16 SAST 2015
+		response.addCookie(initialiseNewCookie("dateLastVisited", "Mon Sep 28 14:49:16 SAST 2015"));
+		// response.addCookie(initialiseNewCookie("dateLastVisited", new
+		// Date().toString()));
 		return date;
 	}
 
