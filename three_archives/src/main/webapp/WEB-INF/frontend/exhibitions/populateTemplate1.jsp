@@ -278,7 +278,7 @@
 						<ul id="mainEx" style="list-style-type:none;margin:auto;padding:5px;text-align:center">
 							<li style="display:inline;">
 								
-								<input  type="button" style= "width:25px;height:25px;background: url('${pageContext.request.contextPath}/images/icons/coverIcon.jpg') no-repeat;" data-toggle="modal" data-target="#backgroundImage">
+								<input  type="button" style= "width:25px;height:25px;background: url('${pageContext.request.contextPath}/images/icons/coverIcon.jpg') no-repeat;" data-toggle="modal" data-target="#backgroundImage"/>
 							</li>
 					
 							<li style="display:inline; ">
@@ -289,7 +289,7 @@
 						</ul>
 						<ul id="mainEx" style="list-style-type:none;margin:auto;padding:5px;text-align:center">
 							<li style="display:inline;">
-								<input type="button" style= "width:25px;height:25px;background: url('${pageContext.request.contextPath}/images/icons/borderIcon.jpg') no-repeat;" data-toggle="modal" data-target="#imageBorders">
+								<input type="button" style= "width:25px;height:25px;background: url('${pageContext.request.contextPath}/images/icons/borderIcon.jpg') no-repeat;" data-toggle="modal" data-target="#imageBorders"/>
 							</li>
 					
 							<li style="display:inline; ">
