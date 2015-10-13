@@ -21,6 +21,20 @@ public class BrowseController implements Controller {
 
 	public String execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
 
+		// adding items from browse to car then redirecting to browse
+				System.out.println(request.getParameter("addedtocart"));
+				if (request.getParameter("addedtocart") != null && !request.getParameter("addedtocart").isEmpty()) {
+					System.out.println("in add to car");
+					ArrayList<String> cart = (ArrayList<String>) request.getSession().getAttribute("MEDIA_CART");
+					String selected = request.getParameter("addedtocart");
+					System.out.println(selected);
+					Download download = new Download();
+					cart= download.addToCart(selected,cart);
+
+					request.getSession().setAttribute("MEDIA_CART", cart);
+
+				}
+		
 		String result = "WEB-INF/frontend/searchandbrowse/searchAndBrowse.jsp";
 
 		System.out.println(request.getParameter("annotations"));
@@ -42,19 +56,7 @@ public class BrowseController implements Controller {
 			new AutoCompleteUtility().refreshAllAutocompleteFiles();
 		}
 
-		// adding items from browse to car then redirecting to browse
-		System.out.println(request.getParameter("addedtocart"));
-		if (request.getParameter("addedtocart") != null && !request.getParameter("addedtocart").isEmpty()) {
-			System.out.println("in add to car");
-			ArrayList<String> cart = (ArrayList<String>) request.getSession().getAttribute("MEDIA_CART");
-			String selected = request.getParameter("addedtocart");
-			System.out.println(selected);
-			Download download = new Download();
-			cart= download.addToCart(selected,cart);
-
-			request.getSession().setAttribute("MEDIA_CART", cart);
-
-		}
+		
 
 		if (request.getPathInfo().contains("ORDER_BY")) {
 			// we do not need to process anything we just need to sort the
