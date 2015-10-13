@@ -24,8 +24,8 @@ public class GeneralController implements Controller {
 	public String execute(HttpServletRequest request,HttpServletResponse response) throws Exception {
 		String result = "";
 		ArrayList<String> cart = new ArrayList<String>();
-		//cart.add("sq:sq3");
-		//cart.add("sq:sq4");
+		cart.add("sss:1");
+		cart.add("sss:2");
 		//cart.add("sq:sq5");
 		//cart.add("sq:sq6");
 		//cart.add("sq:sq7");
@@ -40,9 +40,9 @@ public class GeneralController implements Controller {
 		HttpSession session = request.getSession();
 		clearArchiveSpecificSessionInformation(session);
 		request.getSession().setAttribute("searchCategories", SearchController.retrieveSearchCategories());
-		if(session.getAttribute("MEDIA_CART")==null){
+		//if(session.getAttribute("MEDIA_CART")==null){
 			session.setAttribute("MEDIA_CART", cart);
-		}
+		//}
 		storeAllArchivePropertiesWithinSession(request);
 		HistoryController historyController = new HistoryController();
 		BrowseController browseController = new BrowseController();
