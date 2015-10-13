@@ -2,7 +2,6 @@ package maps;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -56,7 +55,7 @@ public class MapController implements Controller {
 					System.out.println(points);
 					
 					PrintWriter file = new PrintWriter(new FileWriter(
-						    new File("points.txt"), 
+						    new File("../webapps/data/points.txt"), 
 						    true /* append = true */));
 					//PrintWriter file = new PrintWriter("points.txt");
 					//split points then loop
@@ -67,7 +66,7 @@ public class MapController implements Controller {
 					//string maniulation send to database
 				}
 			
-			request.setAttribute("points", read("points.txt"));
+			request.setAttribute("points", read("../webapps/data/points.txt"));
 			request.setAttribute("harfieldcollections", read("collections.txt"));
 			return "WEB-INF/frontend/maps/harfieldoverview.jsp";
 			
