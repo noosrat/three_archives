@@ -52,7 +52,7 @@ public class UploadService {
 
 			metadataArray = files[i].split(delimeter2);
 			filename = metadataArray[0].trim();
-			System.out.println(file_path);
+			//System.out.println(file_path);
 			System.out.println(filename);
 			title = "<dc:title>" + metadataArray[1].trim() + "</dc:title>";
 			creator = "<dc:creator>" + metadataArray[2].trim() + "</dc:creator>";
@@ -89,6 +89,7 @@ public class UploadService {
 				file_path = storage_path + filename;
 				System.out.println("**Finding the file");
 				file2 = new File(file_path);//
+				System.out.println(file_path);
 				System.out.println("**File found and created");
 				// get next PID
 
