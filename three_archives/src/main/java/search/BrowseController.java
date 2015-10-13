@@ -14,6 +14,7 @@ import common.fedora.FedoraDigitalObject;
 import common.fedora.FedoraException;
 import history.History;
 import history.HistoryController;
+import uploads.AutoCompleteUtility;
 
 public class BrowseController implements Controller {
 
@@ -31,13 +32,13 @@ public class BrowseController implements Controller {
 			Annotations annotation = new Annotations();
 			annotation.addAnnotation(pid, annotations, temp);
 
-			request.setAttribute("objects", temp);
+			//request.setAttribute("objects", temp);
 			
-//			SolrCommunicator.updateSolrIndex();
+			SolrCommunicator.updateSolrIndex();
 ////			//we do the below to refresh the images in the application
-//			request.getSession().setAttribute("objects", SearchController.getSearch().findFedoraDigitalObjects("*"));
+			request.getSession().setAttribute("objects", SearchController.getSearch().findFedoraDigitalObjects("*"));
 ////			//we need to refresh autocomplete
-//			new AutoCompleteUtility().refreshAllAutocompleteFiles();
+			new AutoCompleteUtility().refreshAllAutocompleteFiles();
 		}
 
 		if (request.getPathInfo().contains("ORDER_BY")) {
