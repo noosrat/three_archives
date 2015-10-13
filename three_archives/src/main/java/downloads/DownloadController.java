@@ -74,7 +74,7 @@ public class DownloadController implements Controller{
 				for (FedoraDigitalObject object: cartObjects){
 					k++;
 					URL url = new URL(object.getDatastreams().get("IMG").getContent());
-					File f = new File(((DublinCoreDatastream) object.getDatastreams().get("DC")).getTitle()+".jpg") ;
+					File f = new File(((DublinCoreDatastream) object.getDatastreams().get("DC")).getTitle()+"_"+object.getPid()+".jpg") ;
 					
 					FileUtils.copyURLToFile(url, f);
 					
