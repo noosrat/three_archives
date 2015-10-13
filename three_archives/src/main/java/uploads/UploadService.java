@@ -90,7 +90,10 @@ public class UploadService {
 				System.out.println("**Finding the file");
 				file2 = new File(file_path);//
 				System.out.println(file_path);
-				System.out.println("**File found and created");
+				if (file2.isFile())
+				{
+					System.out.println("**File found and created");
+				}
 				// get next PID
 
 				HttpMethod newPIDs = client.POST("/objects/nextPID?format=XML");
