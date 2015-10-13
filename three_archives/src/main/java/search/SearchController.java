@@ -16,7 +16,6 @@ import org.apache.solr.client.solrj.SolrServerException;
 import org.json.simple.JSONArray;
 import org.json.simple.parser.JSONParser;
 import org.noggit.JSONParser.ParseException;
-import org.omg.PortableServer.SERVANT_RETENTION_POLICY_ID;
 
 import common.controller.Controller;
 import common.fedora.FedoraDigitalObject;
@@ -169,14 +168,11 @@ public class SearchController implements Controller {
 			return;
 		}
 		splitSearchTerm = terms.split(" ");
-		// now we read in the autocomplete json file
 		JSONParser parser = new JSONParser();
 		StringBuilder file = new StringBuilder("../webapps/data/");
 
 		file.append(archive).append(".json");
 
-		// read in the archive attribute and check which json file we are
-		// reading in
 		Set<String> autocomplete;
 		try {
 			File dir = new File("../webapps/data/");

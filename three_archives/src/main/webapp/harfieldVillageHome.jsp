@@ -203,9 +203,9 @@
 						src="${pageContext.request.contextPath}/images/CCALogo.png"
 						style="width: 70%"></td>
 
-   <br><br><br><br><br>
+ 
 				</table>
-
+				<br><br><Br><br><br>
 			</div>
 		</div>
 	</div>

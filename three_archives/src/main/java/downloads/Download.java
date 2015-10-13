@@ -43,6 +43,6 @@ public class Download extends Service{
 			cart.add(selectedList[k]);
 			System.out.println(selectedList[k]);
 		}
-		return null;
+		return cart;
 	}
 }

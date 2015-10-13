@@ -196,8 +196,8 @@ public class HistoryController implements Controller {
 		// regardless of whether it is their first visit or not, we need to add
 		// a new cookie of current date to the response..but also make sure
 		// we have added our entry date cookie into the session  // the one for testing is Mon Sep 28 14:49:16 SAST 2015
-//		response.addCookie(initialiseNewCookie("dateLastVisited","Mon Sep 28 14:49:16 SAST 2015"));
-		response.addCookie(initialiseNewCookie("dateLastVisited", new Date().toString()));
+		response.addCookie(initialiseNewCookie("dateLastVisited","Mon Sep 28 14:49:16 SAST 2015"));
+//		response.addCookie(initialiseNewCookie("dateLastVisited", new Date().toString()));
 		return date;
 	}
 
