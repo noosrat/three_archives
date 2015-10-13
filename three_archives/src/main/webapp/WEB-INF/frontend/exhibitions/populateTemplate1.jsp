@@ -275,6 +275,7 @@
 					<textarea id="cover" name="cover" readonly=readonly style="display:none;" ></textarea>
 					<textarea id="border" name="border" readonly=readonly style="display:none;"></textarea>
 					<textarea id="demo" name="user_action" readonly=readonly style="display:none;"></textarea>
+					<input type="submit" value="Back" class="btn btn-primary btn-sm" name="exhibition_det"/>
 					<div id="toolBox">
 					<h3>Toolbox</h3>
 						<ul id="mainEx" style="list-style-type:none;margin:auto;padding:5px;text-align:center">

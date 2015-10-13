@@ -268,7 +268,7 @@
 			
 			
 			<div id="toolBox">
-			<div id="toolBox">
+			
 					<h3>Toolbox</h3>
 						<ul id="mainEx" style="list-style-type:none;margin:auto;padding:5px;text-align:center">
 							<li style="display:inline;">
