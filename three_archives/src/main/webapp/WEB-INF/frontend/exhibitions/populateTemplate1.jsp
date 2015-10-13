@@ -36,8 +36,8 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
   <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 
-<link type="text/css" href="jquery.bxslider/jquery.bxslider.css" rel="stylesheet" />
-<script type="text/javascript" src="jquery.bxslider/jquery.bxslider.min.js"></script>
+<link type="text/css" href="${pageContext.request.contextPath}/jquery.bxslider/jquery.bxslider.css" rel="stylesheet" />
+<script type="text/javascript" src="${pageContext.request.contextPath}/jquery.bxslider/jquery.bxslider.min.js"></script>
 <script>
 	$(document).ready(function(){
 		$('[data-toggle="tooltip"]').tooltip(); 
@@ -52,10 +52,7 @@
   		});
 		});
 	
-		$('#prefetch .typeahead').typeahead(null, {
-			name : 'countries',
-			source : countries
-		});
+	
 	
 </script>
 <style>
@@ -275,12 +272,13 @@
 					<textarea id="cover" name="cover" readonly=readonly style="display:none;" ></textarea>
 					<textarea id="border" name="border" readonly=readonly style="display:none;"></textarea>
 					<textarea id="demo" name="user_action" readonly=readonly style="display:none;"></textarea>
+					<input type="submit" value="Back" class="btn btn-primary btn-sm" name="exhibition_det"/>
 					<div id="toolBox">
 					<h3>Toolbox</h3>
 						<ul id="mainEx" style="list-style-type:none;margin:auto;padding:5px;text-align:center">
 							<li style="display:inline;">
 								
-								<input  type="button" style= "width:25px;height:25px;background: url('${pageContext.request.contextPath}/images/icons/coverIcon.jpg') no-repeat;" data-toggle="modal" data-target="#backgroundImage">
+								<input  type="button" style= "width:25px;height:25px;background: url('${pageContext.request.contextPath}/images/icons/coverIcon.jpg') no-repeat;" data-toggle="modal" data-target="#backgroundImage"/>
 							</li>
 					
 							<li style="display:inline; ">
@@ -291,7 +289,7 @@
 						</ul>
 						<ul id="mainEx" style="list-style-type:none;margin:auto;padding:5px;text-align:center">
 							<li style="display:inline;">
-								<input type="button" style= "width:25px;height:25px;background: url('${pageContext.request.contextPath}/images/icons/borderIcon.jpg') no-repeat;" data-toggle="modal" data-target="#imageBorders">
+								<input type="button" style= "width:25px;height:25px;background: url('${pageContext.request.contextPath}/images/icons/borderIcon.jpg') no-repeat;" data-toggle="modal" data-target="#imageBorders"/>
 							</li>
 					
 							<li style="display:inline; ">

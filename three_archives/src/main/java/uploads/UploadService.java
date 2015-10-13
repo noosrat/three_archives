@@ -52,6 +52,8 @@ public class UploadService {
 
 			metadataArray = files[i].split(delimeter2);
 			filename = metadataArray[0].trim();
+			System.out.println(file_path);
+			System.out.println(filename);
 			title = "<dc:title>" + metadataArray[1].trim() + "</dc:title>";
 			creator = "<dc:creator>" + metadataArray[2].trim() + "</dc:creator>";
 			event = metadataArray[3].trim();// event
@@ -85,7 +87,9 @@ public class UploadService {
 			try {
 				// create new object
 				file_path = storage_path + filename;
+				System.out.println("**Finding the file");
 				file2 = new File(file_path);//
+				System.out.println("**File found and created");
 				// get next PID
 
 				HttpMethod newPIDs = client.POST("/objects/nextPID?format=XML");
@@ -118,14 +122,11 @@ public class UploadService {
 				System.out.println("added a new object");
 				// add the image to the object
 				if (noXMLformat.equals("image/jpeg")) {
-					client.POST("/objects/" + newPID + "/datastreams/IMG?controlGroup=M&mimeType=" + noXMLformat, file2,
-							false);
+					client.POST("/objects/" + newPID + "/datastreams/IMG?controlGroup=M&mimeType="+noXMLformat, file2,false);
 				} else if (noXMLformat.equals("video/mp4")) {
-					client.POST("/objects/" + newPID + "/datastreams/VID?controlGroup=M&mimeType=" + noXMLformat, file2,
-							false);
+					client.POST("/objects/" + newPID + "/datastreams/VID?controlGroup=M&mimeType=" + noXMLformat, file2,false);
 				} else if (noXMLformat.equals("audio/mp3")) {
-					client.POST("/objects/" + newPID + "/datastreams/AUD?controlGroup=M&mimeType=" + noXMLformat, file2,
-							false);
+					client.POST("/objects/" + newPID + "/datastreams/AUD?controlGroup=M&mimeType=" + noXMLformat, file2,false);
 				}
 
 				// add the metadata to the object
@@ -143,13 +144,13 @@ public class UploadService {
 		String[] parameters = pid.split(":");
 		String tag;
 		String num = parameters[1];
-		if (archive.equals("Harfield")) {
+		if (archive.equals("harfield_village")) {
 			tag = "hv";
-		} else if (archive.equals("Snaps")) {
+		} else if (archive.equals("snaps")) {
 			tag = "ms";
-		} else if (archive.equals("MissGay")) {
+		} else if (archive.equals("miss_gay")) {
 			tag = "sss";
-		} else if (archive.equals("SpringQueen")) {
+		} else if (archive.equals("spring_queen")) {
 			tag = "sss";
 		} else {
 			tag = "nul";
