@@ -104,6 +104,7 @@ function initialize() {
 		System.out.println(coverage);
 		//String[] splitcoverage = coverage.split("%");
 		//System.out.println(splitcoverage[0]);
+		if (coverage!=null && !coverage.isEmpty()){
 		String[] latLng = coverage.split(",");
 		System.out.println(latLng[0]);
 		System.out.println(latLng[1]);
@@ -134,7 +135,7 @@ function initialize() {
 	  	    ///lighbox//
 	  	    ////////////
 	  	  //});
-	 <%}
+	 <%}}
 		 %>
 	
  	console.log(placed)
