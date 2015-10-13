@@ -132,7 +132,7 @@ public class MapController implements Controller {
 					location=makesure(((DublinCoreDatastream) digi.getDatastreams().get("DC")).getDublinCoreMetadata().get("LOCATION"));
 				}
 				Set<FedoraDigitalObject> digitalObjects = new HashSet<FedoraDigitalObject>();
-				digitalObjects = search.findFedoraDigitalObjects("&query=coverage~*%*");	
+				digitalObjects = search.findFedoraDigitalObjects("&query=coverage~*%25*");	
 				request.setAttribute("mapObjects", digitalObjects);
 				return "WEB-INF/frontend/maps/mapoverview.jsp";
 				}
