@@ -51,11 +51,7 @@
 		hideControlOnEnd:true
   		});
 		});
-	
-		$('#prefetch .typeahead').typeahead(null, {
-			name : 'countries',
-			source : countries
-		});
+
 	
 </script>
 <style>
