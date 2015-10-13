@@ -94,7 +94,7 @@
 
 							<c:choose>
 								<c:when test="${service.key eq 'Uploads'}">
-									<%if (session.Attribute("user")!=null){
+									<%if (session.getAttribute("user")!=null){
 										if (session.getAttribute("USER").equals("ADMINISTRATOR")){%>
 									
 									<li><a
