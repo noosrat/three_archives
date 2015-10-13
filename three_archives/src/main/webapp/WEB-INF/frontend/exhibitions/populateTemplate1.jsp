@@ -36,8 +36,8 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
   <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 
-<link type="text/css" href="jquery.bxslider/jquery.bxslider.css" rel="stylesheet" />
-<script type="text/javascript" src="jquery.bxslider/jquery.bxslider.min.js"></script>
+<link type="text/css" href="${pageContext.request.contextPath}/jquery.bxslider/jquery.bxslider.css" rel="stylesheet" />
+<script type="text/javascript" src="${pageContext.request.contextPath}/jquery.bxslider/jquery.bxslider.min.js"></script>
 <script>
 	$(document).ready(function(){
 		$('[data-toggle="tooltip"]').tooltip(); 
