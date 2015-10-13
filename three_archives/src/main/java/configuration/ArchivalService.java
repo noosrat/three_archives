@@ -2,7 +2,7 @@ package configuration;
 
 public enum ArchivalService {
 	SEARCH_AND_BROWSE("Browse", "searchandbrowse", "browse"), HISTORY_AND_STATISTICS("History", "historyandstatistics",
-			" "), EXHIBITIONS("Exhibitions", "exhibitions", "redirect_exhibitions"), UPLOADS("Uploads", "uploads",
+			"history"), EXHIBITIONS("Exhibitions", "exhibitions", "redirect_exhibitions"), UPLOADS("Uploads", "uploads",
 					"redirect_uploads"), MAPS("Maps", "maps", "redirect_maps"), DOWNLOADS("Downloads", "downloads",
 							"redirect_downloads"), ANNOTATIONS("Annotations", "annotations", "");
 

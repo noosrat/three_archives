@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 
 <%@page import="common.fedora.Datastream"%>
 <%@page import="common.fedora.DublinCoreDatastream"%>
@@ -25,8 +26,6 @@
 <link
 	href="${pageContext.request.contextPath}/bootstrap-3.3.5/css/bootstrap.min.css"
 	rel="stylesheet">
-<!-- <link href="${pageContext.request.contextPath}/css/lightbox.css"
-	rel="stylesheet">-->
 <link href="${pageContext.request.contextPath}/theme/css/sb-admin.css"
 	rel="stylesheet">
 <link
@@ -44,23 +43,9 @@
 
 <script src="${pageContext.request.contextPath}/js/jquery.tagcloud.js"
 	type="text/javascript" charset="utf-8"></script>
-<script type="text/javascript" charset="utf-8">
-	$.fn.tagcloud.defaults = {
-		size : {
-			start : 12,
-			end : 20,
-			unit : 'pt'
-		},
-		color : {
-			start : '#d0b4b4',
-			end : '#8f0000'
-		}
-	};
+<script type="text/javascript"
+	src="${pageContext.request.contextPath}/js/typeahead.js"></script>
 
-	$(function() {
-		$('#tagcloud a').tagcloud();
-	});
-</script>
 <script type="text/javascript">
 	$(document).ready(function() {
 		var archive ='<%=session.getAttribute("ARCHIVE_CONCAT")%>';
@@ -77,6 +62,23 @@
 			name : 'countries',
 			source : countries
 		});
+	});
+</script>
+<script type="text/javascript" charset="utf-8">
+	$.fn.tagcloud.defaults = {
+		size : {
+			start : 12,
+			end : 20,
+			unit : 'pt'
+		},
+		color : {
+			start : '#d0b4b4',
+			end : '#8f0000'
+		}
+	};
+
+	$(function() {
+		$('#tagcloud a').tagcloud();
 	});
 </script>
 </head>
@@ -137,24 +139,6 @@
 				</ul>
 				<c:if test="${not empty SERVICES['Browse']}">
 					<ul class="nav navbar-nav navbar-right top-nav">
-						<!-- <li class="dropdown"><a
-							href="${pageContext.request.contextPath}/archives/search_objects"
-							class="dropdown-toggle" data-toggle="dropdown" role="button"
-							aria-haspopup="true" aria-expalinded="false">${searchCategories[0]}<span
-								class="caret"></span></a>
-							<ul class="dropdown-menu">
-								<c:set var="first" value="true"/>
-								<c:forEach var="searchCategory" items="${searchCategories}">
-								<c:if test="${first ne 'true'}">
-									<li><a
-										href="${pageContext.request.contextPath}/archives/search_objects/category=${searchCategory}">${searchCategory}</a></li>
-										</c:if>
-								<c:set var="first" value="false"/>
-								</c:forEach>
-							</ul></li>
- -->
-
-
 						<li>
 
 							<form class="navbar-form navbar-right"
@@ -257,11 +241,7 @@
 										class="col-lg-3 col-md-4 col-xs-6 portfolio-item thumbnail"
 										style="overflow: hidden; width: 285px; height: 235px">
 										<a href="#lightbox${count}" class="portfolio-link"
-											data-toggle="modal" data-target="#lightbox${count}"> <!-- <div class="caption">
-												<div class="caption-content">
-													${digitalObject.datastreams['DC'].dublinCoreMetadata['TITLE']}
-												</div>
-											</div>  --> <img
+											data-toggle="modal" data-target="#lightbox${count}"> <img
 											src="${digitalObject.datastreams['IMG'].content}"
 											class="img-thumbnail img-responsive" alt="image unavailable">
 										</a>
@@ -278,34 +258,42 @@
 									<div class="modal-dialog">
 										<div class="modal-content">
 											<div class="modal-body">
-												<h3>${digitalObject.datastreams['DC'].dublinCoreMetadata['TITLE']}</h3>
-												<br>
+												<table style="width: 100%; cellpadding: 10px">
+													<tr>
+														<td align="center"><h2>
+																<span class="label label-default">${digitalObject.datastreams['DC'].dublinCoreMetadata['TITLE']}</span>
+															</h2></td>
+													</tr>
 
-												<table>
-													<td><img
-														src="${digitalObject.datastreams['IMG'].content}"
-														class="img-thumbnail img-responsive"
-														alt="image unavailable"></td>
+													<tr>
+														<td align="center"><img id="${digitalObject.pid}"
+															src="${digitalObject.datastreams['IMG'].content}"
+															class="img-thumbnail img-responsive"
+															alt="image unavailable" readonly="true"
+															data-pid="${digitalObject.pid}"
+															data-annotations="${digitalObject.datastreams['DC'].dublinCoreMetadata['ANNOTATIONS']}"
+															ondblclick="init(this);" /></td>
 
-													<!-- can we not try just iterate through the dublinCoreDatastream's metadata -->
-													<td><c:forEach var="dcMetadata"
-															items="${digitalObject.datastreams['DC'].dublinCoreMetadata}">
-															<c:if
-																test="${dcMetadata.key!='IDENTIFIER' && dcMetadata.key!='TYPE' && dcMetadata.key!='FORMAT'}">
-									${dcMetadata.key}: <a
-																	href="${pageContext.request.contextPath}/archives/search_objects/category=${dcMetadata.key}?terms=${dcMetadata.value}">${dcMetadata.value}</a>
-																<br>
-															</c:if>
-
-														</c:forEach></td>
+													</tr>
+													<tr>
+														<td style="vertical-align: bottom"><br> <c:forEach
+																var="dcMetadata"
+																items="${digitalObject.datastreams['DC'].dublinCoreMetadata}">
+																<c:if
+																	test="${dcMetadata.key!='IDENTIFIER' && dcMetadata.key!='TYPE' && dcMetadata.key!='FORMAT' && dcMetadata.key!='COVERAGE' && dcMetadata.key!='ANNOTATIONS'}">
+																	<span class="label label-default">${dcMetadata.key}:</span>
+																	<a
+																		href="${pageContext.request.contextPath}/archives/search_objects/category=${dcMetadata.key}?terms=${dcMetadata.value}">${dcMetadata.value}</a>
+																	<br>
+																</c:if>
+															</c:forEach>
+													</tr>
 												</table>
 											</div>
-
-											<button type="button">Place me</button>
 										</div>
 									</div>
+									<c:set var="count" value="${count + 1}" scope="page" />
 								</div>
-								<c:set var="count" value="${count + 1}" scope="page" />
 							</c:forEach>
 							</section>
 						</div>
@@ -375,8 +363,8 @@
 		<div class="container-fluid">
 			<!-- Brand and toggle get grouped for better mobile display -->
 			<div class="navbar-header">
-<a class="navbar-brand" href="${pageContext.request.contextPath}"><span
-							class="glyphicon glyphicon-home"></span> Personal Histories</a>
+				<a class="navbar-brand" href="${pageContext.request.contextPath}"><span
+					class="glyphicon glyphicon-home"></span> Personal Histories</a>
 			</div>
 		</div>
 		<!-- /.container -->

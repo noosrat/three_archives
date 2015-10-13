@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <%@page import="common.fedora.Datastream"%>
 <%@page import="common.fedora.DublinCoreDatastream"%>
 <%@page import="common.fedora.FedoraDigitalObject"%>
@@ -23,8 +24,6 @@
 <link
 	href="${pageContext.request.contextPath}/bootstrap-3.3.5/css/bootstrap.min.css"
 	rel="stylesheet">
-<!-- <link href="${pageContext.request.contextPath}/css/lightbox.css"
-	rel="stylesheet">-->
 <link href="${pageContext.request.contextPath}/theme/css/sb-admin.css"
 	rel="stylesheet">
 <link
@@ -38,7 +37,6 @@
 	src="${pageContext.request.contextPath}/bootstrap-3.3.5/js/bootstrap.js"></script>
 <script type="text/javascript"
 	src="${pageContext.request.contextPath}/js/typeahead.js"></script>
-
 <script type="text/javascript">
 $(document).ready(function() {
 	var archive ='<%=session.getAttribute("ARCHIVE_CONCAT")%>';
