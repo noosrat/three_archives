@@ -67,7 +67,7 @@ public class MapController implements Controller {
 				}
 			
 			request.setAttribute("points", read("../webapps/data/points.txt"));
-			request.setAttribute("harfieldcollections", read("collections.txt"));
+			request.setAttribute("harfieldcollections", read("../webapps/data/collections.txt"));
 			return "WEB-INF/frontend/maps/harfieldoverview.jsp";
 			
 			//setAttribute to points array for to be sent (points are from database)

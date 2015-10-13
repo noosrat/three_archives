@@ -410,7 +410,7 @@ $(document).ready(function() {
 									<c:if test="${dcMetadata.key!='IDENTIFIER' && dcMetadata.key!='TYPE' && dcMetadata.key!='FORMAT' && dcMetadata.key!='COVERAGE' && dcMetadata.key!='ANNOTATIONS'}">
 									
 									
-									<tr><span class="label label-default">${dcMetadata.key}:</span> 
+									<tr><h4><span class="label label-default">${dcMetadata.key}:</span></h4></tr> 
 									<!-- <tr><font style="size:10px">${dcMetadata.key}:</font></tr> --> 
 								 
 									
