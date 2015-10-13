@@ -169,7 +169,6 @@
 					<ul class="nav nav-stacked" id="sidebar">
 						<li><a href="#sec0">About Harfield Village</a></li>
 						<li><a href="#sec1">Map</a></li>
-						<li><a href="#sec2">Detailed Map</a></li>
 						<li><a href="#sec3">Contact</a></li>
 					</ul>
 				</div>
@@ -183,16 +182,14 @@
 					during the times of apartheid in South Africa .</p>
 				<hr>
 				<h2 id="sec1">Map</h2>
-				<p></p>
+				<p>
+				<div class="row">
+					<div class="col-lg-12">
+						<img src="${pageContext.request.contextPath}/images/harfieldV.png" class="img-responsive">
+					</div>
+				</div></p>
 				<hr>
 
-				<h2 id="sec2">Detailed Map</h2>
-				<p></p>
-				<div class="row">
-					<div class="col-md-4">
-						<img src="//placehold.it/300x300" class="img-responsive">
-					</div>
-				</div>
 
 				<hr>
 
@@ -206,7 +203,7 @@
 						src="${pageContext.request.contextPath}/images/CCALogo.png"
 						style="width: 70%"></td>
 
-
+   <br><br><br><br><br>
 				</table>
 
 			</div>

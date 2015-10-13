@@ -406,22 +406,22 @@ $(document).ready(function() {
 </tr><tr>
 									<td style="vertical-align:bottom"><c:forEach var="dcMetadata" items="${digitalObject.datastreams['DC'].dublinCoreMetadata}">
 									
-									<table>
+									
 									<c:if test="${dcMetadata.key!='IDENTIFIER' && dcMetadata.key!='TYPE' && dcMetadata.key!='FORMAT' && dcMetadata.key!='COVERAGE' && dcMetadata.key!='ANNOTATIONS'}">
 									
 									
-									<tr><h4><span class="label label-default">${dcMetadata.key}:</span></h4></tr> 
+									<span class="label label-default">${dcMetadata.key}:</span> 
 									<!-- <tr><font style="size:10px">${dcMetadata.key}:</font></tr> --> 
 								 
 									
 									
 									
-								<tr>	<a href="${pageContext.request.contextPath}/archives/search_objects/category=${dcMetadata.key}?terms=${dcMetadata.value}">${dcMetadata.value}</a>
-								</tr><br>
+									<a href="${pageContext.request.contextPath}/archives/search_objects/category=${dcMetadata.key}?terms=${dcMetadata.value}">${dcMetadata.value}</a>
+								<br>
 												</c:if>
 </table>
-											</c:forEach></td></tr>
-									</table>
+											</c:forEach>
+									
 								</div>
 								<table style="width:100%">
 								<tr align="left">
