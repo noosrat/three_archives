@@ -1,20 +1,48 @@
 package common.fedora;
-/*
- * This exception will be thrown whenever issues are experienced with the server/connecting to the server or if the http response is not 200
+
+/**
+ * The {@code FeodraException} will be thrown whenever issues are experienced
+ * with connecting to or communicating with the Fedora RESTful API or when the
+ * response returned by the RESTful service is anything other than 200
  */
 public class FedoraException extends Exception {
-	
-	public FedoraException(String message){
+
+	/**
+	 * SerialVersionUID for the object
+	 */
+	private static final long serialVersionUID = 1L;
+
+	/**
+	 * Constructs a new exception with the specified detail message.
+	 *
+	 * @param message
+	 *            the detail message. The detail message is saved for later
+	 *            retrieval by the {@link #getMessage()} method.
+	 * 
+	 * 
+	 */
+	public FedoraException(String message) {
 		super(message);
 	}
-	
-	public FedoraException(Throwable cause){
+
+	/**
+	 * Constructs a new exception with the specified {@link Throwable} cause.
+	 * 
+	 * @param cause
+	 */
+	public FedoraException(Throwable cause) {
 		super(cause);
 	}
-	
-	public FedoraException(String message, Throwable cause){
+
+	/**
+	 * Constructs a new exception with the specified {@link Throwable} cause and
+	 * specified detail message.
+	 * 
+	 * @param message
+	 * @param cause
+	 */
+	public FedoraException(String message, Throwable cause) {
 		super(message);
 	}
-	
 
 }

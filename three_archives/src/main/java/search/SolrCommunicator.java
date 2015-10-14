@@ -71,16 +71,11 @@ public class SolrCommunicator {
 		StringBuilder query = new StringBuilder(
 				"http://localhost:8089/fedoragsearch/rest?operation=updateIndex&action=fromFoxmlFiles&value=");
 		fedoraGetRequest.setRequest(query);
-		try {
-			System.out.println("UPDATING SOLR INDEX");
-			FedoraClient.executeWithoutParsingResponse(fedoraGetRequest);
-		} catch (FedoraException e) {
-			System.out.println(e);
-			throw new Exception("Unable to update the index after uploading new items.  Please report to IT", e);
-		}
+		System.out.println("UPDATING SOLR INDEX");
+		FedoraClient.executeWithoutParsingResponse(fedoraGetRequest);
 		System.out.println("Successfully updated index with new objects");
 		optimizeSolrIndex();
-	
+
 	}
 
 	private static void optimizeSolrIndex() throws Exception {
@@ -89,13 +84,8 @@ public class SolrCommunicator {
 		StringBuilder query = new StringBuilder(
 				"http://localhost:8089/fedoragsearch/rest?operation=updateIndex&action=optimize");
 		fedoraGetRequest.setRequest(query);
-		try {
-			System.out.println("OPTIMIZING INDEX");
-			FedoraClient.executeWithoutParsingResponse(fedoraGetRequest);
-		} catch (FedoraException e) {
-			System.out.println(e);
-			throw new Exception("Unable to optimise the index after uploading new items.  Please report to IT", e);
-		}
+		System.out.println("OPTIMIZING INDEX");
+		FedoraClient.executeWithoutParsingResponse(fedoraGetRequest);
 		System.out.println("Successfully optimised index");
 	}
 }

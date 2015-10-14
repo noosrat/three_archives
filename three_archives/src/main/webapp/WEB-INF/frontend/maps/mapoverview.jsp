@@ -100,7 +100,7 @@ function initialize() {
 	for(FedoraDigitalObject object: coord){
 		System.out.println(object.getPid());
 		String pid =object.getPid();
-		String coverage = ((DublinCoreDatastream) object.getDatastreams().get("DC")).getCoverage();
+		String coverage = ((DublinCoreDatastream) object.getDatastreams().get("DC")).getDublinCoreMetadata().get("COVERAGE");
 		System.out.println(coverage);
 		//String[] splitcoverage = coverage.split("%");
 		//System.out.println(splitcoverage[0]);
@@ -121,7 +121,7 @@ function initialize() {
 			position:  {lat: <%=lat%>, lng: <%=lng%>},
 			map: map,
 			icon: image1,
-	      	title: "<%=((DublinCoreDatastream) object.getDatastreams().get("DC")).getTitle()%>"});
+	      	title: "<%=((DublinCoreDatastream) object.getDatastreams().get("DC")).getDublinCoreMetadata().get("TITLE")%>"});
 		
 	  	markers.push(marker1);
 	  	

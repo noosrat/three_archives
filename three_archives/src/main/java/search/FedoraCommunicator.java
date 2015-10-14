@@ -21,7 +21,7 @@ import common.fedora.FedoraClient;
 import common.fedora.FedoraDigitalObject;
 import common.fedora.FedoraException;
 import common.fedora.FedoraGetRequest;
-import common.fedora.QueryParameters;
+import common.fedora.QueryParameter;
 
 public class FedoraCommunicator {
 	/*
@@ -92,9 +92,9 @@ public class FedoraCommunicator {
 
 	private List<String> findFedoraObjectsWithSearchTerm(String terms)
 			throws FedoraException {
-		TreeMap<QueryParameters, String> queryParameters = new TreeMap<QueryParameters, String>();
-		queryParameters.put(QueryParameters.TERMS, terms);
-		queryParameters.put(QueryParameters.RESULT_FORMAT, "xml");
+		TreeMap<QueryParameter, String> queryParameters = new TreeMap<QueryParameter, String>();
+		queryParameters.put(QueryParameter.TERMS, terms);
+		queryParameters.put(QueryParameter.RESULT_FORMAT, "xml");
 
 		FedoraGetRequest fedoraGetRequest = new FedoraGetRequest();
 
@@ -177,12 +177,12 @@ public class FedoraCommunicator {
 			//pid =object.getPid();
 		
 		FedoraGetRequest fedoraGetRequest = new FedoraGetRequest(object.getPid());
-		TreeMap<QueryParameters, String> param = new TreeMap();
+		TreeMap<QueryParameter, String> param = new TreeMap();
 		//TreeMap param = new TreeMap();
 		
 		//QueryParameters qp = new QueryParameters("download");
 		
-		param.put(QueryParameters.DOWNLOAD, "true");
+		param.put(QueryParameter.DOWNLOAD, "true");
 		FedoraClient.execute((fedoraGetRequest.getDatastreamDissemination("IMG",param)).getObjectXML());
 		
 		}

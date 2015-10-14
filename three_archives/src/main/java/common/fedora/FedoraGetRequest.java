@@ -5,23 +5,31 @@ import java.util.TreeMap;
 /*
  * Notes on the class: our result format is ALWAYS to be in XML
  */
+/**
+ * The {@code FedoraGetRequest} is responsible for building up the HTTP request
+ * to be propagated to the Fedora HTTP RESTFUL API using the
+ * {@link FedoraClient}. The FedoraGetRequest contains various string mappings
+ * to methods contained within the RestFUL API. Further information can be found
+ * at {@link https://wiki.duraspace.org/display/FEDORA38/REST+API}
+ * 
+ *
+ */
 public class FedoraGetRequest {
+	
 
-
-	private String persistentIdentifier;
+	private String pid;
 	private StringBuilder request;
-	private TreeMap<QueryParameters, String> queryParameters;
+	private TreeMap<QueryParameter, String> queryParameters;
 	private final static String baseURL = FedoraCredentials.getUrl();
 
 	public FedoraGetRequest() {
 		this.request = new StringBuilder(baseURL.concat("/objects"));
-		this.queryParameters = new TreeMap<QueryParameters, String>();
+		this.queryParameters = new TreeMap<QueryParameter, String>();
 	}
 
-	
 	public FedoraGetRequest(String persistentIdentifier) {
 		this();
-		this.persistentIdentifier = persistentIdentifier;
+		this.pid = persistentIdentifier;
 	}
 
 	public StringBuilder getRequest() {
@@ -31,25 +39,24 @@ public class FedoraGetRequest {
 	public void setRequest(StringBuilder request) {
 		this.request = request;
 	}
-	
-	public void resetRequest(){
+
+	public void resetRequest() {
 		setRequest(new StringBuilder(baseURL.concat("/objects")));
 	}
 
 	public String getPersistentIdentifier() {
-		return persistentIdentifier;
+		return pid;
 	}
 
 	public void setPersistentIdentifier(String persistentIdentifier) {
-		this.persistentIdentifier = persistentIdentifier;
+		this.pid = persistentIdentifier;
 	}
 
-	public TreeMap<QueryParameters, String> getQueryParameters() {
+	public TreeMap<QueryParameter, String> getQueryParameters() {
 		return queryParameters;
 	}
 
-	private void setQueryParameters(
-			TreeMap<QueryParameters, String> queryParameters) {
+	private void setQueryParameters(TreeMap<QueryParameter, String> queryParameters) {
 		if (queryParameters != null) {
 			this.queryParameters = queryParameters;
 		}
@@ -64,16 +71,14 @@ public class FedoraGetRequest {
 			prefix = getRequest().append("/");
 		return prefix;
 	}
-	
+
 	// /objects ? [terms | query] [maxResults] [resultFormat] [pid] [label]
 	// [state] [ownerId] [cDate] [mDate] [dcmDate] [title] [creator] [subject]
 	// [description] [publisher] [contributor] [date] [type] [format]
 	// [identifier] [source] [language] [relation] [coverage] [rights]
 	// /objects?terms=demo&pid=true&subject=true&label=true&resultFormat=xml
 
-	public FedoraGetRequest findObjects(
-			TreeMap<QueryParameters, String> queryParameters,
-			DublinCore... toReturn) {
+	public FedoraGetRequest findObjects(TreeMap<QueryParameter, String> queryParameters, DublinCore... toReturn) {
 		getRequest().append("?");
 		// need to go through and add the DC ones so long
 		for (DublinCore dc : toReturn) {
@@ -86,7 +91,7 @@ public class FedoraGetRequest {
 
 	// /objects/{pid}/datastreams/{dsID}/content ? [asOfDateTime] [download]
 	// /objects/demo:29/datastreams/DC/content
-	public FedoraGetRequest getDatastreamDissemination(String dsid, TreeMap<QueryParameters, String> queryParameters) {
+	public FedoraGetRequest getDatastreamDissemination(String dsid, TreeMap<QueryParameter, String> queryParameters) {
 		getPrefix().append("/datastreams/").append(dsid).append("/content?");
 		setQueryParameters(queryParameters);
 		return this;
@@ -103,14 +108,13 @@ public class FedoraGetRequest {
 	// /objects/demo:29/versions?format=xml
 	public FedoraGetRequest getObjectHistory() {
 		getPrefix().append("/versions?");
-		setQueryParameters(new TreeMap<QueryParameters, String>());
+		setQueryParameters(new TreeMap<QueryParameter, String>());
 		return this;
 	}
 
 	// /objects/{pid} ? [format] [asOfDateTime]
 	// /objects/demo:29?format=xml
-	public FedoraGetRequest getObjectProfile(
-			TreeMap<QueryParameters, String> queryParameters) {
+	public FedoraGetRequest getObjectProfile(TreeMap<QueryParameter, String> queryParameters) {
 		getPrefix().append("?");
 		setQueryParameters(queryParameters);
 		return this;
@@ -119,8 +123,7 @@ public class FedoraGetRequest {
 
 	// /objects/{pid}/datastreams ? [format] [asOfDateTime]
 	// /objects/demo:35/datastreams?format=xml&asOfDateTime=2008-01-01T05:15:00Z
-	public FedoraGetRequest listDatastreams(
-			TreeMap<QueryParameters, String> queryParameters) {
+	public FedoraGetRequest listDatastreams(TreeMap<QueryParameter, String> queryParameters) {
 		getPrefix().append("/datastreams?");
 		setQueryParameters(queryParameters);
 		return this;
@@ -130,8 +133,7 @@ public class FedoraGetRequest {
 	// [validateChecksum]
 	// /objects/demo:29/datastreams/DC?format=xml&validateChecksum=true
 
-	public FedoraGetRequest getDatastream(String dsid,
-			TreeMap<QueryParameters, String> queryParameters) {
+	public FedoraGetRequest getDatastream(String dsid, TreeMap<QueryParameter, String> queryParameters) {
 		getPrefix().append("/datastreams/").append(dsid).append("?");
 		setQueryParameters(queryParameters);
 		return this;
@@ -148,8 +150,7 @@ public class FedoraGetRequest {
 
 	// /objects/{pid}/datastreams ? [profiles] [asOfDateTime]
 	// /objects/demo:35/datastreams?profiles=true&asOfDateTime=2012-08-03T10:02:00.169Z
-	public FedoraGetRequest getDatastreams(
-			TreeMap<QueryParameters, String> queryParameters) {
+	public FedoraGetRequest getDatastreams(TreeMap<QueryParameter, String> queryParameters) {
 		getPrefix().append("/datastreams?");
 		setQueryParameters(queryParameters);
 		return this;
@@ -157,8 +158,7 @@ public class FedoraGetRequest {
 
 	// /objects/{pid}/relationships ? [subject] [predicate] [format]
 	// /objects/demo:29/relationships?subject=info%3afedora%2fdemo%3a29%2fDC
-	public FedoraGetRequest getRelationships(
-			TreeMap<QueryParameters, String> queryParameters) {
+	public FedoraGetRequest getRelationships(TreeMap<QueryParameter, String> queryParameters) {
 		getPrefix().append("/relationships?");
 		setQueryParameters(queryParameters);
 		return this;
@@ -176,18 +176,15 @@ public class FedoraGetRequest {
 		 * we have a whole map of all the parameters now we must append it to
 		 * our string
 		 */
-		for (QueryParameters key : queryParameters.keySet()) {
-			getRequest().append(key.getDescription()).append("=")
-					.append(getQueryParameters().get(key)).append("&");
+		for (QueryParameter key : queryParameters.keySet()) {
+			getRequest().append(key.getDescription()).append("=").append(getQueryParameters().get(key)).append("&");
 		}
-		if (!queryParameters.containsKey(QueryParameters.RESULT_FORMAT)) {
+		if (!queryParameters.containsKey(QueryParameter.RESULT_FORMAT)) {
 			getRequest().append("format=xml");
 		} else {
-			getRequest().delete(getRequest().length() - 1,
-					getRequest().length());
+			getRequest().delete(getRequest().length() - 1, getRequest().length());
 		}
 
 	}
-
 
 }

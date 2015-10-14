@@ -1,34 +1,76 @@
 package common.fedora;
 
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.TreeSet;
+
+/**
+ * The {@code DublinCoreDatastream} is a child of {@link Datastream} containing
+ * additional information pertaining to the dublin core metadata fields for the
+ * specific Fedora Digital object. Every fedora digital object has at least a
+ * {@link DublinCoreDatastream}
+ *
+ */
 
 public class DublinCoreDatastream extends Datastream {
 
 	// we have the dublin core metadata fields within this...maybe it should
 	// just be an array list? or map...we need to parse the content
 
-	private HashMap<String, String> dublinCoreMetadata; // these are usually
-														// populated by the dC
-														// datstreams but when
-														// doing coverage and
-														// description we
-														// introduce new fields
-	private TreeSet<String> digitalObjectTags; // this is a derived value and
-												// can be derived from all teh
-												// metadata fields..it is just a
-												// breakdown of all the search
-												// tags within object appearing
-												// as one word
+	/**
+	 * The {@link HashMap<T,E>} instance representing the dublin core metadata
+	 * fields of the digital object. The key value is defined by the
+	 * {@link DublinCore} enum name value and the value of the HashMap is
+	 * defined by the actual value of the dublin core field as obtained from the
+	 * dublin core metadata for the digital object
+	 * 
+	 * In addition to the standard dublin core metadata fields as indicated in
+	 * {@link DublinCore}, the HashMap houses values for
+	 * "COLLECTION","ANNOTATIONS","EVENT" which are all derived from the
+	 * {@link DublinCore.DESCRIPTION} as well as fields for "COVERAGE" and
+	 * "LOCATION" which are derived from the {@link DublinCore.COVERAGE} field.
+	 * 
+	 */
+	private HashMap<String, String> dublinCoreMetadata;
+	// private TreeSet<String> digitalObjectTags; // this is a derived value and
+	// can be derived from all teh
+	// metadata fields..it is just a
+	// breakdown of all the search
+	// tags within object appearing
+	// as one word
 
+	/**
+	 * Constructor for the DublinCoreDatastream
+	 * 
+	 * @param pid
+	 *            {@link String} instance of the persistent identifier matching
+	 *            that of the {@link FedoraDigitalObject} that the
+	 *            DublinCoreDatastream belongs to
+	 */
 	public DublinCoreDatastream(String pid) {
 		super(pid, DatastreamID.DC);
 	}
 
+	/**
+	 * Constructor for the DublinCoreDatastream
+	 * 
+	 * @param datastream
+	 *            {@link Datastream} instance representing the datastream
+	 */
+
 	public DublinCoreDatastream(Datastream datastream) {
 		super(datastream);
 	}
+
+	/**
+	 * Constructor for the DublinCoreDatastream
+	 * 
+	 * @param pid
+	 *            {@link String} instance of the persistent identifier matching
+	 *            that of the {@link FedoraDigitalObject} that the
+	 *            DublinCoreDatastream belongs to
+	 * @param metadata
+	 *            {@link HashMap} instance containing the metadata fields to map
+	 *            into the datastream metadata elements
+	 */
 
 	public DublinCoreDatastream(String pid, HashMap<String, String> metadata) {
 		this(pid);
@@ -36,30 +78,30 @@ public class DublinCoreDatastream extends Datastream {
 
 	}
 
+	/**
+	 * Sets the dublinCoreMetadata collection of fields for the datastream
+	 * 
+	 * @param dublinCoreMetadata
+	 *            {@link HashMap} instance containing the values of the metadata
+	 *            fields for the object
+	 */
 	public void setDublinCoreMetadata(HashMap<String, String> dublinCoreMetadata) {
 		this.dublinCoreMetadata = dublinCoreMetadata;
 	}
 
+	/**
+	 * Gets the dublinCoreMetadata collection of fields for the datastream
+	 * 
+	 * @return {@link HashMap} instance of the dublinCoreMetadata fields for the
+	 *         object
+	 */
 	public HashMap<String, String> getDublinCoreMetadata() {
 		return dublinCoreMetadata;
 	}
 
-	private void setDigitalObjectTags() {
-		// go through all the metadat elements and just split them by a space
-		if (dublinCoreMetadata != null) {
-			for (String elements : getDublinCoreMetadata().values()) {
-				digitalObjectTags.addAll(Arrays.asList(elements.split(" ")));
-			}
-		}
-
-	}
-
-	public TreeSet<String> getDigitalObjectTags() {
-		setDigitalObjectTags();
-		// derive this vlaue from the metadata fields
-		return digitalObjectTags;
-	}
-
+	/**
+	 * @return {@link String} representation of the object
+	 */
 	@Override
 	public String toString() {
 		String result = "";
@@ -68,20 +110,5 @@ public class DublinCoreDatastream extends Datastream {
 		}
 		return super.toString() + "Dublin core fields \n " + result;
 	}
-	
-	public String getTitle(){
-		
-	return dublinCoreMetadata.get("TITLE");	
-	}
-	
-	public String getCoverage(){
-		
-		return dublinCoreMetadata.get("COVERAGE");	
-		}
-
-	public String getAnnotations(){
-		
-		return dublinCoreMetadata.get("ANNOTATIONS");	
-		}
 
 }
