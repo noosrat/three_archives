@@ -40,13 +40,13 @@ public class FedoraDigitalObject {
 	private Date dateCreated;
 	/**
 	 * The {@link Date} instance representing the date on which the digital
-	 * object was last modified
+	 * object was last modified. Date format yyyy-MM-dd HH:mm:ss.SSS
 	 */
 	private Date dateLastModified;
 
 	/**
 	 * The {@link State} instance representing the state of the fedora digital
-	 * object
+	 * object. Date format yyyy-MM-dd HH:mm:ss.SSS
 	 */
 	private State state;
 	/**

@@ -12,7 +12,7 @@ import org.springframework.http.MediaType;
  * These fields are defined as in the Fedora Digital object repository.
  * 
  * In detail definitions and explanations of each of these fields can be found
- * {@link https://wiki.duraspace.org/display/FEDORA38/Fedora+Digital+Object+Model#FedoraDigitalObjectModel-Datastreamsdata}
+ * {@link https://wiki.duraspace.org/display/Fedora38/Fedora+Digital+Object+Model#FedoraDigitalObjectModel-Datastreamsdata}
  */
 public class Datastream {
 	/**
@@ -95,7 +95,9 @@ public class Datastream {
 	 * 
 	 * @param pid
 	 *            {@link String} representing the persistence identifier for the
-	 *            digital object that the Datastream belongs to.  This should be of the structure x:x where x represents any sequence of any alphanumeric character
+	 *            digital object that the Datastream belongs to. This should be
+	 *            of the structure x:x where x represents any sequence of any
+	 *            alphanumeric character
 	 * @param datastreamIdentifier
 	 *            instance of {@link DatastreamID} which identifies the type of
 	 *            datastream
@@ -449,8 +451,8 @@ public class Datastream {
 	public String getContent() {
 		return "http://personalhistories.cs.uct.ac.za:8089/fedora/objects/" + getPid() + "/datastreams/"
 				+ getDatastreamID() + "/content";
-		// return "http://localhost:8080/fedora/objects/" + getPid() +
-		// "/datastreams/" + getDatastreamID() + "/content";
+//		 return "http://localhost:8080/fedora/objects/" + getPid() +
+//		 "/datastreams/" + getDatastreamID() + "/content";
 	}
 
 	/**

@@ -3,7 +3,7 @@ package common.fedora;
 import java.util.TreeMap;
 
 /*
- * Notes on the class: our result format is ALWAYS to be in XML
+ * The result format is ALWAYS to be in XML
  */
 /**
  * The {@code FedoraGetRequest} is responsible for building up the HTTP request
@@ -15,47 +15,125 @@ import java.util.TreeMap;
  *
  */
 public class FedoraGetRequest {
-	
 
+	/**
+	 * The {@link String} representation of the pid of the object being queried.
+	 * This pid will be in every query made to the digital object repository
+	 */
 	private String pid;
+	/**
+	 * The {@link StringBuilder} instance representing the query to be made to
+	 * the Fedora RESTFUL API. These queries are built up based on what is
+	 * expected by the Fedora restful API
+	 */
 	private StringBuilder request;
+	/**
+	 * The {@link TreeMap} representing the queryParameters for the request
+	 * being made to the digital object repository
+	 * 
+	 * The query parameters are structured with a key of {@link QueryParameter}
+	 * and the value matching the key being the actual value required
+	 */
 	private TreeMap<QueryParameter, String> queryParameters;
+	/**
+	 * The {@link String} representation of the URL where the fedora repository
+	 * service is being run. All of the requests are built up with the baseURL
+	 * as the prefix
+	 */
 	private final static String baseURL = FedoraCredentials.getUrl();
 
+	/**
+	 * Constructor This parameterless constructor uses the baseURL to construct
+	 * the {@link #request} attribute and concatenates it with "objects" in
+	 * order to build up the appropriate request to be sent to fedora for the
+	 * retrieval of the digital objects.
+	 * 
+	 * The {@link #queryParameters} is initialised to an empty {@link TreeMap}
+	 * here
+	 */
 	public FedoraGetRequest() {
 		this.request = new StringBuilder(baseURL.concat("/objects"));
 		this.queryParameters = new TreeMap<QueryParameter, String>();
 	}
 
-	public FedoraGetRequest(String persistentIdentifier) {
+	/**
+	 * Constructor
+	 * 
+	 * @param pid
+	 *            representing the pid of the digital object being queried
+	 */
+	public FedoraGetRequest(String pid) {
 		this();
-		this.pid = persistentIdentifier;
+		this.pid = pid;
 	}
 
+	/**
+	 * Gets the request string
+	 * 
+	 * @return {@link String} instance of the built up request
+	 */
 	public StringBuilder getRequest() {
 		return request;
 	}
 
+	/**
+	 * Sets the request string
+	 * 
+	 * @param request
+	 *            {@link String} instance representing the request
+	 */
 	public void setRequest(StringBuilder request) {
 		this.request = request;
 	}
 
+	/**
+	 * Resetting the {@link #request} to only contain the base URL with the
+	 * "objects" concatenated This is necessary after successful execution of
+	 * each request to ensure that the subsequent request is not being built on
+	 * top of an existing request
+	 */
 	public void resetRequest() {
 		setRequest(new StringBuilder(baseURL.concat("/objects")));
 	}
 
-	public String getPersistentIdentifier() {
+	/**
+	 * Gets the pid of the object being dealt with
+	 * 
+	 * @return {@link #pid}
+	 */
+	public String getPid() {
 		return pid;
 	}
+
+	/**
+	 * Sets the pid of the object being dealt with
+	 * 
+	 * @param persistentIdentifier
+	 */
 
 	public void setPersistentIdentifier(String persistentIdentifier) {
 		this.pid = persistentIdentifier;
 	}
 
+	/**
+	 * Gets the query parameters for the request
+	 * 
+	 * @return {@link TreeMap} instance of the query parameters for the fedora
+	 *         get request
+	 */
 	public TreeMap<QueryParameter, String> getQueryParameters() {
 		return queryParameters;
 	}
 
+	/**
+	 * Sets the query parameters for the request. This is only decided and set
+	 * within this class. The parameters are then processed and appended to the
+	 * {@link #request}
+	 * 
+	 * @param queryParameters
+	 *            representing the query parameters required for this request.
+	 * 
+	 */
 	private void setQueryParameters(TreeMap<QueryParameter, String> queryParameters) {
 		if (queryParameters != null) {
 			this.queryParameters = queryParameters;
@@ -63,24 +141,45 @@ public class FedoraGetRequest {
 		processParameters();
 	}
 
+	/**
+	 * Dependent on what REST API method is being interacted with, the prefix
+	 * for the request will differ. One prefix includes the persistent
+	 * identifier which is used widely when making the requests, however, the
+	 * {@link #pid} is not necessary when querying the repository for all
+	 * digital objects as n {@link #findObjects(TreeMap, DublinCore...)}
+	 * 
+	 * @return {@link String} instance representing the request prefix
+	 */
 	private StringBuilder getPrefix() {
 		StringBuilder prefix;
-		if (getPersistentIdentifier() != null) {
-			prefix = getRequest().append("/").append(getPersistentIdentifier());
+		if (getPid() != null) {
+			prefix = getRequest().append("/").append(getPid());
 		} else
 			prefix = getRequest().append("/");
 		return prefix;
 	}
 
-	// /objects ? [terms | query] [maxResults] [resultFormat] [pid] [label]
-	// [state] [ownerId] [cDate] [mDate] [dcmDate] [title] [creator] [subject]
-	// [description] [publisher] [contributor] [date] [type] [format]
-	// [identifier] [source] [language] [relation] [coverage] [rights]
-	// /objects?terms=demo&pid=true&subject=true&label=true&resultFormat=xml
-
+	/**
+	 * This corresponds to the Fedora REST API method "findObjects" and returns
+	 * a list of fedora digital objects that match the query parameters
+	 * specified within the request. The structure of the request is
+	 * "/objects ? [terms | query] [maxResults] [resultFormat] [pid] [label] [state] [ownerId] [cDate] [mDate] [dcmDate] [title] [creator] [subject] [description] [publisher] [contributor] [date] [type] [format] [identifier] [source] [language] [relation] [coverage] [rights]"
+	 * where the possible query parameters are indicated by the items in [] an
+	 * example request would be
+	 * "/objects?terms=demo&pid=true&subject=true&label=true&resultFormat=xml"
+	 * 
+	 * 
+	 * @param queryParameters
+	 *            a {@link TreeMap} representation of the query parameters
+	 *            required for the request.
+	 * @param toReturn
+	 *            a collection containing which {@link DublinCore} metadata
+	 *            fields belonging to the objects to return.
+	 * @return instance of {@link FedoraGetRequest} to be executed via the
+	 *         {@link FedoraClient}
+	 */
 	public FedoraGetRequest findObjects(TreeMap<QueryParameter, String> queryParameters, DublinCore... toReturn) {
 		getRequest().append("?");
-		// need to go through and add the DC ones so long
 		for (DublinCore dc : toReturn) {
 			getRequest().append(dc.getDescription()).append("=true&");
 		}
@@ -89,31 +188,56 @@ public class FedoraGetRequest {
 		return this;
 	}
 
-	// /objects/{pid}/datastreams/{dsID}/content ? [asOfDateTime] [download]
-	// /objects/demo:29/datastreams/DC/content
+	/**
+	 * This retrieves the content of the actual datastream. An example query
+	 * would be "/objects/demo:29/datastreams/DC/content" The structure of the
+	 * query may be
+	 * "/objects/{pid}/datastreams/{dsID}/content ? [asOfDateTime] [download]"
+	 * 
+	 * @param dsid
+	 * @param queryParameters
+	 *            a collection representing the query parameters for the
+	 *            request. The possible options for query parameters are
+	 *            [asOfDateTime] and [download] whose values would be a date
+	 *            time and a boolean respectively
+	 * @return instance of {@link FedoraGetRequest} to be executed via the
+	 *         {@link FedoraClient}
+	 */
 	public FedoraGetRequest getDatastreamDissemination(String dsid, TreeMap<QueryParameter, String> queryParameters) {
 		getPrefix().append("/datastreams/").append(dsid).append("/content?");
 		setQueryParameters(queryParameters);
 		return this;
 	}
 
-	// Probably will not use this?
-	// // /objects/{pid}/methods/{sdefPid}/{method} ? [method parameters]
-	// // /objects/demo:29/methods/demo:27/resizeImage?width=100
-	// public void getDissemination(String pid, String sdefPid) {
-	// getRequest().append("/").append(pid).
-	// }
-
-	// /objects/{pid}/versions ? [format]
-	// /objects/demo:29/versions?format=xml
+	/**
+	 * This constructs a request to get the object history of the digital
+	 * object. The only query parameter (which is implicitly included) is
+	 * [format] Example query "/objects/demo:29/versions?format=xml"
+	 * 
+	 * @return instance of {@link FedoraGetRequest} to be executed via the
+	 *         {@link FedoraClient}
+	 */
 	public FedoraGetRequest getObjectHistory() {
 		getPrefix().append("/versions?");
 		setQueryParameters(new TreeMap<QueryParameter, String>());
 		return this;
 	}
 
-	// /objects/{pid} ? [format] [asOfDateTime]
-	// /objects/demo:29?format=xml
+	/**
+	 * This methods retrieves the {@link FedoraDigitalObject}'s profile. This
+	 * includes element such as the {@link FedoraDigitalObject.dateCreated},
+	 * {@link FedoraDigitalObject.dateLastModified},
+	 * {@link FedoraDigitalObject.state}. Example query:
+	 * "/objects/demo:29?format=xml"
+	 * 
+	 * @param queryParameters
+	 *            a collection representing the query parameters for the
+	 *            request. The possible options for query parameters are
+	 *            [format] and [asOfDateTime] where format is either xml or html
+	 *            and asOfDateTime would be a specific date
+	 * @return instance of {@link FedoraGetRequest} to be executed via the
+	 *         {@link FedoraClient}
+	 */
 	public FedoraGetRequest getObjectProfile(TreeMap<QueryParameter, String> queryParameters) {
 		getPrefix().append("?");
 		setQueryParameters(queryParameters);
@@ -121,17 +245,43 @@ public class FedoraGetRequest {
 
 	}
 
-	// /objects/{pid}/datastreams ? [format] [asOfDateTime]
-	// /objects/demo:35/datastreams?format=xml&asOfDateTime=2008-01-01T05:15:00Z
+	/**
+	 * This method lists all the datastreams that the fedora digital object has.
+	 * Example query: "/objects/{pid}/datastreams ? [format] [asOfDateTime]"
+	 * 
+	 * @param queryParameters
+	 *            a collection representing the query parameters for the
+	 *            request. The possible options for query parameters are
+	 *            [format] and [asOfDateTime] where format is either xml or html
+	 *            and asOfDateTime would be a specific date.
+	 * 
+	 * @return instance of {@link FedoraGetRequest} to be executed via the
+	 *         {@link FedoraClient}
+	 */
 	public FedoraGetRequest listDatastreams(TreeMap<QueryParameter, String> queryParameters) {
 		getPrefix().append("/datastreams?");
 		setQueryParameters(queryParameters);
 		return this;
 	}
 
-	// /objects/{pid}/datastreams/{dsID} ? [asOfDateTime] [format]
-	// [validateChecksum]
-	// /objects/demo:29/datastreams/DC?format=xml&validateChecksum=true
+	/**
+	 * This methods retrieves a specific datastream of the fedora digital object
+	 * identified by {@link #pid} Example query
+	 * "/objects/demo:29/datastreams/DC?format=xml&validateChecksum=true"
+	 * 
+	 * @param dsid
+	 *            {@link String} instance identifying the type of datastream.
+	 *            This is the name value of {@link DatastreamID}
+	 * @param queryParameters
+	 *            a collection representing the query parameters for the
+	 *            request. The possible options for query parameters are
+	 *            [format],[asOfDateTime] and [validateChecksum] where format is
+	 *            either xml or html,asOfDateTime would be a specific date, and
+	 *            validateChecksum takes a boolean value
+	 * 
+	 * @return instance of {@link FedoraGetRequest} to be executed via the
+	 *         {@link FedoraClient}
+	 */
 
 	public FedoraGetRequest getDatastream(String dsid, TreeMap<QueryParameter, String> queryParameters) {
 		getPrefix().append("/datastreams/").append(dsid).append("?");
@@ -140,42 +290,68 @@ public class FedoraGetRequest {
 
 	}
 
-	// /objects/{pid}/datastreams/{dsid}/history ? [format]
-	// GET: /objects/changeme:1/datastreams/DC/history?format=xml
+	/**
+	 * This method gets the history for a specific datastream within a specific
+	 * fedora object from the repository. Example query :
+	 * "/objects/changeme:1/datastreams/DC/history?format=xml"
+	 * 
+	 * @param dsid
+	 *            {@link String} instance identifying the type of datastream.
+	 *            This is the name value of {@link DatastreamID}
+	 * @return instance of {@link FedoraGetRequest} to be executed via the
+	 *         {@link FedoraClient}
+	 */
 	public FedoraGetRequest getDatastreamHistory(String dsid) {
 		getPrefix().append("/datastreams/").append(dsid).append("/history?");
 		setQueryParameters(null);
 		return this;
 	}
 
-	// /objects/{pid}/datastreams ? [profiles] [asOfDateTime]
-	// /objects/demo:35/datastreams?profiles=true&asOfDateTime=2012-08-03T10:02:00.169Z
+	/**
+	 * This method retrieves all the datastreams from of a specific fedora
+	 * digital object. There is also an option to include the objects profile.
+	 * Example query
+	 * "/objects/demo:35/datastreams?profiles=true&asOfDateTime=2012-08-03T10:02:00.169Z"
+	 * 
+	 * @param queryParameters
+	 *            a collection representing the query parameters for the
+	 *            request. The possible options for query parameters are
+	 *            [profiles],[asOfDateTime] where profiles expects a boolean
+	 *            value and asOfDateTime would be a specific date
+	 * 
+	 * @return instance of {@link FedoraGetRequest} to be executed via the
+	 *         {@link FedoraClient}
+	 */
+
 	public FedoraGetRequest getDatastreams(TreeMap<QueryParameter, String> queryParameters) {
 		getPrefix().append("/datastreams?");
 		setQueryParameters(queryParameters);
 		return this;
 	}
 
-	// /objects/{pid}/relationships ? [subject] [predicate] [format]
-	// /objects/demo:29/relationships?subject=info%3afedora%2fdemo%3a29%2fDC
-	public FedoraGetRequest getRelationships(TreeMap<QueryParameter, String> queryParameters) {
-		getPrefix().append("/relationships?");
-		setQueryParameters(queryParameters);
-		return this;
-	}
-
-	// /objects/{pid}/objectXML
-	// /objects/demo:29/objectXML
+	/**
+	 * This method retrieves the entire fedora digital object in XML format
+	 * specific to fedora called FOXML. The objects entire profile and all of
+	 * it's datastreams are represented within this XML. Example query
+	 * "/objects/demo:29/objectXML"
+	 * 
+	 * @return instance of {@link FedoraGetRequest} to be executed via the
+	 *         {@link FedoraClient}
+	 */
 	public FedoraGetRequest getObjectXML() {
 		getPrefix().append("/objectXML");
 		return this;
 	}
 
+	/**
+	 * This method uses the query parameters built up from the above fedora
+	 * methods and appends them to the end of the query. This method is called
+	 * at the end of each of the methods in order to build the request in it's
+	 * entirety. Given that the format is never specified throughout the
+	 * requests using the query parameters, this method appends a default format
+	 * of XML to each of the requests.
+	 */
 	private void processParameters() {
-		/*
-		 * we have a whole map of all the parameters now we must append it to
-		 * our string
-		 */
 		for (QueryParameter key : queryParameters.keySet()) {
 			getRequest().append(key.getDescription()).append("=").append(getQueryParameters().get(key)).append("&");
 		}
