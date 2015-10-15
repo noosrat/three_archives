@@ -10,7 +10,6 @@ import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.common.SolrDocumentList;
 
 import common.fedora.FedoraClient;
-import common.fedora.FedoraException;
 import common.fedora.FedoraGetRequest;
 
 public class SolrCommunicator {

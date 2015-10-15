@@ -9,10 +9,22 @@ import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.util.HashMap;
 
+/**
+ * The {@code PageGeneration} is responsible for the generation of all of the
+ * pages required when introducing a new archive into the system
+ */
 public class PageGeneration {
 
-	private static HashMap<String, PropertiesHandler> ARCHIVES=new HashMap<String, PropertiesHandler>();
+	/**
+	 * The {@link HashMap} instance containing information about all the
+	 * archival properties and values as derived from the .properties files.
+	 */
+	private static HashMap<String, PropertiesHandler> ARCHIVES = new HashMap<String, PropertiesHandler>();
 
+	/**
+	 * This locates the archive properties files and loads them into a
+	 * collection{@link #ARCHIVES} to be used throughout the generation process
+	 */
 	public static void locateAndAssignProperties() {
 		File directory = new File("src/main/resources/configuration/");
 		if (directory != null) {
@@ -27,6 +39,19 @@ public class PageGeneration {
 		}
 
 	}
+
+	/**
+	 * This regenerates the existing index page to include a slider element for
+	 * the new archive. This is done by mapping values of all of the archive
+	 * properties into the index page. The index page template is copied and the
+	 * necessary archive attributes are substituted.
+	 * 
+	 * @param archive
+	 *            {@link String} instance indicating which archive home page is
+	 *            being generated. This is the archive name without
+	 *            non-alphanumeric characters and spaces.
+	 * @throws Exception
+	 */
 
 	public static void generateIndexPage() throws Exception {
 		System.out.println("GENERATING NEW LANDING PAGE");
@@ -50,7 +75,7 @@ public class PageGeneration {
 						while ((line = br.readLine()) != null) {
 							if (line.contains("carousel-indicators")) {
 								line = line
-										+ "<li data-target=\"#myCarousel\" data-slide-to=\"0\" class=\"active\"></li>"; 
+										+ "<li data-target=\"#myCarousel\" data-slide-to=\"0\" class=\"active\"></li>";
 								for (int x = 1; x < ARCHIVES.size(); x++) {
 									line += "<li data-target=\"#myCarousel\" data-slide-to=\"" + x + "\"></li>";
 								}
@@ -66,8 +91,10 @@ public class PageGeneration {
 												+ ");\"></div>";
 										line += "<div class=\"carousel-caption\">";
 										line += "<h2>" + ARCHIVES.get(archive).getProperty("archive.name") + "</h2>";
-										System.out.println("ARCHIVE: " + ARCHIVES.get(archive).getProperty("archive.name"));
-										String newName = ARCHIVES.get(archive).getProperty("archive.name").replaceAll("[^a-zA-Z0-9\\s]", "").replaceAll("\\s+", "");
+										System.out.println(
+												"ARCHIVE: " + ARCHIVES.get(archive).getProperty("archive.name"));
+										String newName = ARCHIVES.get(archive).getProperty("archive.name")
+												.replaceAll("[^a-zA-Z0-9\\s]", "").replaceAll("\\s+", "");
 										line += "<p><a class=\"btn btn-large btn-primary\" href=\"${pageContext.request.contextPath}/archives/"
 												+ newName + "\">Explore Archive</a></p></div></div>";
 										first = false;
@@ -107,13 +134,24 @@ public class PageGeneration {
 
 		File realName = new File("src/main/webapp/index.jsp");
 		realName.delete(); // remove the old file
-		new File("src/main/webapp/tempIndex.jsp").renameTo(realName); 
+		new File("src/main/webapp/tempIndex.jsp").renameTo(realName);
 	}
 
-	// this is the archive property file name
+	/**
+	 * This generates the empty archives home page. This is done by mapping
+	 * values of the new archive into the generic home page structure. This is
+	 * done by copying the template and then filling in the necessary archival
+	 * values after.
+	 * 
+	 * @param archive
+	 *            {@link String} instance indicating which archive home page is
+	 *            being generated. This is the archive name without
+	 *            non-alphanumeric characters and spaces.
+	 * @throws Exception
+	 */
 	public static void generateEmptyArchiveHomePage(String archive) throws Exception {
 		// just need to copy the template as it is
-		String file = "src/main/webapp/"+archive.substring(0,1).toLowerCase() + archive.substring(1) + "Home.jsp";
+		String file = "src/main/webapp/" + archive.substring(0, 1).toLowerCase() + archive.substring(1) + "Home.jsp";
 		System.out.println("GENERATING NEW ARCHIVE HOME PAGE");
 		try {
 			File directory = new File("src/main/resources/configuration");

@@ -4,8 +4,24 @@ import java.io.FileOutputStream;
 import java.util.HashMap;
 import java.util.Properties;
 
+/**
+ * This class is responsible for the generation of the properties file from the
+ * properties specified by the user. This properties file be used throughout the
+ * application to turn the necessary services on and off dependent on what is
+ * required within the archive.
+ *
+ */
 public class PropertiesConfiguration {
-
+	/**
+	 * Generates the Properties file
+	 * 
+	 * @param archiveDetails
+	 *            {@link HashMap} instance containing the properties required
+	 *            within the properties file
+	 * @return {@link String} instance of the archive name with all
+	 *         non-alphanumeric characters and spaces removed
+	 * @throws Exception
+	 */
 	public static String generatePropertiesFile(HashMap<String, String> archiveDetails) throws Exception {
 		String name = archiveDetails.get("archive.name").replaceAll("[^a-zA-Z0-9\\s]", "").replaceAll("\\s+", "");
 		FileOutputStream output = null;
@@ -23,41 +39,8 @@ public class PropertiesConfiguration {
 		} finally {
 			output.close();
 		}
-
-//		copyImageIntoNewCollection(archiveDetails.get("archive.landingpage.image"),name);
 		return name;
 
 	}
-//
-//	private static String copyImageIntoNewCollection(String file, String archive) {
-//		// we need to get the file name from the
-//		int dot = file.lastIndexOf(".");
-//		String newFile = archive + file.substring(dot);
-//		File movedImage = new File("src/main/webpapp/images/" + newFile);
-//		ImageInputStream in =null;
-//		ImageOutputStream out =null;
-//		try {
-//			in = new FileImageInputStream(new File(file));
-//			out = new FileImageOutputStream(movedImage);
-//
-//			byte[] buf = new byte[1024];
-//			int len = 0;
-//			while ((len - in.read(buf)) > 0) {
-//				out.write(buf, 0, len);
-//			}
-//		} catch (Exception ex) {
-//			System.out.println("Something went wrong");
-//		} finally {
-//			try {
-//				in.close();
-//				out.close();
-//			} catch (Exception ex) {
-//				System.out.println("could not close resources");
-//			}
-//		}
-//
-//		System.out.println("PATH OF THE IMAGE " + movedImage.getPath());
-//		return movedImage.getPath();
-//	}
 
 }

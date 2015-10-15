@@ -23,8 +23,6 @@
 <link
 	href="${pageContext.request.contextPath}/bootstrap-3.3.5/css/bootstrap.min.css"
 	rel="stylesheet">
-<!-- <link href="${pageContext.request.contextPath}/css/lightbox.css"
-	rel="stylesheet">-->
 <link href="${pageContext.request.contextPath}/theme/css/sb-admin.css"
 	rel="stylesheet">
 <link
@@ -184,7 +182,6 @@ $(document).ready(function() {
 				</div>
 				<div id="navbar" class="collapse navbar-collapse"
 					id="bs-example-navbar-collapse-1">
-					>
 					<ul class="nav navbar-nav">
 						<c:forEach var="service" items="${SERVICES}">
 							<c:if test="${service.value!='' && service.value!= ' '}">
@@ -466,10 +463,7 @@ $(document).ready(function() {
 	<br>
 	<br>
 	</div>
-	</div>
-
-
-	<!-- wrapper -->
+	</div>	<!-- wrapper -->
 	<script type="text/javascript"
 		src="${pageContext.request.contextPath}/js/lightbox.js"></script>
 </body>

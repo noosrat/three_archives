@@ -3,27 +3,37 @@ package configuration;
 import java.util.HashMap;
 import java.util.Scanner;
 
+/**
+ * The configuration utility is responsible for the introduction of a new
+ * archive to the Personal Histories archival collection. The utility is
+ * responsible for the generation of the classes and properties to map to the
+ * new archive. It involves reading in a properties file and processing the
+ * properties accordingly. The utility regenerates the landing page for the
+ * personal histories collection to include an image for the new archive and
+ * generates the properties file as well as a blank home page for the new
+ * collection. The application then renders the rest of the pages depenedent on
+ * the properties contained within the properties file.
+ *
+ */
 public class ConfigurationUtility {
-	/*
-	 * This utility only generates for new classes..it does not worry about
-	 * regeneration of the old ones... Therefore all we need to do is feed in a
-	 * properties file and then process this properties file accordingly...the
-	 * properties file must just be placed into the directory All we do is
-	 * regenerate the main landing page and a generic home page for the new
-	 * archive
-	 */
 
+	/**
+	 * This reads in the properties for the new archive and generates the
+	 * properties file to be used within the application along with the index page and the home page for the new archive.
+	 * 
+	 * @param args
+	 */
 	public static void main(String[] args) {
-		// This utility will read in properties from the user from the command
-		// line and will generate the file accordingly
 		Scanner input = new Scanner(System.in);
 		HashMap<String, String> details = new HashMap<String, String>();
-		System.out.print(
+		System.out.println("*******************************");
+		System.out.println(
 				"Welcome to the Archive Configuration Utility.\n  This will assist in the addition of your new archive.  \n Please may you enter the required data when prompted.");
+		System.out.println("*******************************");
 		System.out.println("Name of Archive");
 		details.put("archive.name", input.nextLine());
-		System.out.println("File path for the image to appear on the home page of Personal Histories");
-		details.put("archive.landingpage.image", input.nextLine());
+		System.out.println("The full name of the image to appear on the landing page for personal histories.  This image should be placed in the /images folder of the application.");
+		details.put("archive.landingpage.image", "/images/"+input.nextLine());
 		System.out.println("Prefix for multimedia file IDs i.e. mn");
 		details.put("archive.multimedia.prefix", input.nextLine());
 		System.out.println(
@@ -54,7 +64,6 @@ public class ConfigurationUtility {
 			System.out.println("An issue seems to have occurred while attempting to generate the archive files");
 			e.printStackTrace();
 		}
-
 
 	}
 
