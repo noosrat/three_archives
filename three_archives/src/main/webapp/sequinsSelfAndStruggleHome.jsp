@@ -270,78 +270,103 @@ h3 {
 		</div>
 		<!-- /.row -->
 	</div>
+	<div class="modal fade" id="login" role="dialog" style="z-index: 30000">
+		<form role="form" method="post"
+			action="${pageContext.request.contextPath}/archives/auth_user">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal">&times;</button>
+						<h4 class="modal-title">Enter details</h4>
+					</div>
+					<div class="modal-body">
+
+						<div class="form-group">
+							<label for="username">User name:</label> <input
+								class="form-control" id="username" name="new_username">
+						</div>
+						<div class="form-group">
+							<label for="pwd">Password:</label> <input type="password"
+								class="form-control" id="pwd" name="new_pwd">
+						</div>
+
+					</div>
+					<div class="modal-footer">
+						<input type="submit" value="Submit" class="btn btn-primary btn-sm"
+							name="authorise" />
+					</div>
+
+				</div>
+
+			</div>
+		</form>
+
+	</div>
 
 	<nav class="navbar navbar-inverse navbar-fixed-bottom navbar-fluid"
 		role="navigation">
 		<div class="container-fluid">
 			<!-- Brand and toggle get grouped for better mobile display -->
 			<div class="navbar-header">
-
-
 				<div class="row">
-					<div class="navbar-header col-sm-8">
+					<div class="navbar-header col-sm-7">
 						<a class="navbar-brand" href="${pageContext.request.contextPath}"><span
 							class="glyphicon glyphicon-home"></span> Personal Histories</a>
 					</div>
 					<%
 						if (session.getAttribute("USER") == null) {
 					%>
-					<div class="col-sm-3"></div>
+					<div class="col-sm-4"></div>
 					<div class="col-sm-1">
-						<a style="margin: 15px" data-toggle="modal" data-target="#login"
-							class="navbar-brand" href="#login">Login</a>
+						<a data-toggle="modal" data-target="#login" class="navbar-brand" href="#login">Login</a>
 					</div>
 					<%
 						} else if (session.getAttribute("USER").equals("incorrect")) {
 					%>
-					<div class="col-sm-3">
+					<div class="col-sm-4">
 						<div class="navbar-brand">Credentials incorrect</div>
 					</div>
 					<div class="col-sm-1">
-						<a style="margin: 15px" data-toggle="modal" data-target="#login"
+						<a data-toggle="modal" data-target="#login"
 							class="navbar-brand" href="#login">Login</a>
 					</div>
 					<%
 						} else if (session.getAttribute("USER").equals("false")) {
 					%>
-					<div class="col-sm-3"></div>
+					<div class="col-sm-4"></div>
 					<div class="col-sm-1">
-						<a style="margin: 15px" data-toggle="modal" data-target="#login"
+						<a data-toggle="modal" data-target="#login"
 							class="navbar-brand" href="#login">Login</a>
 					</div>
 					<%
 						} else if (session.getAttribute("USER").equals("ADMINISTRATOR")) {
 					%>
-					<div class="col-sm-3">
+					<div class="col-sm-4">
 						<div class="navbar-brand">Logged on as Administrator</div>
 					</div>
 					<div class="col-sm-1">
 						<form role="form" method="post"
 							action="${pageContext.request.contextPath}/archives/logout_user">
-							<input style="margin: 15px" type="submit" value="logout"
+							<input type="submit" value="logout"
 								class="btn btn-primary btn-xs" name="logout" />
 						</form>
 					</div>
 					<%
 						} else if (session.getAttribute("USER").equals("privileged")) {
 					%>
-					<div class="col-sm-3">
-						<div style="margin-left: 600px;" class="navbar-brand">Logged
-							on as a privileged user</div>
+					<div class="col-sm-4">
+						<div class="navbar-brand">Logged on as a privileged user</div>
 					</div>
 					<div class="col-sm-1">
 						<form role="form" method="post"
 							action="${pageContext.request.contextPath}/archives/logout_user">
-							<input style="margin: 15px" type="submit" value="logout"
-								class="btn btn-primary btn-xs" name="logout" />
+							<input type="submit" value="logout" class="btn btn-primary btn-xs" name="logout" />
 						</form>
 					</div>
-
 					<%
 						}
 					%>
 				</div>
-
 			</div>
 		</div>
 		<!-- /.container -->
