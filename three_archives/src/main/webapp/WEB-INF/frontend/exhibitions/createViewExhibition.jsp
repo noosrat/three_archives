@@ -103,7 +103,8 @@
 </head>
 <body onload="customise('url(<%=request.getAttribute("ExhibitionCover")%>)')">
 	<header id="top" class="header">
-       <div class="text-vertical-center">
+       <div class="well well-lg text-vertical-center" style="background-color: #FFF0F0">
+		
             <h1>"<%out.println(request.getAttribute("ExhibitionTitle")); %>"</h1>
             <h4><%out.println(request.getAttribute("ExhibitionDescription")); %></h4>
   			<p>Created by: <%out.println(request.getAttribute("ExhibitionCreator")); %></p>          
