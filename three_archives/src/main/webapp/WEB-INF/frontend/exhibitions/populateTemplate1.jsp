@@ -142,7 +142,7 @@
 	function drop(event) {	
     	event.preventDefault();
     	var a=event.target.id;
-    	if(a.indexOf("http://")>-1){
+    	if(a.indexOf(":")>-1){
     		//do nothing because block is occupied
     	}
     	else{
