@@ -159,9 +159,16 @@
 	<div class="container">
 	<p></p><br><br><br><br>
 		<div class="row">
+			<div class="col-lg-12" style="text-align: center">
+
+				<div class="well well-lg" style="background-color: #FFF0F0">
+					<h4>Exhibitions listed were created by UCT students.</h4>
+				</div>
+			</div>
+		</div>
+		<div class="row">
 			<div class="col-lg-12 text-center">
-			
-<%@ page import="common.model.Exhibition"%>
+				<%@ page import="common.model.Exhibition"%>
 <%@ page import="java.util.List"%>
 <%List<Exhibition> exhibitions= ((List<Exhibition>)request.getAttribute("all_exhibitions")); %>
 
