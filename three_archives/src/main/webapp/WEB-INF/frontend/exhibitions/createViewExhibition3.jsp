@@ -128,7 +128,7 @@
   					<div class="slide">
 						<%if (images[j]!=null){%>
 						<div class="droptarget droptargetTemplate img-circle">
-							<img style="<%=request.getAttribute("ExhibitionBorder") %>" class="img-circle" src="<%=images[j]%>">
+							<img style="<%=request.getAttribute("ExhibitionBorder") %>" src="<%=images[j]%>">
 						</div>
 						<%}
 						else{%>
@@ -148,7 +148,7 @@
 						<%}%>
 						<%if (images[j+1]!=null){%>
 						<div class="droptarget droptargetTemplate img-circle">
-							<img style="<%=request.getAttribute("ExhibitionBorder") %>" class="img-circle" src="<%=images[j+1]%>">
+							<img style="<%=request.getAttribute("ExhibitionBorder") %>" src="<%=images[j+1]%>">
 						</div>
 						<%}
 						else{%>

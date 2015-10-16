@@ -353,43 +353,43 @@
 					<div class="droptarget droptargetTemplate" id="0" ondrop="drop(event)" ondragover="allowDrop(event)">
 					</div>
 					<div class="caption">
-						<textarea maxlength="200" class="TextArea" rows="10" cols="24"  name="input_cap0" style="display:none;" placeholder="Add text to me"></textarea>
+						<textarea maxlength="200" class="TextArea" rows="10" cols="26"  name="input_cap0" style="display:none;" placeholder="Add text to me"></textarea>
 					</div>
 					<div class="droptarget nodroptargetTemplate" id="1">
 					</div>
 					<div class="caption">
-						<textarea maxlength="200" class="TextArea" rows="10" cols="24"  name="input_cap1" placeholder="Add text to me"></textarea>
+						<textarea maxlength="200" class="TextArea" rows="10" cols="26"  name="input_cap1" placeholder="Add text to me"></textarea>
 					</div>
 			</div>
 			<div class="slide">
 					<div class="droptarget nodroptargetTemplate" id="2">
 					</div>
 					<div class="caption">
-						<textarea maxlength="200" class="TextArea" rows="10" cols="24"  name="input_cap2" placeholder="Add text to me"></textarea>
+						<textarea maxlength="200" class="TextArea" rows="10" cols="26"  name="input_cap2" placeholder="Add text to me"></textarea>
 					</div>
 					<div class="droptarget droptargetTemplate" id="3" ondrop="drop(event)" ondragover="allowDrop(event)">
 					</div>
 					<div class="caption">
-						<textarea maxlength="200" class="TextArea" rows="10" cols="24"  name="input_cap3" style="display:none" placeholder="Add text to me"></textarea>
+						<textarea maxlength="200" class="TextArea" rows="10" cols="26"  name="input_cap3" style="display:none" placeholder="Add text to me"></textarea>
 					</div>
 			</div>
 			<div class="slide">
 				<div class="droptarget droptargetTemplate" id="4" ondrop="drop(event)" ondragover="allowDrop(event)">
 				</div>
 				<div class="caption">
-						<textarea maxlength="200" class="TextArea" rows="10" cols="24"  name="input_cap4" style="display:none" placeholder="Add text to me"></textarea>
+						<textarea maxlength="200" class="TextArea" rows="10" cols="26"  name="input_cap4" style="display:none" placeholder="Add text to me"></textarea>
 					</div>
 				<div class="droptarget nodroptargetTemplate" id="5" >
 				</div>
 				<div class="caption">
-						<textarea maxlength="200" class="TextArea" rows="10" cols="24"  name="input_cap5" ></textarea>
+						<textarea maxlength="200" class="TextArea" rows="10" cols="26"  name="input_cap5" ></textarea>
 				</div>
 			</div>	
 			<div class="slide">
 				<div class="droptarget nodroptargetTemplate" id="6" >
 				</div>
 				<div class="caption">
-						<textarea maxlength="200" class="TextArea" rows="10" cols="24"  name="input_cap6" placeholder="Add text to me"></textarea>
+						<textarea maxlength="200" class="TextArea" rows="10" cols="26"  name="input_cap6" placeholder="Add text to me"></textarea>
 				</div>
 				<div class="droptarget droptargetTemplate" id="7" ondrop="drop(event)" ondragover="allowDrop(event)" >
 				</div>
@@ -401,24 +401,24 @@
 				<div class="droptarget droptargetTemplate" id="8" ondrop="drop(event)" ondragover="allowDrop(event)" >	
 				</div>
 				<div class="caption">
-						<textarea maxlength="200" class="TextArea" rows="10" cols="24"  name="input_cap8" style="display:none" placeholder="Add text to me"></textarea>
+						<textarea maxlength="200" class="TextArea" rows="10" cols="26"  name="input_cap8" style="display:none" placeholder="Add text to me"></textarea>
 				</div>
 				<div class="droptarget nodroptargetTemplate" id="9" >
 				</div>
 				<div class="caption">
-						<textarea maxlength="200" class="TextArea" rows="10" cols="24"  name="input_cap9" placeholder="Add text to me"></textarea>
+						<textarea maxlength="200" class="TextArea" rows="10" cols="26"  name="input_cap9" placeholder="Add text to me"></textarea>
 				</div>
 			</div>
 			<div class="slide">
 				<div class="droptarget nodroptargetTemplate" id="10" >
 				</div>
 				<div class="caption">
-						<textarea maxlength="200" class="TextArea" rows="10" cols="24"  name="input_cap10" placeholder="Add text to me"></textarea>
+						<textarea maxlength="200" class="TextArea" rows="10" cols="26"  name="input_cap10" placeholder="Add text to me"></textarea>
 					</div>
 				<div class="droptarget droptargetTemplate" id="11" ondrop="drop(event)" ondragover="allowDrop(event)" >
 				</div>
 				<div class="caption">
-						<textarea maxlength="200" class="TextArea" rows="10" cols="24"  name="input_cap11" style="display:none" placeholder="Add text to me"></textarea>
+						<textarea maxlength="200" class="TextArea" rows="10" cols="26"  name="input_cap11" style="display:none" placeholder="Add text to me"></textarea>
 				</div>
 			</div>
 		</div>

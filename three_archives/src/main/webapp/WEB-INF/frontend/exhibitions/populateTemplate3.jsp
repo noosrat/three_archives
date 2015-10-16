@@ -349,7 +349,7 @@ function selectImage(event) {
 									if(cartImages.get(i)!=null){
 										ob=null;
 										ob=fc.populateFedoraDigitalObject(cartImages.get(i));%>
-  										<img class="img-circle" src="<%=ob.getDatastreams().get("IMG").getContent() %>"  style="width:40%;" ondragstart="dragStart(event)" draggable="true" id="<%=cartImages.get(i)%>">
+  										<img src="<%=ob.getDatastreams().get("IMG").getContent() %>"  style="width:40%;" ondragstart="dragStart(event)" draggable="true" id="<%=cartImages.get(i)%>">
   							<%}} %>	
 				
 			</div>
