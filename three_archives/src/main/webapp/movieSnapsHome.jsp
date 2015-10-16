@@ -166,6 +166,20 @@
 			</script>
 
 		</div>
+		<br> <br> 
+		<div class="row">
+			<div class="col-lg-12" style="text-align: center">
+				<h2>Contribute to the archive</h2>
+				<div class="well well-lg" style="background-color: #FFF0F0">
+					<h4>Please contact:</h4>
+					<p>Centre for Curating the Archive, University of Cape Town:</p>
+					<p>www.cca.uct.ac.za</p>
+					<p>hum-cca.uct.ac.za</p>
+					<p>021 480 7151</p>
+
+				</div>
+			</div>
+		</div>
 		<!-- /.row -->
 	</div>
 <div class="modal fade" id="login" role="dialog" style="z-index: 30000">
