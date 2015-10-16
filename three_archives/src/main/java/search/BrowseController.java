@@ -49,6 +49,7 @@ public class BrowseController implements Controller {
 			ArrayList<String> cart = (ArrayList<String>) request.getSession().getAttribute("MEDIA_CART");
 			String selected = request.getParameter("addedtocart");
 			System.out.println(selected);
+			
 			Download download = new Download();
 			cart= download.addToCart(selected,cart);
 
