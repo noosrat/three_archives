@@ -6,14 +6,17 @@ package common.fedora;
  * retrieve and correctly map data contained within the
  * {@link DublinCoreDatastream}
  *
+ * @author mthnox003
  *
  */
 public enum DublinCore {
-	PID("pid"), LABEL("label"), STATE("state"), OWNER_ID("ownerId"), C_DATE("cDate"), M_DATE("mDate"), DCM_DATE(
-			"dcmDate"), TITLE("title"), CREATOR("creator"), SUBJECT("subject"), DESCRIPTION("description"), PUBLISHER(
-					"publisher"), CONTRIBUTOR("contributor"), DATE("date"), TYPE("type"), FORMAT("format"), IDENTIFIER(
-							"identifier"), SOURCE("source"), LANGUAGE("language"), RELATION("relation"), COVERAGE(
-									"coverage"), RIGHTS("rights");
+	PID("pid"), LABEL("label"), STATE("state"), OWNER_ID("ownerId"), C_DATE(
+			"cDate"), M_DATE("mDate"), DCM_DATE("dcmDate"), TITLE("title"), CREATOR(
+			"creator"), SUBJECT("subject"), DESCRIPTION("description"), PUBLISHER(
+			"publisher"), CONTRIBUTOR("contributor"), DATE("date"), TYPE("type"), FORMAT(
+			"format"), IDENTIFIER("identifier"), SOURCE("source"), LANGUAGE(
+			"language"), RELATION("relation"), COVERAGE("coverage"), RIGHTS(
+			"rights");
 
 	/**
 	 * The {@link String} instance representing the description of the Dublin

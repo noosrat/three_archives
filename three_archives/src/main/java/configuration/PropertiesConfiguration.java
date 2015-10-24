@@ -1,4 +1,4 @@
-package configuration;
+ package configuration;
 
 import java.io.FileOutputStream;
 import java.util.HashMap;
@@ -9,6 +9,8 @@ import java.util.Properties;
  * properties specified by the user. This properties file be used throughout the
  * application to turn the necessary services on and off dependent on what is
  * required within the archive.
+ * 
+ * @author mthnox003
  *
  */
 public class PropertiesConfiguration {

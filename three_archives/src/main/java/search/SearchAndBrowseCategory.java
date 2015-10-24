@@ -1,24 +1,52 @@
 package search;
 
-import java.util.Arrays;
-import java.util.List;
 
+/**
+ * The {@code SearchAndBrowseCategory} enumeration contains all the options
+ * available for the search categories and the browsing categories on the
+ * frontend.
+ * 
+ * @author mthnox003
+ *
+ */
 public enum SearchAndBrowseCategory {
-	SEARCH_ALL(Arrays.asList("")), COLLECTION(Arrays.asList("dc.description")), CREATOR(
-			Arrays.asList("dc.creator")), CONTRIBUTOR(Arrays.asList("dc.contributor")), SOURCE(
-					Arrays.asList("dc.source")), EVENT(Arrays.asList("dc.description")),
+	SEARCH_ALL(), COLLECTION("dc.description"), CREATOR("dc.creator"), CONTRIBUTOR(
+			"dc.contributor"), SOURCE("dc.source"), EVENT("dc.description"),
 
-	DESCRIPTION(Arrays.asList("dc.description")), LOCATION(Arrays.asList("dc.location")), FORMAT(
-			Arrays.asList("dc.format")), TYPE(Arrays.asList("dc.type")), TITLE(Arrays.asList("dc.title")), SUBJECT(
-					Arrays.asList("dc.title")), YEAR(Arrays.asList("dc.date"));
+	DESCRIPTION("dc.description"), LOCATION("dc.location"), FORMAT("dc.format"), TYPE(
+			"dc.type"), TITLE("dc.title"), SUBJECT("dc.subject"), YEAR(
+			"dc.date");
 
-	private List<String> dublinCoreField;
+	/**
+	 * The {@link String} instance indicating the corresponsponding dublinCore
+	 * field as per the Dublin Core Datastream XML representation
+	 */
+	private String dublinCoreField;
 
-	private SearchAndBrowseCategory(List<String> dublinCoreField) {
+	/**
+	 * Constructor Default constructor for the enumeration
+	 */
+	private SearchAndBrowseCategory() {
+
+	}
+
+	/**
+	 * Constructor setting the dublinCoreField
+	 * 
+	 * @param dublinCoreField
+	 *            {@link String} instance representing the dublin core metadata
+	 *            field
+	 */
+	private SearchAndBrowseCategory(String dublinCoreField) {
 		this.dublinCoreField = dublinCoreField;
 	}
 
-	public List<String> getDublinCoreField() {
+	/**
+	 * Gets the dublin core field instance
+	 * 
+	 * @return {@link String} instance representing the dublin core field
+	 */
+	public String getDublinCoreField() {
 		return dublinCoreField;
 	}
 

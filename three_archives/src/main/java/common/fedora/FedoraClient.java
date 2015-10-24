@@ -11,6 +11,8 @@ import com.sun.jersey.client.apache.ApacheHttpClient;
  * Fedora RESTful API which can be found at {@link } The FedoraClient is
  * responsible for the execution of the Fedora request
  * 
+ * 
+ * @author mthnox003
  *
  */
 public class FedoraClient {
@@ -18,7 +20,7 @@ public class FedoraClient {
 	 * The {@link Client} instance of the fedora Client. This is used to
 	 * communicate with the restful API
 	 */
-	private static Client client;
+	private static final Client CLIENT;
 
 	/**
 	 * A static initialiser for the {@link FedoraClient} intialising the Client
@@ -28,8 +30,8 @@ public class FedoraClient {
 	 * {@link FedoraCredentials}
 	 */
 	static {
-		client = ApacheHttpClient.create();
-		client.addFilter(new HTTPBasicAuthFilter(FedoraCredentials.getUsername(), FedoraCredentials.getPassword()));
+		CLIENT = ApacheHttpClient.create();
+		CLIENT.addFilter(new HTTPBasicAuthFilter(FedoraCredentials.getUsername(), FedoraCredentials.getPassword()));
 	}
 
 	/**
@@ -44,7 +46,7 @@ public class FedoraClient {
 	 * @return {@link Client} instance of the {@link FedoraClient}
 	 */
 	public static Client getClient() {
-		return client;
+		return CLIENT;
 	}
 
 	/**
@@ -60,7 +62,7 @@ public class FedoraClient {
 	 * 
 	 */
 	public static void executeWithoutParsingResponse(FedoraGetRequest fedoraGetRequest) {
-		WebResource webResource = client.resource(fedoraGetRequest.getRequest().toString());
+		WebResource webResource = CLIENT.resource(fedoraGetRequest.getRequest().toString());
 		ClientResponse clientResponse = webResource.get(ClientResponse.class);
 		clientResponse.getEntityInputStream();
 	}
@@ -79,7 +81,7 @@ public class FedoraClient {
 	 *             response code is anything besides 200
 	 */
 	public static FedoraXMLResponseParser execute(FedoraGetRequest fedoraGetRequest) throws FedoraException {
-		WebResource webResource = client.resource(fedoraGetRequest.getRequest().toString());
+		WebResource webResource = CLIENT.resource(fedoraGetRequest.getRequest().toString());
 		ClientResponse clientResponse = webResource.get(ClientResponse.class);
 		fedoraGetRequest.resetRequest();
 

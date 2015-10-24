@@ -13,6 +13,8 @@ import org.springframework.http.MediaType;
  * 
  * In detail definitions and explanations of each of these fields can be found
  * {@link https://wiki.duraspace.org/display/Fedora38/Fedora+Digital+Object+Model#FedoraDigitalObjectModel-Datastreamsdata}
+ * 
+ * @author mthnox003
  */
 public class Datastream {
 	/**

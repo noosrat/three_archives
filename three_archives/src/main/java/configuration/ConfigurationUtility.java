@@ -13,6 +13,8 @@ import java.util.Scanner;
  * generates the properties file as well as a blank home page for the new
  * collection. The application then renders the rest of the pages depenedent on
  * the properties contained within the properties file.
+ * 
+ * @author mthnox003
  *
  */
 public class ConfigurationUtility {

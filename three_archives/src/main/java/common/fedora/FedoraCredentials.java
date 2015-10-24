@@ -4,6 +4,8 @@ package common.fedora;
  * The {@code FedoraCredentials} class is for the storage and management of
  * credentials to be used to globally to communicate with the Fedora digital
  * object repository.
+ * 
+ * @author mthnox003
  */
 
 public class FedoraCredentials {

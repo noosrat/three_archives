@@ -12,6 +12,8 @@ import java.util.Set;
  * The {@code PropertiesHandler} allows for the parsing of the properties files
  * as well as efficient retrieval of property values from the files
  * 
+ * 
+ * @author mthnox003
  *
  */
 public class PropertiesHandler {

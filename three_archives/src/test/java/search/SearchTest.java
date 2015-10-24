@@ -4,6 +4,9 @@ package search;
 public class SearchTest {
 
 	private Search instance;
+	/**
+	 * To test: findFedoraDigitalObjects
+	 */
 	
 //	@Before
 //	public void setUp() throws Exception {

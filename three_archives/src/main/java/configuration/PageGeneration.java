@@ -12,6 +12,9 @@ import java.util.HashMap;
 /**
  * The {@code PageGeneration} is responsible for the generation of all of the
  * pages required when introducing a new archive into the system
+ * 
+ * @author mthnox003
+ * 
  */
 public class PageGeneration {
 
@@ -19,7 +22,7 @@ public class PageGeneration {
 	 * The {@link HashMap} instance containing information about all the
 	 * archival properties and values as derived from the .properties files.
 	 */
-	private static HashMap<String, PropertiesHandler> ARCHIVES = new HashMap<String, PropertiesHandler>();
+	private static final HashMap<String, PropertiesHandler> ARCHIVES = new HashMap<String, PropertiesHandler>();
 
 	/**
 	 * This locates the archive properties files and loads them into a

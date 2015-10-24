@@ -4,6 +4,8 @@ package common.fedora;
  * 
  * The {@code State} class indicates the state of the {@link Datastream} and {@link FedoraDigitalObject} as
  * indicated in the Fedora repository
+ * 
+ * @author mthnox003
  *
  */
 public enum State {

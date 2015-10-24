@@ -12,6 +12,8 @@ import java.util.TreeMap;
  * to methods contained within the RestFUL API. Further information can be found
  * at {@link https://wiki.duraspace.org/display/FEDORA38/REST+API}
  * 
+ * @author mthnox003
+ * 
  *
  */
 public class FedoraGetRequest {
@@ -40,7 +42,7 @@ public class FedoraGetRequest {
 	 * service is being run. All of the requests are built up with the baseURL
 	 * as the prefix
 	 */
-	private final static String baseURL = FedoraCredentials.getUrl();
+	private final static String BASE_URL = FedoraCredentials.getUrl();
 
 	/**
 	 * Constructor This parameterless constructor uses the baseURL to construct
@@ -52,7 +54,7 @@ public class FedoraGetRequest {
 	 * here
 	 */
 	public FedoraGetRequest() {
-		this.request = new StringBuilder(baseURL.concat("/objects"));
+		this.request = new StringBuilder(BASE_URL.concat("/objects"));
 		this.queryParameters = new TreeMap<QueryParameter, String>();
 	}
 
@@ -93,7 +95,7 @@ public class FedoraGetRequest {
 	 * top of an existing request
 	 */
 	public void resetRequest() {
-		setRequest(new StringBuilder(baseURL.concat("/objects")));
+		setRequest(new StringBuilder(BASE_URL.concat("/objects")));
 	}
 
 	/**

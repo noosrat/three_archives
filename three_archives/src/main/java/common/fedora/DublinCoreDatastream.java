@@ -7,13 +7,12 @@ import java.util.HashMap;
  * additional information pertaining to the dublin core metadata fields for the
  * specific Fedora Digital object. Every fedora digital object has at least a
  * {@link DublinCoreDatastream}
+ * 
+ * @author mthnox003
  *
  */
 
 public class DublinCoreDatastream extends Datastream {
-
-	// we have the dublin core metadata fields within this...maybe it should
-	// just be an array list? or map...we need to parse the content
 
 	/**
 	 * The {@link HashMap<T,E>} instance representing the dublin core metadata
@@ -30,12 +29,6 @@ public class DublinCoreDatastream extends Datastream {
 	 * 
 	 */
 	private HashMap<String, String> dublinCoreMetadata;
-	// private TreeSet<String> digitalObjectTags; // this is a derived value and
-	// can be derived from all teh
-	// metadata fields..it is just a
-	// breakdown of all the search
-	// tags within object appearing
-	// as one word
 
 	/**
 	 * Constructor for the DublinCoreDatastream

@@ -112,8 +112,8 @@ $(document).ready(function() {
 											<input
 												class="form-control typeahead tt-query tt-hint tt-dropdown-menu tt-suggestion"
 												data-provider="typeahead" type="text"
-												placeholder="Search Archive" 
-												autocomplete="off" spellcheck="false" name="terms">
+												placeholder="Search Archive" autocomplete="off"
+												spellcheck="false" name="terms">
 										</div>
 									</div>
 									<button type="submit" class="btn btn-default">
@@ -134,7 +134,7 @@ $(document).ready(function() {
 						href="${pageContext.request.contextPath}/archives/browse"
 						data-toggle="collapse"
 						data-target="${pageContext.request.contextPath}/archives/browse"><i
-							class="fa fa-fw fa-arrows-v"></i>BROWSE ALL <i
+							class="fa fa-fw fa-arrows-v"></i>BROWSE ALL ITEMS <i
 							class="fa fa-fw fa-caret-down"></i> </a></li>
 					<hr>
 					<c:forEach var="category" items="${categoriesAndObjects}">
@@ -144,42 +144,17 @@ $(document).ready(function() {
 								${category.key} <span class="badge" style="float: right;">${fn:length(category.value)}</span>
 						</a></li>
 					</c:forEach>
-					<p></p>
-					<p></p>
-					<c:if test="${not empty SERVICES['History']}">
-
-						<li><a href="javascript:;" data-toggle="collapse"
-							data-target="#demo"><i class="fa fa-fw fa-arrows-v"></i>
-								RECENT UPDATES<i class="fa fa-fw fa-caret-down"><span
-									class="badge" style="float: right;">${fn:length(objectsModifiedSinceLastVisit)}</span></i></a>
-							<ul id="demo" class="collapse">
-								<c:forEach var="update"
-									items="${userFavouriteCategoriesWithRecentUpdates}">
-									<ul>
-										<font color="grey">${update}</font>
-									</ul>
-								</c:forEach>
-								<c:if test="${fn:length(objectsModifiedSinceLastVisit) >0}">
-									<li><a
-										href="${pageContext.request.contextPath}/archives/history">Explore
-											Updates</a></li>
-
-								</c:if>
-							</ul></li>
-
-
-
-					</c:if>
 				</ul>
 			</div>
 
 		</nav>
-	<nav class="navbar navbar-inverse navbar-fixed-bottom navbar-fluid" role="navigation">
-        <div class="container-fluid">
-            <!-- Brand and toggle get grouped for better mobile display -->
-            <div class="navbar-header">
-<a class="navbar-brand" href="${pageContext.request.contextPath}"><span
-							class="glyphicon glyphicon-home"></span> Personal Histories</a>
+		<nav class="navbar navbar-inverse navbar-fixed-bottom navbar-fluid"
+			role="navigation">
+			<div class="container-fluid">
+				<!-- Brand and toggle get grouped for better mobile display -->
+				<div class="navbar-header">
+					<a class="navbar-brand" href="${pageContext.request.contextPath}"><span
+						class="glyphicon glyphicon-home"></span> Personal Histories</a>
 				</div>
 			</div>
 		</nav>
@@ -208,25 +183,25 @@ $(document).ready(function() {
 					<c:forEach var="subCategory"
 						items="${categoriesAndObjects[browseCategory]}">
 
-						<div class="col-lg-3 col-md-4 col-xs-6 portfolio-item thumbnail" style="overflow:hidden; width:300px; height:250px; background-color:#D4CB90">
-						
-						<p align="center">${subCategory.key}<br> Items: <span class="badge">${fn:length(subCategory.value)}</span><p>
-							<a
-								href="${pageContext.request.contextPath}/archives/browse?category=${browseCategory}&${browseCategory}=${subCategory.key}"
-								class="portfolio-link" data-target="#">
-										
+						<div class="col-lg-3 col-md-4 col-xs-6 portfolio-item thumbnail"
+							style="overflow: hidden; width: 300px; height: 250px; background-color: #D4CB90">
 
-								 <c:set var="conditionVariable" value="true" />
-								<c:forEach var="object" items="${subCategory.value}">
-									<c:if test="${conditionVariable eq 'true'}">
-										<img class="img-responsive img-thumbnail"
-											src="${object.datastreams['IMG'].content}"
-											alt="album cover unavailable"
-											style="width: 90%;">
-									</c:if>
-									<c:set var="conditionVariable" value="false" />
-								</c:forEach>
-							</a>
+							<p align="center">${subCategory.key}<br> Items: <span
+									class="badge">${fn:length(subCategory.value)}</span>
+							<p>
+								<a
+									href="${pageContext.request.contextPath}/archives/browse?category=${browseCategory}&${browseCategory}=${subCategory.key}"
+									class="portfolio-link" data-target="#"> <c:set
+										var="conditionVariable" value="true" /> <c:forEach
+										var="object" items="${subCategory.value}">
+										<c:if test="${conditionVariable eq 'true'}">
+											<img class="img-responsive img-thumbnail"
+												src="${object.datastreams['IMG'].content}"
+												alt="album cover unavailable" style="width: 90%;">
+										</c:if>
+										<c:set var="conditionVariable" value="false" />
+									</c:forEach>
+								</a>
 						</div>
 					</c:forEach>
 				</section>

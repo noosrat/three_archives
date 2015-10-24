@@ -1,98 +1,135 @@
 package common.controller;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.TreeSet;
+import history.HistoryController;
 
-import javax.servlet.http.Cookie;
+import java.util.HashMap;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
-import common.fedora.DublinCoreDatastream;
-import common.fedora.FedoraDigitalObject;
-import common.fedora.FedoraException;
-import common.fedora.UploadClient;
-import downloads.DownloadController;
-import common.fedora.FedoraDigitalObject;
-import exhibitions.ExhibitionController;
-import history.HistoryController;
 import maps.MapController;
 import search.BrowseController;
-import search.FedoraCommunicator;
 import search.SearchController;
 import uploads.UploadController;
 import User.UserController;
 
+import common.fedora.FedoraException;
+
+import downloads.DownloadController;
+import exhibitions.ExhibitionController;
+
+/**
+ * The {@code ServiceDelegator} class is reponsible for delegating the request
+ * to the necessary controller dependent on what has been specified within the
+ * URL. The controller is linked to a particular service and the service
+ * delegator delegates processing and completion of the service by passing the
+ * control to the controller. This class is the {@link ThreeArchiveServlet}'s
+ * entry point into the application
+ * 
+ * @author mthnox003
+ */
 public class ServiceDelegator {
-	// handle exceptions in this method
 
-	private static final HashMap<String, Controller> controllers = new HashMap<String, Controller>();
+	/**
+	 * The {@link HashMap} constant representing all the controllers available
+	 * to be de delegated to
+	 */
+	private static final HashMap<String, Controller> CONTROLLERS = new HashMap<String, Controller>();
 
+	/**
+	 * Static initialiser initialising the controller values into the
+	 * {@link #controllers} type
+	 */
 	static {
-		controllers.put("search", new SearchController());
-		controllers.put("exhibitions", new ExhibitionController());
-		controllers.put("general", new GeneralController());
-		controllers.put("maps", new MapController());
-		controllers.put("downloads", new DownloadController());
-		controllers.put("uploads", new UploadController());
-		controllers.put("browse", new BrowseController());
-		controllers.put("history", new HistoryController());
-		controllers.put("user", new UserController());
+		CONTROLLERS.put("search", new SearchController());
+		CONTROLLERS.put("exhibitions", new ExhibitionController());
+		CONTROLLERS.put("general", new GeneralController());
+		CONTROLLERS.put("maps", new MapController());
+		CONTROLLERS.put("downloads", new DownloadController());
+		CONTROLLERS.put("uploads", new UploadController());
+		CONTROLLERS.put("browse", new BrowseController());
+		CONTROLLERS.put("history", new HistoryController());
+		CONTROLLERS.put("user", new UserController());
 	}
 
+	/**
+	 * Gets the {@link HashMap} instance representing the controllers contained
+	 * within the application
+	 * 
+	 * @return
+	 */
 	public HashMap<String, Controller> getControllers() {
-		return controllers;
+		return CONTROLLERS;
 	}
 
-	public String execute(HttpServletRequest request, HttpServletResponse response) throws FedoraException, Exception{
+	/**
+	 * The execute method is invoked from teh {@link ThreeArchivesServlet} and
+	 * is where the service delegator passes control to the relevant service's
+	 * controller based on the URL content. The execute method also ensures that
+	 * the cookie information has been written once the relevant service has
+	 * been executed
+	 *
+	 * @param request
+	 *            {@link HttpServletRequest} instance representing the request
+	 *            from the client
+	 * @param response
+	 *            {@link HttpServletResponse} instance representing the response
+	 *            for the client
+	 * @return {@link String} instance representing the jsp to dispatch to
+	 * @throws FedoraException
+	 * @throws Exception
+	 */
+
+	public String execute(HttpServletRequest request,
+			HttpServletResponse response) throws FedoraException, Exception {
 		String url = "index.jsp";
-		/*System.out.println(request.getParameter("deletions"));
-			if (request.getParameter("deletions")!=null && !request.getParameter("deletions").equals(""))
-			{
-				System.out.println("in deletions");
-			String deletions=request.getParameter("deletions");
-			String delete[] = deletions.split(",");
-			
-			for (int k=0; k<delete.length;k++){
-				download.removeFromCart(cart, delete[k]);
-			}*/
+		/*
+		 * System.out.println(request.getParameter("deletions")); if
+		 * (request.getParameter("deletions")!=null &&
+		 * !request.getParameter("deletions").equals("")) {
+		 * System.out.println("in deletions"); String
+		 * deletions=request.getParameter("deletions"); String delete[] =
+		 * deletions.split(",");
+		 * 
+		 * for (int k=0; k<delete.length;k++){ download.removeFromCart(cart,
+		 * delete[k]); }
+		 */
 		String pathInfo = request.getPathInfo().substring(1);
 		try {
 			if (pathInfo.contains("search")) {
-				url = controllers.get("search").execute(request, response);
+				url = CONTROLLERS.get("search").execute(request, response);
 			} else if (pathInfo.contains("browse")) {
-				url = controllers.get("browse").execute(request, response);
+				url = CONTROLLERS.get("browse").execute(request, response);
 			} else if (pathInfo.contains("exhibition")) {
-				url = controllers.get("exhibitions").execute(request, response);
-			}else if (pathInfo.contains("maps")) {
-				url = controllers.get("maps").execute(request, response);
-			}else if (pathInfo.contains("downloads")) {
-				url = controllers.get("downloads").execute(request, response);
+				url = CONTROLLERS.get("exhibitions").execute(request, response);
+			} else if (pathInfo.contains("maps")) {
+				url = CONTROLLERS.get("maps").execute(request, response);
+			} else if (pathInfo.contains("downloads")) {
+				url = CONTROLLERS.get("downloads").execute(request, response);
 			} else if (pathInfo.contains("uploads")) {
-				url = controllers.get("uploads").execute(request, response);
+				url = CONTROLLERS.get("uploads").execute(request, response);
 			} else if (pathInfo.contains("history")) {
-				url = controllers.get("history").execute(request, response);
-			} 
-			else if (pathInfo.contains("user")) {
-				url = controllers.get("user").execute(request, response);
-			}else {
+				url = CONTROLLERS.get("history").execute(request, response);
+			} else if (pathInfo.contains("user")) {
+				url = CONTROLLERS.get("user").execute(request, response);
+			} else {
 				System.out.println("PROCESSING GENERAL");
-				url = controllers.get("general").execute(request, response);
+				url = CONTROLLERS.get("general").execute(request, response);
 			}
 		} catch (Exception exception) {
 			request.setAttribute("message", exception.getMessage());
 			System.out.println(exception);
 
-			} 
-		persistAllRequestInformation();
+		}
+
+		/**
+		 * This is the request information to be persisted after each execution
+		 * 
+		 * 
+		 * */
+		((HistoryController) CONTROLLERS.get("history"))
+				.persistNecessaryRequestInformation();
 		return url;
-	}
-
-	/* this is everything to be persisted after each request is executed */
-	private void persistAllRequestInformation() {
-		HistoryController.persistNecessaryRequestInformation();
-
 	}
 
 }

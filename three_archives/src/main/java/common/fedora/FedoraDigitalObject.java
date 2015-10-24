@@ -11,6 +11,8 @@ import java.util.List;
  * nature of the objects and fields being mapped can be found at {@link } This
  * class will be used as a front-end representation of objects represented in
  * the digital object repository
+ * 
+ * @author mthnox003
  *
  */
 public class FedoraDigitalObject {

@@ -4,6 +4,12 @@ package search;
 //remember that we are not trying to test fedora code..we are trying to test OUR code
 public class FedoraCommunicatorTest {
 
+	
+	/**
+	 * To test:
+	 * 1.  Populate Fedora Digital Object
+	 * 2.  Find fedora digital object
+	 */
 //	private FedoraCommunicator instance;
 //	private FedoraClient fedoraClient;
 //

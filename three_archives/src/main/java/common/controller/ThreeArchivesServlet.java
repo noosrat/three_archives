@@ -3,13 +3,11 @@ package common.controller;
 import java.io.IOException;
 
 import javax.servlet.ServletException;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import common.fedora.FedoraException;
-
 
 /**
  * Servlet implementation class ThreeArchivesServlet
@@ -24,50 +22,43 @@ public class ThreeArchivesServlet extends HttpServlet {
 		super();
 	}
 
-	private void process(HttpServletRequest request, HttpServletResponse response) throws FedoraException, Exception
-			{
+	/**
+	 * The process method is called regardless of whether a
+	 * {@link #doGet(HttpServletRequest, HttpServletResponse)} or
+	 * {@link #doPost(HttpServletRequest, HttpServletResponse)} method is called
+	 * by the client. This method passes control to the {@link ServiceDelegator}
+	 * class and dispatches the result retrieved from this class
+	 * 
+	 * @param request
+	 * @param response
+	 * @throws FedoraException
+	 * @throws Exception
+	 */
+	private void process(HttpServletRequest request,
+			HttpServletResponse response) {
 		System.out.println("Entered Servlet");
 
 		System.out.println("PathInfo : " + request.getPathInfo());
-		// clearAllOtherCookies(request,response);
 		ServiceDelegator serviceDelegator = new ServiceDelegator();
-		String result = serviceDelegator.execute(request, response);
-//		new AutoCompleteUtility().refreshAllAutocompleteFiles();
-		request.getServletContext().getRequestDispatcher("/" + result).forward(request, response);
-	}
-	
-
-	private void clearAllOtherCookies(HttpServletRequest request, HttpServletResponse response){
-		Cookie[] cookies = request.getCookies();
-		System.out.println("WE FOUND THIS MANY COOKIES " + cookies.length);
-		for (Cookie c: cookies){
-			if (!(c.getName().equalsIgnoreCase("dateLastVisited"))){
-				//we want to remove all of teh cookies
-				c.setValue(null);
-				c.setMaxAge(0);
-				c.setPath("/");
-				response.addCookie(c);
-			}
+		try {
+			String result = serviceDelegator.execute(request, response);
+			request.getServletContext().getRequestDispatcher("/" + result)
+					.forward(request, response);
+		} catch (Exception ex) {
+			request.setAttribute("message",
+					"Something seems to have gone wrong.  Please contact IT");
+			System.out.println(ex);
 		}
-		
-		System.out.println("We now have " + request.getCookies().length + " cookies");
-		request.getServletContext().getRequestDispatcher("/index.jsp");
-		
 	}
+
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
 	 *      response)
 	 */
 	@Override
-	protected void doGet(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		try {
-			process(request, response);
-		
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+	protected void doGet(HttpServletRequest request,
+			HttpServletResponse response) throws ServletException, IOException {
+		process(request, response);
 
 	}
 
@@ -76,15 +67,9 @@ public class ThreeArchivesServlet extends HttpServlet {
 	 *      response)
 	 */
 	@Override
-	protected void doPost(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		try {
-			process(request, response);
-		
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+	protected void doPost(HttpServletRequest request,
+			HttpServletResponse response) throws ServletException, IOException {
+		process(request, response);
 	}
 
 }

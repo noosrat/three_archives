@@ -4,6 +4,8 @@ package common.fedora;
  * The {@code FeodraException} will be thrown whenever issues are experienced
  * with connecting to or communicating with the Fedora RESTful API or when the
  * response returned by the RESTful service is anything other than 200
+ * 
+ * @author mthnox003
  */
 public class FedoraException extends Exception {
 

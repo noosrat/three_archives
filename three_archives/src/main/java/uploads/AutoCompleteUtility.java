@@ -20,15 +20,40 @@ import common.fedora.FedoraException;
 import configuration.PropertiesHandler;
 import search.SearchController;
 
+/**
+ * The {@code AutoCompleteUtility} is responsible for assembling the
+ * autocomplete.json files to be used for each archive. These files are
+ * assembled dependent on the contents of the actual archives
+ * 
+ * @author mthnox003
+ *
+ */
 public class AutoCompleteUtility {
+	/**
+	 * The {@link HashMap} instance representing the archives available for
+	 * exploration within the system
+	 */
 	private HashMap<String, String> archives;
+	/**
+	 * The {@link Set} instance of Fedora digital objects
+	 */
 	private Set<FedoraDigitalObject> fedoraDigitalObjects;
+	/**
+	 * The {@link HashMap} instance of the archival properties
+	 */
 	private HashMap<String, PropertiesHandler> archiveProperties;
 
+	/**
+	 * Constructor initialising the {@link #archives}
+	 */
 	public AutoCompleteUtility() {
 		archives = new HashMap<String, String>();
 	}
 
+	/**
+	 * This method allows for the refreshing of all the autcomplete files for
+	 * each archive
+	 */
 	public void refreshAllAutocompleteFiles() {
 		// need to find all the files and their archive properties...
 		retrieveArchives();
@@ -40,6 +65,9 @@ public class AutoCompleteUtility {
 		}
 	}
 
+	/**
+	 * This method loads the archival properties
+	 */
 	private void loadArchiveProperties() {
 		System.out.println("IN LOAD ARCHIVE PROPERTIES");
 		archiveProperties = new HashMap<String, PropertiesHandler>();
@@ -54,6 +82,10 @@ public class AutoCompleteUtility {
 		}
 	}
 
+	/**
+	 * This allows for the retrieval of all the archives accessible within the
+	 * application
+	 */
 	private void retrieveArchives() {
 		if (archiveProperties == null) {
 			loadArchiveProperties();
@@ -68,11 +100,18 @@ public class AutoCompleteUtility {
 			archives.put(archiveProperties.get(archive).getProperty("archive.name"),
 					archiveProperties.get(archive).getProperty("archive.multimedia.prefix"));
 		}
-		System.out.println("WE FOUND "+ archiveProperties.size() + " archives");
+		System.out.println("WE FOUND " + archiveProperties.size() + " archives");
 		System.out.println(archiveProperties.toString());
 
 	}
 
+	/**
+	 * This refreshes the autocomplete files
+	 * 
+	 * @param archives
+	 *            {@link HashMap} instance representing the archives
+	 * @throws Exception
+	 */
 	private static void refreshFiles(HashMap<String, String> archives) throws Exception {
 		AutoCompleteUtility utility = new AutoCompleteUtility(archives);
 		try {
@@ -91,12 +130,17 @@ public class AutoCompleteUtility {
 	 * for all the archives
 	 */
 	private AutoCompleteUtility(HashMap<String, String> archives) {
-		// TODO Auto-generated constructor stub
 		this.archives = archives;// this is the name of the archive as well as
 									// the media prefix string....
 
 	}
 
+	/**
+	 * This retrieves all the digital objects contained within the archive
+	 * 
+	 * @throws SolrServerException
+	 * @throws FedoraException
+	 */
 	private void retrieveAllFedoraDigitalObjects() throws SolrServerException, FedoraException {
 		try {
 			fedoraDigitalObjects = SearchController.getSearch().findFedoraDigitalObjects("*");
@@ -110,10 +154,11 @@ public class AutoCompleteUtility {
 		System.out.println("Retrieved objects : " + fedoraDigitalObjects.size());
 	}
 
-	// we have all the objects and all the archives onw we can build the files
+	/**
+	 * This begins the process of building the autocomplete files once having
+	 * obtained all the archives
+	 */
 	private void buildAllAutocompleteJSONFiles() throws IOException {
-		// need to alter the values of the hashmap to make sure there are no
-		// speces etc
 		for (String archive : archives.keySet()) {
 			Set<FedoraDigitalObject> objects = filterFedoraObjectsForSpecificArchive(archives.get(archive));
 			String fileName = archive.replaceAll("[^a-zA-Z0-9\\s]", "").replaceAll("\\s+", "");
@@ -122,6 +167,16 @@ public class AutoCompleteUtility {
 
 	}
 
+	/**
+	 * This filters the digital objects from the archive to ensure that those
+	 * being used for the generation of the autocomplete files are those
+	 * pertaining to the specific archive
+	 * 
+	 * @param multiMediaPrefix
+	 *            {@link String} instance representing the prefix of the PID for
+	 *            each of the archives
+	 * @return
+	 */
 	private Set<FedoraDigitalObject> filterFedoraObjectsForSpecificArchive(String multiMediaPrefix) {
 		Set<FedoraDigitalObject> filteredFedoraDigitalObjects = new HashSet<FedoraDigitalObject>(fedoraDigitalObjects);
 		for (Iterator<FedoraDigitalObject> iterator = filteredFedoraDigitalObjects.iterator(); iterator.hasNext();) {
@@ -134,10 +189,18 @@ public class AutoCompleteUtility {
 		return filteredFedoraDigitalObjects;
 	}
 
-	/*
-	 * the below needs to moved to occur whenever there is an upload to the
-	 * database...the data will then be retrieved from the db from the dofields
-	 * table..
+	/**
+	 * This builds the autocomplete json files by extracting the metadata from
+	 * the digital objects for the specific archive and appending it to an array
+	 * to be written to the json file
+	 * 
+	 * @param archive
+	 *            {@link String} instance representing the archive whose
+	 *            autocomplete file is being generated
+	 * @param filteredObjects
+	 *            {@link Set} instance representing the digital objects for the
+	 *            specific archive
+	 * @throws IOException
 	 */
 	private void buildAutocompleteJSONFile(String archive, Set<FedoraDigitalObject> filteredObjects)
 			throws IOException {
@@ -151,7 +214,7 @@ public class AutoCompleteUtility {
 			String fileName = "../webapps/data/" + archive + ".json";
 			System.out.println("We are making the autocomplere file for " + fileName);
 			File fileExisting = new File(fileName);
-			
+
 			FileWriter file = new FileWriter(fileExisting);
 			file.write(list.toJSONString());
 			file.flush();
@@ -163,6 +226,16 @@ public class AutoCompleteUtility {
 		}
 	}
 
+	/**
+	 * This allows for the extraction of the actual words to be used within the
+	 * autocomplete files. This is done by interrogating the metadata of the
+	 * digital objects contained within teh specific archive
+	 * 
+	 * @param filteredFedoraDigitalObjects
+	 *            {@link Set} instance representing the digital objects
+	 *            contained within the archive
+	 * @return
+	 */
 	private TreeSet<String> autocompleteValues(Set<FedoraDigitalObject> filteredFedoraDigitalObjects) {
 		TreeSet<String> values = new TreeSet<String>();
 
@@ -174,7 +247,7 @@ public class AutoCompleteUtility {
 				String[] splitPercentage = dublinCoreFieldValue.split("%");
 				values.addAll(Arrays.asList(splitPercentage));
 				for (String string : splitPercentage) {
-					// now we split by spaces to get the individual tokents
+					// now we split by spaces to get the individual tokens
 					String[] spaceSplit = string.split(" ");
 					values.addAll(Arrays.asList(spaceSplit));
 				}
