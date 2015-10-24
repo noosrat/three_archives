@@ -284,7 +284,7 @@
 	
 	<div class="col-lg-1">
 	<br><br>
-		<input class="button btn btn-primary btn-sm" type="submit" value="Done" name="upload_files">
+		<input class="button btn btn-primary btn-sm" type="submit" value="Done" name="upload_files" id="done">
 	</div>
 </form>	
 
@@ -403,6 +403,7 @@ function selectImage(event) {
 				
 		document.getElementById("able_selected_image").value="false"
 		document.getElementById("instruction").style.display="none";
+		document.getElementById("done").style.display="none";
 		document.getElementById("metadataForm").style.visibility="visible";
 		var x=document.getElementById("selected_image").value;	
 		document.getElementById("selected_image").innerHTML =event;	
@@ -446,6 +447,7 @@ function submitMetadata(){
 		creator=document.getElementById("creator").value="";
 		document.getElementById("metadataForm").style.visibility="hidden";
 		document.getElementById("instruction").style.display="block";
+		document.getElementById("done").style.display="block";
 	}
 }
 function cancelSelection(){
