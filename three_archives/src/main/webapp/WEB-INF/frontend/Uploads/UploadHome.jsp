@@ -209,8 +209,8 @@
 						<input type="radio" name="archive" value="spring_queen" required>Spring Queen<br>
 					</div>
 					<div>
-					<h4>Enter image folder location</h4>
-					<br><br>
+		
+					<br>
 					<div id="file_input">
 						<output id="list"></output> 
 						<input type="file" id="files" name="files[]" multiple/><br>
