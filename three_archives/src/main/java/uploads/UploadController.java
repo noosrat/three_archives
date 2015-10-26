@@ -34,8 +34,38 @@ public class UploadController implements Controller{
 	
 	private String uploads(HttpServletRequest request,HttpServletResponse response) throws Exception{
 
-		String result = "";		
-		
+		String result = "";
+		/*boolean isMultipart=ServletFileUpload.isMultipartContent(request);		
+		if (isMultipart)
+		{
+			DiskFileItem factory= new DiskFileItemFactory();
+			ServletContext servletContext = this.getServletConfig().getServletContext(); 
+			File repository = (File) servletContext.getAttribute("javax.servlet.context.tempdir"); 
+			factory.setRepository(repository);
+			ServletFileUpload upload = new ServletFileUpload(factory); 
+			// Parse the request List<FileItem> items = upload.parseRequest(request);
+
+
+			// Process the uploaded items 
+			Iterator<FileItem> iter = items.iterator(); 
+			while (iter.hasNext()) { 
+				FileItem item = iter.next(); 
+				if (item.isFormField()) 
+				{
+					String name = item.getFieldName();
+					String value = item.getString();
+				} 
+				else 
+				{ 
+					String fieldName = item.getFieldName(); 
+					String fileName = item.getName(); 
+					String contentType = item.getContentType(); 
+					boolean isInMemory = item.isInMemory(); 
+					long sizeInBytes = item.getSize();
+				} 
+			}
+		}
+		*/
 		if (request.getParameter("upload_files") != null) 
 		{
 			String action = request.getParameter("actions");
