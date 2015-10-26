@@ -3,6 +3,9 @@ package uploads;
 import java.io.File;
 import java.net.URL;
 import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.List;
+import java.io.IOException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -17,7 +20,9 @@ import common.fedora.FedoraGetRequest;
 import search.SearchController;
 import search.SolrCommunicator;
 
-
+import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.fileupload.disk.DiskFileItemFactory;
+import org.apache.commons.fileupload.servlet.ServletFileUpload;
 
 public class UploadController implements Controller{
 	
@@ -35,55 +40,53 @@ public class UploadController implements Controller{
 	private String uploads(HttpServletRequest request,HttpServletResponse response) throws Exception{
 
 		String result = "";
-		/*boolean isMultipart=ServletFileUpload.isMultipartContent(request);		
+		boolean isMultipart=ServletFileUpload.isMultipartContent(request);	
+		String action = "";
+		String archive="";
+		UploadService uploadService=new UploadService();
+		
 		if (isMultipart)
 		{
-			DiskFileItem factory= new DiskFileItemFactory();
-			ServletContext servletContext = this.getServletConfig().getServletContext(); 
-			File repository = (File) servletContext.getAttribute("javax.servlet.context.tempdir"); 
-			factory.setRepository(repository);
-			ServletFileUpload upload = new ServletFileUpload(factory); 
-			// Parse the request List<FileItem> items = upload.parseRequest(request);
-
-
-			// Process the uploaded items 
-			Iterator<FileItem> iter = items.iterator(); 
-			while (iter.hasNext()) { 
-				FileItem item = iter.next(); 
-				if (item.isFormField()) 
-				{
-					String name = item.getFieldName();
-					String value = item.getString();
-				} 
-				else 
-				{ 
-					String fieldName = item.getFieldName(); 
-					String fileName = item.getName(); 
-					String contentType = item.getContentType(); 
-					boolean isInMemory = item.isInMemory(); 
-					long sizeInBytes = item.getSize();
-				} 
+			try{
+				List<FileItem> multiparts=new ServletFileUpload (new DiskFileItemFactory()).parseRequest(request);
+				for (FileItem item:multiparts){
+					if(item.isFormField()){
+						String name=item.getFieldName();
+						String value=item.getString();
+						if (name.equals("actions"))
+						{
+							action=value;
+						}
+						else if(name.equals("archive"))
+						{
+								archive=value;
+						}
+						System.out.println(name+" "+value);
+					}
+					else{
+						String name=new File(item.getName()).getName();
+						item.write(new File(name));
+					}
+				}
+				uploadService.upload(action,archive);
+				System.out.println("* uploads completed");
+				//call method from upload services to add the files to fedora
+				//fedora stuff to update index
+				SolrCommunicator.updateSolrIndex();
+				//we do the below to refresh the images in the application
+				request.getSession().setAttribute("objects", SearchController.getSearch().findFedoraDigitalObjects("*"));
+				//we need to refresh autocomplete
+					new AutoCompleteUtility().refreshAllAutocompleteFiles();
+					result = "WEB-INF/frontend/Uploads/uploadItems.jsp";
+					
 			}
-		}
-		*/
-		if (request.getParameter("upload_files") != null) 
-		{
-			String action = request.getParameter("actions");
-			String file_path=request.getParameter("storage_path");
-			String archive=request.getParameter("archive");
-			UploadService uploadService=new UploadService();
-			uploadService.upload(action,file_path,archive);
-			System.out.println("* uploads completed");
-			//call method from upload services to add the files to fedora
-			//fedora stuff to update index
-			SolrCommunicator.updateSolrIndex();
-//			//we do the below to refresh the images in the application
-			request.getSession().setAttribute("objects", SearchController.getSearch().findFedoraDigitalObjects("*"));
-//			//we need to refresh autocomplete
-			new AutoCompleteUtility().refreshAllAutocompleteFiles();
-			result = "WEB-INF/frontend/Uploads/uploadItems.jsp";
+			catch(Exception e){
+				System.out.println("ERROR: "+ e);
+			}
+			
 			
 		}
+		
 		
 		if (request.getParameter("upload_more_files") != null) 
 		{

@@ -186,7 +186,7 @@
 			<div class="col-lg-3" style="background-color:#F5FFFF; box-shadow: 5px 0 5px -2px #888;min-height: 700px; padding-left:30px;">
 			 
 				<div>		
-					<form method="post" action="${pageContext.request.contextPath}/archives/upload_uploads">
+					<form method="post" action="${pageContext.request.contextPath}/archives/upload_uploads" enctype="multipart/form-data">
 						<textarea id="able_selected_image" style="display:none">false</textarea>
 						<textarea id="actions" name="actions" style="display:none"></textarea>
 					<br><br>
@@ -210,7 +210,7 @@
 					</div>
 					<div>
 					<h4>Enter image folder location</h4>
-					<input type="text" name="storage_path" id="storage_path" required placeholder="eg. C:/images/"> <span data-toggle="tooltip" title="This is the loaction in your computer where all the images you are about to select are stored" class="glyphicon glyphicon-question-sign"></span><br><br>
+					<br><br>
 					<div id="file_input">
 						<output id="list"></output> 
 						<input type="file" id="files" name="files[]" multiple/><br>

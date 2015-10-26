@@ -15,7 +15,7 @@ import common.fedora.UploadClient;
 
 public class UploadService {
 
-	public void upload(String files_string, String storage_path, String archive) {
+	public void upload(String files_string, String archive) {
 		UploadClient client = new UploadClient("http://personalhistories.cs.uct.ac.za:8089/fedora", "fedoraAdmin", "3Arch", null);
 		String filename;
 		String title;
@@ -39,7 +39,7 @@ public class UploadService {
 		String files[];
 		String delimeter = "%%";
 		File file2;
-		String file_path;
+		//String file_path;
 		files = files_string.split(delimeter);// split up the different files
 
 		for (int i = 0; i < files.length; i++)// Iterate through the files to
@@ -86,10 +86,10 @@ public class UploadService {
 			String endTag = "</oai_dc:dc>";
 			try {
 				// create new object
-				file_path = storage_path + filename;
+				//file_path = storage_path + filename;
 				System.out.println("**Finding the file");
-				file2 = new File(file_path);//
-				System.out.println(file_path);
+				file2 = new File(filename);//
+				System.out.println("created "+filename);
 				if (file2.isFile())
 				{
 					System.out.println("**File found and created");
