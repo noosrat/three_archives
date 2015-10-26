@@ -55,6 +55,10 @@ public class UploadController implements Controller{
 						String value=item.getString();
 						if (name.equals("actions"))
 						{
+							if (value.equals(""))
+							{
+								action="none";
+							}
 							action=value;
 						}
 						else if(name.equals("archive"))
@@ -68,16 +72,23 @@ public class UploadController implements Controller{
 						item.write(new File(name));
 					}
 				}
-				uploadService.upload(action,archive);
-				System.out.println("* uploads completed");
-				//call method from upload services to add the files to fedora
-				//fedora stuff to update index
-				SolrCommunicator.updateSolrIndex();
-				//we do the below to refresh the images in the application
-				request.getSession().setAttribute("objects", SearchController.getSearch().findFedoraDigitalObjects("*"));
-				//we need to refresh autocomplete
+				if (!(actions.equals("none")))
+				{
+					uploadService.upload(action,archive);
+					System.out.println("* uploads completed");
+					//call method from upload services to add the files to fedora
+					//fedora stuff to update index
+					SolrCommunicator.updateSolrIndex();
+					//we do the below to refresh the images in the application
+					request.getSession().setAttribute("objects", SearchController.getSearch().findFedoraDigitalObjects("*"));
+					//we need to refresh autocomplete
 					new AutoCompleteUtility().refreshAllAutocompleteFiles();
 					result = "WEB-INF/frontend/Uploads/uploadItems.jsp";
+				}
+				else{
+					result = "WEB-INF/frontend/Uploads/uploadItems.jsp";
+				}
+				
 					
 			}
 			catch(Exception e){
