@@ -1,5 +1,7 @@
 package common.controller;
 
+import history.HistoryController;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -8,12 +10,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import common.model.ManageUsers;
-import configuration.ArchivalService;
-import configuration.PropertiesHandler;
-import history.HistoryController;
 import search.BrowseController;
 import search.SearchController;
+
+import common.model.ManageUsers;
+
+import configuration.ArchivalService;
+import configuration.PropertiesHandler;
 
 public class GeneralController implements Controller {
 

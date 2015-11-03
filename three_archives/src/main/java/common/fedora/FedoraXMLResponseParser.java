@@ -77,9 +77,29 @@ public class FedoraXMLResponseParser {
 	 */
 	private void initialise() throws ParserConfigurationException,
 			SAXException, IOException {
-		document = DocumentBuilderFactory.newInstance().newDocumentBuilder()
-				.parse(response);
-		document.getDocumentElement().normalize();
+		setDocument(DocumentBuilderFactory.newInstance().newDocumentBuilder()
+				.parse(response));
+		getDocument().getDocumentElement().normalize();
+	}
+
+	/**
+	 * Gets the {@link #document}
+	 * 
+	 * @return {@link Document} instance representing the document being parsed
+	 */
+	public Document getDocument() {
+		return document;
+	}
+
+	/**
+	 * Sets the {@link #document}
+	 * 
+	 * @param document
+	 *            {@link Document} instance representing the document to be
+	 *            parsed
+	 */
+	public void setDocument(Document document) {
+		this.document = document;
 	}
 
 	/**

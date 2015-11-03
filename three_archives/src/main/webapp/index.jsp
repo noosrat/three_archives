@@ -44,51 +44,12 @@
 	<!-- Full Page Image Background Carousel Header -->
 	<header id="myCarousel" class="carousel slide">
 		<!-- Indicators -->
-		<ol class="carousel-indicators">
+		<ol class="carousel-indicators"><li data-target="#myCarousel" data-slide-to="0" class="active"></li><li data-target="#myCarousel" data-slide-to="1"></li><li data-target="#myCarousel" data-slide-to="2"></li>
 			<!-- CHANGE DYNAMICALLY GENERATE DEPENDENT ON ARCHIVES WE HAVE -->
-			<li data-target="#myCarousel" data-slide-to="0" class="active"></li>
-			<li data-target="#myCarousel" data-slide-to="1"></li>
-			<li data-target="#myCarousel" data-slide-to="2"></li>
 		</ol>
 
 		<!-- Wrapper for Slides -->
-		<div class="carousel-inner">
-			<div class="item active">
-				<div class="fill"
-					style="background-image:url(${pageContext.request.contextPath}/images/spring.jpg);"></div>
-				<div class="carousel-caption">
-					<h2>Sequins, Self And Struggle</h2>
-					<p>
-						<a class="btn btn-large btn-primary"
-							href="${pageContext.request.contextPath}/archives/SequinsSelfAndStruggle">Explore
-							Archive</a>
-					</p>
-				</div>
-			</div>
-			<div class="item">
-				<div class="fill"
-					style="background-image:url(${pageContext.request.contextPath}/images/movie.jpg);"></div>
-				<div class="carousel-caption">
-					<h2>Movie Snaps</h2>
-					<p>
-						<a class="btn btn-large btn-primary"
-							href="${pageContext.request.contextPath}/archives/MovieSnaps">Explore
-							Archive</a>
-					</p>
-				</div>
-			</div>
-			<div class="item">
-				<div class="fill"
-					style="background-image:url(${pageContext.request.contextPath}/images/harfield.jpg);"></div>
-				<div class="carousel-caption">
-					<h2>Harfield Village</h2>
-					<p>
-						<a class="btn btn-large btn-primary"
-							href="${pageContext.request.contextPath}/archives/HarfieldVillage">Explore
-							Archive</a>
-					</p>
-				</div>
-			</div>
+		<div class="carousel-inner"><div class="item active"><div class="fill" style="background-image:url(${pageContext.request.contextPath}/images/spring.jpg);"></div><div class="carousel-caption"><h2>Sequins, Self And Struggle </h2><p><a class="btn btn-large btn-primary" href="${pageContext.request.contextPath}/archives/SequinsSelfAndStruggle">Explore Archive</a></p></div></div><div class="item"><div class="fill" style="background-image:url(${pageContext.request.contextPath}/images/movie.jpg);"></div><div class="carousel-caption"><h2>Movie Snaps</h2><p><a class="btn btn-large btn-primary" href="${pageContext.request.contextPath}/archives/MovieSnaps">Explore Archive</a></p></div></div><div class="item"><div class="fill" style="background-image:url(${pageContext.request.contextPath}/images/harfield.jpg);"></div><div class="carousel-caption"><h2>Harfield Village	</h2><p><a class="btn btn-large btn-primary" href="${pageContext.request.contextPath}/archives/HarfieldVillage">Explore Archive</a></p></div></div>
 		</div>
 
 		<!-- Controls -->
@@ -99,8 +60,8 @@
 		</a>
 		<div></div>
 	</header>
-	
-	
+
+
 	<div class="modal fade" id="login" role="dialog" style="z-index: 30000">
 		<form role="form" method="post"
 			action="${pageContext.request.contextPath}/archives/auth_user">
@@ -140,58 +101,61 @@
 			<!-- Brand and toggle get grouped for better mobile display -->
 			<div class="navbar-header">
 				<div class="row">
-					<div class="navbar-header col-sm-7">
+					<div class="navbar-header col-sm-8">
 						<a class="navbar-brand" href="${pageContext.request.contextPath}"><span
 							class="glyphicon glyphicon-home"></span> Personal Histories</a>
 					</div>
 					<%
 						if (session.getAttribute("USER") == null) {
 					%>
-					<div class="col-sm-4"></div>
+					<div class="col-sm-3"></div>
 					<div class="col-sm-1">
-						<a data-toggle="modal" data-target="#login" class="navbar-brand" href="#login">Login</a>
+						<a style="margin: 15px" data-toggle="modal" data-target="#login"
+							class="navbar-brand" href="#login">Login</a>
 					</div>
 					<%
 						} else if (session.getAttribute("USER").equals("incorrect")) {
 					%>
-					<div class="col-sm-4">
+					<div class="col-sm-3">
 						<div class="navbar-brand">Credentials incorrect</div>
 					</div>
 					<div class="col-sm-1">
-						<a data-toggle="modal" data-target="#login"
+						<a style="margin: 15px" data-toggle="modal" data-target="#login"
 							class="navbar-brand" href="#login">Login</a>
 					</div>
 					<%
 						} else if (session.getAttribute("USER").equals("false")) {
 					%>
-					<div class="col-sm-4"></div>
+					<div class="col-sm-3"></div>
 					<div class="col-sm-1">
-						<a data-toggle="modal" data-target="#login"
+						<a style="margin: 15px" data-toggle="modal" data-target="#login"
 							class="navbar-brand" href="#login">Login</a>
 					</div>
 					<%
 						} else if (session.getAttribute("USER").equals("ADMINISTRATOR")) {
 					%>
-					<div class="col-sm-4">
+					<div class="col-sm-3">
 						<div class="navbar-brand">Logged on as Administrator</div>
 					</div>
 					<div class="col-sm-1">
 						<form role="form" method="post"
 							action="${pageContext.request.contextPath}/archives/logout_user">
-							<input type="submit" value="logout"
+							<input style="margin: 15px" type="submit" value="logout"
 								class="btn btn-primary btn-xs" name="logout" />
 						</form>
 					</div>
 					<%
 						} else if (session.getAttribute("USER").equals("privileged")) {
 					%>
-					<div class="col-sm-4">
-						<div class="navbar-brand">Logged on as a privileged user</div>
+					<div class="col-sm-3">
+						<div style="margin-left: 600px;" class="navbar-brand">Logged
+							on as a privileged user</div>
 					</div>
 					<div class="col-sm-1">
 						<form role="form" method="post"
 							action="${pageContext.request.contextPath}/archives/logout_user">
-							<input type="submit" value="logout" class="btn btn-primary btn-xs" name="logout" />
+							<input style="margin: 15px" type="submit" value="logout"
+								class="btn btn-primary btn-xs" name="logout" />
 						</form>
 					</div>
 					<%

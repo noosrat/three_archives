@@ -201,7 +201,7 @@ public class FedoraGetRequest {
 	 *            a collection representing the query parameters for the
 	 *            request. The possible options for query parameters are
 	 *            [asOfDateTime] and [download] whose values would be a date
-	 *            time and a boolean respectively
+	 *            time of format yyyy-MM-dd HH:mm:ss.SSS and a boolean respectively
 	 * @return instance of {@link FedoraGetRequest} to be executed via the
 	 *         {@link FedoraClient}
 	 */

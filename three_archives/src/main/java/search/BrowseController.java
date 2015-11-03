@@ -1,6 +1,8 @@
 package search;
 
-import java.util.ArrayList;
+import history.History;
+import history.HistoryController;
+
 import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
@@ -8,14 +10,15 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.solr.client.solrj.SolrServerException;
 
+import uploads.AutoCompleteUtility;
 import annotations.Annotations;
+
+import common.Service;
 import common.controller.Controller;
 import common.fedora.FedoraDigitalObject;
 import common.fedora.FedoraException;
-import downloads.Download;
-import history.History;
-import history.HistoryController;
-import uploads.AutoCompleteUtility;
+
+import downloads.DownloadController;
 
 /**
  * The {@link BrowseController} is responsible for controlling the browsing
@@ -68,7 +71,7 @@ public class BrowseController implements Controller {
 		System.out.println(request.getParameter("addedtocart"));
 		if (request.getParameter("addedtocart") != null
 				&& !request.getParameter("addedtocart").isEmpty()) {
-			performDownloadActions(request);
+			new DownloadController().performDownloadActions(request);;
 		}
 
 		if (request.getPathInfo().contains("ORDER_BY")) {
@@ -85,6 +88,7 @@ public class BrowseController implements Controller {
 			(new HistoryController()).execute(request, response);
 			request.getSession().setAttribute("categoriesAndObjects",
 					getBrowse().getCategorisedFedoraDigitalObjects());
+			System.out.println("CATEGORIESED FEDORA DIGITAL OBJECTS " + getBrowse().getCategorisedFedoraDigitalObjects());
 		}
 		request.getSession().setAttribute("searchTags", null);
 		request.getSession().setAttribute("terms", null);
@@ -116,23 +120,24 @@ public class BrowseController implements Controller {
 
 	}
 
-	/**
-	 * @author noosrat
-	 * @param request
-	 */
-	private void performDownloadActions(HttpServletRequest request) {
-		System.out.println("in add to car");
-		ArrayList<String> cart = (ArrayList<String>) request.getSession()
-				.getAttribute("MEDIA_CART");
-		String selected = request.getParameter("addedtocart");
-		System.out.println(selected);
-
-		Download download = new Download();
-		cart = download.addToCart(selected, cart);
-
-		request.getSession().setAttribute("MEDIA_CART", cart);
-
-	}
+//	/**
+//	 * @author noosrat
+//	 * @param request
+//	 */
+//	private void performDownloadActions(HttpServletRequest request) {
+//		System.out.println("in add to car");
+//		ArrayList<String> cart = (ArrayList<String>) request.getSession()
+//				.getAttribute("MEDIA_CART");
+//		String selected = request.getParameter("addedtocart");
+//		System.out.println(selected);
+//
+//		Download download = new Download();
+//		cart = download.addToCart(selected, cart);
+//
+//		request.getSession().setAttribute("MEDIA_CART", cart);
+//
+//	}
+//	
 
 	/**
 	 * This method sorts fedora digital object dependent on what field has been

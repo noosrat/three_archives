@@ -26,6 +26,7 @@ public class PropertiesConfiguration {
 	 */
 	public static String generatePropertiesFile(HashMap<String, String> archiveDetails) throws Exception {
 		String name = archiveDetails.get("archive.name").replaceAll("[^a-zA-Z0-9\\s]", "").replaceAll("\\s+", "");
+		name = name.substring(0,1).toLowerCase() + name.substring(1);
 		FileOutputStream output = null;
 		Properties specificProperties = new Properties();
 		try {

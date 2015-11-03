@@ -11,6 +11,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.TreeMap;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
@@ -29,7 +30,11 @@ import org.apache.http.params.CoreProtocolPNames;
 import maps.Map;
 import common.controller.Controller;
 import common.fedora.DublinCoreDatastream;
+import common.fedora.FedoraClient;
 import common.fedora.FedoraDigitalObject;
+import common.fedora.FedoraException;
+import common.fedora.FedoraGetRequest;
+import common.fedora.QueryParameter;
 
 public class DownloadController implements Controller{
 
@@ -117,4 +122,20 @@ public class DownloadController implements Controller{
 		
 		return "WEB-INF/frontend/downloads/cart.jsp";
 	}
+
+	
+	public void performDownloadActions(HttpServletRequest request) {
+		System.out.println("in add to car");
+		ArrayList<String> cart = (ArrayList<String>) request.getSession()
+				.getAttribute("MEDIA_CART");
+		String selected = request.getParameter("addedtocart");
+		System.out.println(selected);
+
+		Download download = new Download();
+		cart = download.addToCart(selected, cart);
+
+		request.getSession().setAttribute("MEDIA_CART", cart);
+
+	}
+	
 }

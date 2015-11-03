@@ -81,6 +81,25 @@ public class History extends Service {
 	}
 
 	/**
+	 * Gets the {@link #tagCloudText} instance
+	 * 
+	 * @return {@link StringBuilder} instance representing the tag cloud text
+	 */
+	public static StringBuilder getTagCloudText() {
+		return tagCloudText;
+	}
+
+	/**
+	 * Sets the tag cloud text
+	 * 
+	 * @param tagCloudText
+	 *            {@link StringBuilder} instance representing the tagcloud text
+	 */
+	public static void setTagCloudText(StringBuilder tagCloudText) {
+		History.tagCloudText = tagCloudText;
+	}
+
+	/**
 	 * Sets the digitalObjects modified since the user's last interaction
 	 * 
 	 * @param fedoraDigitalObjects
@@ -226,7 +245,9 @@ public class History extends Service {
 	 * both these conditions
 	 * 
 	 * @param updatedCategories
-	 *            {@link HashMap} representing the updated categories
+	 *            {@link HashMap} representing the updated categories where the
+	 *            {@link String} key represent the category name and the
+	 *            {@link TreeSet} value is the subcategories
 	 * @param browseCategoryCookie
 	 *            {@link Cookie} instance representing the category browsing
 	 *            cookie as per format
@@ -394,7 +415,7 @@ public class History extends Service {
 	 *         filtered based on the
 	 * @param fitlerCategory
 	 *            and
-	 * @param filterValue}
+	 * @param filterValue
 	 */
 	public static Set<FedoraDigitalObject> filterFedoraDigitalObjects(
 			Set<FedoraDigitalObject> objectsToFilter, String filterCategory,
@@ -515,7 +536,7 @@ public class History extends Service {
 						DublinCore.FORMAT.name());
 				if (f != null && !f.isEmpty()) {
 					if (DatastreamID.parseMediaType(f) != DatastreamID
-							.parseDescription(filterValue.toLowerCase())) {
+							.parseMediaType(filterValue.toLowerCase())) {
 						iterator.remove();
 
 					}

@@ -197,7 +197,7 @@ $(document).ready(function() {
 										<c:if test="${conditionVariable eq 'true'}">
 											<img class="img-responsive img-thumbnail"
 												src="${object.datastreams['IMG'].content}"
-												alt="album cover unavailable" style="width: 90%;">
+												alt="album cover unavailable" style="width: 90%; height: 100%">
 										</c:if>
 										<c:set var="conditionVariable" value="false" />
 									</c:forEach>

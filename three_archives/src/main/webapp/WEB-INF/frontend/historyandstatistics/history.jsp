@@ -178,6 +178,9 @@
 								Updated Categories</a></li>
 				</ul>
 				<hr>
+				<c:if test="${empty categoriesWithRecentUpdates}">
+					No categories with updates
+				</c:if>
 				<c:forEach var="updatedCategory"
 					items="${categoriesWithRecentUpdates}">
 					<c:if test="${not empty updatedCategory.value}">
@@ -233,6 +236,10 @@
 				<div class="col-md-8">
 					<div class="panel panel-default">
 						<div class="panel-body" align="center">
+							
+				<c:if test="${empty objectsModifiedSinceLastVisit}">
+					No multimedia items with updates
+				</c:if>
 							<section id="portfolio">
 								<c:set var="count" value="0" scope="page" />
 								<c:forEach var="digitalObject"

@@ -218,7 +218,7 @@ public class HistoryController implements Controller {
 			session.setAttribute("categoriesWithRecentUpdates", updates);
 
 		}
-		if (session.getAttribute("userFavouriteCategiresWithRecentUpdates") == null) {
+		if (session.getAttribute("userFavouriteCategoriesWithRecentUpdates") == null) {
 			System.out
 					.println("No value for user favouritecategories within the session");
 			HashMap<String, TreeSet<String>> categories = (HashMap<String, TreeSet<String>>) request
@@ -264,8 +264,11 @@ public class HistoryController implements Controller {
 	 * This method extracts the cookie of the user's date last visited
 	 * 
 	 * @param request
+	 *            {@link HttpServletRequest} instance representing the client
+	 *            request
 	 * @param response
-	 * @return
+	 *            {@link HttpServletResponse} instance representing the response
+	 * @return {@link String} instance representing the date
 	 * @throws Exception
 	 */
 	private String extractAndProcessDateLastVisited(HttpServletRequest request,
@@ -273,15 +276,17 @@ public class HistoryController implements Controller {
 		Cookie[] cookies = request.getCookies();
 		String date = null;
 
-		for (Cookie cookie : cookies) {
-			if (cookie.getName().equals("dateLastVisited")) {
-				date = cookie.getValue();
-				cookie.setValue(null);
-				cookie.setPath("/");
-				cookie.setMaxAge(0);
-				response.addCookie(cookie);
+		if (cookies != null) {
+			for (Cookie cookie : cookies) {
+				if (cookie.getName().equals("dateLastVisited")) {
+					date = cookie.getValue();
+					cookie.setValue(null);
+					cookie.setPath("/");
+					cookie.setMaxAge(0);
+					response.addCookie(cookie);
 				System.out.println("Found date last visited cookie " + date);
-				break;
+					break;
+				}
 			}
 		}
 		if (date == null) {
@@ -292,10 +297,10 @@ public class HistoryController implements Controller {
 		// a new cookie of current date to the response..but also make sure
 		// we have added our entry date cookie into the session // the one for
 		// testing is Mon Sep 28 14:49:16 SAST 2015
-//		response.addCookie(initialiseNewCookie("dateLastVisited",
-//				"Mon Sep 28 14:49:16 SAST 2015"));
-		 response.addCookie(initialiseNewCookie("dateLastVisited", new
-		 Date().toString()));
+		// response.addCookie(initialiseNewCookie("dateLastVisited",
+		// "Mon Sep 28 14:49:16 SAST 2015"));
+		response.addCookie(initialiseNewCookie("dateLastVisited",
+				new Date().toString()));
 		return date;
 	}
 
@@ -304,17 +309,22 @@ public class HistoryController implements Controller {
 	 * each of the specified categories
 	 * 
 	 * @param request
-	 * @return {@link Cookie} instance containing hte browser cookie for the
+	 *            {@link HttpServletRequest} instance representing the client
+	 *            request
+	 * @return {@link Cookie} instance containing the browser cookie for the
 	 *         specific archive
 	 */
 	private Cookie getBrowseCategoryCookie(HttpServletRequest request) {
 		System.out.println("Getting browse category cookie for " + archive);
 		Cookie[] cookies = request.getCookies();
-		System.out.println("COOKIES: " + cookies.length);
-		for (Cookie cookie : cookies) {
-			if (cookie.getName() != null) {
-				if (cookie.getName().equalsIgnoreCase(archive + "Categories")) {
-					return cookie;
+		if (cookies != null) {
+			System.out.println("COOKIES: " + cookies.length);
+			for (Cookie cookie : cookies) {
+				if (cookie.getName() != null) {
+					if (cookie.getName().equalsIgnoreCase(
+							archive + "Categories")) {
+						return cookie;
+					}
 				}
 			}
 		}
@@ -333,8 +343,12 @@ public class HistoryController implements Controller {
 	 * the specific user with data obtained from the user's interaction with the
 	 * interface
 	 * 
-	 * @param request {@link HttpServletRequest} holding the browser cookie to be changed
-	 * @param response {@link HttpServletResponse} instance that the cookie gets updated with
+	 * @param request
+	 *            {@link HttpServletRequest} holding the browser cookie to be
+	 *            changed
+	 * @param response
+	 *            {@link HttpServletResponse} instance that the cookie gets
+	 *            updated with
 	 */
 	private void updateCategoryCookieBasedOnCategoryBrowse(
 			HttpServletRequest request, HttpServletResponse response) {
@@ -361,12 +375,14 @@ public class HistoryController implements Controller {
 		// now iterate through the existing cookies to make sure this one is
 		// removed before we add it to the response
 		Cookie[] cookies = request.getCookies();
-		for (Cookie c : cookies) {
-			if (c.getName().equalsIgnoreCase(cookie.getName())) {
-				c.setValue(null);
-				c.setPath("/");
-				c.setMaxAge(0);
-				response.addCookie(c);
+		if (cookies != null) {
+			for (Cookie c : cookies) {
+				if (c.getName().equalsIgnoreCase(cookie.getName())) {
+					c.setValue(null);
+					c.setPath("/");
+					c.setMaxAge(0);
+					response.addCookie(c);
+				}
 			}
 		}
 		cookie.setValue(categories.toString());
@@ -379,7 +395,8 @@ public class HistoryController implements Controller {
 	}
 
 	/**
-	 * Thi method persists the tagcloud text at then end of the user's interaction with the specific archive
+	 * Thi method persists the tagcloud text at then end of the user's
+	 * interaction with the specific archive
 	 */
 	public void persistNecessaryRequestInformation() {
 		String filename = "../webapps/data/" + archive + "TagCloud.txt";

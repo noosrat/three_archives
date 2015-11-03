@@ -117,6 +117,8 @@ public class Browse extends Service {
 	private void setFilteredDigitalObjects(
 			Set<FedoraDigitalObject> filteredDigitalObjects) {
 		this.filteredDigitalObjects = filteredDigitalObjects;
+		
+		
 	}
 
 	/**
@@ -297,16 +299,19 @@ public class Browse extends Service {
 				case COLLECTION:
 					values.add(dc.get("COLLECTION"));
 					break;
+				case PUBLISHER:
+					values.add(dc.get(DublinCore.PUBLISHER.name()));
 				}
+
 			}
 			values.remove(null);
 			searchAndBrowseCategoriesAndValues.put(cat.name(),
 					new TreeSet<String>(values));
 
 		}
+		removeEmptyCategories(searchAndBrowseCategoriesAndValues);
 		System.out.println("SEARCHING AND BROWSING CATEGORIES "
 				+ searchAndBrowseCategoriesAndValues.toString());
-		removeEmptyCategories(searchAndBrowseCategoriesAndValues);
 		setBrowsingCategories(searchAndBrowseCategoriesAndValues);
 	}
 
@@ -498,6 +503,7 @@ public class Browse extends Service {
 		System.out.println("Fiiltered objects " + filteredObjects.size());
 		setFilteredBrowsingCategories(filteredCategories);
 		setFilteredDigitalObjects(filteredObjects);
+		
 	}
 
 	/**

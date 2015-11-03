@@ -11,7 +11,7 @@ package search;
  */
 public enum SearchAndBrowseCategory {
 	SEARCH_ALL(), COLLECTION("dc.description"), CREATOR("dc.creator"), CONTRIBUTOR(
-			"dc.contributor"), SOURCE("dc.source"), EVENT("dc.description"),
+			"dc.contributor"), SOURCE("dc.source"), EVENT("dc.description"),PUBLISHER("dc.publisher"),
 
 	DESCRIPTION("dc.description"), LOCATION("dc.location"), FORMAT("dc.format"), TYPE(
 			"dc.type"), TITLE("dc.title"), SUBJECT("dc.subject"), YEAR(

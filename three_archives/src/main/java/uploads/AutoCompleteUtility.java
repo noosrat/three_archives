@@ -229,7 +229,7 @@ public class AutoCompleteUtility {
 	/**
 	 * This allows for the extraction of the actual words to be used within the
 	 * autocomplete files. This is done by interrogating the metadata of the
-	 * digital objects contained within teh specific archive
+	 * digital objects contained within the specific archive
 	 * 
 	 * @param filteredFedoraDigitalObjects
 	 *            {@link Set} instance representing the digital objects
@@ -238,12 +238,24 @@ public class AutoCompleteUtility {
 	 */
 	private TreeSet<String> autocompleteValues(Set<FedoraDigitalObject> filteredFedoraDigitalObjects) {
 		TreeSet<String> values = new TreeSet<String>();
-
+		System.out.println("IN AUTOCOMPLETE VALUES");
 		for (FedoraDigitalObject fedoraDigitalObject : filteredFedoraDigitalObjects) {
 			DublinCoreDatastream dublinCoreDatastream = (DublinCoreDatastream) fedoraDigitalObject.getDatastreams()
 					.get(DatastreamID.DC.name());
+			System.out.println("OBJECT UNDER INSPECTION " + dublinCoreDatastream.toString());
 
 			for (String dublinCoreFieldValue : dublinCoreDatastream.getDublinCoreMetadata().values()) {
+				System.out.println(
+						"THIS IS THE KEY for " + dublinCoreFieldValue);
+				if (dublinCoreFieldValue.indexOf(":") > -1) {
+					System.out.println("Archives values "+ archives.values().toString());
+					System.out.println("dublincorevalue" + dublinCoreFieldValue.substring(0, dublinCoreFieldValue.indexOf(":")));
+					if (archives.values()
+							.contains(dublinCoreFieldValue.substring(0, dublinCoreFieldValue.indexOf(":")))) {// NOX
+																												// TEST
+						continue;
+					}
+				}
 				String[] splitPercentage = dublinCoreFieldValue.split("%");
 				values.addAll(Arrays.asList(splitPercentage));
 				for (String string : splitPercentage) {
@@ -251,6 +263,7 @@ public class AutoCompleteUtility {
 					String[] spaceSplit = string.split(" ");
 					values.addAll(Arrays.asList(spaceSplit));
 				}
+
 			}
 		}
 

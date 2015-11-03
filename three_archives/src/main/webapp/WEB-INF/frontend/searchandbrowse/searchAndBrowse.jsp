@@ -35,137 +35,6 @@
 <link type="text/css" rel="stylesheet"
 	href="${pageContext.request.contextPath}/css/annotorious.css" />
 
-<script type="text/javascript"
-	src="${pageContext.request.contextPath}/js/jquery-1.11.3.js"></script>
-<script type="text/javascript"
-	src="${pageContext.request.contextPath}/bootstrap-3.3.5/js/bootstrap.js"></script>
-<script type="text/javascript"
-	src="${pageContext.request.contextPath}/js/typeahead.js"></script>
-
-<script type="text/javascript"
-	src="${pageContext.request.contextPath}/js/annotorious.min.js"></script>
-
-<script type="text/javascript">
-$(document).ready(function() {
-		var archive ='<%=session.getAttribute("ARCHIVE_CONCAT")%>';
-		var words = "/data/" + archive + ".json";
-		var countries = new Bloodhound({
-			datumTokenizer : Bloodhound.tokenizers.whitespace,
-			queryTokenizer : Bloodhound.tokenizers.whitespace,
-			limit : 5,
-			prefetch : {
-				url : words,
-			}
-		});
-		$('#prefetch .typeahead').typeahead(null, {
-			name : 'countries',
-			source : countries.ttAdapter(),
-
-		});
-	});
-
-	function limitSearch() {
-		var checked = document.getElementById('limitSearchCheckbox').checked;
-		if (checked) {
-			document.getElementById('limitSearch').innerHTML = "true";
-		} else {
-			document.getElementById('limitSearch').innerHTML = "false";
-		}
-		console.log(document.getElementById('limitSearch'));
-	}
-
-	var selected = [];
-	function change(box) {
-		if (box.checked == true) {
-			var thing = box.getAttribute("id");
-			//alert(thing);
-			//console.log(('#ms:1').value);
-			selected.push(thing);
-		} else {
-			console.log($(this).value);
-			selected.splice(selected.indexOf($(this).attr("value")), 1);
-		}
-
-		document.getElementById("cartItems").innerHTML = selected;
-		console.log(selected);
-	}
-
-	function init(id) {
-		console.log("a");
-
-		anno.makeAnnotatable(id);
-
-		if (id.getAttribute("data-annotations") != "") {
-			var annotations = id.getAttribute("data-annotations");
-
-			var annolist = annotations.split(";");
-			for (var k = 0; k < annolist.length - 1; k++) {
-				var annotation = annolist[k].split("/");
-				console.log(this.src + ", " + annotation[0] + ", "
-						+ annotation[1] + ", " + annotation[2] + ", "
-						+ annotation[3] + ", " + annotation[4])
-				anno.addAnnotation(buildAnnotation(id.src, annotation[0],
-						annotation[1], annotation[2], annotation[3],
-						annotation[4]));
-			}
-		}
-
-		console.log("b");
-		//anno.activateSelector(id);
-
-	}
-	function simudbl(pid) {
-		var l = document.getElementById(pid);
-		console.log(l);
-		//for(var i=0; i<50; i++)
-		l.ondblclick();
-	}
-
-	function buildAnnotation(src, annotation, x, y, w, h) {
-
-		var thing = {
-			src : src,
-			text : annotation,
-			editable : false,
-			shapes : [ {
-				type : 'rect',
-				geometry : {
-					x : x,
-					y : y,
-					width : w,
-					height : h
-				}
-			} ]
-		}
-		return thing;
-	}
-
-	var annotations = "";//move global
-	function see(pid) {
-
-		var src = pid.getAttribute("data-src");
-		var ann = anno.getAnnotations(src);//"//%=ob.getDatastreams().get("IMG").getContent()%>");
-
-		for (var k = 0; k < ann.length; k++) {
-			var text = ann[k]["text"];
-			var x = ann[k]["shapes"][0]["geometry"]["x"];
-			var y = ann[k]["shapes"][0]["geometry"]["y"];
-			var w = ann[k]["shapes"][0]["geometry"]["width"];
-			var h = ann[k]["shapes"][0]["geometry"]["height"];
-			annotations = annotations + text + "/" + x + "/" + y + "/" + w
-					+ "/" + h + ";";
-
-			console.log(ann[k]["text"]);
-			console.log(ann[k]["shapes"][0]["geometry"]);
-		}
-
-		console.log(pid.getAttribute("data-pid"));
-		document.getElementById("anno:" + pid.getAttribute("data-pid")).innerHTML = annotations;
-		document.getElementById("id:" + pid.getAttribute("data-pid")).innerHTML = pid
-				.getAttribute("data-pid");
-
-	}
-</script>
 
 </head>
 
@@ -282,16 +151,23 @@ $(document).ready(function() {
 						</h3>
 
 						<div>
-							<c:if test="${not empty terms && terms!=' ' && terms!= ''}">
-								<h4>
-									<span class="badge">${fn:length(objectsForArchive)}</span>
-									results returned for search <a class="label label-default"
-										href="${pageContext.request.contextPath}/archives/search_objects/category=SEARCH_ALL?terms=${terms}">
-										${fn:toUpperCase(terms)}</a>
-								</h4>
-							</c:if>
-
 							<table style="width: 100%">
+								<tr>
+									<td align="left"><c:if
+											test="${not empty terms && terms!=' ' && terms!= ''}">
+											<h4>
+												<span class="badge">${fn:length(objectsForArchive)}</span>
+												results returned for search <a class="label label-default"
+													href="${pageContext.request.contextPath}/archives/search_objects/category=SEARCH_ALL?terms=${terms}">
+													${fn:toUpperCase(terms)}</a>
+											</h4>
+										</c:if></td>
+									<td></td>
+									<td align="right">Sort: <a class="btn btn-default"
+										href="${pageContext.request.contextPath}/archives/browse/ORDER_BY=TITLE">TITLE</a>
+										<a class="btn btn-default"
+										href="${pageContext.request.contextPath}/archives/browse/ORDER_BY=YEAR">YEAR</a></td>
+								</tr>
 								<tr>
 									<td align="left">
 										<div class="checkbox">
@@ -304,29 +180,24 @@ $(document).ready(function() {
 											</c:if>
 										</div>
 									</td>
-									<td align="right">Sort: <a class="btn btn-default"
-										href="${pageContext.request.contextPath}/archives/browse/ORDER_BY=TITLE">TITLE</a>
-										<a class="btn btn-default"
-										href="${pageContext.request.contextPath}/archives/browse/ORDER_BY=YEAR">YEAR</a></td>
 
-								</tr>
-								<tr>
-									<td></td><br>
+									<td></td>
 									<td align="right">
-									
-										<form
-											action="${pageContext.request.contextPath}/archives/browse">
-											<textarea id="cartItems" name="addedtocart" readonly=readonly
-												style="display: none;"></textarea>
-											<input type="submit" class="btn btn-default"
-												value="Download Selected Items" />
-											<script type="text/javascript">
-												console
-														.log("${digitalObject.pid}");
-											</script>
-										</form>
-
+										<div>
+											<form
+												action="${pageContext.request.contextPath}/archives/browse">
+												<textarea id="cartItems" name="addedtocart"
+													readonly=readonly style="display: none;"></textarea>
+												<input type="submit" class="btn btn-default"
+													value="Download Selected Items" />
+												<script type="text/javascript">
+													console
+															.log("${digitalObject.pid}");
+												</script>
+											</form>
+										</div>
 									</td>
+
 								</tr>
 							</table>
 
@@ -366,7 +237,7 @@ $(document).ready(function() {
 											data-target="#lightbox${count}"> <img
 											src="${digitalObject.datastreams['IMG'].content}"
 											class="img-responsive img-thumbnail" alt="image unavailable"
-											style="width: 95%">
+											style="width: 95%; height: 100%">
 
 										</a>
 									</div>
@@ -463,8 +334,141 @@ $(document).ready(function() {
 	<br>
 	<br>
 	</div>
-	</div>	<!-- wrapper -->
+	</div>
+	<!-- wrapper -->
+	<script type="text/javascript"
+		src="${pageContext.request.contextPath}/js/jquery-1.11.3.js"></script>
+	<script type="text/javascript"
+		src="${pageContext.request.contextPath}/bootstrap-3.3.5/js/bootstrap.js"></script>
+	<script type="text/javascript"
+		src="${pageContext.request.contextPath}/js/typeahead.js"></script>
+
 	<script type="text/javascript"
 		src="${pageContext.request.contextPath}/js/lightbox.js"></script>
+	<script type="text/javascript"
+		src="${pageContext.request.contextPath}/js/annotorious.min.js"></script>
+
+	<script type="text/javascript">
+$(document).ready(function() {
+		var archive ='<%=session.getAttribute("ARCHIVE_CONCAT")%>';
+			var words = "/data/" + archive + ".json";
+			var countries = new Bloodhound({
+				datumTokenizer : Bloodhound.tokenizers.whitespace,
+				queryTokenizer : Bloodhound.tokenizers.whitespace,
+				limit : 5,
+				prefetch : {
+					url : words,
+				}
+			});
+			$('#prefetch .typeahead').typeahead(null, {
+				name : 'countries',
+				source : countries.ttAdapter(),
+
+			});
+		});
+
+		function limitSearch() {
+			var checked = document.getElementById('limitSearchCheckbox').checked;
+			if (checked) {
+				document.getElementById('limitSearch').innerHTML = "true";
+			} else {
+				document.getElementById('limitSearch').innerHTML = "false";
+			}
+			console.log(document.getElementById('limitSearch'));
+		}
+
+		var selected = [];
+		function change(box) {
+			if (box.checked == true) {
+				var thing = box.getAttribute("id");
+				//alert(thing);
+				//console.log(('#ms:1').value);
+				selected.push(thing);
+			} else {
+				console.log($(this).value);
+				selected.splice(selected.indexOf($(this).attr("value")), 1);
+			}
+
+			document.getElementById("cartItems").innerHTML = selected;
+			console.log(selected);
+		}
+
+		function init(id) {
+			console.log("a");
+
+			anno.makeAnnotatable(id);
+
+			if (id.getAttribute("data-annotations") != "") {
+				var annotations = id.getAttribute("data-annotations");
+
+				var annolist = annotations.split(";");
+				for (var k = 0; k < annolist.length - 1; k++) {
+					var annotation = annolist[k].split("/");
+					console.log(this.src + ", " + annotation[0] + ", "
+							+ annotation[1] + ", " + annotation[2] + ", "
+							+ annotation[3] + ", " + annotation[4])
+					anno.addAnnotation(buildAnnotation(id.src, annotation[0],
+							annotation[1], annotation[2], annotation[3],
+							annotation[4]));
+				}
+			}
+
+			console.log("b");
+			//anno.activateSelector(id);
+
+		}
+		function simudbl(pid) {
+			var l = document.getElementById(pid);
+			console.log(l);
+			//for(var i=0; i<50; i++)
+			l.ondblclick();
+		}
+
+		function buildAnnotation(src, annotation, x, y, w, h) {
+
+			var thing = {
+				src : src,
+				text : annotation,
+				editable : false,
+				shapes : [ {
+					type : 'rect',
+					geometry : {
+						x : x,
+						y : y,
+						width : w,
+						height : h
+					}
+				} ]
+			}
+			return thing;
+		}
+
+		var annotations = "";//move global
+		function see(pid) {
+
+			var src = pid.getAttribute("data-src");
+			var ann = anno.getAnnotations(src);//"//%=ob.getDatastreams().get("IMG").getContent()%>");
+
+			for (var k = 0; k < ann.length; k++) {
+				var text = ann[k]["text"];
+				var x = ann[k]["shapes"][0]["geometry"]["x"];
+				var y = ann[k]["shapes"][0]["geometry"]["y"];
+				var w = ann[k]["shapes"][0]["geometry"]["width"];
+				var h = ann[k]["shapes"][0]["geometry"]["height"];
+				annotations = annotations + text + "/" + x + "/" + y + "/" + w
+						+ "/" + h + ";";
+
+				console.log(ann[k]["text"]);
+				console.log(ann[k]["shapes"][0]["geometry"]);
+			}
+
+			console.log(pid.getAttribute("data-pid"));
+			document.getElementById("anno:" + pid.getAttribute("data-pid")).innerHTML = annotations;
+			document.getElementById("id:" + pid.getAttribute("data-pid")).innerHTML = pid
+					.getAttribute("data-pid");
+
+		}
+	</script>
+
 </body>
 </html>

@@ -55,13 +55,11 @@ public class SearchController implements Controller {
 	 * @throws Exception
 	 */
 
-	public String execute(HttpServletRequest request,
-			HttpServletResponse response) throws Exception {
+	public String execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		String result = "WEB-INF/frontend/searchandbrowse/searchAndBrowse.jsp";
 		archive = (String) request.getSession().getAttribute("ARCHIVE_CONCAT");
 		request.setAttribute("searchCategories", retrieveSearchCategories());
-		request.setAttribute("browseCategories", new BrowseController()
-				.getBrowse().getBrowsingCategories());
+		request.setAttribute("browseCategories", new BrowseController().getBrowse().getBrowsingCategories());
 		String requestPath = request.getPathInfo().substring(1);
 		if (requestPath != null) {
 			try {
@@ -70,12 +68,10 @@ public class SearchController implements Controller {
 				}
 			} catch (SolrServerException exception) {
 				request.setAttribute("message",
-						"Something seems to have gone wrong with SOLR"
-								+ exception.getStackTrace());
+						"Something seems to have gone wrong with SOLR" + exception.getStackTrace());
 			} catch (FedoraException exception) {
 				request.setAttribute("message",
-						"Something seems to have gone wrong with Fedora"
-								+ exception.getStackTrace());
+						"Something seems to have gone wrong with Fedora" + exception.getStackTrace());
 
 			} catch (Exception exception) {
 				request.setAttribute("message", exception.getStackTrace());
@@ -101,8 +97,7 @@ public class SearchController implements Controller {
 	 *            request
 	 * @throws Exception
 	 */
-	private void searchFedoraDigitalObjects(HttpServletRequest request)
-			throws Exception {
+	private void searchFedoraDigitalObjects(HttpServletRequest request) throws Exception {
 		String requestPath = request.getPathInfo().substring(1);
 		System.out.println("SEARCHING FEDORA DIGITAL OBJECTS " + requestPath);
 
@@ -113,12 +108,11 @@ public class SearchController implements Controller {
 		if (limit != null && !limit.isEmpty() && Boolean.parseBoolean(limit)) {
 			System.out.println("WE ARE IN LIMIT SEARCH");
 			Set<FedoraDigitalObject> results = new HashSet<FedoraDigitalObject>();
-			Set<FedoraDigitalObject> exisitingObjects = (Set<FedoraDigitalObject>) request
-					.getSession().getAttribute("objectsForArchive");
+			Set<FedoraDigitalObject> exisitingObjects = (Set<FedoraDigitalObject>) request.getSession()
+					.getAttribute("objectsForArchive");
 			terms.append("(");
 			for (FedoraDigitalObject digitalObject : exisitingObjects) {
-				terms.append("PID:\"").append(digitalObject.getPid())
-						.append("\" OR ");
+				terms.append("PID:\"").append(digitalObject.getPid()).append("\" OR ");
 			}
 
 			terms.delete(terms.length() - 4, terms.length()).append(")");
@@ -130,13 +124,11 @@ public class SearchController implements Controller {
 		String[] splitPath = requestPath.split("=");
 		System.out.println("SIZE OF OUR SPLIT PATH " + splitPath.length);
 		if (splitPath.length == 2) {
-			SearchAndBrowseCategory queryCategory = SearchAndBrowseCategory
-					.valueOf(splitPath[1]);
+			SearchAndBrowseCategory queryCategory = SearchAndBrowseCategory.valueOf(splitPath[1]);
 			// maybe here we just return to the page with re-organised/placed
 			// search items..etc with our one selected and then they can still
 			// put a value into the text box
-			ArrayList<String> categories = SearchController
-					.retrieveSearchCategories();
+			ArrayList<String> categories = SearchController.retrieveSearchCategories();
 			categories.remove(categories.indexOf(queryCategory.name()));
 			categories.add(0, queryCategory.name());
 			request.setAttribute("searchCategories", categories);
@@ -144,8 +136,7 @@ public class SearchController implements Controller {
 				return;
 			}
 			if (!(queryCategory.equals(SearchAndBrowseCategory.SEARCH_ALL))) {
-				terms.append(queryCategory.getDublinCoreField()).append(":\"")
-						.append(s).append("\"");
+				terms.append(queryCategory.getDublinCoreField()).append(":\"").append(s).append("\"");
 				// for (int x = 0; x <
 				// queryCategory.getDublinCoreField().size(); x++) {
 				// if (x > 0 && x != queryCategory.getDublinCoreField().size() -
@@ -166,15 +157,12 @@ public class SearchController implements Controller {
 		}
 
 		Set<FedoraDigitalObject> digitalObjects = new HashSet<FedoraDigitalObject>();
-		digitalObjects = getSearch()
-				.findFedoraDigitalObjects(new String(terms));
-		filterFedoraObjectsForSpecificArchive((String) request.getSession()
-				.getAttribute("MEDIA_PREFIX"), digitalObjects);
+		digitalObjects = getSearch().findFedoraDigitalObjects(new String(terms));
+		filterFedoraObjectsForSpecificArchive((String) request.getSession().getAttribute("MEDIA_PREFIX"),
+				digitalObjects);
 		// need to restrict these for this archive....
 
-		if ((digitalObjects == null || digitalObjects.isEmpty())) {
-			request.setAttribute("message", "No results to return");
-		} else {
+		if (!(digitalObjects == null || digitalObjects.isEmpty())) {
 			History.addTextToTagCloud(s, true);
 		}
 		request.getSession().setAttribute("objectsForArchive", digitalObjects);
@@ -195,14 +183,12 @@ public class SearchController implements Controller {
 	 */
 	private void filterFedoraObjectsForSpecificArchive(String multiMediaPrefix,
 			Set<FedoraDigitalObject> fedoraDigitalObjects) {
-		for (Iterator<FedoraDigitalObject> iterator = fedoraDigitalObjects
-				.iterator(); iterator.hasNext();) {
+		for (Iterator<FedoraDigitalObject> iterator = fedoraDigitalObjects.iterator(); iterator.hasNext();) {
 			FedoraDigitalObject element = iterator.next();
 			if (!(element.getPid().contains(multiMediaPrefix))) {
 				iterator.remove(); // remove any object who does not have the
 									// prefix for this archive
-				System.out.println("removing object with pid "
-						+ element.getPid());
+				System.out.println("removing object with pid " + element.getPid());
 			}
 		}
 

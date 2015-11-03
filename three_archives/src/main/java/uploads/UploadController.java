@@ -72,7 +72,7 @@ public class UploadController implements Controller{
 						item.write(new File(name));
 					}
 				}
-				if (!(actions.equals("none")))
+				if (!(action.equals("none")))
 				{
 					uploadService.upload(action,archive);
 					System.out.println("* uploads completed");

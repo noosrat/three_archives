@@ -79,10 +79,10 @@ public class FedoraCommunicator {
 		System.out.println("Finding fedora digital objects matching: " + terms);
 		Set<FedoraDigitalObject> results = new HashSet<FedoraDigitalObject>();
 		List<String> pids = new ArrayList<String>();
-		if (feature == "search") {
+		if (feature.equals("search")) {
 			pids = SolrCommunicator.solrSearch(terms);
 
-		} else if (feature == "maps") {
+		} else if (feature.equals("maps")) {
 			pids = findFedoraObjectsWithSearchTerm(terms);
 		}
 		try {

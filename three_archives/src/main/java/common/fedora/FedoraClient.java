@@ -25,7 +25,7 @@ public class FedoraClient {
 	/**
 	 * A static initialiser for the {@link FedoraClient} intialising the Client
 	 * to be used throughout the applications interaction with the Fedora
-	 * digital object repository service The intiialiser creates the
+	 * digital object repository service The initialiser creates the
 	 * {@link ApacheHTtpClient} and assigns the credentials as per
 	 * {@link FedoraCredentials}
 	 */
@@ -62,13 +62,13 @@ public class FedoraClient {
 	 * 
 	 */
 	public static void executeWithoutParsingResponse(FedoraGetRequest fedoraGetRequest) {
-		WebResource webResource = CLIENT.resource(fedoraGetRequest.getRequest().toString());
+		WebResource webResource = getClient().resource(fedoraGetRequest.getRequest().toString());
 		ClientResponse clientResponse = webResource.get(ClientResponse.class);
 		clientResponse.getEntityInputStream();
 	}
 
 	/**
-	 * This allos for the execution of the Fedora Get request with parsing the
+	 * This allows for the execution of the Fedora Get request with parsing the
 	 * response retrieved
 	 * 
 	 * @param fedoraGetRequest
@@ -81,7 +81,7 @@ public class FedoraClient {
 	 *             response code is anything besides 200
 	 */
 	public static FedoraXMLResponseParser execute(FedoraGetRequest fedoraGetRequest) throws FedoraException {
-		WebResource webResource = CLIENT.resource(fedoraGetRequest.getRequest().toString());
+		WebResource webResource = getClient().resource(fedoraGetRequest.getRequest().toString());
 		ClientResponse clientResponse = webResource.get(ClientResponse.class);
 		fedoraGetRequest.resetRequest();
 
