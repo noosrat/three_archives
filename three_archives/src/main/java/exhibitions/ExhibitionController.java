@@ -1,3 +1,7 @@
+/*Author: Nicole Petersen
+Description: COntroller class for the Exhibition service
+*/
+
 package exhibitions;
 
 import java.util.ArrayList;
@@ -16,8 +20,8 @@ import search.FedoraCommunicator;
 
 public class ExhibitionController implements Controller {
 
-	public String execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
-		if (request.getPathInfo().substring(1).contains("redirect_exhibitions")) {
+	public String execute(HttpServletRequest request, HttpServletResponse response) throws Exception { // Mandatory method for a class that implements Controller
+		if (request.getPathInfo().substring(1).contains("redirect_exhibitions")) { // IF the user wants to create or view exhibitions, go to the exhibition home page
 			HttpSession session = request.getSession();
 			session.setAttribute("ARCHIVE", "seqiuns");
 			return "WEB-INF/frontend/exhibitions/exhibitionHome.jsp";
@@ -27,30 +31,28 @@ public class ExhibitionController implements Controller {
 
 	private String exhibitions(HttpServletRequest request, HttpServletResponse response) throws FedoraException {
 
-		String result = "";
+		String result = ""; // Specifies the path of the page that must be returned next
 		ExhibitionService service = new ExhibitionService();
 		HttpSession session = request.getSession();
 
-		List<Exhibition> allExhibitions = new ArrayList<Exhibition>();
+		List<Exhibition> allExhibitions = new ArrayList<Exhibition>(); // ArrayList of all exhibitions retrieved from the database
 
 		if (request.getParameter("authorise") != null) {
 			ManageUsers userManager = new ManageUsers();
-
-			System.out.println("AUTHOR");
+			System.out.println("AUTHORISE");// log
 			String username = request.getParameter("new_username");
-			System.out.println("eu " + username);
+			System.out.println("User name " + username);
 			String password = request.getParameter("new_pwd");
-			System.out.println("ep " + password);
+			System.out.println("password" );//log
 			String role = userManager.approveUser(username, password);
-			System.out.println("er " + role);
+			System.out.println("User role " + role);
 			session.setAttribute("USER", role);
 			return "index.jsp";
 		}
-		if (request.getParameter("view_all_exhibitions") != null) {
+		if (request.getParameter("view_all_exhibitions") != null) {// If the user wants to view an exhibition
 			String action = request.getParameter("view_all_exhibitions");
 			if (action.equals("View All Exhibitions")) {
-				allExhibitions = service.listExhibitions();
-
+				allExhibitions = service.listExhibitions();// Get all exhibitions from the database
 				request.setAttribute("all_exhibitions", allExhibitions);
 				response.setContentType("Exhibition");
 				result = "WEB-INF/frontend/exhibitions/exhibition.jsp";
@@ -59,9 +61,9 @@ public class ExhibitionController implements Controller {
 
 		if (request.getParameter("selectedExhibit") != null) {
 
-			int exhibitionId = Integer.parseInt(request.getParameter("selectedExhibit"));
-
-			Exhibition exhibition = service.getExhibition(exhibitionId);
+			int exhibitionId = Integer.parseInt(request.getParameter("selectedExhibit"));// get the specific exhibition ID 
+			Exhibition exhibition = service.getExhibition(exhibitionId);// get the specific exhibition from the database
+			//Obtain all exhibition variables
 			String title = exhibition.getTitle();
 			String description = exhibition.getDescription();
 			int templateid = exhibition.getTemplateid();
@@ -79,7 +81,7 @@ public class ExhibitionController implements Controller {
 			}
 
 			String[] captions = exhibition.getCaptions().split("%");
-
+			// Set session variables to send to the JSP
 			request.setAttribute("images", images);
 			request.setAttribute("ExhibitionTitle", title);
 			request.setAttribute("ExhibitionDescription", description);
@@ -89,6 +91,7 @@ public class ExhibitionController implements Controller {
 			request.setAttribute("PopulatedTemplateArray", images);
 			session.setAttribute("CAPTIONS", captions);
 			response.setContentType("text/html");
+			//Go to a specific viewer JSP, based on the template ID of the exhibition
 			if (templateid == 1) {
 				result = "WEB-INF/frontend/exhibitions/createViewExhibition.jsp";
 			} else if (templateid == 2) {
@@ -99,22 +102,17 @@ public class ExhibitionController implements Controller {
 
 		}
 
-		if (request.getParameter("create_exhibition") != null) {
+		if (request.getParameter("create_exhibition") != null) { // If the user wants to create exhibitions
 			String action = request.getParameter("create_exhibition");
 			result = "WEB-INF/frontend/exhibitions/createExhibition.jsp";
 
 		}
 
-		if (request.getParameter("selectedTemplate") != null) {
+		if (request.getParameter("selectedTemplate") != null) {// After the user selects a template
 			try {
-				ArrayList<String> cart = new ArrayList<String>();
-				FedoraCommunicator fc = new FedoraCommunicator();
-				// cart.add("sq:sq3");
-				// cart.add("sq:sq2");
-				// cart.add("sq:sq1");
-				// cart.add("sq:sq4");
-				// session.setAttribute("MEDIA_CART", cart);
-				String selectedTemplate = request.getParameter("selectedTemplate");
+				ArrayList<String> cart = new ArrayList<String>(); 
+				String selectedTemplate = request.getParameter("selectedTemplate");// Get the template ID
+				// Go to a specific creator JSP based on the template that was selected
 				if (selectedTemplate.equals("1")) {
 					session.setAttribute("TEMPLATE_ID", selectedTemplate);
 					result = "WEB-INF/frontend/exhibitions/populateTemplate1.jsp";
@@ -132,13 +130,13 @@ public class ExhibitionController implements Controller {
 				e.printStackTrace();
 			}
 		}
-		if (request.getParameter("exhibition_det") != null) {
+		if (request.getParameter("exhibition_det") != null) {// If the user completed the exhibition details
 
 			String action = request.getParameter("exhibition_det");
 
 			if (action.equals("Save")) {
 
-				// Get the captions as well
+				// Get the captions 
 				String[] captions = new String[12];
 
 				if (!(request.getParameter("input_cap0").equals(""))) {
@@ -179,7 +177,7 @@ public class ExhibitionController implements Controller {
 				}
 
 				session.setAttribute("CAPTIONS", captions);
-				String userAction = request.getParameter("user_action");
+				String userAction = request.getParameter("user_action"); // Get the image movements (drags and drops)
 
 				session.setAttribute("POPULATED_TEMPLATE", userAction);
 
@@ -227,8 +225,8 @@ public class ExhibitionController implements Controller {
 						exhibitionDescription.replace("%", "percent"), templateid,
 						exhibitionCreator.replace("%", "percent"), exmediaString, excaptionsString, exhibitioncover,
 						exhibitionborder));
-
-				if (session.getAttribute("TEMPLATE_ID").equals("1")) {
+				//View the exhibition after it is created
+				if (session.getAttribute("TEMPLATE_ID").equals("1")) { 
 
 					Exhibition exhibition = service.getExhibition(id);
 					String title = exhibition.getTitle();
@@ -289,9 +287,7 @@ public class ExhibitionController implements Controller {
 					request.setAttribute("PopulatedTemplateArray", images);
 					session.setAttribute("CAPTIONS", captionss);
 					// View before saving
-					result = "WEB-INF/frontend/exhibitions/createViewExhibition2.jsp";// View
-																						// before
-																						// saving
+					result = "WEB-INF/frontend/exhibitions/createViewExhibition2.jsp";
 				} else if (session.getAttribute("TEMPLATE_ID").equals("3")) {
 					Exhibition exhibition = service.getExhibition(id);
 					String title = exhibition.getTitle();

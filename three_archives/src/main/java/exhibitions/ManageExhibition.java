@@ -1,3 +1,6 @@
+/*Author: Nicole Petersen
+Description: Data manager class for the exhibition service. This class contains methods to interact with the database
+*/
 package exhibitions;
 
 import common.model.Exhibition;
@@ -13,15 +16,15 @@ public class ManageExhibition {
 	   /* Method to CREATE an exhibition in the database */
 	   public Integer addExhibition(Exhibition exhibition){
 		   Integer ID=0;
-		   System.out.println("started saving");
+		   System.out.println("started saving the exhibition");//log
 			  SessionFactory sessionFactory = new Configuration().configure().buildSessionFactory();
 		      Session session =sessionFactory.openSession();
 		      session.beginTransaction();
-		      ID=(Integer)session.save(exhibition); 
-		      System.out.println("saved");
+		      ID=(Integer)session.save(exhibition); //save the exhibition that was passed to this method
+		      System.out.println("exhibition saved");// log
 		      session.getTransaction().commit();
 		      session.close(); 
-		      System.out.println(ID);
+		      System.out.println("ExhibitionID: "+ID);//log
 		      return ID;
 		   }
 	   /* Method to RETRIEVE an exhibition in the database */
@@ -30,8 +33,7 @@ public class ManageExhibition {
 		   Session session =sessionFactory.openSession();
 		   session.beginTransaction();
 		   session.beginTransaction();
-		   Exhibition dbExhibition = (Exhibition) session.get(Exhibition.class, id);
-		   
+		   Exhibition dbExhibition = (Exhibition) session.get(Exhibition.class, id);// Get an exhibition from the database with the specific id
 		   session.getTransaction().commit();
 		   session.close();
 		   
@@ -49,7 +51,7 @@ public class ManageExhibition {
 	        session.getTransaction().commit();
 	        System.out.println("LISTED");
 	        session.close();
-	        return exhibits;
+	        return exhibits; //Return a List of exhibition objects
 	    }
 	 
 	  
