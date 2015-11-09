@@ -1,8 +1,9 @@
+/*Author: Nicole Petersen
+Description: Exhibition class that defines an exhibition object
+*/
 package common.model;
 
 import java.io.Serializable;
-//import java.util.Random;
-
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -10,11 +11,13 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="EXHIBITION")
+@Table(name="EXHIBITION") //specifies the name of the exhibition table in the database
 public class Exhibition implements Serializable  {
 	private static final long serialVersionUID = 1L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	
+	//Exhibition variables
 	int id;
 	String title;
 	String description;
@@ -25,6 +28,7 @@ public class Exhibition implements Serializable  {
 	String cover;
 	String border;
 	
+	//constructors
 	public Exhibition() {
 
 	}
@@ -44,7 +48,7 @@ public class Exhibition implements Serializable  {
 		this.border=border;
 	}
 	
-	
+	//getters and setters
 	public String getBorder(){
 		return this.border;
 	}

@@ -1,8 +1,10 @@
+/*Author: Nicole Petersen
+Description: This class manages user authentication with the database
+*/
 package common.model;
 
 
 import java.util.List;
-
 import org.hibernate.Criteria;
 import org.hibernate.Session; 
 import org.hibernate.SessionFactory;
@@ -18,6 +20,7 @@ public class ManageUsers {
 		      session.getTransaction().commit();
 		      session.close(); 
 		   }
+		   //method to obtain all user objects from the database
 	   public static java.util.List listAllUsers(){
 		   SessionFactory sessionFactory = new Configuration().configure().buildSessionFactory();
 		   Session session = sessionFactory.openSession();
@@ -28,7 +31,7 @@ public class ManageUsers {
 	        session.close();
 	        return users;
 	    }
-	   
+	   //Method to approve a user
 	   public String approveUser(String username, String password)
 	   {
 		   String approve="incorrect";
