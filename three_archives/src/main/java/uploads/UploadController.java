@@ -1,3 +1,5 @@
+/*Author: Nicole Petersen
+Description: Controller for the Upload Service*/
 package uploads;
 
 import java.io.File;
@@ -24,14 +26,14 @@ import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 
-public class UploadController implements Controller{
+public class UploadController implements Controller{ //Mandatory method
 	
 	public String execute(HttpServletRequest request,HttpServletResponse response) throws Exception 
 	{
 		if (request.getPathInfo().substring(1).contains("redirect_uploads")) 
 		{
 			
-			return "WEB-INF/frontend/Uploads/UploadHome.jsp";
+			return "WEB-INF/frontend/Uploads/UploadHome.jsp"; // go to the upload homepage
 		}
 		return uploads(request, response);
 		
@@ -39,8 +41,8 @@ public class UploadController implements Controller{
 	
 	private String uploads(HttpServletRequest request,HttpServletResponse response) throws Exception{
 
-		String result = "";
-		boolean isMultipart=ServletFileUpload.isMultipartContent(request);	
+		String result = "";// path of JSP to return to 
+		boolean isMultipart=ServletFileUpload.isMultipartContent(request);	// check if the request object contains data submitted in a form with enctype=multipart
 		String action = "";
 		String archive="";
 		UploadService uploadService=new UploadService();
@@ -49,27 +51,27 @@ public class UploadController implements Controller{
 		{
 			try{
 				List<FileItem> multiparts=new ServletFileUpload (new DiskFileItemFactory()).parseRequest(request);
-				for (FileItem item:multiparts){
+				for (FileItem item:multiparts){ //for every file that was submitted in the form
 					if(item.isFormField()){
 						String name=item.getFieldName();
 						String value=item.getString();
-						if (name.equals("actions"))
+						if (name.equals("actions"))//if the name of the file is actions
 						{
 							if (value.equals(""))
 							{
 								action="none";
 							}
-							action=value;
+							action=value;// this variable contains user comments
 						}
-						else if(name.equals("archive"))
+						else if(name.equals("archive")) // if the name of the file is archive
 						{
-								archive=value;
+								archive=value; // set the value of the archive to add to as specified by the user
 						}
-						System.out.println(name+" "+value);
+						System.out.println("file: "+name+" "+value);
 					}
-					else{
-						String name=new File(item.getName()).getName();
-						item.write(new File(name));
+					else{ // if the file is a multimedia file
+						String name=new File(item.getName()).getName(); // get the name of the file
+						item.write(new File(name));// save the file
 					}
 				}
 				if (!(action.equals("none")))
@@ -83,7 +85,7 @@ public class UploadController implements Controller{
 					request.getSession().setAttribute("objects", SearchController.getSearch().findFedoraDigitalObjects("*"));
 					//we need to refresh autocomplete
 					new AutoCompleteUtility().refreshAllAutocompleteFiles();
-					result = "WEB-INF/frontend/Uploads/uploadItems.jsp";
+					result = "WEB-INF/frontend/Uploads/uploadItems.jsp"; 
 				}
 				else{
 					result = "WEB-INF/frontend/Uploads/uploadItems.jsp";

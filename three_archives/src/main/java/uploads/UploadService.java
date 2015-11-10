@@ -1,3 +1,5 @@
+/*Author: Nicole Petersen
+Description: Class that contains services to manage uploaded content*/
 package uploads;
 
 import java.io.BufferedReader;
@@ -16,7 +18,7 @@ import common.fedora.UploadClient;
 public class UploadService {
 
 	public void upload(String files_string, String archive) {
-		UploadClient client = new UploadClient("http://personalhistories.cs.uct.ac.za:8089/fedora", "fedoraAdmin", "3Arch", null);
+		UploadClient client = new UploadClient("http://personalhistories.cs.uct.ac.za:8089/fedora", "fedoraAdmin", "3Arch", null); //credentials for the fedora upload client
 		String filename;
 		String title;
 		String creator;
@@ -42,18 +44,17 @@ public class UploadService {
 		//String file_path;
 		files = files_string.split(delimeter);// split up the different files
 
-		for (int i = 0; i < files.length; i++)// Iterate through the files to
-												// upload each one
+		for (int i = 0; i < files.length; i++)// Iterate through the files to upload each one
 		{
 			String PID;
 			// extract the metadata
 			String delimeter2 = "%";
 			String[] metadataArray;
-
 			metadataArray = files[i].split(delimeter2);
 			filename = metadataArray[0].trim();
-			//System.out.println(file_path);
-			System.out.println(filename);
+			System.out.println("file being considered: "+filename);//log
+			
+			//Build the file XML
 			title = "<dc:title>" + metadataArray[1].trim() + "</dc:title>";
 			creator = "<dc:creator>" + metadataArray[2].trim() + "</dc:creator>";
 			event = metadataArray[3].trim();// event
@@ -86,17 +87,15 @@ public class UploadService {
 			String endTag = "</oai_dc:dc>";
 			try {
 				// create new object
-				//file_path = storage_path + filename;
-				System.out.println("**Finding the file");
-				file2 = new File(filename);//
-				System.out.println("created "+filename);
-				if (file2.isFile())
-				{
-					System.out.println("**File found and created");
+				System.out.println("Finding the file");//log
+				file2 = new File(filename);// get the file 
+				System.out.println("obtained "+filename);//log
+				if (file2.isFile()){
+					System.out.println("File found and created");//log
 				}
-				// get next PID
+				
 
-				HttpMethod newPIDs = client.POST("/objects/nextPID?format=XML");
+				HttpMethod newPIDs = client.POST("/objects/nextPID?format=XML"); // get next PID
 				InputStream newPID_xml = newPIDs.getResponseBodyAsStream();
 				String newPID_xml_String = getStringFromInputStream(newPID_xml);
 
@@ -110,22 +109,12 @@ public class UploadService {
 				String newPID = getPID(archive, changeme_pid);
 				System.out.println(newPID);
 
-				// File url = new File (file_path);
-
-				// File dest= new
-				// File("/home/nox/Applications/apache/apache-tomcat-8.0.24/webapps/content/data/test");
-				// FileUtils.copyFileToDirectory(url, dest);
-
-				// File useThis=new
-				// File("/home/nox/Applications/apache/apache-tomcat-8.0.24/webapps/content/data/test/"+filename);
-
-				// File useThis=new
-				// File("/home/nox/Applications/apache/apache-tomcat-8.0.24/webapps/data/content/"+archive+"/"+filename);
+				
 				System.out.println("Started adding a new object");
 				client.POST("/objects/" + newPID + "/");//
 				System.out.println("added a new object");
-				// add the image to the object
-				if (noXMLformat.equals("image/jpeg")) {
+				
+				if (noXMLformat.equals("image/jpeg")) {// add the multimedia to the object
 					client.POST("/objects/" + newPID + "/datastreams/IMG?controlGroup=M&mimeType="+noXMLformat, file2,false);
 				} else if (noXMLformat.equals("video/mp4")) {
 					client.POST("/objects/" + newPID + "/datastreams/VID?controlGroup=M&mimeType=" + noXMLformat, file2,false);
@@ -144,7 +133,7 @@ public class UploadService {
 		}
 	}
 
-	public static String getPID(String archive, String pid) {
+	public static String getPID(String archive, String pid) {// Method to create the unique object PID
 		String[] parameters = pid.split(":");
 		String tag;
 		String num = parameters[1];

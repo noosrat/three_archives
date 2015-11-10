@@ -1,7 +1,7 @@
-package common.fedora;
+/*Edited by Nicole Petersen
+Description: Class to interact with Fedora*/package common.fedora;
 
 import java.io.File;
-
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpMethod;
 import org.apache.commons.httpclient.UsernamePasswordCredentials;
@@ -29,22 +29,15 @@ public class UploadClient {
 	    protected String realm;
 	   
 	    protected String user_agent_header = null;
-	    protected int max_redirects = 0;
-	    
+	    //constructor
 	    public UploadClient(String repository_url, String username,String password, String realm)throws IllegalArgumentException {
 	        setRepositoryURL(repository_url);
 	        setAuthentication(username, password, realm);
 	    }
-	    
-	    public String getAuthPassword() { return password; }
-	    public String getAuthRealm() { return realm; }
-	    public String getAuthUser() { return username; }
-	    public String getContext() { return context; }
-	    public String getDomain() { return domain; }
-	    public int getMaxRedirects() { return max_redirects; }
-	    public String getPort() { return port; }
-	    public String getProtocol() { return protocol; }
+	    //getters and setters
 
+	   
+	
 	    
 	    public String getRepositoryURL() {
 	        return protocol + "://" + domain + ":" +port + "/" + context;
@@ -57,8 +50,7 @@ public class UploadClient {
 	        setAuthRealm(null);
 	    }
 
-	    public void setAuthentication(String username, String password,
-	                                  String realm) {
+	    public void setAuthentication(String username, String password,String realm) {
 	        setAuthUsername(username);
 	        setAuthPassword(password);
 	        setAuthRealm(realm);
@@ -190,10 +182,7 @@ public class UploadClient {
 	        return http_client;
 	    }
 
-	    /**
-	     * creates an HTTP method object.
-	     *
-	     */
+	    
 	    protected HttpMethod getMethod(String method_name, String query_uri)throws IllegalArgumentException {
 	        String request_url = getRequestURL(query_uri);
 	        HttpMethod http_method;
@@ -270,7 +259,7 @@ public class UploadClient {
 	            return http_method;
 	        
 	    }
-
+		//class to make Fedora metadata XML
 	    public String makeXML(String title,String creator, String event, String publisher, String contributor, String date,String resourcetype, String format, String source, String language, String relation, String location, String rights, String collection, String cords,String subject, String annotations, String description )
 	    {
 
