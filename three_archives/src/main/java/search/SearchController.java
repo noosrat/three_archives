@@ -67,14 +67,17 @@ public class SearchController implements Controller {
 					searchFedoraDigitalObjects(request);
 				}
 			} catch (SolrServerException exception) {
-				request.setAttribute("message",
-						"Something seems to have gone wrong with SOLR" + exception.getStackTrace());
+				request.setAttribute("message", "An error occured.  Please contact IT");
+				System.out.println("Something seems to have gone wrong with SOLR" + exception.getStackTrace());
 			} catch (FedoraException exception) {
-				request.setAttribute("message",
-						"Something seems to have gone wrong with Fedora" + exception.getStackTrace());
+				System.out.println("Something seems to have gone wrong with Fedora" + exception.getStackTrace());
 
 			} catch (Exception exception) {
-				request.setAttribute("message", exception.getStackTrace());
+
+				request.setAttribute("message", "An error occurred.  Please contact IT");
+				System.out.println("Something seems to have gone wrong when trying to conduct a search");
+				exception.printStackTrace();
+
 			}
 		}
 		request.getSession().setAttribute("browseCategory", null);
@@ -129,8 +132,10 @@ public class SearchController implements Controller {
 			// search items..etc with our one selected and then they can still
 			// put a value into the text box
 			ArrayList<String> categories = SearchController.retrieveSearchCategories();
-			categories.remove(categories.indexOf(queryCategory.name()));
-			categories.add(0, queryCategory.name());
+			if (categories.indexOf(queryCategory.name()) > -1) {
+				categories.remove(categories.indexOf(queryCategory.name()));
+				categories.add(0, queryCategory.name());
+			}
 			request.setAttribute("searchCategories", categories);
 			if (s == null || s.isEmpty()) {
 				return;
@@ -156,6 +161,7 @@ public class SearchController implements Controller {
 			}
 		}
 
+		System.out.println("SEARCH STRING " + terms);
 		Set<FedoraDigitalObject> digitalObjects = new HashSet<FedoraDigitalObject>();
 		digitalObjects = getSearch().findFedoraDigitalObjects(new String(terms));
 		filterFedoraObjectsForSpecificArchive((String) request.getSession().getAttribute("MEDIA_PREFIX"),

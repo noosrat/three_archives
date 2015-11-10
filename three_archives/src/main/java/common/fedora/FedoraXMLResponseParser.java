@@ -61,8 +61,7 @@ public class FedoraXMLResponseParser {
 		try {
 			initialise();
 		} catch (Exception ex) {
-			throw new FedoraException(
-					"Unable to intialise XML Response Parser ", ex);
+			throw new FedoraException("Unable to intialise XML Response Parser ", ex);
 		}
 	}
 
@@ -75,10 +74,8 @@ public class FedoraXMLResponseParser {
 	 * @throws SAXException
 	 * @throws IOException
 	 */
-	private void initialise() throws ParserConfigurationException,
-			SAXException, IOException {
-		setDocument(DocumentBuilderFactory.newInstance().newDocumentBuilder()
-				.parse(response));
+	private void initialise() throws ParserConfigurationException, SAXException, IOException {
+		setDocument(DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(response));
 		getDocument().getDocumentElement().normalize();
 	}
 
@@ -138,8 +135,7 @@ public class FedoraXMLResponseParser {
 		for (int index = 0; index < nodeList.getLength(); index++) {
 			Node node = nodeList.item(index);
 			Element element = (Element) node;
-			result.add(element.getElementsByTagName("pid").item(0)
-					.getTextContent());
+			result.add(element.getElementsByTagName("pid").item(0).getTextContent());
 		}
 
 		return result;
@@ -154,14 +150,11 @@ public class FedoraXMLResponseParser {
 	 */
 	public List<String> parseGetObjectHistory() {
 		List<String> result = new ArrayList<String>();
-		NodeList nodeList = document
-				.getElementsByTagName("fedoraObjectHistory");
+		NodeList nodeList = document.getElementsByTagName("fedoraObjectHistory");
 		Node node = nodeList.item(0);
 		Element element = (Element) node;
-		for (int index = 0; index < element.getElementsByTagName(
-				"objectChangeDate").getLength(); index++) {
-			result.add(element.getElementsByTagName("objectChangeDate")
-					.item(index).getTextContent());
+		for (int index = 0; index < element.getElementsByTagName("objectChangeDate").getLength(); index++) {
+			result.add(element.getElementsByTagName("objectChangeDate").item(index).getTextContent());
 		}
 
 		return result;
@@ -179,23 +172,17 @@ public class FedoraXMLResponseParser {
 	 * 
 	 * @throws FedoraException
 	 */
-	public void parseGetObjectProfile(FedoraDigitalObject fedoraDigitalObject)
-			throws FedoraException {
+	public void parseGetObjectProfile(FedoraDigitalObject fedoraDigitalObject) throws FedoraException {
 		NodeList nodeList = document.getElementsByTagName("objectProfile");
 		Node node = nodeList.item(0);
 		Element element = (Element) node;
 
-		String dateCreated = element.getElementsByTagName("objCreateDate")
-				.item(0).getTextContent();
-		String lastModified = element.getElementsByTagName("objLastModDate")
-				.item(0).getTextContent();
-		String state = element.getElementsByTagName("objState").item(0)
-				.getTextContent();
+		String dateCreated = element.getElementsByTagName("objCreateDate").item(0).getTextContent();
+		String lastModified = element.getElementsByTagName("objLastModDate").item(0).getTextContent();
+		String state = element.getElementsByTagName("objState").item(0).getTextContent();
 		try {
-			fedoraDigitalObject
-					.setDateCreated(parseFedoraDateToJavaDate(dateCreated));
-			fedoraDigitalObject
-					.setDateLastModified(parseFedoraDateToJavaDate(lastModified));
+			fedoraDigitalObject.setDateCreated(parseFedoraDateToJavaDate(dateCreated));
+			fedoraDigitalObject.setDateLastModified(parseFedoraDateToJavaDate(lastModified));
 		} catch (ParseException e) {
 			throw new FedoraException("Could not convert date", e);
 		}
@@ -217,10 +204,8 @@ public class FedoraXMLResponseParser {
 		Node node = nodeList.item(0);
 		Element element = (Element) node;
 
-		for (int index = 0; index < element.getElementsByTagName("datastream")
-				.getLength(); index++) {
-			DatastreamID dsID = DatastreamID.valueOf(element
-					.getElementsByTagName("datastream").item(index)
+		for (int index = 0; index < element.getElementsByTagName("datastream").getLength(); index++) {
+			DatastreamID dsID = DatastreamID.valueOf(element.getElementsByTagName("datastream").item(index)
 					.getAttributes().getNamedItem("dsid").getTextContent());
 			result.add(dsID);
 		}
@@ -245,8 +230,7 @@ public class FedoraXMLResponseParser {
 	 */
 	public DublinCoreDatastream parseDublinCoreDatastream(Datastream datastream)
 			throws ParserConfigurationException, SAXException, IOException {
-		DublinCoreDatastream dublinCoreDatastream = new DublinCoreDatastream(
-				datastream);
+		DublinCoreDatastream dublinCoreDatastream = new DublinCoreDatastream(datastream);
 		NodeList nodeList = document.getElementsByTagName("oai_dc:dc");
 		Node node = nodeList.item(0);
 		Element element = (Element) node;
@@ -255,25 +239,25 @@ public class FedoraXMLResponseParser {
 			String tagName = "dc:" + dc.getDescription();
 			Node tag = element.getElementsByTagName(tagName).item(0);
 			if (tag != null) {
-				String textContent = element.getElementsByTagName(tagName)
-						.item(0).getTextContent();
-				if (textContent != null && !textContent.trim().isEmpty()) {
+				String content = element.getElementsByTagName(tagName).item(0).getTextContent();
+				if (content != null && !content.trim().isEmpty()) {
+					String textContent = content.trim();
 					if (dc.equals(DublinCore.DESCRIPTION)) {
 						// <dc:description>Collection%Event%Description%Comment</dc:description>
 						String[] description = textContent.split("%");
 						switch (description.length) {
 						case 4:
-							dublinCoreMetadata.put("ANNOTATIONS",
-									description[3]);
+							if (!description[3].trim().isEmpty())
+								dublinCoreMetadata.put("ANNOTATIONS", description[3]);
 						case 3:
-							dublinCoreMetadata.put(dc.name(),
-									description[2].trim());
+							if (!description[2].trim().isEmpty())
+								dublinCoreMetadata.put(dc.name(), description[2].trim());
 						case 2:
-							dublinCoreMetadata.put("EVENT",
-									description[1].trim());
+							if (!description[1].trim().isEmpty())
+								dublinCoreMetadata.put("EVENT", description[1].trim());
 						case 1:
-							dublinCoreMetadata.put("COLLECTION",
-									description[0].trim());
+							if (!description[0].trim().isEmpty())
+								dublinCoreMetadata.put("COLLECTION", description[0].trim());
 							break;
 						}
 
@@ -281,13 +265,12 @@ public class FedoraXMLResponseParser {
 						// <dc:coverage>Location:%21,22,11</dc:coverage>
 						String[] coverage = textContent.split("%");
 						if (coverage.length != 0) {
-							dublinCoreMetadata.put("LOCATION",
-									coverage[0].trim());
-							dublinCoreMetadata.put(dc.name(),
-									coverage[1].trim());
+							if (!coverage[0].trim().isEmpty())
+								dublinCoreMetadata.put("LOCATION", coverage[0].trim());
+								dublinCoreMetadata.put(dc.name(), coverage[1].trim());
 						}
 					} else {
-						dublinCoreMetadata.put(dc.name(), textContent.trim());
+						dublinCoreMetadata.put(dc.name(), textContent);
 					}
 				}
 			}
@@ -311,44 +294,25 @@ public class FedoraXMLResponseParser {
 	 * @return {@link Datastream} instance containing the parsed information
 	 * @throws FedoraException
 	 */
-	private Datastream parseDatastream(Node node, String tagPrefix)
-			throws FedoraException {
+	private Datastream parseDatastream(Node node, String tagPrefix) throws FedoraException {
 		Element element = (Element) node;
 		Datastream datastream = new Datastream();
-		DatastreamID dsID = DatastreamID.valueOf(element.getAttributes()
-				.getNamedItem("dsID").getTextContent());
-		String pid = element.getAttributes().getNamedItem("pid")
-				.getTextContent();
+		DatastreamID dsID = DatastreamID.valueOf(element.getAttributes().getNamedItem("dsID").getTextContent());
+		String pid = element.getAttributes().getNamedItem("pid").getTextContent();
 		datastream.setPid(pid);
 		datastream.setDatastreamID(dsID);
-		String label = element.getElementsByTagName(tagPrefix + "dsLabel")
-				.item(0).getTextContent();
-		String version = element
-				.getElementsByTagName(tagPrefix + "dsVersionID").item(0)
-				.getTextContent();
-		String created = element
-				.getElementsByTagName(tagPrefix + "dsCreateDate").item(0)
-				.getTextContent();
-		String state = element.getElementsByTagName(tagPrefix + "dsState")
-				.item(0).getTextContent();
+		String label = element.getElementsByTagName(tagPrefix + "dsLabel").item(0).getTextContent();
+		String version = element.getElementsByTagName(tagPrefix + "dsVersionID").item(0).getTextContent();
+		String created = element.getElementsByTagName(tagPrefix + "dsCreateDate").item(0).getTextContent();
+		String state = element.getElementsByTagName(tagPrefix + "dsState").item(0).getTextContent();
 
-		String[] mimeType = element.getElementsByTagName(tagPrefix + "dsMIME")
-				.item(0).getTextContent().split("/");
+		String[] mimeType = element.getElementsByTagName(tagPrefix + "dsMIME").item(0).getTextContent().split("/");
 		MediaType mediaType = new MediaType(mimeType[0], mimeType[1]);
-		String formatURI = element
-				.getElementsByTagName(tagPrefix + "dsFormatURI").item(0)
-				.getTextContent();
-		String controlGroup = element
-				.getElementsByTagName(tagPrefix + "dsControlGroup").item(0)
-				.getTextContent();
-		String size = element.getElementsByTagName(tagPrefix + "dsSize")
-				.item(0).getTextContent();
-		String versionable = element
-				.getElementsByTagName(tagPrefix + "dsVersionable").item(0)
-				.getTextContent();
-		String location = element
-				.getElementsByTagName(tagPrefix + "dsLocation").item(0)
-				.getTextContent();
+		String formatURI = element.getElementsByTagName(tagPrefix + "dsFormatURI").item(0).getTextContent();
+		String controlGroup = element.getElementsByTagName(tagPrefix + "dsControlGroup").item(0).getTextContent();
+		String size = element.getElementsByTagName(tagPrefix + "dsSize").item(0).getTextContent();
+		String versionable = element.getElementsByTagName(tagPrefix + "dsVersionable").item(0).getTextContent();
+		String location = element.getElementsByTagName(tagPrefix + "dsLocation").item(0).getTextContent();
 		datastream.setLabel(label);
 
 		try {
@@ -432,13 +396,11 @@ public class FedoraXMLResponseParser {
 	 * @return {@link Date} instance of the parsed date
 	 * @throws ParseException
 	 */
-	private Date parseFedoraDateToJavaDate(String fedoraDate)
-			throws ParseException {
+	private Date parseFedoraDateToJavaDate(String fedoraDate) throws ParseException {
 		StringBuilder fed = new StringBuilder(fedoraDate);
 		fed.deleteCharAt(fed.indexOf("Z"));
 		fed.replace(fed.indexOf("T"), fed.indexOf("T") + 1, " ");
-		SimpleDateFormat formatter = new SimpleDateFormat(
-				"yyyy-MM-dd HH:mm:ss.SSS");
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
 		Date date = formatter.parse(fed.toString());
 		Calendar c = Calendar.getInstance();
 		c.setTime(date);

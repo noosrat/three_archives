@@ -117,8 +117,9 @@ public class ServiceDelegator {
 				url = CONTROLLERS.get("general").execute(request, response);
 			}
 		} catch (Exception exception) {
-			request.setAttribute("message", exception.getMessage());
-			System.out.println(exception);
+			request.setAttribute("message", "An error occured.  Please contact IT");
+			System.out.println("An exception has occurred");
+			exception.printStackTrace();
 
 		}
 

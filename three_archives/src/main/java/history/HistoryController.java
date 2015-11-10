@@ -115,7 +115,7 @@ public class HistoryController implements Controller {
 		}
 		if (value == null && value.isEmpty()) {
 			request.setAttribute("message",
-					"Something seems to have gone wrong. Your filter value is null");
+					"An error occured.  Please contact IT");
 			return;
 		}
 		Set<FedoraDigitalObject> objectsToFilter = (Set<FedoraDigitalObject>) request

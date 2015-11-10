@@ -19,6 +19,8 @@ import common.fedora.DatastreamID;
 import common.fedora.DublinCore;
 import common.fedora.DublinCoreDatastream;
 import common.fedora.FedoraDigitalObject;
+import common.fedora.FedoraDigitalObjectDateComparator;
+import common.fedora.FedoraDigitalObjectTitleComparator;
 import common.fedora.FedoraException;
 
 /**

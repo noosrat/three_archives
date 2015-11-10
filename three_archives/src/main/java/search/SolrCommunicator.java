@@ -30,19 +30,19 @@ public class SolrCommunicator {
 	 * within the server and within solr Here we see that we are accessing
 	 * "collection1"
 	 */
-	private static String url = "http://localhost:8089/solr/collection1";
+	private static final String URL = "http://localhost:8089/solr/collection1";
 	/**
 	 * The {@link SolrServer} instance allowing for the connection to the Solr
-	 * server URL specified in {@link #url}
+	 * server URL specified in {@link #URL}
 	 */
-	private static final SolrServer solr;
+	private static final SolrServer SOLR;
 
 	/**
 	 * Static initialiser initialising our single instance of the SolrServer to
 	 * be used to communicate with the search engine
 	 */
 	static {
-		solr = new HttpSolrServer(url);
+		SOLR = new HttpSolrServer(URL);
 	}
 
 	/**
@@ -84,7 +84,7 @@ public class SolrCommunicator {
 	private static ArrayList<String> solrResponse(SolrQuery solrQuery)
 			throws SolrServerException {
 		System.out.println("in SOLR response");
-		QueryResponse queryResponse = solr.query(solrQuery);
+		QueryResponse queryResponse = SOLR.query(solrQuery);
 		SolrDocumentList list = queryResponse.getResults();
 		System.out.println("SOLR response size: " + list.size());
 		System.out.println("SOLR response size: " + list.getNumFound());

@@ -49,7 +49,7 @@ public class History extends Service {
 	 * The {@link HashSet} instance representing the FedoraDigitalObjects that
 	 * have been modified or added since the users' last visit to the archives
 	 */
-	private static HashSet<FedoraDigitalObject> objectsSinceLastVisit = new HashSet<FedoraDigitalObject>();
+	private HashSet<FedoraDigitalObject> objectsSinceLastVisit = new HashSet<FedoraDigitalObject>();
 
 	/**
 	 * The method responsible for retrieving the FedoraDigitalObjects that have
@@ -106,7 +106,7 @@ public class History extends Service {
 	 *            the {@link HashSet} instance repersenting the objects recently
 	 *            modified
 	 */
-	private static void setObjectsSinceLastVisit(
+	private void setObjectsSinceLastVisit(
 			HashSet<FedoraDigitalObject> fedoraDigitalObjects) {
 		objectsSinceLastVisit = fedoraDigitalObjects;
 

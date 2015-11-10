@@ -110,11 +110,11 @@ public class FedoraGetRequest {
 	/**
 	 * Sets the pid of the object being dealt with
 	 * 
-	 * @param persistentIdentifier
+	 * @param pid
 	 */
 
-	public void setPersistentIdentifier(String persistentIdentifier) {
-		this.pid = persistentIdentifier;
+	public void setPid(String pid) {
+		this.pid = pid;
 	}
 
 	/**

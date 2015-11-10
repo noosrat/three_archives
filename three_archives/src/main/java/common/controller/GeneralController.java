@@ -160,7 +160,7 @@ public class GeneralController implements Controller {
 			}
 		} else {
 			request.setAttribute("message",
-					"SOMETHING SEEMS TO HAVE GONE WRONG.  CONTACT IT");
+					"An error occured.  Please contact IT");
 		}
 	}
 

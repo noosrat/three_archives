@@ -1,11 +1,6 @@
-package search;
+package common.fedora;
 
 import java.util.Comparator;
-
-import common.fedora.DatastreamID;
-import common.fedora.DublinCore;
-import common.fedora.DublinCoreDatastream;
-import common.fedora.FedoraDigitalObject;
 
 /**
  * The {@code FedoraDigitalObjectDateComparator} allows for a collection of
