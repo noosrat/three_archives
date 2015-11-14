@@ -189,7 +189,7 @@
 												<textarea id="cartItems" name="addedtocart"
 													readonly=readonly style="display: none;"></textarea>
 												<input type="submit" class="btn btn-default"
-													value="Download Selected Items" />
+													value="Add Selected Items to My Collection" />
 												<script type="text/javascript">
 													console
 															.log("${digitalObject.pid}");
@@ -274,7 +274,7 @@
 										</tr>
 
 										<tr>
-											<td align="center"><img id="${digitalObject.pid}"
+											<td align="center"><img id="item:${digitalObject.pid}"
 												src="${digitalObject.datastreams['IMG'].content}"
 												class="img-thumbnail img-responsive" alt="image unavailable"
 												readonly="true" data-pid="${digitalObject.pid}"
@@ -306,8 +306,26 @@
 						<form name="map" method="post"
 							action="${pageContext.request.contextPath}/archives/redirect_maps/place?image=${digitalObject.pid}">
 							<!-- place word map in url-->
-							<input type="submit" class="btn btn-default" value="Place Me" />
+							<input type="submit" class="btn btn-default" value="Add to Map" />
 						</form>
+						<button id="Tag" data-pid="${digitalObject.pid}" 
+						onclick="triggerdblclick(this);"
+						class="btn btn-default">Tag Image</button>
+								<script>
+								function triggerdblclick(img)
+							    {
+								var event = new MouseEvent('dblclick', {
+									'view': window,
+							    		'bubbles': true,
+							    		'cancelable': true});
+								console.log(img.getAttribute("data-pid"));
+							       var elem = document.getElementById("item:"+img.getAttribute("data-pid"))
+							       console.log(elem);
+							       elem.dispatchEvent(event);
+							       img.style.display = "none";
+							       document.getElementById("btn:"+img.getAttribute("data-pid")).style.display = "inline"
+							       }
+								</script>
 						<form action="${pageContext.request.contextPath}/archives/browse">
 							<textarea id="id:${digitalObject.pid}" name="pid"
 								readonly=readonly style="display: none;">${digitalObject.pid}</textarea>
@@ -316,7 +334,8 @@
 							<input id="btn:${digitalObject.pid}" type="submit"
 								class="btn btn-default" data-pid="${digitalObject.pid}"
 								data-src="${digitalObject.datastreams['IMG'].content}"
-								onclick="see(this)" value="Save Comments" />
+								style="display: none;"
+								onclick="see(this)" value="Done Tagging" />
 						</form>
 					<tr>
 				</table>
