@@ -65,7 +65,7 @@
       }
     </style>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAkDhZAIvYefYnMLplLMYFBxACznT-8lmA"></script>
-    <!--<script src="${pageContext.request.contextPath}/js/markerclusterer.js" type="text/javascript"></script>-->
+    <script src="${pageContext.request.contextPath}/js/markerclusterer.js" type="text/javascript"></script>
 <script>
 var map;
 function initialize() {
@@ -172,7 +172,8 @@ function initialize() {
   	  	markers.push(newmarker);
   	  	placed=1;}
   	  });
-  	
+  
+  var mc = new MarkerClusterer(map, markers);
   //var mcOptions = {gridSize: 50, maxZoom: 15};
   //var markers = [marker1, marker2, marker3, marker4];
 }
