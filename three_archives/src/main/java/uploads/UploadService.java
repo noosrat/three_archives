@@ -178,5 +178,9 @@ public class UploadService {
 		return sb.toString();
 
 	}
+	public String getPIDT(String archive, String pid) {
+		return getPID(archive,pid);
+		
+	}
 
 }
