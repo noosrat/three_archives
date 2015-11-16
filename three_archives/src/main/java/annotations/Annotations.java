@@ -1,3 +1,7 @@
+/*Author: Noosrat Hossain
+Description: Service class for annotations manages annotations. Contains methods that update annotations on repository.
+*/
+
 package annotations;
 
 import java.util.Set;
@@ -9,12 +13,27 @@ import common.fedora.FedoraDigitalObject;
 import common.fedora.FedoraException;
 import common.fedora.UploadClient;
 
+/**
+ * The {@code Annotations} is a {@link Service} responsible for the management of
+ * annotations. Containing methos that update annotations on repository.
+ * 
+ * @author hssnoo003
+ *
+ */
+
 public class Annotations extends Service{
 
 	public Annotations() {
 		super();
 	}
 	
+	/**
+	 * The method responsible for updating the annotations field in the {@link FedoraDigitalObject}
+	 * Using the put method in Fedora's RestAPI allows updating of existing {@link FedoraDigitalObject}
+	 * 
+	 * @param curret
+	 *            {@link HashSet} storing all metadata currently held by the {@link FedoraDigitalObject}
+	 */
 	public Set<FedoraDigitalObject> addAnnotation(String pid, String annotations, Set<FedoraDigitalObject> current) throws FedoraException, Exception{
 		
 		System.out.println("madeit");
@@ -61,6 +80,12 @@ public class Annotations extends Service{
 		return current;
 	}
 	
+	/**
+	 * Method to ensure all fields are sent to fedora even if they are empty.
+	 * 
+	 * @param string
+	 *            {@link String} holding the metadat field content
+	 */
 	String makesure(String string)
 	{	
 		if (string == null)
