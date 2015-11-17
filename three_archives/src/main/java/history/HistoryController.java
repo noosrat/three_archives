@@ -32,7 +32,7 @@ public class HistoryController implements Controller {
 	/**
 	 * The {@link String} instance representing the archive being investigated
 	 */
-	private String archive;
+	private static String archive;
 
 	/**
 	 * The defaultCookies for any user

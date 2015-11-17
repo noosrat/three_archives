@@ -28,7 +28,8 @@
 	rel="stylesheet">
 <link href="${pageContext.request.contextPath}/css/typeahead.css"
 	rel="stylesheet">
-
+<link rel="stylesheet"
+	href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
 <script type="text/javascript"
 	src="${pageContext.request.contextPath}/js/jquery-1.11.3.js"></script>
 <script type="text/javascript"
@@ -54,11 +55,29 @@
 		});
 	});
 </script>
+<style>
+.carousel-inner>.item>img, .carousel-inner>.item>a>img {
+	margin: auto;
+}
+
+.Sequins {
+	width: 150px;
+	height: 100px;
+	background-color: #ffffff;
+	border: 1px solid black;
+	opacity: 0.8;
+}
+
+h3 {
+	margin: 5%;
+	font-weight: bold;
+	color: #000000;
+}
+</style>
 </head>
 
 <body>
 
-	<!-- Navigation -->
 	<!-- Navigation -->
 	<nav class="navbar navbar-inverse navbar-fixed-top navbar-left"
 		role="navigation">
@@ -95,6 +114,7 @@
 							</c:choose>
 						</c:if>
 					</c:forEach>
+
 					<%
 						if (session.getAttribute("USER") != null) {
 							if (session.getAttribute("USER").equals("ADMINISTRATOR")) {
@@ -155,65 +175,32 @@
 		</div>
 	</nav>
 
-	<br>
-	<br>
-	<br>
-	<br>
 	<div class="container">
-
+		<p></p>
+		<br> <br> <br>
 		<div class="row">
-			<div class="col-md-3" id="leftCol">
-
-				<div class="well"
-					style="background-color: #D4CB90; opacity: 0.8; color: black">
-					<ul class="nav nav-stacked" id="sidebar">
-						<li><a href="#sec0">About Harfield Village</a></li>
-						<li><a href="#sec1">Map</a></li>
-						<li><a href="#sec3">Contact</a></li>
-					</ul>
-				</div>
-
-			</div>
-			<div class="col-md-9">
-				<h2 id="sec0">About Harfield Village</h2>
-				<p>The Harfield Village archive is a collection of artefacts
+			<div class="col-lg-12" style="text-align: center">
+				<h2>About Harfield Village</h2>
+				<div class="well well-lg" style="background-color: #999966">
+					<p>The Harfield Village archive is a collection of artefacts
 					comprising of images, videos, letters, statements and accounts of
 					residents who were forcibly-removed from the Claremont suburb
 					during the times of apartheid in South Africa .</p>
-				<hr>
-				<h2 id="sec1">Map</h2>
-				<p>
-				<div class="row">
-					<div class="col-lg-12">
-						<img src="${pageContext.request.contextPath}/images/harfieldV.png" class="img-responsive">
-					</div>
-				</div></p>
-				<hr>
 
-
-				<hr>
-
-				<h2 id="sec3">Contact</h2>
-				<table style="width: 100%">
-
-					<td><br>University of Cape Town<br> 31 -37 Orange
-						Street<br> Gardens, 8001<br> Cape Town, South Africa<br>
-						Ph 021 480 7151<br> email: jm.higgins@uct.ac.za</td>
-					<td><img
-						src="${pageContext.request.contextPath}/images/CCALogo.png"
-						style="width: 70%"></td>
-
- 
-				</table>
-				<br><br><Br><br><br>
+				</div>
 			</div>
 		</div>
-
-	<br> <br> 
+		<div class="row">
+		<div class="col-lg-12">
+						<img src="${pageContext.request.contextPath}/images/harfieldV.png" class="img-responsive">
+					</div>
+		
+		</div>
+		<br> <br> 
 		<div class="row">
 			<div class="col-lg-12" style="text-align: center">
 				<h2>Contribute to the archive</h2>
-				<div class="well well-lg" style="background-color: #FFF0F0">
+				<div class="well well-lg" style="background-color: #999966">
 					<h4>Please contact:</h4>
 					<p>Centre for Curating the Archive, University of Cape Town:</p>
 					<p>www.cca.uct.ac.za</p>
@@ -223,6 +210,7 @@
 				</div>
 			</div>
 		</div>
+		<!-- /.row -->
 	</div>
 	<div class="modal fade" id="login" role="dialog" style="z-index: 30000">
 		<form role="form" method="post"
@@ -256,6 +244,7 @@
 		</form>
 
 	</div>
+
 	<nav class="navbar navbar-inverse navbar-fixed-bottom navbar-fluid"
 		role="navigation">
 		<div class="container-fluid">
@@ -324,75 +313,11 @@
 		</div>
 		<!-- /.container -->
 	</nav>
-	<style>
-.ad {
-	position: absolute;
-	bottom: 70px;
-	right: 48px;
-	z-index: 992;
-	background-color: #f3f3f3;
-	position: fixed;
-	width: 155px;
-	padding: 1px;
-}
+	<!-- /.container -->
 
-.ad-btn-hide {
-	position: absolute;
-	top: -10px;
-	left: -12px;
-	background: #fefefe;
-	background: rgba(240, 240, 240, 0.9);
-	border: 0;
-	border-radius: 26px;
-	cursor: pointer;
-	padding: 2px;
-	height: 25px;
-	width: 25px;
-	font-size: 14px;
-	vertical-align: top;
-	outline: 0;
-}
 
-.carbon-img {
-	float: left;
-	padding: 10px;
-}
+	<!-- Script to Activate the Carousel -->
 
-.carbon-text {
-	color: #888;
-	display: inline-block;
-	font-family: Verdana;
-	font-size: 11px;
-	font-weight: 400;
-	height: 60px;
-	margin-left: 9px;
-	width: 142px;
-	padding-top: 10px;
-}
-
-.carbon-text:hover {
-	color: #666;
-}
-
-.carbon-poweredby {
-	color: #6A6A6A;
-	float: left;
-	font-family: Verdana;
-	font-size: 11px;
-	font-weight: 400;
-	margin-left: 10px;
-	margin-top: 13px;
-	text-align: center;
-}
-</style>
-	<div class="ad collapse in">
-		<button class="ad-btn-hide" data-toggle="collapse" data-target=".ad">&times;</button>
-		<script async type="text/javascript"
-			src="//cdn.carbonads.com/carbon.js?zoneid=1673&serve=C6AILKT&placement=bootplycom"
-			id="_carbonads_js"></script>
-	</div>
-
-</body>
 
 </body>
 
