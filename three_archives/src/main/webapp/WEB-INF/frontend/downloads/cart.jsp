@@ -148,7 +148,7 @@ console.log(remove);
 									<table style="width: 100%">
 										<td align="center">${digitalObject.datastreams['DC'].dublinCoreMetadata['TITLE']}</td>
 										<td align="right"><input align="right"
-											id="${digitalObject.pid}" type="checkbox"
+											id="${digitalObject.pid}" type="checkbox" data-pid ="${digitalObject.pid}"
 											onchange="change(this)" checked/></td>
 									</table>
 								</div>
