@@ -308,7 +308,7 @@
 							<!-- place word map in url-->
 							<input type="submit" class="btn btn-default" value="Add to Map" />
 						</form>
-						<button id="Tag" data-pid="${digitalObject.pid}" 
+						<button id="tag:${digitalObject.pid}" data-pid="${digitalObject.pid}" 
 						onclick="triggerdblclick(this);"
 						class="btn btn-default">Tag Image</button>
 								<script>
@@ -431,6 +431,9 @@ $(document).ready(function() {
 							annotation[4]));
 				}
 			}
+			
+			document.getElementById("tag:"+id.getAttribute("data-pid")).style.display = "none";
+			document.getElementById("btn:"+id.getAttribute("data-pid")).style.display = "inline"
 
 			console.log("b");
 			//anno.activateSelector(id);
