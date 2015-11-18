@@ -323,21 +323,21 @@ h3 {
 			<!-- Brand and toggle get grouped for better mobile display -->
 			<div class="navbar-header">
 				<div class="row">
-					<div class="navbar-header col-sm-7">
+					<div class="navbar-header col-sm-6">
 						<a class="navbar-brand" href="${pageContext.request.contextPath}"><span
 							class="glyphicon glyphicon-home"></span> Personal Histories</a>
 					</div>
 					<%
 						if (session.getAttribute("USER") == null) {
 					%>
-					<div class="col-sm-4"></div>
+					<div class="col-sm-5"></div>
 					<div class="col-sm-1">
 						<a data-toggle="modal" data-target="#login" class="navbar-brand" href="#login">Login</a>
 					</div>
 					<%
 						} else if (session.getAttribute("USER").equals("incorrect")) {
 					%>
-					<div class="col-sm-4">
+					<div class="col-sm-5">
 						<div class="navbar-brand">Credentials incorrect</div>
 					</div>
 					<div class="col-sm-1">
@@ -347,7 +347,7 @@ h3 {
 					<%
 						} else if (session.getAttribute("USER").equals("false")) {
 					%>
-					<div class="col-sm-4"></div>
+					<div class="col-sm-5"></div>
 					<div class="col-sm-1">
 						<a data-toggle="modal" data-target="#login"
 							class="navbar-brand" href="#login">Login</a>
@@ -355,7 +355,7 @@ h3 {
 					<%
 						} else if (session.getAttribute("USER").equals("ADMINISTRATOR")) {
 					%>
-					<div class="col-sm-4">
+					<div class="col-sm-5">
 						<div class="navbar-brand">Logged on as Administrator</div>
 					</div>
 					<div class="col-sm-1">
@@ -368,7 +368,7 @@ h3 {
 					<%
 						} else if (session.getAttribute("USER").equals("privileged")) {
 					%>
-					<div class="col-sm-4">
+					<div class="col-sm-5">
 						<div class="navbar-brand">Logged on as a privileged user</div>
 					</div>
 					<div class="col-sm-1">

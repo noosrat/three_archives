@@ -23,7 +23,7 @@ public class ExhibitionController implements Controller {
 	public String execute(HttpServletRequest request, HttpServletResponse response) throws Exception { // Mandatory method for a class that implements Controller
 		if (request.getPathInfo().substring(1).contains("redirect_exhibitions")) { // IF the user wants to create or view exhibitions, go to the exhibition home page
 			HttpSession session = request.getSession();
-			session.setAttribute("ARCHIVE", "seqiuns");
+			
 			return "WEB-INF/frontend/exhibitions/exhibitionHome.jsp";
 		}
 		return exhibitions(request, response);

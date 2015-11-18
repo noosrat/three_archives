@@ -52,15 +52,35 @@
 				<div id="navbar" class="collapse navbar-collapse"
 					id="bs-example-navbar-collapse-1">
 					<ul class="nav navbar-nav">
-						<c:forEach var="service" items="${SERVICES}">
-							<c:if test="${service.value!='' && service.value!= ' '}">
-								<li><a
-									href="${pageContext.request.contextPath}/archives/${service.value}">${service.key}</a></li>
-								<li>
-							</c:if>
-						</c:forEach>
+					<c:forEach var="service" items="${SERVICES}">
+						<c:if test="${service.value!='' && service.value!= ' '}">
 
-					</ul>
+							<c:choose>
+								<c:when test="${service.key eq 'Uploads'}">
+									<%if (session.getAttribute("USER")!=null){
+										if (session.getAttribute("USER").equals("ADMINISTRATOR")){%>
+									<li><a
+										href="${pageContext.request.contextPath}/archives/${service.value}">${service.key}</a></li>
+									<%}}%>
+								</c:when>
+								<c:otherwise>
+									<li><a
+										href="${pageContext.request.contextPath}/archives/${service.value}">${service.key}</a></li>
+									<li>
+								</c:otherwise>
+							</c:choose>
+						</c:if>
+					</c:forEach>
+					<!--add user stuff here-->
+					<%if (session.getAttribute("USER")!=null){
+						if (session.getAttribute("USER").equals("ADMINISTRATOR")){%>
+					
+
+					<li><a
+						href="${pageContext.request.contextPath}/archives/redirect_user">Users</a></li>
+					<%}}%>
+
+				</ul>
 					<c:if test="${not empty SERVICES['Browse']}">
 						<ul class="nav navbar-nav navbar-right top-nav">
 							<li class="dropdown"><a
