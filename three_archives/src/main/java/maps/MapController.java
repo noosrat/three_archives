@@ -47,9 +47,9 @@ public class MapController implements Controller {
 		Map search = new Map();
 		request.setAttribute("placeObject", search.place("ms:3"));//dummy fedora object
 		request.setAttribute("placement", 1);
-			
+		System.out.println(archive.equals("Harfield Village"));	
 			if (archive.equalsIgnoreCase("Harfield Village")){
-				
+				System.out.println("WITHIN ARCHIVES = Harfield Village");
 				if (request.getPathInfo().substring(1).contains("polygon")) {
 	
 					String points = (String) request.getParameter("polypoints");

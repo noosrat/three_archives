@@ -303,11 +303,10 @@ public class HistoryController implements Controller {
 //		response.addCookie(initialiseNewCookie("dateLastVisited",
 //				new Date().toString()));
 		//this was done since fedora was registering a time two hours delayed
-		Calendar c =Calendar.getInstance();
-		c.add(Calendar.HOUR,-2);
+		Date d = new Date(System.currentTimeMillis()- 2 * 3600 * 1000);
 
 		response.addCookie(initialiseNewCookie("dateLastVisited",
-				c.getTime().toString()));
+				d.toString()));
 		return date;
 	}
 	
