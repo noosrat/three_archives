@@ -267,6 +267,7 @@ public class FedoraXMLResponseParser {
 						if (coverage.length != 0) {
 							if (!coverage[0].trim().isEmpty())
 								dublinCoreMetadata.put("LOCATION", coverage[0].trim());
+							if (!coverage[1].trim().isEmpty())
 								dublinCoreMetadata.put(dc.name(), coverage[1].trim());
 						}
 					} else {
