@@ -1,6 +1,7 @@
 package history;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -299,11 +300,17 @@ public class HistoryController implements Controller {
 		// testing is Mon Sep 28 14:49:16 SAST 2015
 		// response.addCookie(initialiseNewCookie("dateLastVisited",
 		// "Mon Sep 28 14:49:16 SAST 2015"));
+//		response.addCookie(initialiseNewCookie("dateLastVisited",
+//				new Date().toString()));
+		//this was done since fedora was registering a time two hours delayed
+		Calendar c =Calendar.getInstance();
+		c.add(Calendar.HOUR,-2);
+
 		response.addCookie(initialiseNewCookie("dateLastVisited",
-				new Date().toString()));
+				c.getTime().toString()));
 		return date;
 	}
-
+	
 	/**
 	 * Gets the browse category cookie indicating how often the user browses
 	 * each of the specified categories
