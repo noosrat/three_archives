@@ -43,7 +43,8 @@ public class MapController implements Controller {
 	public String execute(HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
 		String archive = (String) request.getSession().getAttribute("ARCHIVE");
-		System.out.println("MAP CONTROLLER:##### "+archive);
+		System.out.println("MAP CONTROLLER:##### "+archive+"#");
+		archive = archive.trim();
 		Map search = new Map();
 		request.setAttribute("placeObject", search.place("ms:3"));//dummy fedora object
 		request.setAttribute("placement", 1);
